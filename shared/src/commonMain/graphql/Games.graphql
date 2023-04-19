@@ -1,0 +1,64 @@
+query GameList($databaseId: String!) {
+    documents(
+        databaseId: $databaseId,
+        collectionId: "games"
+    ) {
+        total
+        games {
+            _id
+            _createdAt
+            _updatedAt
+            name
+            expires
+            turnDuration
+            limits {
+                player {
+                    min
+                    max
+                }
+                thing {
+                    min
+                    max
+                }
+            }
+            players {
+                _id,
+                name
+            }
+            things {
+                _id
+                _updatedAt
+                _createdAt
+                name
+                guesses {
+                    at
+                    by {
+                        _id
+                        name
+                    }
+                    correct
+                }
+                image {
+                    _id
+                    bucketId
+                }
+                clues {
+                    color
+                    what
+                    where {
+                        latitude
+                        longitude
+                        name
+                        city
+                        region
+                        country
+                        accuracy
+                    }
+                    who
+                    why
+                    rhyme
+                }
+            }
+        }
+    }
+}
