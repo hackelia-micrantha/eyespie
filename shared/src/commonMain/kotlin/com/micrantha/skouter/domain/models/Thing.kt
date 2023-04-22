@@ -1,6 +1,5 @@
 package com.micrantha.skouter.domain.models
 
-import com.micrantha.skouter.type.PlayerRef
 import kotlinx.datetime.LocalDateTime
 
 data class Thing(

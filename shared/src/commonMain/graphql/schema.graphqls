@@ -1,114 +1,138 @@
-type Preferences {
-  firstName: String
-  lastName: String
-  totalScore: Int
-}
-
-type Account implements Entity, Creatable {
-  _id: String!
-  _createdAt: String!
-  _updatedAt: String
-  email: String!
-  name: String
-  registration: String
-  status: Boolean
-  phone: String
-  emailVerification: Boolean
-  phoneVerification: Boolean
-  prefs: Preferences
-}
-
-type Session implements Entity {
-  userId: String!
-}
+scalar Cursor
+scalar DateTime
+scalar JSON
+scalar BigInt
 
 interface Entity {
-  _id: String!
+    _id: String!
 }
 
 interface Creatable {
-  _createdAt: String!
-  _updatedAt: String
+    _createdAt: String!
 }
 
-type Limits {
-  min: Int
-  max: Int
+type PageInfo {
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String!
+    endCursor: String!
 }
 
-type GameLimits {
-  player: Limits,
-  thing: Limits
+type Player implements Entity, Creatable {
+    _id: String!
+    _createdAt: String!
+    email: String!
+    phone: String
+    firstName: String
+    lastName: String
+    totalScore: Int
 }
 
 type PlayerRef implements Entity {
-  _id: String!
-  name: String!
+    _id: String!
+    name: String!
 }
 
 type Guess {
-  at: String
-  by: PlayerRef
-  correct: Boolean
+    at: String
+    by: PlayerRef
 }
 
 type ImageRef implements Entity {
-  _id: String!
-  bucketId: String!
+    _id: String!
+    bucketId: String!
 }
 
 type Location {
-  latitude: Float
-  longitude: Float
-  name: String
-  city: String
-  region: String
-  country: String
-  accuracy: Float
+    latitude: Float
+    longitude: Float
+    name: String
+    city: String
+    region: String
+    country: String
+    accuracy: Float
 }
 
 type Clues {
-  color: String
-  where: Location
-  what: String
-  who: String
-  why: String
-  rhyme: String
+    color: String
+    where: Location
+    what: String
+    who: String
+    why: String
+    rhyme: String
 }
 
 type Thing implements Entity {
-  _id: String!
-  _updatedAt: String
-  _createdAt: String!
-  name: String
-  guesses: [Guess]
-  image: ImageRef
-  clues: Clues
+    _id: String!
+    _createdAt: String!
+    name: String
+    guessed: Boolean
+    guessConnection: ThingGuessConnection
+    image: ImageRef
+    clues: Clues
+}
+
+type ThingGuessConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [ThingGuessEdge]
+}
+
+type ThingGuessEdge {
+    cursor: String!
+    node: Guess
+    at: DateTime
 }
 
 type Game implements Entity{
-  _id: String!
-  _createdAt: String!
-  _updatedAt: String
-  name: String!
-  expires: String!
-  turnDuration: String!
-  limits: GameLimits
-  things: [Thing],
-  players: [PlayerRef]
+    _id: String!
+    _createdAt: String!
+    name: String!
+    expires: String!
+    turnDuration: String!
+    minPlayers: Int
+    maxPlayers: Int
+    minThings: Int
+    maxThings: Int
+    thingsConnection: GameThingConnection,
+    playersConnection: GamePlayerConnection
 }
 
-type GameList {
-  total: Int
-  games: [Game]
+type GameThingConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [GameThingEdge]
+}
+
+type GameThingEdge {
+    cursor: String!
+    node:Thing
+    at: DateTime
+}
+type GamePlayerConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [GamePlayerEdge]
+}
+
+type GamePlayerEdge {
+    cursor: String!
+    node: Player
+    at: DateTime
+}
+
+type GameEdge {
+    cursor: String!
+    node: Game
+}
+
+type GameConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [GameEdge]
 }
 
 type Query {
-  accountGet: Account
-  documents(databaseId: String!, collectionId: String!, queries: [String]): GameList
-}
-
-type Mutation {
-  accountCreateEmailSession(email: String!, password: String!): Session
-  accountCreateAnonymousSession: Session
+    gamesCollection(after: Cursor, before: Cursor, first: Int, last: Int): GameConnection
+    gameDetails(id: String): Game
 }

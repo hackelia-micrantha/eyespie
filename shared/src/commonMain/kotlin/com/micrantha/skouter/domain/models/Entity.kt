@@ -8,5 +8,4 @@ interface Entity {
 
 interface Creatable {
     val createdAt: LocalDateTime
-    val updatedAt: LocalDateTime?
 }

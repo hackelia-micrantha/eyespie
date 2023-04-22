@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loading_games">Loading games…</string>
+    <string name="model_status_failure">An error occurred preparing data, please try again later.</string>
+    <string name="model_status_busy">Preparing data…</string>
+    <string name="games_title">Games</string>
+    <string name="network_failure">An network error occurred, please try again later.</string>
+</resources>

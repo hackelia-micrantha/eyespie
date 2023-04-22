@@ -1,0 +1,16 @@
+{
+  "name": "Skouter GraphQL Schema",
+  "schemaPath": "schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "http://ipvxwipixdtyemipfogb.supabase.co/graphql/v1",
+        "headers": {
+          "Content-Type": "application/json",
+          "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlwdnh3aXBpeGR0eWVtaXBmb2diIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODIwNDkxODUsImV4cCI6MTk5NzYyNTE4NX0.w3zU9iNuAhrkXzBTcRnfuvMOeYZP1nzyF_wYONUjVso"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

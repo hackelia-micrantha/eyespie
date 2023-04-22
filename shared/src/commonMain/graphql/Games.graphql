@@ -1,62 +1,73 @@
-query GameList($databaseId: String!) {
-    documents(
-        databaseId: $databaseId,
-        collectionId: "games"
-    ) {
-        total
-        games {
-            _id
-            _createdAt
-            _updatedAt
-            name
-            expires
-            turnDuration
-            limits {
-                player {
-                    min
-                    max
-                }
-                thing {
-                    min
-                    max
-                }
-            }
-            players {
-                _id,
-                name
-            }
-            things {
+query GameList {
+    gamesCollection {
+        totalCount
+        edges {
+            node {
                 _id
-                _updatedAt
                 _createdAt
                 name
-                guesses {
-                    at
-                    by {
-                        _id
-                        name
-                    }
-                    correct
+                expires
+                thingsConnection {
+                    totalCount
                 }
-                image {
+                playersConnection {
+                    totalCount
+                }
+            }
+        }
+    }
+}
+
+query GameDetails($id: String!) {
+    gameDetails(id: $id) {
+        thingsConnection {
+            edges {
+                node {
                     _id
-                    bucketId
-                }
-                clues {
-                    color
-                    what
-                    where {
-                        latitude
-                        longitude
-                        name
-                        city
-                        region
-                        country
-                        accuracy
+                    _createdAt
+                    image {
+                        bucketId
+                        _id
                     }
-                    who
-                    why
-                    rhyme
+                    name
+                    clues {
+                        what
+                        where {
+                            accuracy
+                            name
+                            region
+                            longitude
+                            latitude
+                            country
+                            city
+                        }
+                        who
+                        why
+                        rhyme
+                        color
+                    }
+                    guessed
+                    guessConnection {
+                        edges {
+                            node {
+                                at
+                                by {
+                                    name
+                                    _id
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        playersConnection {
+            edges {
+                node {
+                    _id
+                    firstName
+                    lastName
+                    totalScore
                 }
             }
         }

@@ -1,18 +1,39 @@
 package com.micrantha.skouter.data.remote
 
-import com.apollographql.apollo3.ApolloClient
-import com.micrantha.skouter.AnonymousSessionMutation
+import Skouter.shared.BuildConfig
+import com.micrantha.skouter.GameDetailsQuery
 import com.micrantha.skouter.GameListQuery
-import com.micrantha.skouter.GetAccountQuery
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.gotrue.GoTrue
+import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.graphql.GraphQL
+import io.github.jan.supabase.graphql.graphql
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.postgrest
+
+typealias AuthClient = GoTrue
+typealias DatabaseClient = Postgrest
 
 class ApiClient {
-    private val client = ApolloClient.Builder()
-        .serverUrl("http://localhost/v1/graphql")
-        .build()
+    private val supabase =
+        createSupabaseClient("https://${BuildConfig.API_DOMAIN}", BuildConfig.API_KEY) {
+            install(GraphQL) {
+                apolloConfiguration {
+                }
+            }
 
-     fun loginAnonymous() = client.mutation(AnonymousSessionMutation())
+            install(Postgrest) {
 
-     fun account() = client.query(GetAccountQuery())
+            }
 
-     fun games(databaseId: String = "643f999cec48757ab51e") = client.query(GameListQuery(databaseId))
+            install(GoTrue)
+        }
+
+    fun auth(): AuthClient = supabase.gotrue
+
+    fun players() = supabase.postgrest["players"]
+
+    fun games() = supabase.graphql.apolloClient.query(GameListQuery())
+
+    fun game(id: String) = supabase.graphql.apolloClient.query(GameDetailsQuery(id))
 }
