@@ -7,5 +7,9 @@ import org.koin.dsl.module
 internal fun uiModules() = module {
     factory { GameListEnvironment(get(), get()) }
 
+    factory { MainEnvironment(get()) }
+
     factory { params -> GameListViewModel(params.get(), get()) }
+
+    factory { params -> MainViewModel(params.get(), get()) }
 }

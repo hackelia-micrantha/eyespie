@@ -1,6 +1,5 @@
 query GameList {
     gamesCollection {
-        totalCount
         edges {
             node {
                 _id

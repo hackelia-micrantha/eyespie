@@ -1,4 +1,4 @@
-package com.micrantha.bluebell.ui
+package com.micrantha.skouter.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -10,20 +10,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import com.micrantha.bluebell.ui.navi.NavigationRoutes
 import com.micrantha.bluebell.ui.navi.NavigationScreen
+import com.micrantha.bluebell.ui.view.ViewContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel,
-    routes: NavigationRoutes
+    state: MainState,
+    viewContext: ViewContext
 ) {
-    val state by viewModel.state().collectAsState()
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -33,7 +29,7 @@ fun MainScreen(
                 navigationIcon = {
                     if (state.showBack) {
                         MainBackButton(state) {
-                            viewModel.router().back()
+                            viewContext.router.back()
                         }
                     }
                 }
@@ -41,8 +37,7 @@ fun MainScreen(
         }
     ) {
         NavigationScreen(
-            routes = routes,
-            viewContext = viewModel.viewContext
+            viewContext = viewContext
         )
     }
 }

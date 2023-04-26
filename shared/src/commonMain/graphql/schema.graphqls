@@ -73,7 +73,6 @@ type Thing implements Entity {
 }
 
 type ThingGuessConnection {
-    totalCount: Int!
     pageInfo: PageInfo!
     edges: [ThingGuessEdge]
 }
@@ -81,7 +80,6 @@ type ThingGuessConnection {
 type ThingGuessEdge {
     cursor: String!
     node: Guess
-    at: DateTime
 }
 
 type Game implements Entity{
@@ -107,7 +105,6 @@ type GameThingConnection {
 type GameThingEdge {
     cursor: String!
     node:Thing
-    at: DateTime
 }
 type GamePlayerConnection {
     totalCount: Int!
@@ -118,7 +115,6 @@ type GamePlayerConnection {
 type GamePlayerEdge {
     cursor: String!
     node: Player
-    at: DateTime
 }
 
 type GameEdge {
@@ -127,7 +123,6 @@ type GameEdge {
 }
 
 type GameConnection {
-    totalCount: Int!
     pageInfo: PageInfo!
     edges: [GameEdge]
 }

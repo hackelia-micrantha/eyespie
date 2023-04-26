@@ -3,6 +3,8 @@ package com.micrantha.skouter.data.remote
 import Skouter.shared.BuildConfig
 import com.micrantha.skouter.GameDetailsQuery
 import com.micrantha.skouter.GameListQuery
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
@@ -28,6 +30,10 @@ class ApiClient {
 
             install(GoTrue)
         }
+
+    init {
+        Napier.base(DebugAntilog())
+    }
 
     fun auth(): AuthClient = supabase.gotrue
 

@@ -1,8 +1,8 @@
 package com.micrantha.skouter.ui.games
 
-import com.micrantha.bluebell.ui.MainAction.SetTitle
 import com.micrantha.bluebell.ui.view.MappedViewModel
 import com.micrantha.bluebell.ui.view.ViewContext
+import com.micrantha.skouter.ui.MainAction.SetTitle
 import com.micrantha.skouter.ui.arch.i18n
 import com.micrantha.skouter.ui.games.GameListActions.Load
 import kotlinx.coroutines.launch

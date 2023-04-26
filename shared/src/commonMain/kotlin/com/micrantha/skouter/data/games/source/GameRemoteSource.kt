@@ -8,11 +8,10 @@ class GameRemoteSource(
     private val client: ApiClient,
     private val mapper: GameDomainMapper = GameDomainMapper()
 ) {
-
     suspend fun games(): Result<List<GameListing>> = try {
         val games = client.games().execute()
             .dataAssertNoErrors.gamesCollection!!.edges!!.filterNotNull()
-            .mapNotNull {
+            .map {
                 mapper(it.node!!)
             }
         Result.success(games)

@@ -5,6 +5,4 @@ import org.koin.dsl.module
 
 internal fun bluebellUi() = module {
     factory { params -> ViewContext(params.get(), get(), get()) }
-
-    factory { params -> MainViewModel(params.get()) }
 }

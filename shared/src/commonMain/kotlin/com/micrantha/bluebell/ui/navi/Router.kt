@@ -8,15 +8,20 @@ import com.chrynan.navigation.StackDuplicateContentStrategy.ADD_TO_STACK
 import com.chrynan.navigation.compose.rememberNavigator
 import com.chrynan.navigation.Navigator as Navi
 
-public interface Router {
+interface Router {
     fun back()
 
     fun navigate(route: Route)
+
+    operator fun get(route: Route): RouteRenderer?
 }
 
 internal typealias Navigator = Navi<Route, SingleNavigationContext<Route>>
 
-internal class NavigationRouter(internal val navigator: Navigator) :
+internal class NavigationRouter(
+    internal val navigator: Navigator,
+    private val routes: NavigationRoutes
+) :
     Router {
 
     override fun back() {
@@ -24,11 +29,13 @@ internal class NavigationRouter(internal val navigator: Navigator) :
     }
 
     override fun navigate(route: Route) = navigator.goTo(route, ADD_TO_STACK)
+
+    override fun get(route: Route) = routes[route]
 }
 
 @OptIn(ExperimentalNavigationApi::class)
 @Composable
-internal fun rememberRouter(defaultRoute: Route): Router {
-    val navigator = rememberNavigator(defaultRoute)
-    return remember { NavigationRouter(navigator) }
+internal fun rememberRouter(routes: NavigationRoutes): Router {
+    val navigator = rememberNavigator(routes.defaultRoute)
+    return remember { NavigationRouter(navigator, routes) }
 }
