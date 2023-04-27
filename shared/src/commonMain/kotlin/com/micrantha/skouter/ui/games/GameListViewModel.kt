@@ -5,7 +5,6 @@ import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.skouter.ui.MainAction.SetTitle
 import com.micrantha.skouter.ui.arch.i18n
 import com.micrantha.skouter.ui.games.GameListActions.Load
-import kotlinx.coroutines.launch
 
 class GameListViewModel(
     viewContext: ViewContext,
@@ -18,16 +17,10 @@ class GameListViewModel(
 ) {
 
     init {
-
-        viewModelScope.launch {
-            environment.test()
-        }
         store.addReducer(GameListReducer(viewContext))
             .applyEffect(GameListEffects(viewContext, environment))
 
-        dispatch(
-            SetTitle(resource(i18n.GamesTitle))
-        )
+        dispatch(SetTitle(string(i18n.GamesTitle)))
         dispatch(Load)
 
     }

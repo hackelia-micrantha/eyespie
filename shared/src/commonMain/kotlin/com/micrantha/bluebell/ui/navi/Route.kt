@@ -1,6 +1,7 @@
 package com.micrantha.bluebell.ui.navi
 
 import androidx.compose.runtime.Composable
+import com.chrynan.navigation.NavigationContext
 import com.micrantha.bluebell.data.err.fail
 import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.bluebell.ui.view.ViewContextModel
@@ -11,17 +12,18 @@ import kotlin.collections.set
 
 interface Route {
     val path: String
-    val isDefault: Boolean
 }
+
+typealias RouteContext = NavigationContext<Route>
 
 typealias Screen<T> = @Composable (viewModel: T) -> Unit
 
-internal typealias RouteRenderer = @Composable (ViewContext) -> Unit
+typealias RouteRenderer = @Composable (ViewContext) -> Unit
 
 internal typealias MappedRoutes = Map<Route, RouteRenderer>
 
 class RouteBuilder : KoinComponent {
-    var defaultRoute: Route? = null
+    var initialContext: RouteContext? = null
 
     private val routedScreens = mutableMapOf<Route, RouteRenderer>()
 
@@ -32,9 +34,8 @@ class RouteBuilder : KoinComponent {
     }
 
     fun build() = NavigationRoutes(
-        defaultRoute = defaultRoute ?: routedScreens.keys.find { it.isDefault }
-        ?: routedScreens.keys.firstOrNull()
-        ?: fail("no default route configured"),
+        initialContext = initialContext
+            ?: fail("no initial route context configured"),
         routedScreens
     )
 }

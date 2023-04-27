@@ -5,4 +5,12 @@
     <string name="model_status_busy">Preparing data…</string>
     <string name="games_title">Games</string>
     <string name="network_failure">An network error occurred, please try again later.</string>
+    <string name="app_title">Skouter</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_email_placeholder">Enter email</string>
+    <string name="login_password_placeholder">Enter password</string>
+    <string name="logging_in">Logging in…</string>
+    <string name="login_failure">Login failed, please try again.</string>
 </resources>

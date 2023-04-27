@@ -12,7 +12,7 @@ sealed class MainAction : Action {
 
     object Refresh : MainAction()
 
-    data class CheckedLogin(val isLoggedIn: Boolean) : MainAction()
+    data class Init(val isLoggedIn: Boolean) : MainAction()
 
     companion object {
         fun setTitle(init: ScaffoldBuilder.() -> Unit) = ScaffoldBuilder().apply(init).asTitle()

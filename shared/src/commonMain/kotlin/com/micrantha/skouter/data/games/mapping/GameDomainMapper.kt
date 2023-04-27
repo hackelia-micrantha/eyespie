@@ -6,11 +6,11 @@ import kotlinx.datetime.LocalDateTime
 
 class GameDomainMapper {
     operator fun invoke(data: GameListQuery.Node) = GameListing(
-        id = data._id,
+        id = data.id,
         name = data.name,
-        createdAt = LocalDateTime.parse(data._createdAt),
+        createdAt = LocalDateTime.parse(data.created_at),
         expiresAt = LocalDateTime.parse(data.expires),
-        totalPlayers = data.playersConnection?.totalCount ?: 0,
-        totalThings = data.thingsConnection?.totalCount ?: 0
+        totalPlayers = 0,
+        totalThings = 0
     )
 }

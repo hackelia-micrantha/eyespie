@@ -9,13 +9,13 @@ import com.micrantha.bluebell.ui.view.ViewContext
 @OptIn(ExperimentalNavigationApi::class)
 @Composable
 internal fun NavigationScreen(
-    viewContext: ViewContext,
+    viewContext: ViewContext
 ) {
-    NavContainer(navigator = viewContext.navigator()) { _, route ->
-        viewContext.router[route]?.let { screen -> screen(viewContext) } ?: fail(
+    val router = LocalRouter.current as NavigationRouter
+
+    NavContainer(navigator = router.navigator) { _, route ->
+        router[route]?.let { screen -> screen(viewContext) } ?: fail(
             "no screen for navigation to $route"
         )
     }
 }
-
-private fun ViewContext.navigator() = (this.router as NavigationRouter).navigator

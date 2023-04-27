@@ -2,72 +2,16 @@ query GameList {
     gamesCollection {
         edges {
             node {
-                _id
-                _createdAt
+                id
+                created_at
                 name
                 expires
-                thingsConnection {
-                    totalCount
-                }
-                playersConnection {
-                    totalCount
-                }
-            }
-        }
-    }
-}
-
-query GameDetails($id: String!) {
-    gameDetails(id: $id) {
-        thingsConnection {
-            edges {
-                node {
-                    _id
-                    _createdAt
-                    image {
-                        bucketId
-                        _id
-                    }
-                    name
-                    clues {
-                        what
-                        where {
-                            accuracy
-                            name
-                            region
-                            longitude
-                            latitude
-                            country
-                            city
-                        }
-                        who
-                        why
-                        rhyme
-                        color
-                    }
-                    guessed
-                    guessConnection {
-                        edges {
-                            node {
-                                at
-                                by {
-                                    name
-                                    _id
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        playersConnection {
-            edges {
-                node {
-                    _id
-                    firstName
-                    lastName
-                    totalScore
-                }
+                #thingsConnection {
+                #    totalCount
+                #}
+                #playersConnection {
+                #    totalCount
+                #}
             }
         }
     }

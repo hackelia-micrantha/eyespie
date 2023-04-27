@@ -5,15 +5,15 @@ import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.status.busy
-import com.micrantha.bluebell.domain.status.error
-import com.micrantha.bluebell.domain.status.status
+import com.micrantha.bluebell.domain.model.busy
+import com.micrantha.bluebell.domain.model.error
+import com.micrantha.bluebell.domain.model.status
 import com.micrantha.bluebell.ui.navi.Router
 import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.skouter.domain.models.GameListing
 import com.micrantha.skouter.ui.arch.i18n.LoadingGames
 import com.micrantha.skouter.ui.arch.toi18n
-import com.micrantha.skouter.ui.navi.AppRoutes
+import com.micrantha.skouter.ui.navi.Routes
 
 sealed class GameListActions : Action {
     object NewGame : GameListActions()
@@ -45,7 +45,7 @@ class GameListEffects(
             is GameListActions.Load -> environment.games()
                 .onFailure { dispatch(GameListActions.OnError(it)) }
                 .onSuccess { dispatch(GameListActions.OnLoaded(it)) }
-            is GameListActions.NewGame -> navigate(AppRoutes.NewGame)
+            is GameListActions.NewGame -> navigate(Routes.NewGame)
         }
     }
 }

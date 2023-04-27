@@ -4,11 +4,11 @@ scalar JSON
 scalar BigInt
 
 interface Entity {
-    _id: String!
+    id: String!
 }
 
 interface Creatable {
-    _createdAt: String!
+    created_at: String!
 }
 
 type PageInfo {
@@ -19,27 +19,27 @@ type PageInfo {
 }
 
 type Player implements Entity, Creatable {
-    _id: String!
-    _createdAt: String!
+    id: String!
+    created_at: String!
     email: String!
     phone: String
-    firstName: String
-    lastName: String
-    totalScore: Int
+    first_name: String
+    last_name: String
+    total_score: Int
 }
 
 type PlayerRef implements Entity {
-    _id: String!
+    id: String!
     name: String!
 }
 
 type Guess {
-    at: String
-    by: PlayerRef
+    created_at: String
+    created_by: PlayerRef
 }
 
 type ImageRef implements Entity {
-    _id: String!
+    id: String!
     bucketId: String!
 }
 
@@ -62,9 +62,9 @@ type Clues {
     rhyme: String
 }
 
-type Thing implements Entity {
-    _id: String!
-    _createdAt: String!
+type Thing implements Entity, Creatable {
+    id: String!
+    created_at: String!
     name: String
     guessed: Boolean
     guessConnection: ThingGuessConnection
@@ -82,18 +82,18 @@ type ThingGuessEdge {
     node: Guess
 }
 
-type Game implements Entity{
-    _id: String!
-    _createdAt: String!
+type Game implements Entity, Creatable {
+    id: String!
+    created_at: String!
     name: String!
     expires: String!
-    turnDuration: String!
-    minPlayers: Int
-    maxPlayers: Int
-    minThings: Int
-    maxThings: Int
-    thingsConnection: GameThingConnection,
-    playersConnection: GamePlayerConnection
+    turn_duration: String!
+    min_players: Int
+    max_players: Int
+    min_things: Int
+    max_things: Int
+    #thingsConnection: GameThingConnection,
+    #playersConnection: GamePlayerConnection
 }
 
 type GameThingConnection {

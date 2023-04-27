@@ -8,8 +8,16 @@ enum class i18n(
     override val androidKey: String? = null
 ) : LocalizedString {
     LoadingGames("loading_games"),
-    ModelStatusBusy("model_status_busy"),
-    ModelStatusFailure("model_status_failure"),
+    ResultStatusBusy("model_status_busy"),
+    ResultStatusFailure("model_status_failure"),
     GamesTitle("games_title"),
-    NetworkFailure("network_failure")
+    NetworkFailure("network_failure"),
+    Login("login"),
+    AppTitle("app_title"),
+    LoginEmailPlaceholder("login_email_placeholder"),
+    LoginPasswordPlaceholder("login_password_placeholder"),
+    Email("email"),
+    Password("password"),
+    LoggingIn("logging_in"),
+    LoginFailed("login_failed")
 }

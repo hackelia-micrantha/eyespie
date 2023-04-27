@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.micrantha.bluebell.domain.status.ModelStatus
+import com.micrantha.bluebell.domain.model.ResultStatus
 import com.micrantha.bluebell.ui.status.FailureContent
 import com.micrantha.bluebell.ui.status.LoadingContent
 
@@ -16,8 +16,8 @@ fun GameListScreen(viewModel: GameListViewModel) {
     val state by viewModel.state().collectAsState()
 
     when (val status = state.status) {
-        is ModelStatus.Busy -> LoadingContent(status.message)
-        is ModelStatus.Failure -> FailureContent(status.error)
+        is ResultStatus.Busy -> LoadingContent(status.message)
+        is ResultStatus.Failure -> FailureContent(status.error)
         else -> GameListContent(state)
     }
 

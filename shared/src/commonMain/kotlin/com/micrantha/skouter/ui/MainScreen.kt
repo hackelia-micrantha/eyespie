@@ -17,8 +17,8 @@ import com.micrantha.bluebell.ui.view.ViewContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    viewContext: ViewContext,
     state: MainState,
-    viewContext: ViewContext
 ) {
     Scaffold(
         topBar = {
@@ -29,7 +29,7 @@ fun MainScreen(
                 navigationIcon = {
                     if (state.showBack) {
                         MainBackButton(state) {
-                            viewContext.router.back()
+                            viewContext.navigateBack()
                         }
                     }
                 }

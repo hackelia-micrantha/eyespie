@@ -2,20 +2,21 @@ package com.micrantha.skouter.ui
 
 import com.micrantha.bluebell.ui.view.StatefulViewModel
 import com.micrantha.bluebell.ui.view.ViewContext
-import com.micrantha.skouter.ui.MainAction.CheckedLogin
+import com.micrantha.skouter.ui.MainAction.Init
 import com.micrantha.skouter.ui.MainAction.Refresh
 import com.micrantha.skouter.ui.MainAction.SetTitle
+import com.micrantha.skouter.ui.navi.NavContext
 import kotlinx.coroutines.launch
 
 class MainViewModel(
     val viewContext: ViewContext,
-    private val environment: MainEnvironment
+    val environment: MainEnvironment
 ) : StatefulViewModel<MainState>(viewContext, MainState()) {
 
     init {
         store.addReducer { state, action ->
             when (action) {
-                is CheckedLogin -> state.copy(
+                is Init -> state.copy(
                     isLoggedIn = action.isLoggedIn
                 )
                 is SetTitle -> state.copy(
@@ -28,10 +29,19 @@ class MainViewModel(
                 )
                 else -> state
             }
+        }.applyEffect { action, state ->
+            when (action) {
+                is Init -> viewContext.changeNavigationContext(
+                    if (state.isLoggedIn)
+                        NavContext.User
+                    else
+                        NavContext.Init
+                )
+            }
         }
 
         viewModelScope.launch {
-            dispatch(MainAction.CheckedLogin(environment.isLoggedIn()))
+            dispatch(Init(environment.isLoggedIn()))
         }
     }
 }

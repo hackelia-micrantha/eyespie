@@ -3,6 +3,7 @@ package com.micrantha.bluebell.ui.view
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Stateful
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
+import com.micrantha.bluebell.domain.i18n.LocalizedString
 import com.micrantha.bluebell.ui.navi.Router
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -13,9 +14,10 @@ expect abstract class ViewModel() {
 
 abstract class ViewContextModel<State>(
     private val viewContext: ViewContext
-) : ViewModel(), Dispatcher by viewContext, LocalizedRepository by viewContext,
-    Router by viewContext {
-    internal fun router(): Router = viewContext.router
+) : ViewModel(), Dispatcher by viewContext, LocalizedRepository by viewContext {
+    internal val router: Router = viewContext
+
+    internal fun string(str: LocalizedString) = viewContext.resource(str)
 }
 
 abstract class StatefulViewModel<State>(

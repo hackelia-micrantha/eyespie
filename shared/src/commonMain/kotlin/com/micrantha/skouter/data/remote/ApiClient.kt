@@ -1,7 +1,6 @@
 package com.micrantha.skouter.data.remote
 
 import Skouter.shared.BuildConfig
-import com.micrantha.skouter.GameDetailsQuery
 import com.micrantha.skouter.GameListQuery
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
@@ -18,15 +17,10 @@ typealias DatabaseClient = Postgrest
 
 class ApiClient {
     private val supabase =
-        createSupabaseClient("https://${BuildConfig.API_DOMAIN}", BuildConfig.API_KEY) {
-            install(GraphQL) {
-                apolloConfiguration {
-                }
-            }
+        createSupabaseClient("https://${BuildConfig.apiDomain}", BuildConfig.apiKey) {
+            install(GraphQL)
 
-            install(Postgrest) {
-
-            }
+            install(Postgrest)
 
             install(GoTrue)
         }
@@ -41,5 +35,4 @@ class ApiClient {
 
     fun games() = supabase.graphql.apolloClient.query(GameListQuery())
 
-    fun game(id: String) = supabase.graphql.apolloClient.query(GameDetailsQuery(id))
 }

@@ -1,5 +1,3 @@
-import java.util.*
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -29,6 +27,7 @@ kotlin {
     }
 
     sourceSets {
+
         val commonMain by getting {
             dependencies {
                 api(compose.runtime)
@@ -37,11 +36,11 @@ kotlin {
                 api(compose.materialIconsExtended)
                 api(compose.material3)
 
-                api("io.insert-koin:koin-core:3.4.0")
+                implementation("io.insert-koin:koin-core:3.4.0")
 
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
-                api("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+                implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
@@ -49,9 +48,9 @@ kotlin {
 
                 implementation("io.ktor:ktor-client-cio:2.3.0")
 
-                implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.2-dev")
-                implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.2-dev")
-                implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.2-dev")
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.3")
+                implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.3")
+                implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.3")
             }
         }
         val commonTest by getting {
@@ -63,11 +62,12 @@ kotlin {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.core:core-ktx:1.10.0")
-                api("io.insert-koin:koin-androidx-compose:3.4.3")
-                api(compose.preview)
+                implementation("io.insert-koin:koin-androidx-compose:3.4.3")
                 implementation("org.jetbrains.kotlinx:kotlin-deeplearning-api:0.5.1")
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+                implementation("io.github.chopyourbrain:kontrol:0.1.1")
             }
         }
         val androidUnitTest by getting
@@ -106,17 +106,15 @@ apollo {
     }
 }
 
-fun localProperties(): Properties {
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").reader())
-    return properties
-}
-
-val properties = localProperties()
-val apiKey = properties["apiKey"]
-val apiDomain = properties["apiDomain"]
-
 buildConfig {
-    buildConfigField("String", "API_KEY", "\"${apiKey}\"")
-    buildConfigField("String", "API_DOMAIN", "\"${apiDomain}\"")
+    listOf(
+        "apiKey", "apiDomain",
+        "loginEmail", "loginPassword",
+        "keystore", "keystorePassword"
+    ).forEach { key ->
+        properties[key]?.let {
+            buildConfigField("String", key, "\"${it}\"")
+        }
+    }
 }
+

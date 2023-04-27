@@ -7,4 +7,3 @@ expect class Platform : LocalizedRepository {
     val name: String
     override fun resource(str: LocalizedString): String
 }
-
