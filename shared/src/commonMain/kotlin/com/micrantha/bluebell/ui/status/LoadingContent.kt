@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 @Composable
 fun LoadingContent(message: String? = null) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-        Column(verticalArrangement = Arrangement.Center) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator()
             message?.let {
                 Text(it, style = MaterialTheme.typography.titleLarge)

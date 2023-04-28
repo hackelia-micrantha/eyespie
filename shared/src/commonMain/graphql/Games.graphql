@@ -6,13 +6,14 @@ query GameList {
                 created_at
                 name
                 expires
-                #thingsConnection {
-                #    totalCount
-                #}
-                #playersConnection {
-                #    totalCount
-                #}
+                gameThingsCollection {
+                    totalCount
+                }
+                gamePlayersCollection {
+                    totalCount
+                }
             }
         }
     }
 }
+

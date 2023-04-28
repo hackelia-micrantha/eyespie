@@ -34,5 +34,4 @@ class ApiClient {
     fun players() = supabase.postgrest["players"]
 
     fun games() = supabase.graphql.apolloClient.query(GameListQuery())
-
 }

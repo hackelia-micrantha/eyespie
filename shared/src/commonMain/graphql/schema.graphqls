@@ -92,8 +92,20 @@ type Game implements Entity, Creatable {
     max_players: Int
     min_things: Int
     max_things: Int
-    #thingsConnection: GameThingConnection,
-    #playersConnection: GamePlayerConnection
+    gameThingsCollection: GameThingConnection,
+    gamePlayersCollection: GamePlayerConnection
+}
+
+type GameThing {
+    id: String!
+    game_id: String!
+    thing_id: String!
+}
+
+type GamePlayer {
+    id: String!
+    game_id: String!
+    player_id: String!
 }
 
 type GameThingConnection {
@@ -104,7 +116,7 @@ type GameThingConnection {
 
 type GameThingEdge {
     cursor: String!
-    node:Thing
+    node:GameThing
 }
 type GamePlayerConnection {
     totalCount: Int!
@@ -114,7 +126,7 @@ type GamePlayerConnection {
 
 type GamePlayerEdge {
     cursor: String!
-    node: Player
+    node: GamePlayer
 }
 
 type GameEdge {
