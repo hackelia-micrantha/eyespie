@@ -12,4 +12,18 @@ actual class Platform : LocalizedRepository {
     actual override fun resource(str: LocalizedString): String {
         return NSLocalizedString(str.iosKey ?: str.key)
     }
+
+    actual fun format(
+        epochSeconds: Long,
+        format: String,
+        timeZone: String,
+        locale: String
+    ): String {
+        val date = NSDate.dateWithTimeIntervalFrom1970(epochSeconds)
+        val dateFormatter = NSDateFormatter()
+        dateFormatter.timeZone = NSTimeZone(timeZone)
+        dateFormatter.locale = NSLocale(locale)
+        dateFormatter.dateFormat = format
+        return dateFormatter.stringFromDate(date)
+    }
 }

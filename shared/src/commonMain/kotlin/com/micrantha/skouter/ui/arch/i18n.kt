@@ -19,5 +19,12 @@ enum class i18n(
     Email("email"),
     Password("password"),
     LoggingIn("logging_in"),
-    LoginFailed("login_failed")
+    LoginFailed("login_failed"),
+    Things("things"),
+    Players("players"),
+    CreatedAt("created_at"),
+    ExpiresAt("expires_at"),
+    LoadingGame("loading_game"),
+    NextTurn("next_turn"),
+    Location("location")
 }

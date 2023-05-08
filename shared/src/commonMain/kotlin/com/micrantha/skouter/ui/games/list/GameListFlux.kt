@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games
+package com.micrantha.skouter.ui.games.list
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
@@ -13,25 +13,31 @@ import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.skouter.domain.models.GameListing
 import com.micrantha.skouter.ui.arch.i18n.LoadingGames
 import com.micrantha.skouter.ui.arch.toi18n
+import com.micrantha.skouter.ui.games.list.GameListActions.Error
+import com.micrantha.skouter.ui.games.list.GameListActions.GameClicked
+import com.micrantha.skouter.ui.games.list.GameListActions.Load
+import com.micrantha.skouter.ui.games.list.GameListActions.Loaded
+import com.micrantha.skouter.ui.games.list.GameListActions.NewGame
 import com.micrantha.skouter.ui.navi.Routes
 
 sealed class GameListActions : Action {
     object NewGame : GameListActions()
     object Load : GameListActions()
-    data class OnLoaded(val data: List<GameListing>) : GameListActions()
-    data class OnError(val error: Throwable) : GameListActions()
+    data class Loaded(val data: List<GameListing>) : GameListActions()
+    data class Error(val error: Throwable) : GameListActions()
+
+    data class GameClicked(val id: String) : GameListActions()
 }
 
 class GameListReducer(private val i18n: LocalizedRepository) : Reducer<GameListState> {
     override fun invoke(state: GameListState, action: Action) =
         when (action) {
-            is GameListActions.Load ->
+            is Load ->
                 state.copy(status = i18n.busy(LoadingGames))
-            is GameListActions.OnLoaded -> state.copy(
-                games = action.data,
+            is Loaded -> state.copy(
                 status = action.data.status()
             )
-            is GameListActions.OnError -> state.copy(status = i18n.error(action.error.toi18n()))
+            is Error -> state.copy(status = i18n.error(action.error.toi18n()))
             else -> state
         }
 }
@@ -42,10 +48,11 @@ class GameListEffects(
 ) : Effect<GameListState>, Dispatcher by viewContext, Router by viewContext {
     override suspend fun invoke(action: Action, state: GameListState) {
         when (action) {
-            is GameListActions.Load -> environment.games()
-                .onFailure { dispatch(GameListActions.OnError(it)) }
-                .onSuccess { dispatch(GameListActions.OnLoaded(it)) }
-            is GameListActions.NewGame -> navigate(Routes.NewGame)
+            is Load -> environment.games()
+                .onFailure { dispatch(Error(it)) }
+                .onSuccess { dispatch(Loaded(it)) }
+            is NewGame -> navigate(Routes.NewGame)
+            is GameClicked -> navigate(Routes.GameDetails, action.id)
         }
     }
 }

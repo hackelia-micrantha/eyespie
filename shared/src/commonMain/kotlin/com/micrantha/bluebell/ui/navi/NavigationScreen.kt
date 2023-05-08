@@ -14,8 +14,9 @@ internal fun NavigationScreen(
     val router = LocalRouter.current as NavigationRouter
 
     NavContainer(navigator = router.navigator) { _, route ->
-        router[route]?.let { screen -> screen(viewContext) } ?: fail(
+        val (screen, args) = router[route] ?: fail(
             "no screen for navigation to $route"
         )
+        screen(viewContext, args)
     }
 }

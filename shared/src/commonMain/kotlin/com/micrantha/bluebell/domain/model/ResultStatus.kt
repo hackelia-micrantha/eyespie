@@ -1,14 +1,21 @@
 package com.micrantha.bluebell.domain.model
 
-sealed class ResultStatus {
+import com.micrantha.bluebell.domain.model.ResultStatus.Ready
 
-    data class Ready<T>(val data: T) : ResultStatus()
+sealed class ResultStatus<out T> {
 
-    object Default : ResultStatus()
+    data class Ready<T>(val data: T) : ResultStatus<T>()
 
-    data class Busy(val message: String? = null) : ResultStatus()
+    object Default : ResultStatus<Nothing>()
 
-    data class Failure(val error: String? = null) : ResultStatus()
+    data class Busy(val message: String? = null) : ResultStatus<Nothing>()
 
-    data class Empty(val message: String? = null) : ResultStatus()
+    data class Failure(val message: String? = null) : ResultStatus<Nothing>()
+
+    data class Empty(val message: String? = null) : ResultStatus<Nothing>()
+}
+
+fun <T> ResultStatus<T>.copy(ready: (T) -> T) = when (this) {
+    is Ready -> this.copy(data = ready(this.data))
+    else -> this
 }

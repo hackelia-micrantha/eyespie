@@ -9,14 +9,14 @@ data class LoginState(
     val email: String = BuildConfig.loginEmail,
     val password: String = BuildConfig.loginPassword,
     val isLoggedIn: Boolean = false,
-    val status: ResultStatus = ResultStatus.Default
+    val status: ResultStatus<Unit> = ResultStatus.Default
 )
 
 data class LoginUiState(
     val email: String,
     val password: String,
     val isLoggedIn: Boolean = false,
-    val status: ResultStatus
+    val status: ResultStatus<Unit>
 )
 
 fun LoginState.asUiState() = LoginUiState(

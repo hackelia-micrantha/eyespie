@@ -26,7 +26,7 @@ fun App(koin: Koin) {
 
     CompositionLocalProvider(
         LocalRouter provides router,
-        LocalViewContext provides viewContext,
+        LocalViewContext provides viewContext
     ) {
         MainScreen(viewContext, state)
     }

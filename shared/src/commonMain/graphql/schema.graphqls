@@ -3,6 +3,10 @@ scalar DateTime
 scalar JSON
 scalar BigInt
 
+interface Node {
+    nodeId: ID!
+}
+
 interface Entity {
     id: String!
 }
@@ -18,8 +22,9 @@ type PageInfo {
     endCursor: String!
 }
 
-type Player implements Entity, Creatable {
+type Player implements Entity, Creatable, Node {
     id: String!
+    nodeId: ID!
     created_at: String!
     email: String!
     phone: String
@@ -28,8 +33,9 @@ type Player implements Entity, Creatable {
     total_score: Int
 }
 
-type PlayerRef implements Entity {
+type PlayerRef implements Entity, Node {
     id: String!
+    nodeId: ID!
     name: String!
 }
 
@@ -62,17 +68,19 @@ type Clues {
     rhyme: String
 }
 
-type Thing implements Entity, Creatable {
+type Thing implements Entity, Creatable, Node {
     id: String!
+    nodeId: ID!
     created_at: String!
-    name: String
+    name: String!
     guessed: Boolean
-    guessConnection: ThingGuessConnection
-    image: ImageRef
-    clues: Clues
+    guesses: ThingGuessConnection
+    image: JSON
+    clues: JSON
 }
 
 type ThingGuessConnection {
+    totalCount: Int!
     pageInfo: PageInfo!
     edges: [ThingGuessEdge]
 }
@@ -82,8 +90,9 @@ type ThingGuessEdge {
     node: Guess
 }
 
-type Game implements Entity, Creatable {
+type Game implements Entity, Creatable, Node {
     id: String!
+    nodeId: ID!
     created_at: String!
     name: String!
     expires: String!
@@ -92,20 +101,21 @@ type Game implements Entity, Creatable {
     max_players: Int
     min_things: Int
     max_things: Int
-    gameThingsCollection: GameThingConnection,
-    gamePlayersCollection: GamePlayerConnection
+    gameThingCollection: GameThingConnection,
+    gamePlayerCollection: GamePlayerConnection
 }
 
 type GameThing {
-    id: String!
     game_id: String!
     thing_id: String!
+    thing: Thing!
 }
 
 type GamePlayer {
-    id: String!
     game_id: String!
     player_id: String!
+    score: Int
+    player: Player!
 }
 
 type GameThingConnection {
@@ -116,7 +126,7 @@ type GameThingConnection {
 
 type GameThingEdge {
     cursor: String!
-    node:GameThing
+    node:GameThing!
 }
 type GamePlayerConnection {
     totalCount: Int!
@@ -126,12 +136,12 @@ type GamePlayerConnection {
 
 type GamePlayerEdge {
     cursor: String!
-    node: GamePlayer
+    node: GamePlayer!
 }
 
 type GameEdge {
     cursor: String!
-    node: Game
+    node: Game!
 }
 
 type GameConnection {
@@ -140,6 +150,7 @@ type GameConnection {
 }
 
 type Query {
-    gamesCollection(after: Cursor, before: Cursor, first: Int, last: Int): GameConnection
-    gameDetails(id: String): Game
+    gameCollection(after: Cursor, before: Cursor, first: Int, last: Int): GameConnection
+
+    node(nodeId: ID!): Node
 }

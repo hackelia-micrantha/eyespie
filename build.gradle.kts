@@ -8,14 +8,6 @@ plugins {
     id("com.apollographql.apollo3").version("3.8.0").apply(false)
 }
 
-fun localProperties(): java.util.Properties {
-    val properties = java.util.Properties()
-    properties.load(project.rootProject.file("local.properties").reader())
-    return properties
-}
-
-val properties = localProperties()
-
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }

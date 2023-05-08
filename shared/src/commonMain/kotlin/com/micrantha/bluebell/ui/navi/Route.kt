@@ -16,9 +16,9 @@ interface Route {
 
 typealias RouteContext = NavigationContext<Route>
 
-typealias Screen<T> = @Composable (viewModel: T) -> Unit
+typealias Screen<T> = @Composable (T) -> Unit
 
-typealias RouteRenderer = @Composable (ViewContext) -> Unit
+typealias RouteRenderer = @Composable (ViewContext, Array<out Any>?) -> Unit
 
 internal typealias MappedRoutes = Map<Route, RouteRenderer>
 
@@ -27,9 +27,15 @@ class RouteBuilder : KoinComponent {
 
     private val routedScreens = mutableMapOf<Route, RouteRenderer>()
 
-    internal inline infix fun <State, reified T : ViewContextModel<State>> Route.to(noinline screen: Screen<T>) {
-        routedScreens[this] = { context ->
-            screen(get { parametersOf(context) })
+    internal inline infix fun <State, reified T : ViewContextModel<State>> Route.to(
+        noinline screen: Screen<T>
+    ) {
+        routedScreens[this] = { context, params ->
+            if (params == null) {
+                screen(get { parametersOf(context) })
+            } else {
+                screen(get { parametersOf(context, *params) })
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.micrantha.bluebell.ui.status
+package com.micrantha.bluebell.ui.components.status
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

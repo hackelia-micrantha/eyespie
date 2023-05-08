@@ -7,4 +7,5 @@ class GameRepository(
     private val remoteSource: GameRemoteSource
 ) : DomainRepository {
     override suspend fun games() = remoteSource.games()
+    override suspend fun game(id: String) = remoteSource.game(id)
 }

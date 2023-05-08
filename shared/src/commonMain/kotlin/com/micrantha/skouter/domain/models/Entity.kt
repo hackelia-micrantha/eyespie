@@ -1,11 +1,12 @@
 package com.micrantha.skouter.domain.models
 
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Instant
 
 interface Entity {
     val id: String
+    val nodeId: String
 }
 
 interface Creatable {
-    val createdAt: LocalDateTime
+    val createdAt: Instant
 }

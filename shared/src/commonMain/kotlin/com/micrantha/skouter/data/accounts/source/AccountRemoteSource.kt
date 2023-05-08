@@ -1,11 +1,11 @@
 package com.micrantha.skouter.data.accounts.source
 
-import com.micrantha.skouter.data.remote.ApiClient
+import com.micrantha.skouter.data.remote.SupaClient
 import com.micrantha.skouter.domain.models.Player
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 
 class AccountRemoteSource(
-    private val client: ApiClient
+    private val client: SupaClient
 ) {
     fun isLoggedIn(): Boolean = client.auth().currentSessionOrNull()?.user != null
 

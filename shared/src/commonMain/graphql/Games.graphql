@@ -1,15 +1,16 @@
 query GameList {
-    gamesCollection {
+    games: gameCollection {
         edges {
             node {
                 id
+                nodeId
                 created_at
                 name
                 expires
-                gameThingsCollection {
+                things: gameThingCollection {
                     totalCount
                 }
-                gamePlayersCollection {
+                players: gamePlayerCollection {
                     totalCount
                 }
             }
@@ -17,3 +18,48 @@ query GameList {
     }
 }
 
+query GameNode($nodeId: ID!) {
+    gameNode: node(nodeId: $nodeId) {
+        nodeId
+        ... on Game {
+            id
+            name
+            created_at
+            expires
+            turn_duration
+            min_things
+            max_things
+            min_players
+            max_players
+            things: gameThingCollection {
+                edges {
+                    node {
+                        thing {
+                            id
+                            nodeId
+                            image
+                            name
+                            created_at
+                            clues
+                            guessed
+                        }
+                    }
+                }
+            }
+            players: gamePlayerCollection {
+                edges {
+                    node {
+                        score
+                        player {
+                            id
+                            nodeId
+                            first_name
+                            last_name
+                            created_at
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

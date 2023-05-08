@@ -12,5 +12,12 @@
     <string name="login_email_placeholder">Enter email</string>
     <string name="login_password_placeholder">Enter password</string>
     <string name="logging_in">Logging in…</string>
+    <string name="loading_game">Loading game…</string>
     <string name="login_failure">Login failed, please try again.</string>
+    <string name="things">Things</string>
+    <string name="players">Players</string>
+    <string name="created_at">Created</string>
+    <string name="expires_at">Expires</string>
+    <string name="next_turn">Next Turn</string>
+    <string name="location">Location</string>
 </resources>

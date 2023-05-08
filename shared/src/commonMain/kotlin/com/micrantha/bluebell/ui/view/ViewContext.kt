@@ -7,8 +7,9 @@ import com.micrantha.bluebell.domain.arch.StoreFactory
 import com.micrantha.bluebell.domain.flux.Flux
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.navi.Router
+import org.koin.core.component.KoinComponent
 
-interface ViewContext : StoreFactory, Dispatcher, LocalizedRepository, Router
+interface ViewContext : StoreFactory, Dispatcher, LocalizedRepository, Router, KoinComponent
 
 class DefaultViewContext(
     internal val router: Router,

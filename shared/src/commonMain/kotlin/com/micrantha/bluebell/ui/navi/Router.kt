@@ -11,11 +11,11 @@ import com.chrynan.navigation.Navigator as Navi
 interface Router {
     fun navigateBack()
 
-    fun navigate(route: Route)
+    fun navigate(route: Route, vararg params: Any)
 
     fun changeNavigationContext(context: RouteContext)
 
-    operator fun get(route: Route): RouteRenderer?
+    operator fun get(route: Route): Pair<RouteRenderer, Array<out Any>?>?
 }
 
 val LocalRouter = compositionLocalOf<Router> { error("Router not defined") }
@@ -27,13 +27,18 @@ internal class NavigationRouter(
     private val routes: NavigationRoutes
 ) : Router {
 
+    private val params = mutableMapOf<Route, Array<out Any>?>()
+
     override fun navigateBack() {
         navigator.goBack()
     }
 
-    override fun navigate(route: Route) = navigator.goTo(route, ADD_TO_STACK)
+    override fun navigate(route: Route, vararg params: Any) {
+        this.params[route] = params
+        navigator.goTo(route, ADD_TO_STACK)
+    }
 
-    override fun get(route: Route) = routes[route]
+    override fun get(route: Route) = routes[route]?.let { Pair(it, params[route]) }
 
     fun current(): Route = navigator.state.currentDestination
 
