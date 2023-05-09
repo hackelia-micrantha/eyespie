@@ -30,7 +30,7 @@ fun EmptyContent(message: String? = null) {
             Icon(
                 Icons.Default.QuestionMark,
                 contentDescription = null,
-                modifier = Modifier.size(Dimensions.Icon.placeholder)
+                modifier = Modifier.size(Dimensions.List.placeholder)
             )
             message?.let {
                 Text(

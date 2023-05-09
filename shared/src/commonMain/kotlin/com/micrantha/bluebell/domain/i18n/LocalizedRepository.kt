@@ -7,7 +7,7 @@ import kotlinx.datetime.Instant
 import org.koin.core.component.inject
 
 interface LocalizedRepository {
-    fun resource(str: LocalizedString): String
+    fun resource(str: LocalizedString, vararg args: Any?): String
 
     fun format(epochSeconds: Long, format: String, timeZone: String, locale: String): String
 }

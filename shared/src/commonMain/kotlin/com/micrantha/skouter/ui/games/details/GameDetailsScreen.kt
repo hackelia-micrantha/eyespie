@@ -16,7 +16,7 @@ import androidx.compose.ui.layout.HorizontalAlignmentLine
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.domain.i18n.stringResource
-import com.micrantha.bluebell.domain.model.ResultStatus
+import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.bluebell.ui.components.HorizontalLabeledText
 import com.micrantha.bluebell.ui.components.TabPager
 import com.micrantha.bluebell.ui.components.status.FailureContent
@@ -38,9 +38,9 @@ fun GameDetailsScreen(viewModel: GameDetailsViewModel) {
 @Composable
 fun GameDetailsContent(state: GameDetailsUiState, dispatch: Dispatch) {
     when (val status = state.status) {
-        is ResultStatus.Busy -> LoadingContent(status.message)
-        is ResultStatus.Failure -> FailureContent(status.message)
-        is ResultStatus.Ready -> GameDetailsContent(state, status.data, dispatch)
+        is UiResult.Busy -> LoadingContent(status.message)
+        is UiResult.Failure -> FailureContent(status.message)
+        is UiResult.Ready -> GameDetailsContent(state, status.data, dispatch)
         else -> Unit
     }
 }
@@ -80,7 +80,7 @@ fun GameDetailsContent(state: GameDetailsUiState, game: Game, dispatch: Dispatch
             stringResource(i18n.Location)
         ) { index, _ ->
             when (index) {
-                0 -> GameThingsContent(game, dispatch)
+                0 -> GameThingsContent(state, game, dispatch)
                 1 -> GamePlayersContent(state, game, dispatch)
                 2 -> GameLocationContent(state, dispatch)
             }
@@ -89,10 +89,14 @@ fun GameDetailsContent(state: GameDetailsUiState, game: Game, dispatch: Dispatch
 }
 
 @Composable
-private fun GameThingsContent(game: Game, dispatch: Dispatch) {
+private fun GameThingsContent(
+    state: GameDetailsUiState,
+    game: Game,
+    dispatch: Dispatch
+) {
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
         items(game.things) {
-            GameThingCard(game, it, dispatch)
+            GameThingCard(it, state.image(it.id), dispatch)
         }
     }
 }

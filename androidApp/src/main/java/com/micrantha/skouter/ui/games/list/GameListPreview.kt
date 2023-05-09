@@ -2,7 +2,7 @@ package com.micrantha.skouter.ui.games.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.micrantha.bluebell.domain.model.ResultStatus.Ready
+import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.skouter.domain.models.GameListing
 import com.micrantha.skouter.ui.PreviewContext
 import kotlinx.datetime.Clock.System

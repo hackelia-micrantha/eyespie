@@ -1,6 +1,5 @@
 package com.micrantha.skouter.data.things
 
-import androidx.compose.ui.graphics.ImageBitmap
 import com.micrantha.skouter.data.things.source.ThingsRemoteSource
 import com.micrantha.skouter.domain.models.Clues
 import com.micrantha.skouter.domain.models.Thing.Image
@@ -12,7 +11,7 @@ class ThingsRepository(
     override suspend fun recognize(image: ByteArray, contentType: String): Result<Clues> =
         remoteSource.recognize(image, contentType)
 
-    override suspend fun image(image: Image): Result<ImageBitmap> =
+    override suspend fun image(image: Image): Result<ByteArray> =
         remoteSource.image(image)
 
 }

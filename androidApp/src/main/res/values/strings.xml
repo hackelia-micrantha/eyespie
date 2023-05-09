@@ -13,7 +13,7 @@
     <string name="login_password_placeholder">Enter password</string>
     <string name="logging_in">Logging in…</string>
     <string name="loading_game">Loading game…</string>
-    <string name="login_failure">Login failed, please try again.</string>
+    <string name="login_failed">Login failed, please try again.</string>
     <string name="things">Things</string>
     <string name="players">Players</string>
     <string name="created_at">Created</string>

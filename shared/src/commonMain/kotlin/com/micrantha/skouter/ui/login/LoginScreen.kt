@@ -45,7 +45,7 @@ fun LoginContent(state: LoginUiState, dispatch: Dispatch) {
             Icon(
                 Icons.Default.Visibility,
                 contentDescription = null,
-                modifier = Modifier.size(Dimensions.Icon.placeholder),
+                modifier = Modifier.size(Dimensions.List.placeholder),
                 tint = MaterialTheme.colorScheme.primary
             )
             Text(

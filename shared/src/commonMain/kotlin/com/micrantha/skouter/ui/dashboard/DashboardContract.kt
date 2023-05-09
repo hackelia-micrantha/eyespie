@@ -1,6 +1,6 @@
 package com.micrantha.skouter.ui.dashboard
 
-import com.micrantha.bluebell.domain.model.ResultStatus
+import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.models.GameListing
 import com.micrantha.skouter.domain.models.PlayerListing
 import com.micrantha.skouter.domain.models.ThingListing
@@ -12,5 +12,5 @@ data class Dashboard(
 )
 
 data class DashboardState(
-    val status: ResultStatus<Dashboard> = ResultStatus.Default
+    val status: UiResult<Dashboard> = UiResult.Default
 )

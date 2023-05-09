@@ -5,7 +5,7 @@ import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.i18n.StringResource
-import com.micrantha.bluebell.domain.model.ResultStatus
+import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.skouter.ui.arch.i18n
 
@@ -27,8 +27,8 @@ class LoginReducer(private val string: StringResource) : Reducer<LoginState> {
         when (action) {
             is LoginAction.ChangedEmail -> state.copy(email = action.email)
             is LoginAction.ChangedPassword -> state.copy(password = action.password)
-            is LoginAction.OnLogin -> state.copy(status = ResultStatus.Busy(string(i18n.LoggingIn)))
-            is LoginAction.OnError -> state.copy(status = ResultStatus.Failure(string(i18n.LoginFailed)))
+            is LoginAction.OnLogin -> state.copy(status = UiResult.Busy(string(i18n.LoggingIn)))
+            is LoginAction.OnError -> state.copy(status = UiResult.Failure(string(i18n.LoginFailed)))
             else -> state
         }
 }

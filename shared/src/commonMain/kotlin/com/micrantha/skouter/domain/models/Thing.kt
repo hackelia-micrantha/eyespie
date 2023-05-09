@@ -1,6 +1,5 @@
 package com.micrantha.skouter.domain.models
 
-import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.datetime.Instant
 
 data class ThingListing(
@@ -24,8 +23,7 @@ data class Thing(
     data class Image(
         val fileId: String,
         val bucketId: String,
-        val playerId: String,
-        val data: ImageBitmap? = null
+        val playerId: String
     )
 
     data class Guess(

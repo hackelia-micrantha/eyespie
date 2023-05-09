@@ -2,7 +2,7 @@ package com.micrantha.skouter.ui.games.details
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.micrantha.bluebell.domain.model.ResultStatus
+import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.models.Game
 import com.micrantha.skouter.domain.models.Game.Limits
 import com.micrantha.skouter.ui.PreviewContext
@@ -15,7 +15,7 @@ import kotlin.time.Duration
 fun GameDetailsPreview() = PreviewContext {
     GameDetailsContent(
         state = GameDetailsUiState(
-            status = ResultStatus.Ready(
+            status = UiResult.Ready(
                 Game(
                     id = "123",
                     nodeId = "123",
@@ -30,7 +30,8 @@ fun GameDetailsPreview() = PreviewContext {
                     things = emptyList(),
                     turnDuration = Duration.parse("8h")
                 )
-            )
+            ),
+            images = emptyMap()
         )
     ) {}
 

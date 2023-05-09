@@ -1,13 +1,13 @@
 package com.micrantha.skouter.data.remote
 
+import Skouter.shared.BuildConfig
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-
-private const val MICRANTHA_DOMAIN = "micrantha.com"
 
 class MicranthaClient {
 
@@ -15,18 +15,23 @@ class MicranthaClient {
         install(ContentNegotiation) {
             json()
         }
+        defaultRequest {
+            headers {
+                "apiKey" to BuildConfig.apiKey
+            }
+        }
     }
 
     suspend fun recognize(data: ByteArray, contentType: String) =
         httpClient.submitFormWithBinaryData(
-            url = "https:${MICRANTHA_DOMAIN}/recognize",
+            url = "https://recognition.${BuildConfig.apiDomain}",
             formData {
                 append(
                     "image",
                     data,
-                    HeadersBuilder().apply {
-                        append(HttpHeaders.ContentType, contentType)
-                    }.build()
+                    headers {
+                        HttpHeaders.ContentType to contentType
+                    }
                 )
             }
         )

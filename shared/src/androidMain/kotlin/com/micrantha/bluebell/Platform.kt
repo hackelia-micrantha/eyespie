@@ -12,10 +12,10 @@ import java.util.*
 actual class Platform(private val context: Context) : LocalizedRepository {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
-    actual override fun resource(str: LocalizedString): String {
+    actual override fun resource(str: LocalizedString, vararg args: Any?): String {
         val key = str.androidKey ?: str.key
         val id = context.resources.getIdentifier(key, "string", context.packageName)
-        return context.getString(id)
+        return context.getString(id, *args)
     }
 
     actual override fun format(

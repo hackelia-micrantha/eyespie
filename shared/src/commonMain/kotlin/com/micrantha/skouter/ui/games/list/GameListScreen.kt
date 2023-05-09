@@ -21,11 +21,11 @@ import androidx.compose.ui.layout.HorizontalAlignmentLine
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.domain.i18n.stringResource
-import com.micrantha.bluebell.domain.model.ResultStatus.Busy
-import com.micrantha.bluebell.domain.model.ResultStatus.Default
-import com.micrantha.bluebell.domain.model.ResultStatus.Empty
-import com.micrantha.bluebell.domain.model.ResultStatus.Failure
-import com.micrantha.bluebell.domain.model.ResultStatus.Ready
+import com.micrantha.bluebell.domain.model.UiResult.Busy
+import com.micrantha.bluebell.domain.model.UiResult.Default
+import com.micrantha.bluebell.domain.model.UiResult.Empty
+import com.micrantha.bluebell.domain.model.UiResult.Failure
+import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.components.HorizontalLabeledText
 import com.micrantha.bluebell.ui.components.status.EmptyContent
 import com.micrantha.bluebell.ui.components.status.FailureContent

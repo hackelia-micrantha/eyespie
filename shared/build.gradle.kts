@@ -38,12 +38,14 @@ kotlin {
                 api(compose.materialIconsExtended)
                 api(compose.material3)
 
-                api("io.insert-koin:koin-core:3.4.0")
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                runtimeOnly("org.jetbrains.skiko:skiko:0.7.58")
+                api("io.insert-koin:koin-core:3.4.0")
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+                implementation("com.squareup.okio:okio:3.3.0")
 
+                runtimeOnly("com.soywiz.korlibs.korim:korim:3.4.0")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
@@ -52,7 +54,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-cio:2.3.0")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
-                implementation("com.soywiz:korim:0.19.1")
 
                 implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.3")
                 implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.3")
@@ -72,7 +73,7 @@ kotlin {
                 implementation("io.insert-koin:koin-androidx-compose:3.4.3")
                 //implementation("org.jetbrains.kotlinx:kotlin-deeplearning-api:0.5.1")
 
-                api("androidx.compose.foundation:foundation:1.4.2")
+                api("androidx.compose.foundation:foundation:1.4.3")
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
@@ -80,11 +81,16 @@ kotlin {
             }
         }
         val androidUnitTest by getting
+
+        val skiaMain by creating {
+            dependsOn(commonMain)
+        }
+
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
-            dependsOn(commonMain)
+            dependsOn(skiaMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)

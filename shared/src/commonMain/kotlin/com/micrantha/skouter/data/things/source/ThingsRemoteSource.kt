@@ -1,7 +1,5 @@
 package com.micrantha.skouter.data.things.source
 
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.toComposeImageBitmap
 import com.micrantha.skouter.data.remote.MicranthaClient
 import com.micrantha.skouter.data.remote.SupaClient
 import com.micrantha.skouter.data.things.mapping.ThingsDomainMapper
@@ -11,7 +9,6 @@ import com.micrantha.skouter.domain.models.Clues
 import com.micrantha.skouter.domain.models.Thing.Image
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
-import org.jetbrains.skia.Image as ImageBuilder
 
 class ThingsRemoteSource(
     private val client: MicranthaClient,
@@ -27,12 +24,9 @@ class ThingsRemoteSource(
             Result.failure(err)
         }
 
-    suspend fun image(image: Image): Result<BitmapPainter> = try {
-        val result = supabase.storage().get(image.bucketId)
-            .downloadAuthenticated(image.path).let {
-                ImageBuilder.Companion.makeFromEncoded(it)
-                    .toComposeImageBitmap().let(::BitmapPainter)
-            }
+    suspend fun image(image: Image): Result<ByteArray> = try {
+        val result = supabase.storage(image.bucketId)
+            .downloadAuthenticated(image.path)
         Result.success(result)
     } catch (err: Throwable) {
         Napier.e("image", err)

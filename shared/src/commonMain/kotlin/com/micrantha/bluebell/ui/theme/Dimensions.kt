@@ -13,7 +13,8 @@ object Dimensions {
         val Large = 26.sp
     }
 
-    object Icon {
+    object List {
         val placeholder = 200.dp
+        val thumbnail = 100.dp
     }
 }

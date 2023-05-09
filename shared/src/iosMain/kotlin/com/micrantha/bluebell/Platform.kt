@@ -9,8 +9,8 @@ actual class Platform : LocalizedRepository {
     actual val name: String =
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 
-    actual override fun resource(str: LocalizedString): String {
-        return NSLocalizedString(str.iosKey ?: str.key)
+    actual override fun resource(str: LocalizedString, vararg args: Any?): String {
+        return NSLocalizedString(str.iosKey ?: str.key, *args)
     }
 
     actual fun format(

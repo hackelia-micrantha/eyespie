@@ -20,7 +20,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://jitpack.io")
         maven("https://repo.repsy.io/mvn/chrynan/public")
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 

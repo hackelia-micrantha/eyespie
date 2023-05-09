@@ -1,11 +1,11 @@
 package com.micrantha.skouter.ui.games.list
 
-import com.micrantha.bluebell.domain.model.ResultStatus
+import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.models.GameListing
 import com.micrantha.skouter.domain.repository.GameRepository
 
 data class GameListState(
-    val status: ResultStatus<List<GameListing>> = ResultStatus.Busy()
+    val status: UiResult<List<GameListing>> = UiResult.Busy()
 )
 
 class GameListEnvironment(
@@ -13,7 +13,7 @@ class GameListEnvironment(
 ) : GameRepository by repository
 
 data class GameListUiState(
-    val status: ResultStatus<List<GameListing>>
+    val status: UiResult<List<GameListing>>
 )
 
 internal fun GameListState.asUiState() = GameListUiState(

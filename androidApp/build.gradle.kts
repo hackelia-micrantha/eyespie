@@ -41,6 +41,6 @@ android {
 dependencies {
     implementation(project(":shared"))
     implementation("androidx.activity:activity-compose:1.7.1")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.2")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.2")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
 }
