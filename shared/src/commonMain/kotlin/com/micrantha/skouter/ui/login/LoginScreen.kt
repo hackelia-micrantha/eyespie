@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +25,8 @@ import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.domain.model.enabled
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.ui.arch.i18n
+import com.micrantha.skouter.ui.Skouter
+import com.micrantha.skouter.ui.components.i18n
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel) {
@@ -43,7 +42,7 @@ fun LoginContent(state: LoginUiState, dispatch: Dispatch) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Icon(
-                Icons.Default.Visibility,
+                Skouter.defaultIcon,
                 contentDescription = null,
                 modifier = Modifier.size(Dimensions.List.placeholder),
                 tint = MaterialTheme.colorScheme.primary

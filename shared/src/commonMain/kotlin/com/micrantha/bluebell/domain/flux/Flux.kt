@@ -8,8 +8,7 @@ class Flux(
     private val dispatcher: FluxDispatcher
 ) : StoreFactory, Dispatcher by dispatcher {
 
-    override fun <T> createStore(with: T): Store<T> =
-        FluxStore(with).apply {
-            dispatcher.register(this::dispatch)
-        }
+    fun <T> register(store: FluxStore<T>) = dispatcher.register(store::dispatch)
+
+    override fun <T> createStore(state: T): Store<T> = FluxStore(state, this).apply { register() }
 }

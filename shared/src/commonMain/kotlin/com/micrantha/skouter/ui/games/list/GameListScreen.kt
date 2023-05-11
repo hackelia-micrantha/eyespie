@@ -32,7 +32,7 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.models.GameListing
-import com.micrantha.skouter.ui.arch.i18n
+import com.micrantha.skouter.ui.components.i18n
 import kotlin.math.max
 
 @Composable

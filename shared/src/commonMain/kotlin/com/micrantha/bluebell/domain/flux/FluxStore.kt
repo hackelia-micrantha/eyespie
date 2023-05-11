@@ -1,7 +1,6 @@
 package com.micrantha.bluebell.domain.flux
 
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.arch.Store
@@ -19,18 +18,24 @@ import kotlinx.coroutines.plus
 
 class FluxStore<State> internal constructor(
     initialState: State,
+    private val flux: Flux,
     private val stateScope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined) + Job()
-) : Store<State>, Dispatcher, Store.Listener<State> {
+) : Store<State>, Store.Listener<State> {
     private val reducers = mutableListOf<Reducer<State>>()
     private val effects = mutableListOf<Effect<State>>()
     private val current = MutableStateFlow(initialState)
 
+    override fun register(): Store<State> {
+        flux.register(this)
+        return this
+    }
+
     override fun dispatch(action: Action) {
         current.update { state ->
-            reducers.fold(state) { next, reducer -> reducer(next, action) }
+            reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
         }
         stateScope.launch {
-            effects.forEach { it(action, current.value) }
+            effects.forEach { effect -> effect(action, current.value) }
         }
     }
 

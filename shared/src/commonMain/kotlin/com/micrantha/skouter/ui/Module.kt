@@ -1,5 +1,7 @@
 package com.micrantha.skouter.ui
 
+import com.micrantha.skouter.ui.games.create.GameCreateEnvironment
+import com.micrantha.skouter.ui.games.create.GameCreateViewModel
 import com.micrantha.skouter.ui.games.details.GameDetailsEnvironment
 import com.micrantha.skouter.ui.games.details.GameDetailsViewModel
 import com.micrantha.skouter.ui.games.list.GameListEnvironment
@@ -9,19 +11,23 @@ import com.micrantha.skouter.ui.login.LoginViewModel
 import org.koin.dsl.module
 
 internal fun uiModules() = module {
-    factory { GameListEnvironment(get()) }
+    factory { GameListEnvironment(get(), get(), get(), get()) }
 
-    factory { LoginEnvironment(get()) }
+    factory { LoginEnvironment(get(), get(), get(), get()) }
 
     factory { MainEnvironment(get()) }
 
     factory { GameDetailsEnvironment(get(), get(), get(), get()) }
 
-    factory { params -> GameListViewModel(params.get(), get()) }
+    factory { GameCreateEnvironment() }
 
-    factory { params -> GameDetailsViewModel(params.get(), params.get(), get()) }
+    factory { GameListViewModel(get(), get()) }
 
-    factory { params -> MainViewModel(params.get(), get()) }
+    factory { GameDetailsViewModel(get(), get(), get()) }
 
-    factory { params -> LoginViewModel(params.get(), get()) }
+    factory { MainViewModel(get(), get()) }
+
+    factory { LoginViewModel(get(), get()) }
+
+    factory { GameCreateViewModel(get()) }
 }

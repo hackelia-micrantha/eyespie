@@ -14,3 +14,7 @@ data class Dashboard(
 data class DashboardState(
     val status: UiResult<Dashboard> = UiResult.Default
 )
+
+sealed class DashboardActions {
+    object Load
+}

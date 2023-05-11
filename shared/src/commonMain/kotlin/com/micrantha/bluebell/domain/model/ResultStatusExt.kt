@@ -13,4 +13,5 @@ fun LocalizedRepository.error(str: LocalizedString) = Failure(resource(str))
 
 fun <T> List<T>.status() = if (isEmpty()) Empty() else Ready(this)
 
-fun <T> UiResult<T>.enabled(): Boolean = this !is UiResult.Busy
+fun <T> UiResult<T>.enabled(): Boolean = this !is Busy
+

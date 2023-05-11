@@ -1,41 +1,37 @@
 package com.micrantha.skouter.ui
 
 import com.micrantha.bluebell.domain.arch.Action
+import com.micrantha.bluebell.domain.model.Ready
+import com.micrantha.bluebell.domain.model.UiResult
+import com.micrantha.bluebell.domain.model.UiResult.Busy
 import com.micrantha.skouter.domain.repository.AccountRepository
-import com.micrantha.skouter.ui.MainAction.Refresh
-import com.micrantha.skouter.ui.MainAction.SetTitle
-
-typealias BackHandler = () -> Unit
+import com.micrantha.skouter.ui.MainAction.Load
+import com.micrantha.skouter.ui.MainAction.Loaded
 
 sealed class MainAction : Action {
-    data class SetTitle(val title: String, val showBack: Boolean = false) : MainAction()
 
-    object Refresh : MainAction()
+    data class Loaded(val isLoggedIn: Boolean) : MainAction()
 
-    data class Init(val isLoggedIn: Boolean) : MainAction()
+    object Load : MainAction()
 
-    companion object {
-        fun setTitle(init: ScaffoldBuilder.() -> Unit) = ScaffoldBuilder().apply(init).asTitle()
-    }
-}
-
-class ScaffoldBuilder {
-    var title: String? = null
-    var showBack: Boolean = false
-    var onBack: BackHandler? = null
-
-    fun asTitle() = title?.let { SetTitle(it, showBack) } ?: Refresh
 }
 
 data class MainState(
-    val title: String? = null,
-    val showBack: Boolean = false,
-    val onBack: BackHandler? = null,
-    val isLoggedIn: Boolean = false
+    val isLoggedIn: Boolean = false,
+    val status: UiResult<Unit> = UiResult.Default
 )
 
 class MainEnvironment(
     private val accountRepository: AccountRepository
 ) {
     suspend fun isLoggedIn() = accountRepository.isLoggedIn()
+
+    fun reduce(state: MainState, action: Action) = when (action) {
+        is Load -> state.copy(status = Busy())
+        is Loaded -> state.copy(
+            isLoggedIn = action.isLoggedIn,
+            status = Ready()
+        )
+        else -> state
+    }
 }

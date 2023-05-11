@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.arch
+package com.micrantha.skouter.ui.components
 
 import com.micrantha.bluebell.domain.i18n.LocalizedString
 
@@ -26,5 +26,9 @@ enum class i18n(
     ExpiresAt("expires_at"),
     LoadingGame("loading_game"),
     NextTurn("next_turn"),
-    Location("location")
+    Location("location"),
+    NewGameHeader("new_game_header"),
+    NewGameContent("new_game_content"),
+    Name("name"),
+    Next("next")
 }

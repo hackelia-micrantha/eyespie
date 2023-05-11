@@ -75,22 +75,19 @@ kotlin {
 
                 api("androidx.compose.foundation:foundation:1.4.3")
 
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+                api("androidx.activity:activity-compose:1.7.1")
 
                 //implementation("io.github.chopyourbrain:kontrol:0.1.1")
             }
         }
         val androidUnitTest by getting
 
-        val skiaMain by creating {
-            dependsOn(commonMain)
-        }
-
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
-            dependsOn(skiaMain)
+            dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)

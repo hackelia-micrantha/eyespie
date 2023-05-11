@@ -28,6 +28,9 @@ import org.koin.dsl.module
 
 class PreviewRouter : Router {
     override fun navigateBack() = Unit
+    override fun canGoBack() = false
+
+    override val current: Route? = null
 
     override fun navigate(route: Route, vararg params: Any) = Unit
 
@@ -44,12 +47,12 @@ class PreviewContext(
     Dispatcher, LocalizedRepository by platform, Router by router, ViewContext {
     override fun dispatch(action: Action) {}
 
-    override fun <T> createStore(with: T): Store<T> {
+    override fun <T> createStore(state: T): Store<T> {
         return object : Store<T> {
-            override fun state(): StateFlow<T> = MutableStateFlow(with)
-
+            override fun register(): Store<T> = this
+            override fun state(): StateFlow<T> = MutableStateFlow(state)
+            override fun dispatch(action: Action) = Unit
             override fun applyEffect(effect: Effect<T>): Store<T> = this
-
             override fun addReducer(reducer: Reducer<T>): Store<T> = this
         }
     }
@@ -60,7 +63,6 @@ fun PreviewContext(content: @Composable () -> Unit) {
     val context = LocalContext.current
 
     startKoin {
-
         modules(module {
             Platform(context)
         }, bluebellModules(), skouterModules())

@@ -1,11 +1,13 @@
 package com.micrantha.bluebell
 
+import androidx.compose.runtime.Composable
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
+import org.koin.core.component.KoinComponent
 import platform.Foundation.NSLocalizedString
 import platform.UIKit.UIDevice
 
-actual class Platform : LocalizedRepository {
+actual class Platform : LocalizedRepository, KoinComponent {
     actual val name: String =
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 
@@ -27,3 +29,7 @@ actual class Platform : LocalizedRepository {
         return dateFormatter.stringFromDate(date)
     }
 }
+
+
+@Composable
+actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) = Unit

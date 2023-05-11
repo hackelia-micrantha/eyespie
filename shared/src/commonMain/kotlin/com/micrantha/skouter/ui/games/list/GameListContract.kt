@@ -1,21 +1,26 @@
 package com.micrantha.skouter.ui.games.list
 
+import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.models.GameListing
-import com.micrantha.skouter.domain.repository.GameRepository
 
 data class GameListState(
     val status: UiResult<List<GameListing>> = UiResult.Busy()
-)
-
-class GameListEnvironment(
-    private val repository: GameRepository,
-) : GameRepository by repository
+) {
+    fun asUiState() = GameListUiState(
+        status = status
+    )
+}
 
 data class GameListUiState(
     val status: UiResult<List<GameListing>>
 )
 
-internal fun GameListState.asUiState() = GameListUiState(
-    status = status
-)
+sealed class GameListActions : Action {
+    object NewGame : GameListActions()
+    object Load : GameListActions()
+    data class Loaded(val data: List<GameListing>) : GameListActions()
+    data class Error(val error: Throwable) : GameListActions()
+
+    data class GameClicked(val id: String) : GameListActions()
+}

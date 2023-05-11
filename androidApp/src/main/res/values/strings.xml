@@ -20,4 +20,8 @@
     <string name="expires_at">Expires</string>
     <string name="next_turn">Next Turn</string>
     <string name="location">Location</string>
+    <string name="new_game_header">Start a new game</string>
+    <string name="new_game_content">Give your game a name.</string>
+    <string name="name">Name</string>
+    <string name="next">Next</string>
 </resources>

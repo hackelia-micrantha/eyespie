@@ -13,7 +13,10 @@ sealed class UiResult<out T> {
     data class Failure(val message: String? = null) : UiResult<Nothing>()
 
     data class Empty(val message: String? = null) : UiResult<Nothing>()
+
 }
+
+fun Ready() = Ready(Unit)
 
 fun <T> UiResult<T>.copy(ready: (T) -> T) = when (this) {
     is Ready -> this.copy(data = ready(this.data))

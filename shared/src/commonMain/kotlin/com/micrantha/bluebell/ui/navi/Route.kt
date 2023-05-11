@@ -2,7 +2,9 @@ package com.micrantha.bluebell.ui.navi
 
 import androidx.compose.runtime.Composable
 import com.chrynan.navigation.NavigationContext
+import com.micrantha.bluebell.BackHandler
 import com.micrantha.bluebell.data.err.fail
+import com.micrantha.bluebell.ui.components.effects.ScreenVisibilityEffect
 import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.bluebell.ui.view.ViewContextModel
 import org.koin.core.component.KoinComponent
@@ -31,19 +33,29 @@ class RouteBuilder : KoinComponent {
         noinline screen: Screen<T>
     ) {
         routedScreens[this] = { context, params ->
-            if (params == null) {
-                screen(get { parametersOf(context) })
+            val viewModel: T = if (params == null) {
+                get { parametersOf(context) }
             } else {
-                screen(get { parametersOf(context, *params) })
+                get { parametersOf(context, *params) }
             }
+
+            BackHandler(context.canGoBack()) {
+                context.navigateBack()
+            }
+
+            ScreenVisibilityEffect(viewModel)
+
+            screen(viewModel)
         }
     }
 
-    fun build() = NavigationRoutes(
-        initialContext = initialContext
-            ?: fail("no initial route context configured"),
-        routedScreens
-    )
+    fun build(): NavigationRoutes {
+        return NavigationRoutes(
+            initialContext = initialContext
+                ?: fail("no initial route context configured"),
+            routedScreens
+        )
+    }
 }
 
 fun routes(builder: RouteBuilder.() -> Unit) = RouteBuilder().apply(builder)

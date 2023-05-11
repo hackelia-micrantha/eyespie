@@ -11,9 +11,13 @@ import com.chrynan.navigation.Navigator as Navi
 interface Router {
     fun navigateBack()
 
+    fun canGoBack(): Boolean
+
     fun navigate(route: Route, vararg params: Any)
 
     fun changeNavigationContext(context: RouteContext)
+
+    val current: Route?
 
     operator fun get(route: Route): Pair<RouteRenderer, Array<out Any>?>?
 }
@@ -40,7 +44,9 @@ internal class NavigationRouter(
 
     override fun get(route: Route) = routes[route]?.let { Pair(it, params[route]) }
 
-    fun current(): Route = navigator.state.currentDestination
+    override val current: Route = navigator.state.currentDestination
+
+    override fun canGoBack(): Boolean = navigator.canGoBack()
 
     override fun changeNavigationContext(context: RouteContext) =
         navigator.changeContext(context)

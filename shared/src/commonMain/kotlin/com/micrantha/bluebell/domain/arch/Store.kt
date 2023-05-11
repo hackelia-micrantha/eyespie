@@ -9,15 +9,18 @@ fun interface ReducerStore<State> {
 
 fun interface EffectedStore<State> {
     fun applyEffect(effect: Effect<State>): Store<State>
+
     operator fun plus(effect: Effect<State>) = applyEffect(effect)
 }
 
-interface Store<State> : Stateful<State>, ReducerStore<State>, EffectedStore<State> {
+interface Store<State> : Stateful<State>, ReducerStore<State>, EffectedStore<State>, Dispatcher {
+    fun register(): Store<State>
+
     fun interface Listener<State> {
         fun listen(block: (State) -> Unit): Store<State>
     }
 }
 
 interface StoreFactory {
-    fun <T> createStore(with: T): Store<T>
+    fun <T> createStore(state: T): Store<T>
 }

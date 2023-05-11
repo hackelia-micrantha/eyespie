@@ -1,9 +1,8 @@
 package com.micrantha.skouter.ui.login
 
 import Skouter.shared.BuildConfig
+import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
-import com.micrantha.skouter.domain.repository.AccountRepository
-import com.micrantha.skouter.ui.navi.Routes
 
 data class LoginState(
     val email: String = BuildConfig.userLoginEmail,
@@ -26,11 +25,15 @@ fun LoginState.asUiState() = LoginUiState(
     status = this.status
 )
 
-class LoginEnvironment(
-    private val accountRepository: AccountRepository,
-) {
-    suspend fun login(email: String, password: String) = accountRepository.login(email, password)
+sealed class LoginAction : Action {
 
-    fun nextRoute() = Routes.Games
+    object OnLogin : LoginAction()
+
+    data class OnError(val err: Throwable) : LoginAction()
+
+    object OnSuccess : LoginAction()
+
+    data class ChangedPassword(val password: String) : LoginAction()
+
+    data class ChangedEmail(val email: String) : LoginAction()
 }
-
