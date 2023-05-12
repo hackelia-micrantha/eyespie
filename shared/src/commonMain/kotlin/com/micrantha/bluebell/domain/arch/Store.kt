@@ -14,7 +14,6 @@ fun interface EffectedStore<State> {
 }
 
 interface Store<State> : Stateful<State>, ReducerStore<State>, EffectedStore<State>, Dispatcher {
-    fun register(): Store<State>
 
     fun interface Listener<State> {
         fun listen(block: (State) -> Unit): Store<State>

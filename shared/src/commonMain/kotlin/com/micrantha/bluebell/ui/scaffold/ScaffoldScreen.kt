@@ -9,22 +9,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.micrantha.bluebell.BackHandler
+import com.micrantha.bluebell.domain.arch.Store
+import com.micrantha.bluebell.rememberStore
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.skouter.ui.navi.NavigationAction
+
+@Composable
+fun rememberScaffoldStore(): Lazy<Store<ScaffoldState>> {
+    val store = rememberStore(ScaffoldState())
+    return lazy { store.addReducer(::scaffoldReducer) }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScaffoldScreen(
-    viewContext: ViewContext,
     state: ScaffoldState,
     content: @Composable () -> Unit
 ) {
-    BackHandler(state.backAction?.enabled ?: false) {
-        viewContext.navigateBack()
-    }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -39,7 +40,6 @@ fun ScaffoldScreen(
                 navigationIcon = {
                     state.backAction?.let {
                         NavigationAction(
-                            viewContext = viewContext,
                             navAction = it
                         )
                     }
@@ -48,7 +48,6 @@ fun ScaffoldScreen(
                     state.actions?.forEach { nav ->
                         NavigationAction(
                             modifier = Modifier.padding(start = Dimensions.content),
-                            viewContext = viewContext,
                             navAction = nav
                         )
                     }

@@ -7,32 +7,31 @@ import com.micrantha.skouter.data.remote.MicranthaClient
 import com.micrantha.skouter.data.remote.SupaClient
 import com.micrantha.skouter.data.things.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.things.source.ThingsRemoteSource
-import com.micrantha.skouter.domain.repository.AccountRepository
-import com.micrantha.skouter.domain.repository.GameRepository
-import com.micrantha.skouter.domain.repository.ThingsRepository
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bindProviderOf
+import org.kodein.di.bindSingletonOf
 import com.micrantha.skouter.data.accounts.AccountRepository as AccountDataRepository
 import com.micrantha.skouter.data.games.GameRepository as GameDataRepository
 import com.micrantha.skouter.data.things.ThingsRepository as ThingDataRepository
 
-internal fun dataModules() = module {
-    single { SupaClient() }
+internal fun dataModules() = DI.Module("Skouter Data") {
+    bindSingletonOf(::SupaClient)
 
-    single { MicranthaClient() }
+    bindSingletonOf(::MicranthaClient)
 
-    factory { GameDomainMapper() }
+    bindProviderOf(::GameDomainMapper)
 
-    factory { ThingsDomainMapper() }
+    bindProviderOf(::ThingsDomainMapper)
 
-    factory { GameRemoteSource(get(), get()) }
+    bindProviderOf(::GameRemoteSource)
 
-    factory { ThingsRemoteSource(get(), get(), get()) }
+    bindProviderOf(::ThingsRemoteSource)
 
-    factory { AccountRemoteSource(get()) }
+    bindProviderOf(::AccountRemoteSource)
 
-    factory<GameRepository> { GameDataRepository(get()) }
+    bindProviderOf(::GameDataRepository)
 
-    factory<AccountRepository> { AccountDataRepository(get()) }
+    bindProviderOf(::AccountDataRepository)
 
-    factory<ThingsRepository> { ThingDataRepository(get()) }
+    bindProviderOf(::ThingDataRepository)
 }

@@ -1,11 +1,6 @@
 package com.micrantha.bluebell.ui.scaffold
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.ui.view.ViewContext
 import com.micrantha.skouter.ui.navi.NavAction
 
 data class ScaffoldState(
@@ -23,16 +18,7 @@ sealed class ScaffoldAction : Action {
     object Reset : ScaffoldAction()
 
     companion object {
-        fun navigation(init: ScaffoldBuilder.() -> Unit) =
+        fun scaffolding(init: ScaffoldBuilder.() -> Unit) =
             ScaffoldBuilder().apply(init).build()
     }
-}
-
-@Composable
-fun rememberScaffoldState(viewContext: ViewContext): State<ScaffoldState> {
-    val store = remember {
-        viewContext.createStore(ScaffoldState())
-            .addReducer(::scaffoldReducer)
-    }
-    return store.state().collectAsState()
 }

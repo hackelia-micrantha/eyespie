@@ -14,7 +14,7 @@ import kotlinx.coroutines.plus
 
 class FluxDispatcher internal constructor(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default) + Job()
-) : Dispatcher, Dispatcher.Listener {
+) : Dispatcher, Dispatcher.Observer {
     private val actions = MutableSharedFlow<Action>()
 
     override fun register(dispatch: Dispatch) {

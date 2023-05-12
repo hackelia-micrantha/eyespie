@@ -2,45 +2,45 @@ package com.micrantha.bluebell
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.micrantha.bluebell.ui.components.effects.InjectDependencyEffect
-import com.micrantha.bluebell.ui.navi.LocalRouter
-import com.micrantha.bluebell.ui.navi.NavigationRoutes
-import com.micrantha.bluebell.ui.navi.rememberRouter
+import androidx.compose.runtime.remember
+import com.micrantha.bluebell.domain.arch.Store
+import com.micrantha.bluebell.domain.flux.Flux
 import com.micrantha.bluebell.ui.scaffold.ScaffoldScreen
-import com.micrantha.bluebell.ui.scaffold.rememberScaffoldState
-import com.micrantha.bluebell.ui.view.LocalViewContext
-import com.micrantha.bluebell.ui.view.ViewContext
-import com.micrantha.bluebell.ui.view.ViewModel
-import com.micrantha.bluebell.ui.view.rememberViewContext
+import com.micrantha.bluebell.ui.scaffold.rememberScaffoldStore
+import com.micrantha.bluebell.ui.screen.LocalScreenContext
+import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.withViewContext
+import org.kodein.di.DI
+import org.kodein.di.compose.localDI
+import org.kodein.di.compose.rememberInstance
+import org.kodein.di.compose.subDI
 
-class AppConfig {
-    var platform: Platform? = null
-    var routes: NavigationRoutes? = null
-    var scaffolding: Boolean = false
-    var mainViewModel: ViewModel? = null
+@Composable
+fun <State> rememberStore(state: State): Store<State> {
+    val flux: Flux by rememberInstance()
+    return remember { flux.createStore(state) }
 }
 
 @Composable
 fun BluebellApp(
-    platform: Platform,
-    routes: NavigationRoutes,
-    content: @Composable (ViewContext) -> Unit
-) {
-    val router = rememberRouter(routes)
+    module: DI = localDI(),
+    content: @Composable () -> Unit
+) = subDI(parentDI = module, diBuilder = { import(bluebellModules()) }) {
 
-    val viewContext = rememberViewContext(platform, router)
+    withViewContext {
+        val screenContext by rememberInstance<ScreenContext>()
 
-    val state by rememberScaffoldState(viewContext)
+        CompositionLocalProvider(
+            LocalScreenContext provides screenContext
+        ) {
+            val store by rememberScaffoldStore()
+            val state by store.state().collectAsState()
 
-    InjectDependencyEffect(platform, viewContext)
-
-    CompositionLocalProvider(
-        LocalRouter provides router,
-        LocalViewContext provides viewContext
-    ) {
-        ScaffoldScreen(viewContext, state) {
-            content(viewContext)
+            ScaffoldScreen(state) {
+                content()
+            }
         }
     }
 }

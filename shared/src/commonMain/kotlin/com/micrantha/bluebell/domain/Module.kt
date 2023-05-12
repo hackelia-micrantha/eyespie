@@ -1,12 +1,19 @@
 package com.micrantha.bluebell.domain
 
+import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.flux.Flux
 import com.micrantha.bluebell.domain.flux.FluxDispatcher
 import com.micrantha.bluebell.domain.usecase.FormatDateTimeUseCase
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bindProviderOf
+import org.kodein.di.bindSingleton
+import org.kodein.di.delegate
 
-internal fun bluebellDomain() = module {
-    single { Flux(FluxDispatcher()) }
+internal fun bluebellDomain() = DI.Module(name = "Bluebell Domain") {
 
-    factory { FormatDateTimeUseCase(get()) }
+    bindSingleton { Flux(FluxDispatcher()) }
+
+    delegate<Dispatcher>().to<Flux>()
+
+    bindProviderOf(::FormatDateTimeUseCase)
 }

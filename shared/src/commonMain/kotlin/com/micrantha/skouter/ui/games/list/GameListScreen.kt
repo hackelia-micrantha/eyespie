@@ -18,6 +18,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.HorizontalAlignmentLine
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.domain.i18n.stringResource
@@ -32,24 +34,27 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.models.GameListing
-import com.micrantha.skouter.ui.components.i18n
+import com.micrantha.skouter.ui.components.Strings
 import kotlin.math.max
 
-@Composable
-fun GameListScreen(viewModel: GameListViewModel) {
-    val state by viewModel.state().collectAsState()
+class GameListScreen : Screen {
+    @Composable
+    override fun Content() {
+        val viewModel = rememberScreenModel<GameListScreenModel>()
+        val state by viewModel.state().collectAsState()
 
-    GameListContent(state, viewModel::dispatch)
-}
+        render(state, viewModel::dispatch)
+    }
 
-@Composable
-fun GameListContent(state: GameListUiState, dispatch: Dispatch) {
-    when (val status = state.status) {
-        is Busy -> LoadingContent(status.message)
-        is Failure -> FailureContent(status.message)
-        is Empty -> EmptyContent(status.message)
-        is Ready -> GameListContent(status.data, dispatch)
-        is Default -> Unit
+    @Composable
+    private fun render(state: GameListUiState, dispatch: Dispatch) {
+        when (val status = state.status) {
+            is Busy -> LoadingContent(status.message)
+            is Failure -> FailureContent(status.message)
+            is Empty -> EmptyContent(status.message)
+            is Ready -> GameListContent(status.data, dispatch)
+            is Default -> Unit
+        }
     }
 }
 
@@ -72,13 +77,13 @@ private fun GameListCard(game: GameListing, onClick: () -> Unit) = Card(
         HorizontalLabeledText(
             modifier = Modifier.padding(top = Dimensions.content),
             text = longDateTime(game.createdAt),
-            label = stringResource(i18n.CreatedAt),
+            label = stringResource(Strings.CreatedAt),
             labelAlignment = labelAlignment
         )
 
         HorizontalLabeledText(
             text = longDateTime(game.expiresAt),
-            label = stringResource(i18n.ExpiresAt),
+            label = stringResource(Strings.ExpiresAt),
             labelAlignment = labelAlignment
         )
 
@@ -86,13 +91,13 @@ private fun GameListCard(game: GameListing, onClick: () -> Unit) = Card(
 
         HorizontalLabeledText(
             text = game.totalThings.toString(),
-            label = stringResource(i18n.Things),
+            label = stringResource(Strings.Things),
             labelAlignment = labelAlignment
         )
 
         HorizontalLabeledText(
             text = game.totalPlayers.toString(),
-            label = stringResource(i18n.Players),
+            label = stringResource(Strings.Players),
             labelAlignment = labelAlignment
         )
 
@@ -104,7 +109,7 @@ private fun GameListContent(games: List<GameListing>, dispatch: Dispatch) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(games) { game ->
             GameListCard(game) {
-                dispatch(GameListActions.GameClicked(game.nodeId))
+                dispatch(GameListActions.GameClicked(game))
             }
         }
     }

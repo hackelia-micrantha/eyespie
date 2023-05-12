@@ -2,7 +2,9 @@ package com.micrantha.skouter.ui.components
 
 import com.micrantha.bluebell.domain.i18n.LocalizedString
 
-enum class i18n(
+typealias S = Strings
+
+enum class Strings(
     override val key: String,
     override val iosKey: String? = null,
     override val androidKey: String? = null

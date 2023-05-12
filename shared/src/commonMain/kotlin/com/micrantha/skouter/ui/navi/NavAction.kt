@@ -1,9 +1,9 @@
 package com.micrantha.skouter.ui.navi
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.micrantha.bluebell.ui.view.ViewContext
+import com.micrantha.bluebell.ui.screen.ScreenContext
 
-typealias ActionHandler = (ViewContext) -> Unit
+typealias ActionHandler = (ScreenContext) -> Unit
 
 data class NavAction(
     val title: String? = null,

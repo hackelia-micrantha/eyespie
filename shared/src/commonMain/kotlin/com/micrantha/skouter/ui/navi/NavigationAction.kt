@@ -5,19 +5,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.micrantha.bluebell.ui.view.ViewContext
+import com.micrantha.bluebell.ui.screen.LocalScreenContext
 
 @Composable
 fun NavigationAction(
     modifier: Modifier = Modifier,
-    viewContext: ViewContext,
     navAction: NavAction
-) =
+) {
+    val context = LocalScreenContext.current
+
     IconButton(
         modifier = modifier,
         enabled = navAction.enabled,
         onClick = {
-            navAction.action(viewContext)
+            navAction.action(context)
         }
     ) {
         Icon(
@@ -26,3 +27,4 @@ fun NavigationAction(
             tint = MaterialTheme.colorScheme.primary
         )
     }
+}

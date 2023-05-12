@@ -1,33 +1,38 @@
 package com.micrantha.skouter.ui
 
-import com.micrantha.skouter.ui.games.create.GameCreateEnvironment
-import com.micrantha.skouter.ui.games.create.GameCreateViewModel
+import com.micrantha.skouter.ui.games.create.GameCreateScreen
+import com.micrantha.skouter.ui.games.create.GameCreateScreenModel
+import com.micrantha.skouter.ui.games.details.GameDetailScreenArg
 import com.micrantha.skouter.ui.games.details.GameDetailsEnvironment
-import com.micrantha.skouter.ui.games.details.GameDetailsViewModel
+import com.micrantha.skouter.ui.games.details.GameDetailsScreen
+import com.micrantha.skouter.ui.games.details.GameDetailsScreenModel
 import com.micrantha.skouter.ui.games.list.GameListEnvironment
-import com.micrantha.skouter.ui.games.list.GameListViewModel
+import com.micrantha.skouter.ui.games.list.GameListScreen
+import com.micrantha.skouter.ui.games.list.GameListScreenModel
 import com.micrantha.skouter.ui.login.LoginEnvironment
-import com.micrantha.skouter.ui.login.LoginViewModel
-import org.koin.dsl.module
+import com.micrantha.skouter.ui.login.LoginScreen
+import com.micrantha.skouter.ui.login.LoginScreenModel
+import org.kodein.di.DI
+import org.kodein.di.bindFactory
+import org.kodein.di.bindProvider
+import org.kodein.di.bindProviderOf
+import org.kodein.di.instance
 
-internal fun uiModules() = module {
-    factory { GameListEnvironment(get(), get(), get(), get()) }
+internal fun uiModules() = DI.Module("Skouter UI") {
+    bindProviderOf(::MainEnvironment)
 
-    factory { LoginEnvironment(get(), get(), get(), get()) }
+    bindProviderOf(::LoginEnvironment)
+    bindProvider { LoginScreenModel(instance(), instance()) }
+    bindProviderOf(::LoginScreen)
 
-    factory { MainEnvironment(get()) }
+    bindProviderOf(::GameListEnvironment)
+    bindProvider { GameListScreenModel(instance(), instance()) }
+    bindProviderOf(::GameListScreen)
 
-    factory { GameDetailsEnvironment(get(), get(), get(), get()) }
+    bindProviderOf(::GameDetailsEnvironment)
+    bindFactory { arg: GameDetailScreenArg -> GameDetailsScreenModel(arg, instance(), instance()) }
+    bindFactory { arg: GameDetailScreenArg -> GameDetailsScreen(arg) }
 
-    factory { GameCreateEnvironment() }
-
-    factory { GameListViewModel(get(), get()) }
-
-    factory { GameDetailsViewModel(get(), get(), get()) }
-
-    factory { MainViewModel(get(), get()) }
-
-    factory { LoginViewModel(get(), get()) }
-
-    factory { GameCreateViewModel(get()) }
+    bindProvider { GameCreateScreenModel(instance()) }
+    bindProviderOf(::GameCreateScreen)
 }

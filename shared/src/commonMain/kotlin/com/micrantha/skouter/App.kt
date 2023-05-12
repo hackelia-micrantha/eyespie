@@ -1,21 +1,25 @@
 package com.micrantha.skouter
 
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.navigator.CurrentScreen
+import cafe.adriel.voyager.navigator.Navigator
 import com.micrantha.bluebell.BluebellApp
-import com.micrantha.bluebell.Platform
-import com.micrantha.bluebell.ui.components.effects.ScreenVisibilityEffect
-import com.micrantha.bluebell.ui.navi.NavigationScreen
-import com.micrantha.skouter.ui.MainViewModel
-import com.micrantha.skouter.ui.navi.routes
-import org.koin.core.component.inject
-import org.koin.core.parameter.parametersOf
+import com.micrantha.skouter.ui.login.LoginScreen
+import org.kodein.di.DI
+import org.kodein.di.bindProvider
+import org.kodein.di.compose.subDI
 
 @Composable
-fun SkouterApp(platform: Platform) = BluebellApp(platform, routes()) { context ->
-
-    val viewModel: MainViewModel by platform.inject { parametersOf(context) }
-
-    ScreenVisibilityEffect(viewModel)
-
-    NavigationScreen(context)
+fun SkouterApp(module: DI) = subDI(parentDI = module,
+    diBuilder = { import(skouterModules()) }
+) {
+    Navigator(LoginScreen()) { navigator ->
+        subDI(diBuilder = {
+            bindProvider { navigator }
+        }) {
+            BluebellApp {
+                CurrentScreen()
+            }
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.micrantha.bluebell.ui.view
+package com.micrantha.bluebell.ui.screen
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted

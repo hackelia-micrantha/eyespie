@@ -39,7 +39,10 @@ kotlin {
                 api(compose.material3)
 
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                api("io.insert-koin:koin-core:3.4.0")
+
+                api("org.kodein.di:kodein-di:7.20.1")
+                api("org.kodein.di:kodein-di-framework-compose:7.20.1")
+                implementation("org.kodein.di:kodein-di-conf:7.19.0")
 
                 implementation("com.squareup.okio:okio:3.3.0")
 
@@ -49,7 +52,9 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
-                implementation("com.chrynan.navigation:navigation-compose:0.7.0")
+                api("cafe.adriel.voyager:voyager-navigator:1.0.0-rc06")
+                implementation("cafe.adriel.voyager:voyager-transitions:1.0.0-rc06")
+                implementation("cafe.adriel.voyager:voyager-kodein:1.0.0-rc06")
 
                 implementation("io.ktor:ktor-client-cio:2.3.0")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
@@ -70,7 +75,6 @@ kotlin {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.core:core-ktx:1.10.0")
-                implementation("io.insert-koin:koin-androidx-compose:3.4.3")
                 //implementation("org.jetbrains.kotlinx:kotlin-deeplearning-api:0.5.1")
 
                 api("androidx.compose.foundation:foundation:1.4.3")

@@ -15,7 +15,7 @@ import com.micrantha.bluebell.ui.toPainter
 import com.micrantha.skouter.data.things.model.path
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.domain.repository.ThingsRepository
-import com.micrantha.skouter.ui.components.i18n.LoadingGame
+import com.micrantha.skouter.ui.components.Strings.LoadingGame
 import com.micrantha.skouter.ui.components.toi18n
 import com.micrantha.skouter.ui.games.details.GameDetailsAction.Error
 import com.micrantha.skouter.ui.games.details.GameDetailsAction.ImageFailed
@@ -32,6 +32,11 @@ class GameDetailsEnvironment(
     private val thingsRepository: ThingsRepository,
 ) : Reducer<GameDetailsState>, Effect<GameDetailsState>, Dispatcher by dispatcher,
     LocalizedRepository by localizedRepository {
+
+    fun map(state: GameDetailsState) = GameDetailsUiState(
+        status = state.status,
+        images = state.images
+    )
 
     override fun reduce(state: GameDetailsState, action: Action) = when (action) {
         is Load -> state.copy(status = busy(LoadingGame))

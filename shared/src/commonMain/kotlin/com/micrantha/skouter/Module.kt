@@ -2,8 +2,10 @@ package com.micrantha.skouter
 
 import com.micrantha.skouter.data.dataModules
 import com.micrantha.skouter.ui.uiModules
-import org.koin.dsl.module
+import org.kodein.di.DI
 
-fun skouterModules() = module {
-    includes(dataModules(), uiModules())
+
+fun skouterModules() = DI.Module("Skouter") {
+    import(dataModules())
+    import(uiModules())
 }

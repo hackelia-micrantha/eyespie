@@ -24,7 +24,7 @@ class ScaffoldBuilder {
         if (showBack == true && onBack == null) {
             onBack = NavAction(
                 icon = Icons.Default.KeyboardArrowLeft,
-                action = { viewContext -> viewContext.navigateBack() }
+                action = { context -> context.navigateBack() }
             )
         }
 

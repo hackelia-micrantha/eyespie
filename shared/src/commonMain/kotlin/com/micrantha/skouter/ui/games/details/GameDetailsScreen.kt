@@ -13,6 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.HorizontalAlignmentLine
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.domain.i18n.stringResource
@@ -23,94 +25,98 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.models.Game
-import com.micrantha.skouter.ui.components.i18n
+import com.micrantha.skouter.ui.components.Strings
 import com.micrantha.skouter.ui.games.components.GamePlayerCard
 import com.micrantha.skouter.ui.games.components.GameThingCard
 import kotlin.math.max
 
-@Composable
-fun GameDetailsScreen(viewModel: GameDetailsViewModel) {
-    val state by viewModel.state().collectAsState()
+data class GameDetailsScreen(private val arg: GameDetailScreenArg) : Screen {
+    @Composable
+    override fun Content() {
+        val viewModel: GameDetailsScreenModel = rememberScreenModel(arg = arg)
 
-    GameDetailsContent(state, viewModel::dispatch)
-}
+        val state by viewModel.state().collectAsState()
 
-@Composable
-fun GameDetailsContent(state: GameDetailsUiState, dispatch: Dispatch) {
-    when (val status = state.status) {
-        is UiResult.Busy -> LoadingContent(status.message)
-        is UiResult.Failure -> FailureContent(status.message)
-        is UiResult.Ready -> GameDetailsContent(state, status.data, dispatch)
-        else -> Unit
+        Render(state, viewModel::dispatch)
     }
-}
 
-@Composable
-fun GameDetailsContent(state: GameDetailsUiState, game: Game, dispatch: Dispatch) {
-    val labelAlignmentLine = remember { HorizontalAlignmentLine(::max) }
+    @Composable
+    private fun Render(state: GameDetailsUiState, dispatch: Dispatch) {
+        when (val status = state.status) {
+            is UiResult.Busy -> LoadingContent(status.message)
+            is UiResult.Failure -> FailureContent(status.message)
+            is UiResult.Ready -> GameDetailsContent(state, status.data, dispatch)
+            else -> Unit
+        }
+    }
 
-    Column(
-        modifier = Modifier.fillMaxSize().padding(Dimensions.screen)
+    @Composable
+    private fun GameDetailsContent(state: GameDetailsUiState, game: Game, dispatch: Dispatch) {
+        val labelAlignmentLine = remember { HorizontalAlignmentLine(::max) }
+
+        Column(
+            modifier = Modifier.fillMaxSize().padding(Dimensions.screen)
+        ) {
+            Card(modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.padding(Dimensions.content)) {
+                    HorizontalLabeledText(
+                        label = stringResource(Strings.CreatedAt),
+                        text = longDateTime(game.createdAt),
+                        labelAlignment = labelAlignmentLine
+                    )
+
+                    HorizontalLabeledText(
+                        label = stringResource(Strings.ExpiresAt),
+                        text = longDateTime(game.expires),
+                        labelAlignment = labelAlignmentLine
+                    )
+
+                    HorizontalLabeledText(
+                        label = stringResource(Strings.NextTurn),
+                        text = game.turnDuration.toString(),
+                        labelAlignment = labelAlignmentLine
+                    )
+                }
+            }
+
+            TabPager(
+                stringResource(Strings.Things),
+                stringResource(Strings.Players),
+                stringResource(Strings.Location)
+            ) { index, _ ->
+                when (index) {
+                    0 -> GameThingsContent(state, game, dispatch)
+                    1 -> GamePlayersContent(state, game, dispatch)
+                    2 -> GameLocationContent(state, dispatch)
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun GameThingsContent(
+        state: GameDetailsUiState,
+        game: Game,
+        dispatch: Dispatch
     ) {
-        Card(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(Dimensions.content)) {
-                HorizontalLabeledText(
-                    label = stringResource(i18n.CreatedAt),
-                    text = longDateTime(game.createdAt),
-                    labelAlignment = labelAlignmentLine
-                )
-
-                HorizontalLabeledText(
-                    label = stringResource(i18n.ExpiresAt),
-                    text = longDateTime(game.expires),
-                    labelAlignment = labelAlignmentLine
-                )
-
-                HorizontalLabeledText(
-                    label = stringResource(i18n.NextTurn),
-                    text = game.turnDuration.toString(),
-                    labelAlignment = labelAlignmentLine
-                )
-            }
-        }
-
-        TabPager(
-            stringResource(i18n.Things),
-            stringResource(i18n.Players),
-            stringResource(i18n.Location)
-        ) { index, _ ->
-            when (index) {
-                0 -> GameThingsContent(state, game, dispatch)
-                1 -> GamePlayersContent(state, game, dispatch)
-                2 -> GameLocationContent(state, dispatch)
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(game.things) {
+                GameThingCard(it, state.image(it.id), dispatch)
             }
         }
     }
-}
 
-@Composable
-private fun GameThingsContent(
-    state: GameDetailsUiState,
-    game: Game,
-    dispatch: Dispatch
-) {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(game.things) {
-            GameThingCard(it, state.image(it.id), dispatch)
+    @Composable
+    private fun GamePlayersContent(state: GameDetailsUiState, game: Game, dispatch: Dispatch) {
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(game.players) {
+                GamePlayerCard(game, it)
+            }
         }
     }
-}
 
-@Composable
-private fun GamePlayersContent(state: GameDetailsUiState, game: Game, dispatch: Dispatch) {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
-        items(game.players) {
-            GamePlayerCard(game, it)
-        }
+    @Composable
+    private fun GameLocationContent(state: GameDetailsUiState, dispatch: Dispatch) {
+
     }
-}
-
-@Composable
-private fun GameLocationContent(state: GameDetailsUiState, dispatch: Dispatch) {
-
 }

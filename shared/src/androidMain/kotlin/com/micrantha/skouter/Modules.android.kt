@@ -1,8 +1,13 @@
 package com.micrantha.skouter
 
+import android.content.Context
 import com.micrantha.bluebell.Platform
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bindInstance
+import org.kodein.di.bindSingleton
 
-fun androidModules() = module {
-    single { Platform(get()) }
+fun androidDependencies(context: Context) = DI {
+    bindInstance { context }
+
+    bindSingleton { Platform(context) }
 }

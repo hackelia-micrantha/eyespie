@@ -6,6 +6,11 @@ import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.models.Game
 import com.micrantha.skouter.domain.models.Thing.Image
 
+data class GameDetailScreenArg(
+    val id: String,
+    val title: String
+)
+
 data class GameDetailsState(
     val status: UiResult<Game> = UiResult.Default,
     val game: Game? = null,
@@ -18,12 +23,6 @@ data class GameDetailsUiState(
 ) {
     fun image(id: String): UiResult<Painter> = images[id] ?: UiResult.Default
 }
-
-fun GameDetailsState.asUiState() = GameDetailsUiState(
-    status = this.status,
-    images = this.images
-)
-
 
 sealed class GameDetailsAction : Action {
     data class Load(val id: String) : GameDetailsAction()

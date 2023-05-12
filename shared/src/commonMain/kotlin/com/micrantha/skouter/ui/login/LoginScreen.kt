@@ -16,71 +16,106 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.stringResource
+import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.domain.model.enabled
 import com.micrantha.bluebell.ui.theme.Dimensions
+import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.Skouter
-import com.micrantha.skouter.ui.components.i18n
+import com.micrantha.skouter.ui.components.Strings
 
-@Composable
-fun LoginScreen(viewModel: LoginViewModel) {
-    val state by viewModel.state().collectAsState()
+class LoginScreen : Screen {
 
-    LoginContent(state, viewModel::dispatch)
-}
+    @Composable
+    override fun Content() {
+        val viewModel = rememberScreenModel<LoginScreenModel>()
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LoginContent(state: LoginUiState, dispatch: Dispatch) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        val state by viewModel.state().collectAsState()
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Skouter.defaultIcon,
-                contentDescription = null,
-                modifier = Modifier.size(Dimensions.List.placeholder),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = stringResource(i18n.AppTitle),
-                style = MaterialTheme.typography.titleLarge.copy(fontSize = Dimensions.Text.Large)
-            )
+        LaunchedEffect(viewModel) {
+            viewModel.dispatch(Load)
+        }
 
-            Spacer(modifier = Modifier.heightIn(Dimensions.screen))
+        render(state, viewModel::dispatch)
+    }
 
-            TextField(
-                modifier = Modifier.padding(Dimensions.content),
-                value = state.email,
-                enabled = state.status.enabled(),
-                maxLines = 1,
-                label = { Text(stringResource(i18n.Email)) },
-                onValueChange = { dispatch(LoginAction.ChangedEmail(it)) },
-                placeholder = { Text(stringResource(i18n.LoginEmailPlaceholder)) }
-            )
-            TextField(
-                enabled = state.status.enabled(),
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.padding(Dimensions.content),
-                maxLines = 1,
-                label = { Text(stringResource(i18n.Password)) },
-                value = state.password,
-                onValueChange = { dispatch(LoginAction.ChangedPassword(it)) },
-                placeholder = { Text(stringResource(i18n.LoginPasswordPlaceholder)) }
-            )
+    @Composable
+    fun render(state: LoginUiState, dispatch: Dispatch) {
+        when (state.status) {
+            is Default -> SplashScreen()
+            else -> LoginForm(state, dispatch)
+        }
+    }
 
-            OutlinedButton(
-                enabled = state.status.enabled(),
-                modifier = Modifier.fillMaxWidth().padding(Dimensions.screen),
-                contentPadding = PaddingValues(Dimensions.content),
-                onClick = { dispatch(LoginAction.OnLogin) }) {
-                Text(stringResource(i18n.Login))
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    private fun LoginForm(state: LoginUiState, dispatch: Dispatch) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    Skouter.defaultIcon,
+                    contentDescription = null,
+                    modifier = Modifier.size(Dimensions.List.placeholder),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = stringResource(Strings.AppTitle),
+                    style = MaterialTheme.typography.titleLarge.copy(fontSize = Dimensions.Text.Large)
+                )
+
+                Spacer(modifier = Modifier.heightIn(Dimensions.screen))
+
+                TextField(
+                    modifier = Modifier.padding(Dimensions.content),
+                    value = state.email,
+                    enabled = state.status.enabled(),
+                    maxLines = 1,
+                    label = { Text(stringResource(Strings.Email)) },
+                    onValueChange = { dispatch(LoginAction.ChangedEmail(it)) },
+                    placeholder = { Text(stringResource(Strings.LoginEmailPlaceholder)) }
+                )
+                TextField(
+                    enabled = state.status.enabled(),
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.padding(Dimensions.content),
+                    maxLines = 1,
+                    label = { Text(stringResource(Strings.Password)) },
+                    value = state.password,
+                    onValueChange = { dispatch(LoginAction.ChangedPassword(it)) },
+                    placeholder = { Text(stringResource(Strings.LoginPasswordPlaceholder)) }
+                )
+
+                OutlinedButton(
+                    enabled = state.status.enabled(),
+                    modifier = Modifier.fillMaxWidth().padding(Dimensions.screen),
+                    contentPadding = PaddingValues(Dimensions.content),
+                    onClick = { dispatch(LoginAction.OnLogin) }) {
+                    Text(stringResource(Strings.Login))
+                }
             }
         }
     }
+
+    @Composable
+    private fun SplashScreen() {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Icon(
+                imageVector = Skouter.defaultIcon,
+                modifier = Modifier.size(Dimensions.List.placeholder),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+
 }

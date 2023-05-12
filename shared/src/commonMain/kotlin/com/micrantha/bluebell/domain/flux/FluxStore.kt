@@ -18,17 +18,11 @@ import kotlinx.coroutines.plus
 
 class FluxStore<State> internal constructor(
     initialState: State,
-    private val flux: Flux,
     private val stateScope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined) + Job()
 ) : Store<State>, Store.Listener<State> {
     private val reducers = mutableListOf<Reducer<State>>()
     private val effects = mutableListOf<Effect<State>>()
     private val current = MutableStateFlow(initialState)
-
-    override fun register(): Store<State> {
-        flux.register(this)
-        return this
-    }
 
     override fun dispatch(action: Action) {
         current.update { state ->

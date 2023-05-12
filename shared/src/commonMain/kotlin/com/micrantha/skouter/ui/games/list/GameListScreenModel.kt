@@ -2,30 +2,32 @@ package com.micrantha.skouter.ui.games.list
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import com.micrantha.bluebell.ui.scaffold.ScaffoldAction
-import com.micrantha.bluebell.ui.view.MappedViewModel
-import com.micrantha.bluebell.ui.view.ViewContext
-import com.micrantha.skouter.ui.components.i18n
+import com.micrantha.bluebell.ui.scaffold.ScaffoldAction.Companion.scaffolding
+import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.ScreenMappedModel
+import com.micrantha.skouter.ui.components.Strings.GamesTitle
 import com.micrantha.skouter.ui.games.list.GameListActions.Load
 import com.micrantha.skouter.ui.navi.NavAction
 
-class GameListViewModel(
-    viewContext: ViewContext,
+class GameListScreenModel(
+    viewContext: ScreenContext,
     environment: GameListEnvironment,
-) : MappedViewModel<GameListState, GameListUiState>(
+    initialState: GameListState = GameListState()
+) : ScreenMappedModel<GameListState, GameListUiState>(
     viewContext,
-    GameListState(),
-    GameListState::asUiState
+    initialState,
+    environment::map
 ) {
-
     init {
         store.addReducer(environment::reduce)
             .applyEffect(environment::invoke)
+
+        onActive()
     }
 
-    override fun onScreenActive() {
-        dispatch(ScaffoldAction.navigation {
-            title = string(i18n.GamesTitle)
+    private fun onActive() {
+        dispatch(scaffolding {
+            title = i18n.string(GamesTitle)
             action(NavAction(
                 icon = Icons.Default.Add,
                 action = {
@@ -34,9 +36,5 @@ class GameListViewModel(
             ))
         })
         dispatch(Load)
-    }
-
-    override fun onScreenIdle() {
-        dispatch(ScaffoldAction.Reset)
     }
 }

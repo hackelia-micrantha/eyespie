@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
+import cafe.adriel.voyager.core.screen.Screen
 import com.micrantha.bluebell.Platform
 import com.micrantha.bluebell.bluebellModules
 import com.micrantha.bluebell.domain.arch.Action
@@ -13,43 +14,43 @@ import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.arch.Store
 import com.micrantha.bluebell.domain.arch.StoreFactory
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.ui.navi.LocalRouter
-import com.micrantha.bluebell.ui.navi.Route
-import com.micrantha.bluebell.ui.navi.RouteContext
-import com.micrantha.bluebell.ui.navi.RouteRenderer
-import com.micrantha.bluebell.ui.navi.Router
-import com.micrantha.bluebell.ui.view.LocalViewContext
-import com.micrantha.bluebell.ui.view.ViewContext
+import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.components.Router.Options
+import com.micrantha.bluebell.ui.screen.LocalScreenContext
+import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.skouterModules
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
+import org.kodein.di.DI
+import org.kodein.di.bindProvider
+import org.kodein.di.compose.withDI
 
 class PreviewRouter : Router {
-    override fun navigateBack() = Unit
-    override fun canGoBack() = false
+    override fun navigateBack() = false
+    override val canGoBack = false
+    override val isBackOrIdle = false
+    override fun <T : Screen> navigate(screen: T, options: Options) = Unit
 
-    override val current: Route? = null
-
-    override fun navigate(route: Route, vararg params: Any) = Unit
-
-    override fun changeNavigationContext(context: RouteContext) = Unit
-
-    override fun get(route: Route): Pair<RouteRenderer, Array<out Any>?>? = null
 }
 
 class PreviewContext(
     context: Context,
     private val platform: Platform = Platform(context),
     private val router: PreviewRouter = PreviewRouter()
-) : StoreFactory,
-    Dispatcher, LocalizedRepository by platform, Router by router, ViewContext {
-    override fun dispatch(action: Action) {}
+) : StoreFactory, LocalizedRepository by platform, Router by router, ScreenContext {
+
+    override val dispatcher: Dispatcher = Dispatcher {}
+
+    override val i18n: LocalizedRepository = platform
+
+    override val di: DI = DI.lazy {
+        import(bluebellModules())
+        import(skouterModules())
+        bindProvider { this }
+    }
 
     override fun <T> createStore(state: T): Store<T> {
         return object : Store<T> {
-            override fun register(): Store<T> = this
             override fun state(): StateFlow<T> = MutableStateFlow(state)
             override fun dispatch(action: Action) = Unit
             override fun applyEffect(effect: Effect<T>): Store<T> = this
@@ -59,18 +60,13 @@ class PreviewContext(
 }
 
 @Composable
-fun PreviewContext(content: @Composable () -> Unit) {
+fun PreviewContext(bindings: DI.MainBuilder.() -> Unit, content: @Composable () -> Unit) {
+
     val context = LocalContext.current
 
-    startKoin {
-        modules(module {
-            Platform(context)
-        }, bluebellModules(), skouterModules())
-    }
     CompositionLocalProvider(
-        LocalRouter provides PreviewRouter(),
-        LocalViewContext provides PreviewContext(context = context)
+        LocalScreenContext provides PreviewContext(context = context)
     ) {
-        content()
+        withDI(bindings, content)
     }
 }

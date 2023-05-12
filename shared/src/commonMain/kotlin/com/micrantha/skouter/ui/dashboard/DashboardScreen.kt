@@ -8,7 +8,7 @@ import com.micrantha.bluebell.domain.arch.Dispatch
 
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel
+    viewModel: DashboardScreenModel
 ) {
     val state by viewModel.state().collectAsState()
 

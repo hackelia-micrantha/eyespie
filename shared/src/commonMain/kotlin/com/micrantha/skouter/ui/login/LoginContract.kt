@@ -7,25 +7,21 @@ import com.micrantha.bluebell.domain.model.UiResult
 data class LoginState(
     val email: String = BuildConfig.userLoginEmail,
     val password: String = BuildConfig.userLoginPassword,
-    val isLoggedIn: Boolean = false,
-    val status: UiResult<Unit> = UiResult.Default
+    val status: UiResult<Boolean> = UiResult.Default
 )
 
 data class LoginUiState(
     val email: String,
     val password: String,
-    val isLoggedIn: Boolean = false,
-    val status: UiResult<Unit>
+    val status: UiResult<Boolean>
 )
 
-fun LoginState.asUiState() = LoginUiState(
-    email = this.email,
-    password = this.password,
-    isLoggedIn = this.isLoggedIn,
-    status = this.status
-)
 
 sealed class LoginAction : Action {
+
+    object Load : LoginAction()
+
+    data class Loaded(val isLoggedIn: Boolean) : LoginAction()
 
     object OnLogin : LoginAction()
 

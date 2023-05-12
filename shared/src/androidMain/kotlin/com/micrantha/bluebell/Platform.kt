@@ -1,18 +1,15 @@
 package com.micrantha.bluebell
 
 import android.content.Context
-import androidx.compose.runtime.Composable
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
-import org.koin.core.component.KoinComponent
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import androidx.activity.compose.BackHandler as AndroidBackHandler
 
-actual class Platform(private val context: Context) : LocalizedRepository, KoinComponent {
+actual class Platform(private val context: Context) : LocalizedRepository {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
     actual override fun resource(str: LocalizedString, vararg args: Any?): String {
@@ -34,10 +31,3 @@ actual class Platform(private val context: Context) : LocalizedRepository, KoinC
         return date.format(formatter)
     }
 }
-
-@Composable
-actual fun BackHandler(enabled: Boolean, onBack: () -> Unit) =
-    AndroidBackHandler(
-        enabled = enabled,
-        onBack = onBack
-    )

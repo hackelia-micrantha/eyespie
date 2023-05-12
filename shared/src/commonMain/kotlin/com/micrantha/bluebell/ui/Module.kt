@@ -1,10 +1,7 @@
 package com.micrantha.bluebell.ui
 
-import com.micrantha.bluebell.ui.view.DefaultViewContext
-import com.micrantha.bluebell.ui.view.ViewContext
-import org.koin.dsl.module
+import org.kodein.di.DI
 
-internal fun bluebellUi() = module {
+internal fun bluebellUi() = DI.Module(name = "Bluebell UI") {
 
-    factory<ViewContext> { params -> DefaultViewContext(params.get(), get(), get()) }
 }

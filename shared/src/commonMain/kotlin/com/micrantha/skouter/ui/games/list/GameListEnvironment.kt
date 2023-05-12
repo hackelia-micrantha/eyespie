@@ -8,25 +8,30 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.model.busy
 import com.micrantha.bluebell.domain.model.error
 import com.micrantha.bluebell.domain.model.status
-import com.micrantha.bluebell.ui.navi.Router
+import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.get
 import com.micrantha.skouter.domain.repository.GameRepository
-import com.micrantha.skouter.ui.components.i18n.LoadingGames
+import com.micrantha.skouter.ui.components.Strings.LoadingGames
 import com.micrantha.skouter.ui.components.toi18n
+import com.micrantha.skouter.ui.games.create.GameCreateScreen
+import com.micrantha.skouter.ui.games.details.GameDetailsScreen
 import com.micrantha.skouter.ui.games.list.GameListActions.Error
 import com.micrantha.skouter.ui.games.list.GameListActions.GameClicked
 import com.micrantha.skouter.ui.games.list.GameListActions.Load
 import com.micrantha.skouter.ui.games.list.GameListActions.Loaded
 import com.micrantha.skouter.ui.games.list.GameListActions.NewGame
-import com.micrantha.skouter.ui.navi.NavContext
-import com.micrantha.skouter.ui.navi.Routes
 
 class GameListEnvironment(
-    private val router: Router,
+    private val context: ScreenContext,
     private val dispatcher: Dispatcher,
     private val localizedRepository: LocalizedRepository,
     private val repository: GameRepository,
-) : GameRepository by repository, Reducer<GameListState>, Effect<GameListState>,
-    LocalizedRepository by localizedRepository, Router by router, Dispatcher by dispatcher {
+) : Reducer<GameListState>, Effect<GameListState>,
+    LocalizedRepository by localizedRepository, Router by context, Dispatcher by dispatcher {
+    fun map(state: GameListState) = GameListUiState(
+        status = state.status
+    )
 
     override fun reduce(state: GameListState, action: Action) = when (action) {
         is Load ->
@@ -43,8 +48,8 @@ class GameListEnvironment(
             is Load -> repository.games()
                 .onFailure { dispatch(Error(it)) }
                 .onSuccess { dispatch(Loaded(it)) }
-            is NewGame -> changeNavigationContext(NavContext.CreateGame)
-            is GameClicked -> navigate(Routes.GameDetails, action.id)
+            is NewGame -> navigate<GameCreateScreen>(context.get())
+            is GameClicked -> navigate<GameDetailsScreen>(context.get(action.arg))
         }
     }
 }
