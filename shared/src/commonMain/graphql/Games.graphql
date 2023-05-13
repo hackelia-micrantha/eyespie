@@ -42,6 +42,19 @@ query GameNode($nodeId: ID!) {
                             created_at
                             clues
                             guessed
+                            guesses {
+                                edges {
+                                    node {
+                                        created_by {
+                                            name
+                                            id
+                                            nodeId
+                                        }
+                                        created_at
+                                        correct
+                                    }
+                                }
+                            }
                         }
                     }
                 }

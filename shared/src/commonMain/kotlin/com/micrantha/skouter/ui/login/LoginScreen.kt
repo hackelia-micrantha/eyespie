@@ -25,9 +25,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
+import com.micrantha.bluebell.domain.ext.enabled
 import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.domain.model.UiResult.Default
-import com.micrantha.bluebell.domain.model.enabled
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.Skouter

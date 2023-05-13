@@ -28,7 +28,12 @@ import org.kodein.di.compose.withDI
 class PreviewRouter : Router {
     override fun navigateBack() = false
     override val canGoBack = false
-    override val isBackOrIdle = false
+    override val screen: Screen = object : Screen {
+        @Composable
+        override fun Content() {
+        }
+    }
+
     override fun <T : Screen> navigate(screen: T, options: Options) = Unit
 
 }

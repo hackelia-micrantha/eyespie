@@ -5,7 +5,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.micrantha.bluebell.domain.model.UiResult.Ready
-import com.micrantha.skouter.domain.models.GameListing
+import com.micrantha.skouter.domain.models.Game
+import com.micrantha.skouter.domain.models.GameList
 import com.micrantha.skouter.ui.PreviewContext
 import kotlinx.datetime.Clock.System
 import org.kodein.di.bind
@@ -20,7 +21,7 @@ class GameListPreviewContent : PreviewParameterProvider<GameListState> {
         GameListState(
             status = Ready(
                 listOf(
-                    GameListing(
+                    Game.Listing(
                         id = "id",
                         nodeId = "n123",
                         name = "Preview Game",
@@ -37,17 +38,18 @@ class GameListPreviewContent : PreviewParameterProvider<GameListState> {
 
 @Preview
 @Composable
-fun GameListPreview(@PreviewParameter(GameListPreviewContent::class) state: GameListState) = PreviewContext(
-    bindings = {
-        bind(overrides = true) {
-            provider {
-                GameListScreenModel(
-                    instance(), instance(), state
-                )
+fun GameListPreview(@PreviewParameter(GameListPreviewContent::class) state: GameListState) =
+    PreviewContext(
+        bindings = {
+            bind(overrides = true) {
+                provider {
+                    GameListScreenModel(
+                        instance(), instance(), state
+                    )
+                }
             }
         }
+    ) {
+        localDI().direct.instance<GameListScreen>().Content()
+        //GameListScreen().Content()
     }
-) {
-    localDI().direct.instance<GameListScreen>().Content()
-    //GameListScreen().Content()
-}

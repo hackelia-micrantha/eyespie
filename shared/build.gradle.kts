@@ -46,7 +46,7 @@ kotlin {
 
                 implementation("com.squareup.okio:okio:3.3.0")
 
-                runtimeOnly("com.soywiz.korlibs.korim:korim:3.4.0")
+                implementation("io.github.reactivecircus.cache4k:cache4k:0.11.0")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")

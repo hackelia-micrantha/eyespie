@@ -8,15 +8,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.HorizontalAlignmentLine
 import com.micrantha.bluebell.ui.theme.Dimensions
 
 @Composable
+@Deprecated(
+    "not appropriate layout for varying screen dimensions",
+    replaceWith = ReplaceWith("LabeledText")
+)
 fun HorizontalLabeledText(
     modifier: Modifier = Modifier,
     label: String,
     text: String,
-    labelAlignment: HorizontalAlignmentLine
 ) = Row(
     modifier = modifier,
     horizontalArrangement = Arrangement.SpaceBetween,
@@ -24,7 +26,6 @@ fun HorizontalLabeledText(
 ) {
 
     Text(
-        modifier = Modifier.alignBy(labelAlignment),
         text = label,
         style = MaterialTheme.typography.bodyLarge
     )
@@ -33,4 +34,5 @@ fun HorizontalLabeledText(
         text = text,
         style = MaterialTheme.typography.bodyLarge
     )
+
 }

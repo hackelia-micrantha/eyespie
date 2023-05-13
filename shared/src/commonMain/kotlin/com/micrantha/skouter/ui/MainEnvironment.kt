@@ -11,7 +11,7 @@ import com.micrantha.bluebell.ui.screen.get
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.MainAction.Loaded
-import com.micrantha.skouter.ui.games.list.GameListScreen
+import com.micrantha.skouter.ui.dashboard.DashboardScreen
 import com.micrantha.skouter.ui.login.LoginScreen
 
 class MainEnvironment(
@@ -36,7 +36,7 @@ class MainEnvironment(
             )
             is Loaded -> context.navigate(
                 if (action.isLoggedIn)
-                    context.get<GameListScreen>()
+                    context.get<DashboardScreen>()
                 else
                     context.get<LoginScreen>()
             )

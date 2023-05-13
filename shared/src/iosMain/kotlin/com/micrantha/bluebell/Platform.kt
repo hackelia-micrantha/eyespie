@@ -27,3 +27,9 @@ actual class Platform : LocalizedRepository {
         return dateFormatter.stringFromDate(date)
     }
 }
+
+actual class WeakReference<out T : Any> actual constructor(target: T) {
+    private val underlying: kotlin.native.ref.WeakReference<T> =
+        kotlin.native.ref.WeakReference(target)
+    actual val targetOrNull: T? get() = underlying.get()
+}

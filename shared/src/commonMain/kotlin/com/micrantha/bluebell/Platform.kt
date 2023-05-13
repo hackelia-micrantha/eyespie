@@ -14,3 +14,7 @@ expect class Platform : LocalizedRepository {
         locale: String
     ): String
 }
+
+expect class WeakReference<out T : Any>(target: T) {
+    val targetOrNull: T?
+}

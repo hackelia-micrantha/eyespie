@@ -42,6 +42,7 @@ type PlayerRef implements Entity, Node {
 type Guess {
     created_at: String
     created_by: PlayerRef
+    correct: Boolean
 }
 
 type ImageRef implements Entity {

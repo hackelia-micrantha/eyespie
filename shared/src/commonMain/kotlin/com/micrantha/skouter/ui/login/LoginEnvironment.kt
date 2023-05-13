@@ -4,16 +4,18 @@ import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
+import com.micrantha.bluebell.domain.ext.busy
+import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.domain.model.UiResult.Ready
-import com.micrantha.bluebell.domain.model.busy
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.get
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.components.Strings
+import com.micrantha.skouter.ui.dashboard.DashboardScreen
 import com.micrantha.skouter.ui.games.list.GameListScreen
 import com.micrantha.skouter.ui.login.LoginAction.ChangedEmail
 import com.micrantha.skouter.ui.login.LoginAction.ChangedPassword
@@ -40,7 +42,7 @@ class LoginEnvironment(
         is ChangedEmail -> state.copy(email = action.email)
         is ChangedPassword -> state.copy(password = action.password)
         is OnLogin -> state.copy(status = busy(Strings.LoggingIn))
-        is OnError -> state.copy(status = error(Strings.LoginFailed))
+        is OnError -> state.copy(status = failure(Strings.LoginFailed))
         is Loaded -> state.copy(status = Ready(action.isLoggedIn))
         else -> state
     }
@@ -57,7 +59,7 @@ class LoginEnvironment(
                     dispatch(OnSuccess)
                 }
             is Loaded -> if (action.isLoggedIn) {
-                navigate<GameListScreen>(context.get())
+                navigate<DashboardScreen>(context.get())
             }
             is OnSuccess -> navigate<GameListScreen>(context.get())
         }

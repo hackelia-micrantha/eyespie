@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui.games.details
 
-import com.micrantha.bluebell.ui.scaffold.ScaffoldAction.Companion.scaffolding
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenMappedModel
 
@@ -22,10 +21,7 @@ class GameDetailsScreenModel(
     }
 
     private fun onActive() {
-        dispatch(scaffolding {
-            title = arg.title
-            actions = mutableListOf()
-        })
-        dispatch(GameDetailsAction.Load(arg.id))
+
+        dispatch(GameDetailsAction.Load(arg))
     }
 }

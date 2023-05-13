@@ -1,6 +1,8 @@
 package com.micrantha.bluebell.ui.scaffold
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -9,28 +11,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.micrantha.bluebell.domain.arch.Store
-import com.micrantha.bluebell.rememberStore
+import com.micrantha.bluebell.ui.screen.LocalScreenContext
 import com.micrantha.bluebell.ui.theme.Dimensions
+import com.micrantha.skouter.ui.navi.NavAction
 import com.micrantha.skouter.ui.navi.NavigationAction
 
-@Composable
-fun rememberScaffoldStore(): Lazy<Store<ScaffoldState>> {
-    val store = rememberStore(ScaffoldState())
-    return lazy { store.addReducer(::scaffoldReducer) }
-}
+internal fun defaultBackAction() = NavAction(
+    icon = Icons.Default.KeyboardArrowLeft,
+    action = { context -> context.navigateBack() }
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScaffoldScreen(
-    state: ScaffoldState,
-    content: @Composable () -> Unit
-) {
+fun ScaffoldScreen(screen: Scaffolding, content: @Composable () -> Unit) {
+    val context = LocalScreenContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    state.title?.let {
+                    screen.title()?.let {
                         Text(
                             text = it,
                             style = MaterialTheme.typography.headlineMedium
@@ -38,14 +38,22 @@ fun ScaffoldScreen(
                     }
                 },
                 navigationIcon = {
-                    state.backAction?.let {
-                        NavigationAction(
-                            navAction = it
-                        )
+                    if (screen.showBack()) {
+                        screen.backAction()?.let {
+                            NavigationAction(
+                                navAction = it
+                            )
+                        } ?: run {
+                            if (context.canGoBack) {
+                                NavigationAction(
+                                    navAction = defaultBackAction()
+                                )
+                            }
+                        }
                     }
                 },
                 actions = {
-                    state.actions?.forEach { nav ->
+                    screen.actions()?.forEach { nav ->
                         NavigationAction(
                             modifier = Modifier.padding(start = Dimensions.content),
                             navAction = nav

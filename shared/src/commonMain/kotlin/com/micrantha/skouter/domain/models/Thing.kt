@@ -2,33 +2,33 @@ package com.micrantha.skouter.domain.models
 
 import kotlinx.datetime.Instant
 
-data class ThingListing(
-    override val id: String,
-    override val nodeId: String,
-    override val createdAt: Instant,
-    val name: String,
-    val image: String
-) : Entity, Creatable
-
 data class Thing(
     override val id: String,
     override val nodeId: String,
     override val createdAt: Instant,
     val name: String,
+    val guessed: Boolean,
     val guesses: List<Guess>,
     val image: Image,
     val clues: Clues
 ) : Entity, Creatable {
 
-    data class Image(
-        val fileId: String,
-        val bucketId: String,
-        val playerId: String
-    )
 
     data class Guess(
         val at: Instant,
         val by: Player.Ref,
         val correct: Boolean
     )
+
+    data class Listing(
+        override val id: String,
+        override val nodeId: String,
+        override val createdAt: Instant,
+        val name: String,
+        val guessed: Boolean,
+        val image: Image
+    ) : Entity, Creatable
+
 }
+
+typealias ThingList = List<Thing.Listing>

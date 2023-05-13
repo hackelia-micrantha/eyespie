@@ -5,6 +5,8 @@ import androidx.compose.ui.unit.sp
 
 object Dimensions {
 
+    val touchable = 48.dp
+
     val screen = 18.dp
 
     val content = 12.dp

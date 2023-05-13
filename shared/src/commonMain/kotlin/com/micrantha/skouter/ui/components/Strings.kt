@@ -12,7 +12,7 @@ enum class Strings(
     LoadingGames("loading_games"),
     ResultStatusBusy("model_status_busy"),
     ResultStatusFailure("model_status_failure"),
-    GamesTitle("games_title"),
+    Games("games"),
     NetworkFailure("network_failure"),
     Login("login"),
     AppTitle("app_title"),
@@ -32,5 +32,8 @@ enum class Strings(
     NewGameHeader("new_game_header"),
     NewGameContent("new_game_content"),
     Name("name"),
-    Next("next")
+    Next("next"),
+    NewThing("new_thing"),
+    NewThingDescription("new_thing_description"),
+    LoadingDashboard("loading_dashboard")
 }

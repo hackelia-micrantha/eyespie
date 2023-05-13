@@ -10,7 +10,6 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.components.Router.Options.Reset
-import com.micrantha.bluebell.ui.components.isBackOrIdle
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.bindSingleton
@@ -42,7 +41,7 @@ class BluebellScreenContext(
 
     override val canGoBack: Boolean = navigator.canPop
 
-    override val isBackOrIdle: Boolean = navigator.lastEvent.isBackOrIdle
+    override val screen: Screen = navigator.lastItem
 
     override fun <T : Screen> navigate(screen: T, options: Router.Options) = when (options) {
         Replace -> navigator.replace(screen)
@@ -54,16 +53,19 @@ class BluebellScreenContext(
 }
 
 @Composable
-fun withViewContext(di: DI = localDI(), content: @Composable () -> Unit) = subDI(
+fun bindViewContext(di: DI = localDI(), content: @Composable () -> Unit) = subDI(
     parentDI = di,
     diBuilder = {
         bindSingleton { BluebellScreenContext(di, instance(), instance(), instance()) }
-    }
-) {
-    content()
-}
+    },
+    content = content
+)
+
 
 val LocalScreenContext = compositionLocalOf<ScreenContext> {
-    error("Screen context not defined")
+    error("Local screen context not defined")
 }
 
+val LocalDispatcher = compositionLocalOf<Dispatcher> {
+    error("Local dispatcher not defined")
+}

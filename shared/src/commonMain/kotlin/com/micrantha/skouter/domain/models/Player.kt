@@ -2,14 +2,6 @@ package com.micrantha.skouter.domain.models
 
 import kotlinx.datetime.Instant
 
-data class PlayerListing(
-    override val id: String,
-    override val nodeId: String,
-    override val createdAt: Instant,
-    val name: String,
-    val image: String
-) : Entity, Creatable
-
 data class Player(
     override val id: String,
     override val nodeId: String,
@@ -30,14 +22,19 @@ data class Player(
         val total: Int
     )
 
-    data class Image(
-        val small: String,
-        val medium: String,
-        val large: String,
-    )
-
     data class Ref(
         val id: String,
         val name: String,
     )
+
+    data class Listing(
+        override val id: String,
+        override val nodeId: String,
+        override val createdAt: Instant,
+        val name: String,
+        val image: Image? = null,
+        val score: Int,
+    ) : Entity, Creatable
 }
+
+typealias PlayerList = List<Player.Listing>

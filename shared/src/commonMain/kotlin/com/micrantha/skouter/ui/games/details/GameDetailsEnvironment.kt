@@ -1,81 +1,75 @@
 package com.micrantha.skouter.ui.games.details
 
+import com.micrantha.bluebell.data.err.fail
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
+import com.micrantha.bluebell.domain.ext.busy
+import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.model.UiResult.Busy
-import com.micrantha.bluebell.domain.model.UiResult.Failure
+import com.micrantha.bluebell.domain.model.Ready
 import com.micrantha.bluebell.domain.model.UiResult.Ready
-import com.micrantha.bluebell.domain.model.busy
-import com.micrantha.bluebell.domain.model.error
-import com.micrantha.bluebell.ui.scaffold.ScaffoldAction
+import com.micrantha.bluebell.domain.model.mapNotNull
 import com.micrantha.bluebell.ui.toPainter
-import com.micrantha.skouter.data.things.model.path
 import com.micrantha.skouter.domain.repository.GameRepository
-import com.micrantha.skouter.domain.repository.ThingsRepository
+import com.micrantha.skouter.domain.repository.StorageRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGame
 import com.micrantha.skouter.ui.components.toi18n
-import com.micrantha.skouter.ui.games.details.GameDetailsAction.Error
-import com.micrantha.skouter.ui.games.details.GameDetailsAction.ImageFailed
+import com.micrantha.skouter.ui.games.action.GameAction.Failure
+import com.micrantha.skouter.ui.games.action.GameAction.ImageFailed
+import com.micrantha.skouter.ui.games.action.GameAction.LoadImage
+import com.micrantha.skouter.ui.games.action.GameAction.LoadedImage
 import com.micrantha.skouter.ui.games.details.GameDetailsAction.Load
-import com.micrantha.skouter.ui.games.details.GameDetailsAction.LoadImage
 import com.micrantha.skouter.ui.games.details.GameDetailsAction.Loaded
-import com.micrantha.skouter.ui.games.details.GameDetailsAction.LoadedImage
 import io.github.aakira.napier.Napier
 
 class GameDetailsEnvironment(
     private val dispatcher: Dispatcher,
     private val localizedRepository: LocalizedRepository,
     private val gameRepository: GameRepository,
-    private val thingsRepository: ThingsRepository,
+    private val storageRepository: StorageRepository,
 ) : Reducer<GameDetailsState>, Effect<GameDetailsState>, Dispatcher by dispatcher,
     LocalizedRepository by localizedRepository {
 
     fun map(state: GameDetailsState) = GameDetailsUiState(
-        status = state.status,
-        images = state.images
+        status = state.status.mapNotNull { state.game }
     )
 
     override fun reduce(state: GameDetailsState, action: Action) = when (action) {
         is Load -> state.copy(status = busy(LoadingGame))
-        is Loaded -> state.copy(status = Ready(action.game))
-        is Error -> state.copy(status = error(action.error.toi18n()))
-        is LoadedImage -> state.copy(
-            images = state.images.plus(
-                action.thingId to Ready(action.data)
-            )
+        is Loaded -> state.copy(
+            status = Ready(),
+            game = action.game,
+            images = action.images.toMutableMap()
         )
-        is LoadImage -> state.copy(
-            images = state.images.plus(
-                action.thingId to Busy()
-            )
-        )
-        is ImageFailed -> state.copy(
-            images = state.images.plus(
-                action.thingId to Failure()
-            )
-        )
+        is Failure -> state.copy(status = failure(action.error.toi18n()))
+        is LoadedImage -> state.apply {
+            val ref = images[action.id] ?: fail("no image found for ${action.id}")
+            images[action.id] = ref.copy(status = Ready(action.data))
+        }
+        is LoadImage -> state.copy()
+        is ImageFailed -> state.copy()
         else -> state
     }
 
     override suspend fun invoke(action: Action, state: GameDetailsState) {
         when (action) {
-            is Load -> gameRepository.game(action.id).onFailure {
-                dispatch(Error(it))
-            }.onSuccess {
-                dispatch(Loaded(it))
+            is Load -> {
+                gameRepository.game(action.arg.id).onFailure {
+                    dispatch(Failure(it))
+                }.onSuccess { game ->
+                    dispatch(Loaded(game))
+                }
             }
-            is Loaded -> dispatch(
-                ScaffoldAction.SetTitle(action.game.name)
-            )
-            is LoadImage -> thingsRepository.image(action.image)
+            is LoadImage -> storageRepository.download(action.image)
                 .onFailure {
-                    Napier.e("load image ${action.image.path}", it)
-                    dispatch(ImageFailed(action.thingId, it))
+                    Napier.e("load image failed - ${action.image.path}", it)
+                    dispatch(ImageFailed(action.image.id, it))
                 }.onSuccess {
-                    dispatch(LoadedImage(action.thingId, it.toPainter()))
+                    dispatch(
+                        LoadedImage(action.image.id, it.toPainter())
+                    )
                 }
         }
     }
