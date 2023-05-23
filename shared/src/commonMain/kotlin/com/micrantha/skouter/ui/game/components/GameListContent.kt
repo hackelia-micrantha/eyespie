@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games.components
+package com.micrantha.skouter.ui.game.components
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

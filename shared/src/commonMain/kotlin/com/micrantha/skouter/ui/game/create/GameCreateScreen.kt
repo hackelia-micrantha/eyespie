@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games.create
+package com.micrantha.skouter.ui.game.create
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games.list
+package com.micrantha.skouter.ui.game.list
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -20,9 +20,9 @@ import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.scaffold.Scaffolding
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.ui.components.Strings.Games
-import com.micrantha.skouter.ui.games.components.GameListContent
-import com.micrantha.skouter.ui.games.list.GameListAction.Load
-import com.micrantha.skouter.ui.games.list.GameListAction.NewGame
+import com.micrantha.skouter.ui.game.components.GameListContent
+import com.micrantha.skouter.ui.game.list.GameListAction.Load
+import com.micrantha.skouter.ui.game.list.GameListAction.NewGame
 import com.micrantha.skouter.ui.navi.NavAction
 
 class GameListScreen(

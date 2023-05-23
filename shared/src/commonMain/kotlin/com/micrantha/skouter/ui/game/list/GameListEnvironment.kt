@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games.list
+package com.micrantha.skouter.ui.game.list
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
@@ -14,14 +14,14 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGames
 import com.micrantha.skouter.ui.components.toi18n
-import com.micrantha.skouter.ui.games.action.GameAction.Failure
-import com.micrantha.skouter.ui.games.action.GameAction.GameClicked
-import com.micrantha.skouter.ui.games.create.GameCreateScreen
-import com.micrantha.skouter.ui.games.details.GameDetailScreenArg
-import com.micrantha.skouter.ui.games.details.GameDetailsScreen
-import com.micrantha.skouter.ui.games.list.GameListAction.Load
-import com.micrantha.skouter.ui.games.list.GameListAction.Loaded
-import com.micrantha.skouter.ui.games.list.GameListAction.NewGame
+import com.micrantha.skouter.ui.game.action.GameAction.Failure
+import com.micrantha.skouter.ui.game.action.GameAction.GameClicked
+import com.micrantha.skouter.ui.game.create.GameCreateScreen
+import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
+import com.micrantha.skouter.ui.game.details.GameDetailsScreen
+import com.micrantha.skouter.ui.game.list.GameListAction.Load
+import com.micrantha.skouter.ui.game.list.GameListAction.Loaded
+import com.micrantha.skouter.ui.game.list.GameListAction.NewGame
 
 class GameListEnvironment(
     private val context: ScreenContext,

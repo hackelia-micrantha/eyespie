@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games.details
+package com.micrantha.skouter.ui.game.details
 
 import com.micrantha.bluebell.data.err.fail
 import com.micrantha.bluebell.domain.arch.Action
@@ -16,12 +16,12 @@ import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.domain.repository.StorageRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGame
 import com.micrantha.skouter.ui.components.toi18n
-import com.micrantha.skouter.ui.games.action.GameAction.Failure
-import com.micrantha.skouter.ui.games.action.GameAction.ImageFailed
-import com.micrantha.skouter.ui.games.action.GameAction.LoadImage
-import com.micrantha.skouter.ui.games.action.GameAction.LoadedImage
-import com.micrantha.skouter.ui.games.details.GameDetailsAction.Load
-import com.micrantha.skouter.ui.games.details.GameDetailsAction.Loaded
+import com.micrantha.skouter.ui.game.action.GameAction.Failure
+import com.micrantha.skouter.ui.game.action.GameAction.ImageFailed
+import com.micrantha.skouter.ui.game.action.GameAction.LoadImage
+import com.micrantha.skouter.ui.game.action.GameAction.LoadedImage
+import com.micrantha.skouter.ui.game.details.GameDetailsAction.Load
+import com.micrantha.skouter.ui.game.details.GameDetailsAction.Loaded
 import io.github.aakira.napier.Napier
 
 class GameDetailsEnvironment(

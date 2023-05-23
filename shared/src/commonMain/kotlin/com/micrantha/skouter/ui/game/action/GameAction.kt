@@ -1,10 +1,10 @@
-package com.micrantha.skouter.ui.games.action
+package com.micrantha.skouter.ui.game.action
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.models.Game
 import com.micrantha.skouter.domain.models.Image
 import com.micrantha.skouter.domain.models.ImageDownload
-import com.micrantha.skouter.ui.games.details.GameDetailScreenArg
+import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
 
 sealed class GameAction : Action {
 

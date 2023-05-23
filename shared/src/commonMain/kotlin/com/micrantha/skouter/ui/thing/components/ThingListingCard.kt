@@ -28,7 +28,7 @@ import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.models.Image
 import com.micrantha.skouter.domain.models.Thing
-import com.micrantha.skouter.ui.games.action.GameAction.LoadImage
+import com.micrantha.skouter.ui.game.action.GameAction.LoadImage
 
 @Composable
 fun ThingListingCard(thing: Thing.Listing, dispatch: Dispatch) {

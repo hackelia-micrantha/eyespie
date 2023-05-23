@@ -9,6 +9,7 @@ import org.kodein.di.DI
 import org.kodein.di.delegate
 
 fun bluebellModules() = DI.Module(name = "Bluebell") {
+
     import(bluebellDomain())
     import(bluebellUi())
 

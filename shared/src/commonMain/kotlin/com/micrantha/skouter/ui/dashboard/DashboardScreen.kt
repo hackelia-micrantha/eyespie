@@ -31,7 +31,7 @@ import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Tabs
 import com.micrantha.skouter.ui.dashboard.components.ScanNewThingCard
-import com.micrantha.skouter.ui.games.components.GameListContent
+import com.micrantha.skouter.ui.game.components.GameListContent
 import com.micrantha.skouter.ui.player.components.PlayerListContent
 import com.micrantha.skouter.ui.thing.components.ThingListContent
 

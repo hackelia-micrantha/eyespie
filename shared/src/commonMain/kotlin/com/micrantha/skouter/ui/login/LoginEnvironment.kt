@@ -10,13 +10,13 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.bluebell.ui.screen.get
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.components.Strings
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
-import com.micrantha.skouter.ui.games.list.GameListScreen
+import com.micrantha.skouter.ui.game.list.GameListScreen
 import com.micrantha.skouter.ui.login.LoginAction.ChangedEmail
 import com.micrantha.skouter.ui.login.LoginAction.ChangedPassword
 import com.micrantha.skouter.ui.login.LoginAction.Loaded
@@ -59,9 +59,9 @@ class LoginEnvironment(
                     dispatch(OnSuccess)
                 }
             is Loaded -> if (action.isLoggedIn) {
-                navigate<DashboardScreen>(context.get())
+                navigate<DashboardScreen>()
             }
-            is OnSuccess -> navigate<GameListScreen>(context.get())
+            is OnSuccess -> navigate<GameListScreen>()
         }
     }
 }

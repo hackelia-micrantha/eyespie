@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.games.list
+package com.micrantha.skouter.ui.game.list
 
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenMappedModel
