@@ -36,6 +36,11 @@ class PreviewRouter : Router {
 
     override fun <T : Screen> navigate(screen: T, options: Options) = Unit
 
+    override val di: DI = DI.lazy {
+        import(bluebellModules())
+        import(skouterModules())
+        bindProvider { this }
+    }
 }
 
 class PreviewContext(
@@ -47,12 +52,6 @@ class PreviewContext(
     override val dispatcher: Dispatcher = Dispatcher {}
 
     override val i18n: LocalizedRepository = platform
-
-    override val di: DI = DI.lazy {
-        import(bluebellModules())
-        import(skouterModules())
-        bindProvider { this }
-    }
 
     override fun <T> createStore(state: T): Store<T> {
         return object : Store<T> {

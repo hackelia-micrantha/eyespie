@@ -6,8 +6,8 @@ import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.model.Ready
 import com.micrantha.bluebell.domain.model.UiResult.Busy
+import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.bluebell.ui.screen.get
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.MainAction.Loaded
@@ -34,12 +34,11 @@ class MainEnvironment(
             is Load -> dispatch(
                 Loaded(accountRepository.isLoggedIn())
             )
-            is Loaded -> context.navigate(
+            is Loaded ->
                 if (action.isLoggedIn)
-                    context.get<DashboardScreen>()
+                    context.navigate<LoginScreen>()
                 else
-                    context.get<LoginScreen>()
-            )
+                    context.navigate<DashboardScreen>()
         }
     }
 }

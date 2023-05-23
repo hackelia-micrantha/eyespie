@@ -1,6 +1,5 @@
 package com.micrantha.bluebell.ui.screen
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
@@ -12,9 +11,6 @@ import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.components.Router.Options.Reset
 import org.kodein.di.DI
 import org.kodein.di.DIAware
-import org.kodein.di.bindSingleton
-import org.kodein.di.compose.localDI
-import org.kodein.di.compose.subDI
 import org.kodein.di.direct
 import org.kodein.di.instance
 
@@ -43,24 +39,14 @@ class BluebellScreenContext(
 
     override val screen: Screen = navigator.lastItem
 
-    override fun <T : Screen> navigate(screen: T, options: Router.Options) = when (options) {
-        Replace -> navigator.replace(screen)
-        Reset -> navigator.replaceAll(screen)
-        else -> navigator.push(screen)
+    override fun <T : Screen> navigate(screen: T, options: Router.Options) {
+        when (options) {
+            Replace -> navigator.replace(screen)
+            Reset -> navigator.replaceAll(screen)
+            else -> navigator.push(screen)
+        }
     }
-
-
 }
-
-@Composable
-fun bindViewContext(di: DI = localDI(), content: @Composable () -> Unit) = subDI(
-    parentDI = di,
-    diBuilder = {
-        bindSingleton { BluebellScreenContext(di, instance(), instance(), instance()) }
-    },
-    content = content
-)
-
 
 val LocalScreenContext = compositionLocalOf<ScreenContext> {
     error("Local screen context not defined")

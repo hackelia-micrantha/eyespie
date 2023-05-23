@@ -8,7 +8,6 @@ import com.micrantha.bluebell.ui.scaffold.Scaffolding
 import com.micrantha.bluebell.ui.screen.LocalDispatcher
 import com.micrantha.bluebell.ui.screen.LocalScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.bluebell.ui.screen.bindViewContext
 import org.kodein.di.DI
 import org.kodein.di.compose.localDI
 import org.kodein.di.compose.rememberInstance
@@ -18,17 +17,16 @@ import org.kodein.di.compose.subDI
 fun BluebellApp(
     module: DI = localDI(),
     content: @Composable () -> Unit
-) = subDI(parentDI = module, diBuilder = { import(bluebellModules()) }) {
+) = subDI(parentDI = module, diBuilder = {
+    import(bluebellModules())
+}) {
+    val screenContext by rememberInstance<ScreenContext>()
 
-    bindViewContext {
-        val screenContext by rememberInstance<ScreenContext>()
-
-        CompositionLocalProvider(
-            LocalScreenContext provides screenContext,
-            LocalDispatcher provides screenContext.dispatcher
-        ) {
-            LayoutScreen(content)
-        }
+    CompositionLocalProvider(
+        LocalScreenContext provides screenContext,
+        LocalDispatcher provides screenContext.dispatcher
+    ) {
+        LayoutScreen(content)
     }
 }
 

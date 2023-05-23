@@ -9,14 +9,15 @@ import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.ext.status
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.bluebell.ui.screen.get
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGames
 import com.micrantha.skouter.ui.components.toi18n
 import com.micrantha.skouter.ui.games.action.GameAction.Failure
 import com.micrantha.skouter.ui.games.action.GameAction.GameClicked
 import com.micrantha.skouter.ui.games.create.GameCreateScreen
+import com.micrantha.skouter.ui.games.details.GameDetailScreenArg
 import com.micrantha.skouter.ui.games.details.GameDetailsScreen
 import com.micrantha.skouter.ui.games.list.GameListAction.Load
 import com.micrantha.skouter.ui.games.list.GameListAction.Loaded
@@ -48,8 +49,8 @@ class GameListEnvironment(
             is Load -> repository.games()
                 .onFailure { dispatch(Failure(it)) }
                 .onSuccess { dispatch(Loaded(it)) }
-            is NewGame -> navigate<GameCreateScreen>(context.get())
-            is GameClicked -> navigate<GameDetailsScreen>(context.get(action.arg))
+            is NewGame -> navigate<GameCreateScreen>()
+            is GameClicked -> navigate<GameDetailsScreen, GameDetailScreenArg>(arg = action.arg)
         }
     }
 }
