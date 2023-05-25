@@ -29,16 +29,16 @@ fun <T> UiResult<T>.copy(ready: (T) -> T) = when (this) {
 
 fun <T, V> UiResult<T>.map(ready: (T) -> V): UiResult<V> = when (this) {
     is Ready -> Ready(ready(data))
-    is Busy -> Busy()
-    is Failure -> Failure()
-    is Empty -> Empty()
+    is Busy -> Busy(message)
+    is Failure -> Failure(message)
+    is Empty -> Empty(message)
     is Default -> Default
 }
 
 fun <T, V> UiResult<T>.mapNotNull(block: (T) -> V?): UiResult<V> = when (this) {
     is Ready -> block(data)?.let { Ready(it) } ?: Default
-    is Busy -> Busy()
-    is Failure -> Failure()
-    is Empty -> Empty()
+    is Busy -> Busy(message)
+    is Failure -> Failure(message)
+    is Empty -> Empty(message)
     is Default -> Default
 }

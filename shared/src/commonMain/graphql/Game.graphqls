@@ -1,0 +1,58 @@
+type Game implements Entity, Creatable, Node {
+    id: String!
+    nodeId: ID!
+    created_at: String!
+    name: String!
+    expires: String!
+    turn_duration: String!
+    min_players: Int
+    max_players: Int
+    min_things: Int
+    max_things: Int
+    gameThingCollection: GameThingConnection,
+    gamePlayerCollection: GamePlayerConnection
+}
+
+type GameThing {
+    game_id: String!
+    thing_id: String!
+    thing: Thing!
+}
+
+type GamePlayer {
+    game_id: String!
+    player_id: String!
+    score: Int
+    player: Player!
+}
+
+type GameThingConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [GameThingEdge]
+}
+
+type GameThingEdge {
+    cursor: String!
+    node:GameThing!
+}
+type GamePlayerConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [GamePlayerEdge]
+}
+
+type GamePlayerEdge {
+    cursor: String!
+    node: GamePlayer!
+}
+
+type GameEdge {
+    cursor: String!
+    node: Game!
+}
+
+type GameConnection {
+    pageInfo: PageInfo!
+    edges: [GameEdge]
+}

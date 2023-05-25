@@ -17,6 +17,6 @@ object Dimensions {
 
     object List {
         val placeholder = 200.dp
-        val thumbnail = 100.dp
+        val thumbnail = 80.dp
     }
 }

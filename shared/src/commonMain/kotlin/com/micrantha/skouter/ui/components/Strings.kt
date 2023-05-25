@@ -35,5 +35,8 @@ enum class Strings(
     Next("next"),
     NewThing("new_thing"),
     NewThingDescription("new_thing_description"),
-    LoadingDashboard("loading_dashboard")
+    LoadingDashboard("loading_dashboard"),
+    NoThingsFound("no_things_found"),
+    NoGamesFound("no_games_found"),
+    NoPlayersFound("no_players_found")
 }

@@ -3,14 +3,12 @@ package com.micrantha.skouter.ui
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
-import com.micrantha.bluebell.domain.arch.Reducer
-import com.micrantha.bluebell.domain.model.Ready
-import com.micrantha.bluebell.domain.model.UiResult.Busy
 import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.MainAction.Loaded
+import com.micrantha.skouter.ui.MainAction.Login
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
 import com.micrantha.skouter.ui.login.LoginScreen
 
@@ -18,27 +16,17 @@ class MainEnvironment(
     private val context: ScreenContext,
     private val accountRepository: AccountRepository,
     private val dispatcher: Dispatcher,
-) : Reducer<MainState>, Effect<MainState>, Dispatcher by dispatcher {
+) : Effect<Unit>, Dispatcher by dispatcher {
 
-    override fun reduce(state: MainState, action: Action) = when (action) {
-        is Load -> state.copy(status = Busy("Initializing"))
-        is Loaded -> state.copy(
-            isLoggedIn = action.isLoggedIn,
-            status = Ready()
-        )
-        else -> state
-    }
-
-    override suspend fun invoke(action: Action, state: MainState) {
+    override suspend fun invoke(action: Action, state: Unit) {
         when (action) {
-            is Load -> dispatch(
-                Loaded(accountRepository.isLoggedIn())
-            )
-            is Loaded ->
-                if (action.isLoggedIn)
-                    context.navigate<LoginScreen>()
-                else
-                    context.navigate<DashboardScreen>()
+            is Load -> accountRepository.account().onFailure {
+                dispatch(Login)
+            }.onSuccess {
+                dispatch(Loaded(it))
+            }
+            is Login -> context.navigate<LoginScreen>()
+            is Loaded -> context.navigate<DashboardScreen>()
         }
     }
 }

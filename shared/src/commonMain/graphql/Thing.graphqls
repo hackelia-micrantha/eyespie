@@ -1,0 +1,52 @@
+type Guess {
+    created_at: String
+    created_by: PlayerRef
+    correct: Boolean
+}
+
+type ImageRef implements Entity {
+    id: String!
+    bucketId: String!
+}
+
+type Location {
+    latitude: Float
+    longitude: Float
+    name: String
+    city: String
+    region: String
+    country: String
+    accuracy: Float
+}
+
+type Clues {
+    color: String
+    where: Location
+    what: String
+    who: String
+    why: String
+    rhyme: String
+}
+
+type Thing implements Entity, Creatable, Node {
+    id: String!
+    nodeId: ID!
+    created_at: String!
+    created_by: PlayerRef!
+    name: String!
+    guessed: Boolean
+    guesses: ThingGuessConnection
+    image: JSON
+    clues: JSON
+}
+
+type ThingGuessConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [ThingGuessEdge]
+}
+
+type ThingGuessEdge {
+    cursor: String!
+    node: Guess
+}

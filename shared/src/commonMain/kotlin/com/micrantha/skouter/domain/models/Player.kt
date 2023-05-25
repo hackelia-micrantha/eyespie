@@ -10,6 +10,7 @@ data class Player(
     val email: String,
     val score: Score,
     val image: Image? = null,
+    val location: Location? = null,
 ) : Entity, Creatable {
 
     data class Name(

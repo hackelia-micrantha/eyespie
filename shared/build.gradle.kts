@@ -64,6 +64,8 @@ kotlin {
                 implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.3")
                 implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.3")
                 implementation("io.github.jan-tennert.supabase:storage-kt:0.9.3")
+                implementation("io.github.jan-tennert.supabase:realtime-kt:0.9.3")
+
             }
         }
         val commonTest by getting {

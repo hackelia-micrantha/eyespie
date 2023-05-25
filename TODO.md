@@ -69,3 +69,9 @@
     - show distance in real world
     - show map pins in real world
     - show heat map of "getting warmer" or "getting colder"
+
+---
+
+### Tech Notes
+
+- thing storage needs to be deleted with row

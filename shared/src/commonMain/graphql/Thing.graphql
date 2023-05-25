@@ -1,0 +1,23 @@
+subscription PlayerThings($playerID: String!, $lat: Float!, $lon: Float!, $dist: Float!) {
+    searchThingsNearPlayer(playerId: $playerID, latitude: $lat, longitude: $lon, distance: $dist) {
+        edges {
+            node {
+                id
+                nodeId,
+                image,
+                created_at
+                created_by {
+                    nodeId
+                    name
+                    id
+                }
+                name
+                clues
+                guessed
+                guesses {
+                    totalCount
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+type Player implements Entity, Creatable, Node {
+    id: String!
+    nodeId: ID!
+    created_at: String!
+    email: String!
+    phone: String
+    first_name: String
+    last_name: String
+    total_score: Int
+}
+
+type PlayerRef implements Entity, Node {
+    id: String!
+    nodeId: ID!
+    name: String!
+}
+
+type PlayerThingConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [PlayerThingEdge]
+}
+
+type PlayerThingEdge {
+    cursor: String!
+    node: Thing!
+}

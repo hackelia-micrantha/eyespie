@@ -3,17 +3,21 @@ package com.micrantha.skouter.ui.dashboard
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.models.GameList
+import com.micrantha.skouter.domain.models.Location
 import com.micrantha.skouter.domain.models.PlayerList
 import com.micrantha.skouter.domain.models.ThingList
 
 data class DashboardState(
+    val playerID: String? = null,
+    val location: Location? = null,
     val games: GameList? = null,
     val players: PlayerList? = null,
-    val things: ThingList? = null
+    val things: ThingList? = null,
+    val status: UiResult<Unit> = UiResult.Default
 )
 
 data class DashboardUiState(
-    val status: UiResult<Tabs> = UiResult.Default
+    val status: UiResult<Tabs>
 ) {
     data class Tabs(
         val games: GameList,
@@ -25,10 +29,10 @@ data class DashboardUiState(
 sealed class DashboardAction : Action {
     object Load : DashboardAction()
 
-    object Loaded : DashboardAction()
+    object LoadError : DashboardAction()
+
+    data class Loaded(val things: ThingList, val games: GameList, val players: PlayerList) :
+        DashboardAction()
 
     object ScanNewThing : DashboardAction()
 }
-
-val DashboardState.isValid: Boolean
-    get() = games != null && things != null && players != null

@@ -19,10 +19,6 @@ data class LoginUiState(
 
 sealed class LoginAction : Action {
 
-    object Load : LoginAction()
-
-    data class Loaded(val isLoggedIn: Boolean) : LoginAction()
-
     object OnLogin : LoginAction()
 
     data class OnError(val err: Throwable) : LoginAction()

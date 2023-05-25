@@ -23,6 +23,7 @@ import org.kodein.di.instance
 
 internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::MainEnvironment)
+    bindProviderOf(::MainScreen)
 
     bindProviderOf(::LoginEnvironment)
     bindProvider { LoginScreenModel(instance(), instance()) }
@@ -30,7 +31,7 @@ internal fun uiModules() = DI.Module("Skouter UI") {
 
     bindProviderOf(::GameListEnvironment)
     bindProvider { GameListScreenModel(instance(), instance()) }
-    bindProviderOf(::GameListScreen)
+    bindProvider { GameListScreen(instance()) }
 
     bindProviderOf(::GameDetailsEnvironment)
     bindFactory { arg: GameDetailScreenArg -> GameDetailsScreenModel(arg, instance(), instance()) }

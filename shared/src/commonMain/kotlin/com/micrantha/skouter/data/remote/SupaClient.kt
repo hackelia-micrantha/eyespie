@@ -4,6 +4,7 @@ import Skouter.shared.BuildConfig
 import com.apollographql.apollo3.ApolloCall
 import com.micrantha.skouter.GameListQuery
 import com.micrantha.skouter.GameNodeQuery
+import com.micrantha.skouter.PlayerThingsSubscription
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import io.github.jan.supabase.createSupabaseClient
@@ -14,6 +15,8 @@ import io.github.jan.supabase.graphql.graphql
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.PostgrestBuilder
+import io.github.jan.supabase.realtime.Realtime
+import io.github.jan.supabase.realtime.realtime
 import io.github.jan.supabase.storage.BucketApi
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
@@ -22,6 +25,7 @@ typealias AuthClient = GoTrue
 typealias DatabaseClient = Postgrest
 typealias StorageClient = Storage
 typealias GraphClient = GraphQL
+typealias RealtimeClient = Realtime
 
 typealias DatabaseCall = PostgrestBuilder
 typealias GraphCall<T> = ApolloCall<T>
@@ -38,6 +42,8 @@ class SupaClient {
             install(AuthClient)
 
             install(StorageClient)
+
+            install(RealtimeClient)
         }
 
     init {
@@ -46,7 +52,7 @@ class SupaClient {
 
     fun auth(): AuthCall = supabase.gotrue
 
-    fun players(): DatabaseCall = supabase.postgrest["players"]
+    fun players(): DatabaseCall = supabase.postgrest["Player"]
 
     fun games(): GraphCall<GameListQuery.Data> =
         supabase.graphql.apolloClient.query(GameListQuery())
@@ -55,5 +61,22 @@ class SupaClient {
         supabase.graphql.apolloClient.query(GameNodeQuery(id))
 
     fun storage(bucketId: String): StorageCall = supabase.storage[bucketId]
+
+    fun realtime(): RealtimeClient = supabase.realtime
+
+    fun nearby(
+        playerID: String,
+        latitude: Double,
+        longitude: Double,
+        distance: Double
+    ): GraphCall<PlayerThingsSubscription.Data> =
+        supabase.graphql.apolloClient.subscription(
+            PlayerThingsSubscription(
+                playerID,
+                latitude,
+                longitude,
+                distance
+            )
+        )
 
 }

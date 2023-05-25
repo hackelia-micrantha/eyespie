@@ -1,17 +1,14 @@
 package com.micrantha.skouter.ui
 
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.domain.model.UiResult
+import com.micrantha.skouter.domain.models.Player
 
 sealed class MainAction : Action {
 
-    data class Loaded(val isLoggedIn: Boolean) : MainAction()
+    data class Loaded(val player: Player) : MainAction()
+
+    object Login : MainAction()
 
     object Load : MainAction()
 
 }
-
-data class MainState(
-    val isLoggedIn: Boolean = false,
-    val status: UiResult<Unit> = UiResult.Default
-)

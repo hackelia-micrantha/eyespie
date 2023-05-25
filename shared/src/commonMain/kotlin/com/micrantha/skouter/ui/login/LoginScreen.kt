@@ -16,7 +16,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -27,9 +26,7 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.ext.enabled
 import com.micrantha.bluebell.domain.i18n.stringResource
-import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.Skouter
 import com.micrantha.skouter.ui.components.Strings
 
@@ -41,24 +38,12 @@ class LoginScreen : Screen {
 
         val state by viewModel.state().collectAsState()
 
-        LaunchedEffect(viewModel) {
-            viewModel.dispatch(Load)
-        }
-
         render(state, viewModel::dispatch)
-    }
-
-    @Composable
-    fun render(state: LoginUiState, dispatch: Dispatch) {
-        when (state.status) {
-            is Default -> SplashScreen()
-            else -> LoginForm(state, dispatch)
-        }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun LoginForm(state: LoginUiState, dispatch: Dispatch) {
+    fun render(state: LoginUiState, dispatch: Dispatch) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -105,17 +90,4 @@ class LoginScreen : Screen {
             }
         }
     }
-
-    @Composable
-    private fun SplashScreen() {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Icon(
-                imageVector = Skouter.defaultIcon,
-                modifier = Modifier.size(Dimensions.List.placeholder),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
-    }
-
 }

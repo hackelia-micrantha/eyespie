@@ -30,6 +30,7 @@ fun FailureContent(message: String? = null) {
             Icon(
                 Icons.Default.Error,
                 contentDescription = null,
+                tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.size(Dimensions.List.placeholder)
             )
             message?.let {

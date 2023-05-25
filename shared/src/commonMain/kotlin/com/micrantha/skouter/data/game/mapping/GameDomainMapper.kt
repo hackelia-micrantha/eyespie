@@ -3,7 +3,6 @@ package com.micrantha.skouter.data.game.mapping
 import com.micrantha.bluebell.data.err.fail
 import com.micrantha.skouter.GameListQuery
 import com.micrantha.skouter.GameNodeQuery
-import com.micrantha.skouter.GameNodeQuery.Edge1
 import com.micrantha.skouter.GameNodeQuery.Edge2
 import com.micrantha.skouter.data.thing.model.ImageJson
 import com.micrantha.skouter.domain.models.Game
@@ -12,7 +11,6 @@ import com.micrantha.skouter.domain.models.Image
 import com.micrantha.skouter.domain.models.Player
 import com.micrantha.skouter.domain.models.PlayerList
 import com.micrantha.skouter.domain.models.Thing
-import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -71,16 +69,6 @@ class GameDomainMapper {
                 } ?: fail("no image for thing(${thing.id})")
             )
         }
-
-    private fun mapGuesses(data: List<Edge1>?) = data?.mapNotNull { it.node }?.map { guess ->
-        Thing.Guess(
-            at = guess.created_at?.toInstant() ?: System.now(),
-            by = guess.created_by?.let { by ->
-                Player.Ref(by.nodeId, by.name)
-            } ?: fail("invalid player ref"),
-            correct = guess.correct ?: false
-        )
-    }
 
     private fun mapImage(data: ImageJson) = Image(
         fileId = data.fileId,

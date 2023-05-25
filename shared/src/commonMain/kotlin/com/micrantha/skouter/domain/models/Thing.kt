@@ -6,6 +6,7 @@ data class Thing(
     override val id: String,
     override val nodeId: String,
     override val createdAt: Instant,
+    val createdBy: Player.Ref,
     val name: String,
     val guessed: Boolean,
     val guesses: List<Guess>,
