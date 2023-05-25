@@ -31,9 +31,9 @@ import com.micrantha.skouter.domain.models.Thing
 import com.micrantha.skouter.ui.game.action.GameAction.LoadImage
 
 @Composable
-fun ThingListingCard(thing: Thing.Listing, dispatch: Dispatch) {
+fun ThingListingCard(modifier: Modifier = Modifier, thing: Thing.Listing, dispatch: Dispatch) {
     Card(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier.padding(Dimensions.content)

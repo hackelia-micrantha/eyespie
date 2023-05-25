@@ -32,6 +32,6 @@ class ThingsRemoteSource(
     ): Flow<ThingList> =
         supaClient.nearby(playerID, location.latitude, location.longitude, distance)
             .toFlow()
-            .map { mapper(it.dataAssertNoErrors.searchThingsNearPlayer?.edgesFilterNotNull()) }
+            .map { mapper(it.dataAssertNoErrors.searchThingsNearPlayer!!.edgesFilterNotNull()) }
 
 }

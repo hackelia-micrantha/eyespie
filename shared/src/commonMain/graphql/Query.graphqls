@@ -1,9 +1,0 @@
-type Query {
-    gameCollection(after: Cursor, before: Cursor, first: Int, last: Int): GameConnection
-
-    node(nodeId: ID!): Node
-}
-
-type Subscription {
-    searchThingsNearPlayer(playerId: String!, latitude: Float!, longitude: Float!, distance: Float!): PlayerThingConnection
-}

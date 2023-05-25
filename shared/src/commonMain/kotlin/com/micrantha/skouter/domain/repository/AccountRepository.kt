@@ -11,5 +11,5 @@ interface AccountRepository {
 
     suspend fun loginAnonymous(): Result<Unit>
 
-    suspend fun login(email: String, passwd: String): Result<Unit>
+    suspend fun login(email: String, passwd: String): Result<Player>
 }

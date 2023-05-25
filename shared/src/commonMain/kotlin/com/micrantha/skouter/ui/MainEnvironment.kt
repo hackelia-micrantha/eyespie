@@ -23,7 +23,7 @@ class MainEnvironment(
             is Load -> accountRepository.account().onFailure {
                 dispatch(Login)
             }.onSuccess {
-                dispatch(Loaded(it))
+                dispatch(Loaded)
             }
             is Login -> context.navigate<LoginScreen>()
             is Loaded -> context.navigate<DashboardScreen>()

@@ -4,7 +4,7 @@ import Skouter.shared.BuildConfig
 import com.apollographql.apollo3.ApolloCall
 import com.micrantha.skouter.GameListQuery
 import com.micrantha.skouter.GameNodeQuery
-import com.micrantha.skouter.PlayerThingsSubscription
+import com.micrantha.skouter.PlayerNearbyThingsQuery
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import io.github.jan.supabase.createSupabaseClient
@@ -60,6 +60,8 @@ class SupaClient {
     fun game(id: String): GraphCall<GameNodeQuery.Data> =
         supabase.graphql.apolloClient.query(GameNodeQuery(id))
 
+    fun things() = supabase.postgrest["Thing"]
+
     fun storage(bucketId: String): StorageCall = supabase.storage[bucketId]
 
     fun realtime(): RealtimeClient = supabase.realtime
@@ -69,14 +71,13 @@ class SupaClient {
         latitude: Double,
         longitude: Double,
         distance: Double
-    ): GraphCall<PlayerThingsSubscription.Data> =
-        supabase.graphql.apolloClient.subscription(
-            PlayerThingsSubscription(
+    ): GraphCall<PlayerNearbyThingsQuery.Data> =
+        supabase.graphql.apolloClient.query(
+            PlayerNearbyThingsQuery(
                 playerID,
                 latitude,
                 longitude,
                 distance
             )
         )
-
 }

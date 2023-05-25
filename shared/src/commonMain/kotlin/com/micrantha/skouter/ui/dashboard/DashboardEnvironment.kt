@@ -6,10 +6,10 @@ import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.ext.busy
 import com.micrantha.bluebell.domain.ext.failure
+import com.micrantha.bluebell.domain.model.Ready
 import com.micrantha.bluebell.domain.model.map
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.domain.models.GameList
-import com.micrantha.skouter.domain.models.Location
 import com.micrantha.skouter.domain.models.PlayerList
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.domain.repository.GameRepository
@@ -46,6 +46,7 @@ class DashboardEnvironment(
     override fun reduce(state: DashboardState, action: Action): DashboardState {
         return when (action) {
             is Loaded -> state.copy(
+                status = Ready(),
                 games = action.games,
                 things = action.things,
                 players = action.players
@@ -63,10 +64,11 @@ class DashboardEnvironment(
     override suspend fun invoke(action: Action, state: DashboardState) {
         when (action) {
             is Load -> {
-                val thingFlow = thingsRepository.nearby(
-                    accountRepository.currentPlayer!!.id,
-                    Location.Point(49.319981, -123.072411)
-                )
+                val thingFlow = flow {
+                    playerRepository.things(accountRepository.currentPlayer!!.id)
+                        .onSuccess { emit(it) }
+                        .onFailure { throw it }
+                }
                 val gameFlow = flow<GameList> { emit(emptyList()) }
                 val playerFlow = flow<PlayerList> { emit(emptyList()) }
                 combine(

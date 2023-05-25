@@ -1,6 +1,7 @@
 package com.micrantha.skouter.ui.thing.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.ui.components.status.EmptyContent
+import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.models.ThingList
 import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
@@ -26,9 +28,13 @@ fun ThingListContent(
         ) {
             dispatch(ScanNewThing)
         }
-        else -> LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(things) { thing ->
-                ThingListingCard(thing, dispatch)
+                ThingListingCard(
+                    modifier = Modifier.padding(Dimensions.content),
+                    thing = thing,
+                    dispatch = dispatch
+                )
             }
         }
     }

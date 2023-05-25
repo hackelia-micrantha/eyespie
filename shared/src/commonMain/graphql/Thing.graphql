@@ -1,5 +1,5 @@
-subscription PlayerThings($playerID: String!, $lat: Float!, $lon: Float!, $dist: Float!) {
-    searchThingsNearPlayer(playerId: $playerID, latitude: $lat, longitude: $lon, distance: $dist) {
+query PlayerNearbyThings($playerID: String!, $lat: Float!, $lon: Float!, $dist: Float!) {
+    searchThingsNearPlayer(playerID: $playerID, latitude: $lat, longitude: $lon, distance: $dist) {
         edges {
             node {
                 id
