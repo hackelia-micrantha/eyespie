@@ -2,8 +2,8 @@ package com.micrantha.skouter.data.game.source
 
 import com.micrantha.skouter.data.game.mapping.GameDomainMapper
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.domain.models.Game
-import com.micrantha.skouter.domain.models.GameList
+import com.micrantha.skouter.domain.model.Game
+import com.micrantha.skouter.domain.model.GameList
 import io.github.aakira.napier.Napier
 
 class GameRemoteSource(

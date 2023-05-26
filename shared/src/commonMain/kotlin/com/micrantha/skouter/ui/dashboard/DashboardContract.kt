@@ -2,10 +2,11 @@ package com.micrantha.skouter.ui.dashboard
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
-import com.micrantha.skouter.domain.models.GameList
-import com.micrantha.skouter.domain.models.Location
-import com.micrantha.skouter.domain.models.PlayerList
-import com.micrantha.skouter.domain.models.ThingList
+import com.micrantha.skouter.domain.model.GameList
+import com.micrantha.skouter.domain.model.ImageDownload
+import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.PlayerList
+import com.micrantha.skouter.domain.model.ThingList
 
 data class DashboardState(
     val playerID: String? = null,
@@ -27,12 +28,17 @@ data class DashboardUiState(
 }
 
 sealed class DashboardAction : Action {
+
+    data class ImageLoaded(val image: ImageDownload) : DashboardAction()
+
+    data class ImageError(val err: Throwable) : DashboardAction()
+
+    object ScanNewThing : DashboardAction()
+
     object Load : DashboardAction()
 
     object LoadError : DashboardAction()
 
     data class Loaded(val things: ThingList, val games: GameList, val players: PlayerList) :
         DashboardAction()
-
-    object ScanNewThing : DashboardAction()
 }

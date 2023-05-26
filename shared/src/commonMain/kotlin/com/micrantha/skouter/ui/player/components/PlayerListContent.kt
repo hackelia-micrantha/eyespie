@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.ui.components.status.EmptyContent
-import com.micrantha.skouter.domain.models.PlayerList
+import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.ui.components.S
 
 @Composable

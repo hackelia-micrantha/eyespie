@@ -3,7 +3,7 @@ package com.micrantha.skouter.data.account.source
 import com.micrantha.skouter.data.player.mapping.PlayerDomainMapper
 import com.micrantha.skouter.data.player.model.PlayerResponse
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.domain.models.Player
+import com.micrantha.skouter.domain.model.Player
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 
 class AccountRemoteSource(

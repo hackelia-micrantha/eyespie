@@ -1,4 +1,4 @@
-package com.micrantha.skouter.domain.models
+package com.micrantha.skouter.domain.model
 
 data class Clues(
     val color: String? = null,

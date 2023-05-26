@@ -1,8 +1,8 @@
 package com.micrantha.skouter.domain.repository
 
-import com.micrantha.skouter.domain.models.Clues
-import com.micrantha.skouter.domain.models.Location
-import com.micrantha.skouter.domain.models.ThingList
+import com.micrantha.skouter.domain.model.Clues
+import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.ThingList
 import kotlinx.coroutines.flow.Flow
 
 interface ThingsRepository {
@@ -10,7 +10,7 @@ interface ThingsRepository {
     suspend fun recognize(image: ByteArray, contentType: String): Result<Clues>
 
     suspend fun things(playerID: String): Result<ThingList>
-    
+
     fun nearby(
         playerID: String,
         location: Location.Point,

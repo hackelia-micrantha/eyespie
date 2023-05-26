@@ -1,7 +1,7 @@
 package com.micrantha.skouter.data.local.mapping
 
 import com.micrantha.skouter.data.thing.model.ImageJson
-import com.micrantha.skouter.domain.models.Image
+import com.micrantha.skouter.domain.model.Image
 
 class DomainMapper {
 

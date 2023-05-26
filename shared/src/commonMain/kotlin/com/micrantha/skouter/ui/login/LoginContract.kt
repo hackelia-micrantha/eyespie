@@ -7,13 +7,13 @@ import com.micrantha.bluebell.domain.model.UiResult
 data class LoginState(
     val email: String = BuildConfig.userLoginEmail,
     val password: String = BuildConfig.userLoginPassword,
-    val status: UiResult<Boolean> = UiResult.Default
+    val status: UiResult<Unit> = UiResult.Default
 )
 
 data class LoginUiState(
     val email: String,
     val password: String,
-    val status: UiResult<Boolean>
+    val status: UiResult<Unit>
 )
 
 

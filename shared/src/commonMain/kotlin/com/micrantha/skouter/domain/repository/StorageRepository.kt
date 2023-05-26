@@ -1,6 +1,6 @@
 package com.micrantha.skouter.domain.repository
 
-import com.micrantha.skouter.domain.models.Image
+import com.micrantha.skouter.domain.model.Image
 
 interface StorageRepository {
     suspend fun download(image: Image): Result<ByteArray>

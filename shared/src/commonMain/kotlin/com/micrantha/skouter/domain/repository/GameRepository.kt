@@ -1,7 +1,7 @@
 package com.micrantha.skouter.domain.repository
 
-import com.micrantha.skouter.domain.models.Game
-import com.micrantha.skouter.domain.models.GameList
+import com.micrantha.skouter.domain.model.Game
+import com.micrantha.skouter.domain.model.GameList
 
 interface GameRepository {
     suspend fun games(): Result<GameList>

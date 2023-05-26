@@ -21,7 +21,7 @@ import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.ui.components.LabeledText
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.domain.models.Game
+import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.ui.components.Strings.CreatedAt
 import com.micrantha.skouter.ui.components.Strings.ExpiresAt
 import com.micrantha.skouter.ui.components.Strings.Players
@@ -68,6 +68,7 @@ fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
                 )
             ) {
                 LabeledText(
+                    modifier = Modifier.padding(Dimensions.content),
                     text = game.totalThings.toString(),
                     label = stringResource(Things),
                 )
@@ -81,6 +82,7 @@ fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
                 )
             ) {
                 LabeledText(
+                    modifier = Modifier.padding(Dimensions.content),
                     text = game.totalPlayers.toString(),
                     label = stringResource(Players),
                 )

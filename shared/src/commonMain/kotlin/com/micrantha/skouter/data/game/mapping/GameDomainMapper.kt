@@ -5,11 +5,11 @@ import com.micrantha.skouter.GameListQuery
 import com.micrantha.skouter.GameNodeQuery
 import com.micrantha.skouter.GameNodeQuery.Edge2
 import com.micrantha.skouter.data.local.mapping.DomainMapper
-import com.micrantha.skouter.domain.models.Game
-import com.micrantha.skouter.domain.models.Game.Limits
-import com.micrantha.skouter.domain.models.Player
-import com.micrantha.skouter.domain.models.PlayerList
-import com.micrantha.skouter.domain.models.Thing
+import com.micrantha.skouter.domain.model.Game
+import com.micrantha.skouter.domain.model.Game.Limits
+import com.micrantha.skouter.domain.model.Player
+import com.micrantha.skouter.domain.model.PlayerList
+import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json

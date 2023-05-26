@@ -1,11 +1,11 @@
 package com.micrantha.skouter.data.player.mapping
 
 import com.micrantha.skouter.data.player.model.PlayerResponse
-import com.micrantha.skouter.domain.models.Location
-import com.micrantha.skouter.domain.models.Location.Point
-import com.micrantha.skouter.domain.models.Player
-import com.micrantha.skouter.domain.models.Player.Name
-import com.micrantha.skouter.domain.models.Player.Score
+import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.Location.Point
+import com.micrantha.skouter.domain.model.Player
+import com.micrantha.skouter.domain.model.Player.Name
+import com.micrantha.skouter.domain.model.Player.Score
 import kotlinx.datetime.toInstant
 
 class PlayerDomainMapper {

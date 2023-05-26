@@ -2,8 +2,8 @@ package com.micrantha.skouter.ui.game.details
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
-import com.micrantha.skouter.domain.models.Game
-import com.micrantha.skouter.domain.models.Image
+import com.micrantha.skouter.domain.model.Game
+import com.micrantha.skouter.domain.model.Image
 
 data class GameDetailScreenArg(
     val id: String,

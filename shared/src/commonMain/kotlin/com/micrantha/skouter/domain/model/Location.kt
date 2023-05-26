@@ -1,4 +1,4 @@
-package com.micrantha.skouter.domain.models
+package com.micrantha.skouter.domain.model
 
 import com.micrantha.skouter.domain.algo.distanceTo
 

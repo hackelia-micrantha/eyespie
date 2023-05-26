@@ -3,7 +3,7 @@ package com.micrantha.skouter.ui.components
 import com.micrantha.bluebell.domain.model.UiResult.Failure
 import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.toPainter
-import com.micrantha.skouter.domain.models.Thing
+import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.repository.StorageRepository
 
 

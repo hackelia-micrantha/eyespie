@@ -2,7 +2,7 @@ package com.micrantha.skouter.data.account
 
 import com.micrantha.skouter.data.account.model.CurrentAccount
 import com.micrantha.skouter.data.account.source.AccountRemoteSource
-import com.micrantha.skouter.domain.models.Player
+import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.repository.AccountRepository as DomainRepository
 
 class AccountDataRepository(

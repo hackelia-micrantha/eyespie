@@ -38,12 +38,12 @@ class LoginScreen : Screen {
 
         val state by viewModel.state().collectAsState()
 
-        render(state, viewModel::dispatch)
+        Render(state, viewModel::dispatch)
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun render(state: LoginUiState, dispatch: Dispatch) {
+    fun Render(state: LoginUiState, dispatch: Dispatch) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {

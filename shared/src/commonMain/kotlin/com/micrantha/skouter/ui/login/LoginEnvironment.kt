@@ -7,6 +7,7 @@ import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.ext.busy
 import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
+import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
@@ -37,6 +38,7 @@ class LoginEnvironment(
     override fun reduce(state: LoginState, action: Action) = when (action) {
         is ChangedEmail -> state.copy(email = action.email)
         is ChangedPassword -> state.copy(password = action.password)
+        is OnSuccess -> state.copy(status = Default)
         is OnLogin -> state.copy(status = busy(Strings.LoggingIn))
         is OnError -> state.copy(status = failure(Strings.LoginFailed))
         else -> state

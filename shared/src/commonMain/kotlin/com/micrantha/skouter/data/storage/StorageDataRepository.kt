@@ -2,7 +2,7 @@ package com.micrantha.skouter.data.storage
 
 import com.micrantha.skouter.data.storage.source.StorageLocalSource
 import com.micrantha.skouter.data.storage.source.StorageRemoteSource
-import com.micrantha.skouter.domain.models.Image
+import com.micrantha.skouter.domain.model.Image
 import com.micrantha.skouter.domain.repository.StorageRepository
 
 class StorageDataRepository(

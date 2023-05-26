@@ -26,9 +26,9 @@ import com.micrantha.bluebell.domain.model.UiResult.Busy
 import com.micrantha.bluebell.domain.model.UiResult.Failure
 import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.domain.models.Image
-import com.micrantha.skouter.domain.models.Thing
-import com.micrantha.skouter.ui.game.action.GameAction.LoadImage
+import com.micrantha.skouter.domain.model.Image
+import com.micrantha.skouter.domain.model.Thing
+import com.micrantha.skouter.ui.thing.ThingAction.DownloadImage
 
 @Composable
 fun ThingListingCard(modifier: Modifier = Modifier, thing: Thing.Listing, dispatch: Dispatch) {
@@ -56,8 +56,10 @@ fun ThingListingCard(modifier: Modifier = Modifier, thing: Thing.Listing, dispat
 @Composable
 private fun GameThingImage(image: Image, dispatch: Dispatch) {
 
-    LaunchedEffect(image) {
-        dispatch(LoadImage(image))
+    LaunchedEffect(Unit) {
+        if (image.status !is Ready) {
+            dispatch(DownloadImage(image))
+        }
     }
 
     Box(

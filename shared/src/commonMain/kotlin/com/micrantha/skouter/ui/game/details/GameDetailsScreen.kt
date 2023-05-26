@@ -21,7 +21,7 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.scaffold.Scaffolding
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.domain.models.Game
+import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.ui.components.Strings
 import com.micrantha.skouter.ui.player.components.PlayerListContent
 import com.micrantha.skouter.ui.thing.components.ThingListContent

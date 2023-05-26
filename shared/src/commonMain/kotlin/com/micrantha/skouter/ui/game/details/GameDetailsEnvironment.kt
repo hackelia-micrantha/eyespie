@@ -13,23 +13,21 @@ import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.domain.model.mapNotNull
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
-import com.micrantha.bluebell.ui.toPainter
 import com.micrantha.skouter.domain.repository.GameRepository
-import com.micrantha.skouter.domain.repository.StorageRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGame
 import com.micrantha.skouter.ui.components.toi18n
 import com.micrantha.skouter.ui.game.action.GameAction.Failure
 import com.micrantha.skouter.ui.game.action.GameAction.ImageFailed
-import com.micrantha.skouter.ui.game.action.GameAction.LoadImage
 import com.micrantha.skouter.ui.game.action.GameAction.LoadedImage
 import com.micrantha.skouter.ui.game.details.GameDetailsAction.Load
 import com.micrantha.skouter.ui.game.details.GameDetailsAction.Loaded
-import io.github.aakira.napier.Napier
+import com.micrantha.skouter.ui.thing.ThingAction.DownloadImage
+import com.micrantha.skouter.ui.thing.usecase.LoadImageFromStorageUseCase
 
 class GameDetailsEnvironment(
     private val context: ScreenContext,
     private val gameRepository: GameRepository,
-    private val storageRepository: StorageRepository,
+    private val loadImageFromStorageUseCase: LoadImageFromStorageUseCase
 ) : Reducer<GameDetailsState>, Effect<GameDetailsState>,
     StateMapper<GameDetailsState, GameDetailsUiState>,
     Dispatcher by context.dispatcher,
@@ -51,8 +49,6 @@ class GameDetailsEnvironment(
             val ref = images[action.id] ?: fail("no image found for ${action.id}")
             images[action.id] = ref.copy(status = Ready(action.data))
         }
-        is LoadImage -> state.copy()
-        is ImageFailed -> state.copy()
         else -> state
     }
 
@@ -65,14 +61,11 @@ class GameDetailsEnvironment(
                     dispatch(Loaded(game))
                 }
             }
-            is LoadImage -> storageRepository.download(action.image)
+            is DownloadImage -> loadImageFromStorageUseCase(action.data)
                 .onFailure {
-                    Napier.e("load image failed - ${action.image.path}", it)
-                    dispatch(ImageFailed(action.image.id, it))
+                    dispatch(ImageFailed(action.data.id, it))
                 }.onSuccess {
-                    dispatch(
-                        LoadedImage(action.image.id, it.toPainter())
-                    )
+                    dispatch(LoadedImage(action.data.id, it))
                 }
         }
     }

@@ -3,7 +3,7 @@ package com.micrantha.skouter.ui.scan
 import androidx.compose.ui.graphics.painter.Painter
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
-import com.micrantha.skouter.domain.models.Clues
+import com.micrantha.skouter.domain.model.Clues
 
 data class ScanState(
     val status: UiResult<Unit> = UiResult.Default,

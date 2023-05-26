@@ -5,9 +5,9 @@ import com.micrantha.skouter.data.remote.SupaClient
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.model.RecognitionResponse
 import com.micrantha.skouter.data.thing.model.ThingResponse
-import com.micrantha.skouter.domain.models.Clues
-import com.micrantha.skouter.domain.models.Location
-import com.micrantha.skouter.domain.models.ThingList
+import com.micrantha.skouter.domain.model.Clues
+import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.ThingList
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import kotlinx.coroutines.flow.Flow

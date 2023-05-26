@@ -5,8 +5,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.micrantha.bluebell.domain.model.Ready
-import com.micrantha.skouter.domain.models.Game
-import com.micrantha.skouter.domain.models.Game.Limits
+import com.micrantha.skouter.domain.model.Game
+import com.micrantha.skouter.domain.model.Game.Limits
 import com.micrantha.skouter.ui.PreviewContext
 import kotlinx.datetime.Clock.System
 import org.kodein.di.bind

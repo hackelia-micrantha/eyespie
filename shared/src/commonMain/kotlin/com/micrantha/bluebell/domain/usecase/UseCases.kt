@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
-/** Executes the use case asynchronously and returns an [Outcome].
+/** Executes the use case asynchronously and returns a [Result].
  *
- * @return an [Outcome].
+ * @return a [Result].
  *
  * @param coroutineDispatcher the dispatcher to dispatch the use case to.
  * @param block the block to execute.
@@ -29,8 +29,8 @@ suspend fun <Out> dispatchUseCase(
 
 /**
  * Executes business logic in its execute method and keep posting updates to the result as
- * [Outcome<R>].
- * Handling an exception (emit [Outcome.Failure] to the result) is the subclasses responsibility.
+ * [Result<R>].
+ * Handling an exception (emit [Result.Failure] to the result) is the subclasses responsibility.
  */
 suspend fun <Out> flowUseCase(
     coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,

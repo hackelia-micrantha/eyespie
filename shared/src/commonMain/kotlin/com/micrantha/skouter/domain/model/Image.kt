@@ -1,4 +1,4 @@
-package com.micrantha.skouter.domain.models
+package com.micrantha.skouter.domain.model
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.micrantha.bluebell.domain.model.UiResult

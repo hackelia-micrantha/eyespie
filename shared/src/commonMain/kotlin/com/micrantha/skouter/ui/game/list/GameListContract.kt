@@ -2,7 +2,7 @@ package com.micrantha.skouter.ui.game.list
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
-import com.micrantha.skouter.domain.models.GameList
+import com.micrantha.skouter.domain.model.GameList
 
 data class GameListState(
     val status: UiResult<GameList> = UiResult.Default

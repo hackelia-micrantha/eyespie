@@ -1,6 +1,6 @@
 package com.micrantha.skouter.domain.repository
 
-import com.micrantha.skouter.domain.models.Player
+import com.micrantha.skouter.domain.model.Player
 
 interface AccountRepository {
     suspend fun account(): Result<Player>

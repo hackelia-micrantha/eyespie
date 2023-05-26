@@ -5,9 +5,9 @@ import com.micrantha.skouter.PlayerNearbyThingsQuery
 import com.micrantha.skouter.data.local.mapping.DomainMapper
 import com.micrantha.skouter.data.thing.model.RecognitionResponse
 import com.micrantha.skouter.data.thing.model.ThingResponse
-import com.micrantha.skouter.domain.models.Clues
-import com.micrantha.skouter.domain.models.Player
-import com.micrantha.skouter.domain.models.Thing
+import com.micrantha.skouter.domain.model.Clues
+import com.micrantha.skouter.domain.model.Player
+import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
