@@ -38,5 +38,7 @@ enum class Strings(
     LoadingDashboard("loading_dashboard"),
     NoThingsFound("no_things_found"),
     NoGamesFound("no_games_found"),
-    NoPlayersFound("no_players_found")
+    NoPlayersFound("no_players_found"),
+    NoCamera("no_camera"),
+    NoClues("no_clues")
 }

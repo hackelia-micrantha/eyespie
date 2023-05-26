@@ -38,8 +38,6 @@ kotlin {
                 api(compose.materialIconsExtended)
                 api(compose.material3)
 
-                api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-
                 api("org.kodein.di:kodein-di:7.20.1")
                 api("org.kodein.di:kodein-di-framework-compose:7.20.1")
                 implementation("org.kodein.di:kodein-di-conf:7.19.0")
@@ -48,6 +46,7 @@ kotlin {
 
                 implementation("io.github.reactivecircus.cache4k:cache4k:0.11.0")
 
+                api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
@@ -66,6 +65,10 @@ kotlin {
                 implementation("io.github.jan-tennert.supabase:storage-kt:0.9.3")
                 implementation("io.github.jan-tennert.supabase:realtime-kt:0.9.3")
 
+                api("dev.icerock.moko:permissions-compose:0.16.0")
+                api("dev.icerock.moko:media-compose:0.11.0")
+                api("dev.icerock.moko:geo-compose:0.6.0")
+
             }
         }
         val commonTest by getting {
@@ -76,13 +79,15 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.6.1")
-                implementation("androidx.core:core-ktx:1.10.0")
+                implementation("androidx.core:core-ktx:1.10.1")
                 //implementation("org.jetbrains.kotlinx:kotlin-deeplearning-api:0.5.1")
 
                 api("androidx.compose.foundation:foundation:1.4.3")
+                api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
-                api("androidx.activity:activity-compose:1.7.1")
+                api("androidx.activity:activity-compose:1.7.2")
+                api("androidx.fragment:fragment-ktx:1.5.7")
 
                 //implementation("io.github.chopyourbrain:kontrol:0.1.1")
             }

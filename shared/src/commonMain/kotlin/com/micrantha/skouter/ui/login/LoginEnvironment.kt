@@ -10,6 +10,7 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.components.Strings
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
@@ -21,13 +22,13 @@ import com.micrantha.skouter.ui.login.LoginAction.OnSuccess
 
 class LoginEnvironment(
     private val context: ScreenContext,
-    private val dispatcher: Dispatcher,
-    private val localizedRepository: LocalizedRepository,
     private val accountRepository: AccountRepository,
-) : Reducer<LoginState>, Effect<LoginState>, Dispatcher by dispatcher,
-    LocalizedRepository by localizedRepository, Router by context {
+) : Reducer<LoginState>, Effect<LoginState>,
+    StateMapper<LoginState, LoginUiState>,
+    Dispatcher by context.dispatcher,
+    LocalizedRepository by context.i18n, Router by context.router {
 
-    fun map(state: LoginState) = LoginUiState(
+    override fun map(state: LoginState) = LoginUiState(
         email = state.email,
         password = state.password,
         status = state.status

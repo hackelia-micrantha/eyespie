@@ -2,20 +2,19 @@ package com.micrantha.bluebell.ui.screen
 
 import androidx.compose.runtime.compositionLocalOf
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
 import com.micrantha.bluebell.Platform
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
-import com.micrantha.bluebell.ui.components.Router.Options.Replace
-import com.micrantha.bluebell.ui.components.Router.Options.Reset
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.direct
 import org.kodein.di.instance
 
-interface ScreenContext : DIAware, Router {
+interface ScreenContext : DIAware {
     val i18n: LocalizedRepository
+
+    val router: Router
 
     val dispatcher: Dispatcher
 }
@@ -25,27 +24,15 @@ inline fun <reified T : Screen> ScreenContext.get() = direct.instance<T>()
 inline fun <reified T : Screen, reified A : Any> ScreenContext.get(arg: A) =
     direct.instance<A, T>(arg = arg)
 
+
 class BluebellScreenContext(
     override val di: DI,
     platform: Platform,
     override val dispatcher: Dispatcher,
-    private val navigator: Navigator
+    override val router: Router
 ) : ScreenContext {
     override val i18n: LocalizedRepository = platform
 
-    override fun navigateBack() = navigator.pop()
-
-    override val canGoBack: Boolean = navigator.canPop
-
-    override val screen: Screen = navigator.lastItem
-
-    override fun <T : Screen> navigate(screen: T, options: Router.Options) {
-        when (options) {
-            Replace -> navigator.replace(screen)
-            Reset -> navigator.replaceAll(screen)
-            else -> navigator.push(screen)
-        }
-    }
 }
 
 val LocalScreenContext = compositionLocalOf<ScreenContext> {

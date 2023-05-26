@@ -9,6 +9,8 @@ interface ThingsRepository {
 
     suspend fun recognize(image: ByteArray, contentType: String): Result<Clues>
 
+    suspend fun things(playerID: String): Result<ThingList>
+    
     fun nearby(
         playerID: String,
         location: Location.Point,

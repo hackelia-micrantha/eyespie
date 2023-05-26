@@ -11,6 +11,7 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGames
 import com.micrantha.skouter.ui.components.toi18n
@@ -25,12 +26,13 @@ import com.micrantha.skouter.ui.game.list.GameListAction.NewGame
 
 class GameListEnvironment(
     private val context: ScreenContext,
-    private val dispatcher: Dispatcher,
-    private val localizedRepository: LocalizedRepository,
     private val repository: GameRepository,
 ) : Reducer<GameListState>, Effect<GameListState>,
-    LocalizedRepository by localizedRepository, Router by context, Dispatcher by dispatcher {
-    fun map(state: GameListState) = GameListUiState(
+    StateMapper<GameListState, GameListUiState>,
+    LocalizedRepository by context.i18n, Router by context.router,
+    Dispatcher by context.dispatcher {
+
+    override fun map(state: GameListState) = GameListUiState(
         status = state.status
     )
 

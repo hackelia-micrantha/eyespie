@@ -30,4 +30,6 @@
     <string name="no_things_found">No things found.</string>
     <string name="no_games_found">No games found.</string>
     <string name="no_players_found">No players found.</string>
+    <string name="no_camera">Camera not available, try enable permission in settings.</string>
+    <string name="no_clues">Clues not available, try capturing another image.</string>
 </resources>

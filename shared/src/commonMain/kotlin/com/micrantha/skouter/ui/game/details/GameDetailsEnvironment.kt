@@ -11,6 +11,8 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.model.Ready
 import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.domain.model.mapNotNull
+import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.bluebell.ui.toPainter
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.domain.repository.StorageRepository
@@ -25,14 +27,15 @@ import com.micrantha.skouter.ui.game.details.GameDetailsAction.Loaded
 import io.github.aakira.napier.Napier
 
 class GameDetailsEnvironment(
-    private val dispatcher: Dispatcher,
-    private val localizedRepository: LocalizedRepository,
+    private val context: ScreenContext,
     private val gameRepository: GameRepository,
     private val storageRepository: StorageRepository,
-) : Reducer<GameDetailsState>, Effect<GameDetailsState>, Dispatcher by dispatcher,
-    LocalizedRepository by localizedRepository {
+) : Reducer<GameDetailsState>, Effect<GameDetailsState>,
+    StateMapper<GameDetailsState, GameDetailsUiState>,
+    Dispatcher by context.dispatcher,
+    LocalizedRepository by context.i18n {
 
-    fun map(state: GameDetailsState) = GameDetailsUiState(
+    override fun map(state: GameDetailsState) = GameDetailsUiState(
         status = state.status.mapNotNull { state.game }
     )
 

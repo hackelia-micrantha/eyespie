@@ -7,7 +7,7 @@ class GameCreateScreenModel(
     screenContext: ScreenContext,
     initialState: GameCreateState = GameCreateState()
 ) : ScreenStatefulModel<GameCreateState>(
-    screenContext = screenContext,
+    context = screenContext,
     initialState = initialState
 ) {
 

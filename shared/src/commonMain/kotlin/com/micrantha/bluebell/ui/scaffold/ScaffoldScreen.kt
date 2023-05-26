@@ -18,7 +18,7 @@ import com.micrantha.skouter.ui.navi.NavigationAction
 
 internal fun defaultBackAction() = NavAction(
     icon = Icons.Default.KeyboardArrowLeft,
-    action = { context -> context.navigateBack() }
+    action = { context -> context.router.navigateBack() }
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,7 +44,7 @@ fun ScaffoldScreen(screen: Scaffolding, content: @Composable () -> Unit) {
                                 navAction = it
                             )
                         } ?: run {
-                            if (context.canGoBack) {
+                            if (context.router.canGoBack) {
                                 NavigationAction(
                                     navAction = defaultBackAction()
                                 )

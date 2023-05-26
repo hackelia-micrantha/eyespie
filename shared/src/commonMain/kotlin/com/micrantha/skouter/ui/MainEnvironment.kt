@@ -14,9 +14,8 @@ import com.micrantha.skouter.ui.login.LoginScreen
 
 class MainEnvironment(
     private val context: ScreenContext,
-    private val accountRepository: AccountRepository,
-    private val dispatcher: Dispatcher,
-) : Effect<Unit>, Dispatcher by dispatcher {
+    private val accountRepository: AccountRepository
+) : Effect<Unit>, Dispatcher by context.dispatcher {
 
     override suspend fun invoke(action: Action, state: Unit) {
         when (action) {
@@ -25,8 +24,8 @@ class MainEnvironment(
             }.onSuccess {
                 dispatch(Loaded)
             }
-            is Login -> context.navigate<LoginScreen>()
-            is Loaded -> context.navigate<DashboardScreen>()
+            is Login -> context.router.navigate<LoginScreen>()
+            is Loaded -> context.router.navigate<DashboardScreen>()
         }
     }
 }

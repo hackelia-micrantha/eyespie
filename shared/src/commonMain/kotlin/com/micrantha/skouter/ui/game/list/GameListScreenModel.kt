@@ -4,11 +4,11 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenMappedModel
 
 class GameListScreenModel(
-    viewContext: ScreenContext,
+    context: ScreenContext,
     environment: GameListEnvironment,
     initialState: GameListState = GameListState()
 ) : ScreenMappedModel<GameListState, GameListUiState>(
-    viewContext,
+    context,
     initialState,
     environment::map
 ) {

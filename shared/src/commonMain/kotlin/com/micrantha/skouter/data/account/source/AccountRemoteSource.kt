@@ -1,14 +1,14 @@
 package com.micrantha.skouter.data.account.source
 
-import com.micrantha.skouter.data.account.mapping.AccountDomainMapper
-import com.micrantha.skouter.data.account.model.AccountResponse
+import com.micrantha.skouter.data.player.mapping.PlayerDomainMapper
+import com.micrantha.skouter.data.player.model.PlayerResponse
 import com.micrantha.skouter.data.remote.SupaClient
 import com.micrantha.skouter.domain.models.Player
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 
 class AccountRemoteSource(
     private val client: SupaClient,
-    private val mapper: AccountDomainMapper,
+    private val mapper: PlayerDomainMapper,
 ) {
     fun isLoggedIn(): Boolean = client.auth().currentSessionOrNull()?.user != null
 
@@ -17,8 +17,8 @@ class AccountRemoteSource(
         val player = client.players().select {
             eq("user_id", userId)
             limit(1)
-        }.decodeAs<List<AccountResponse>>().first()
-        Result.success(mapper(player))
+        }.decodeAs<List<PlayerResponse>>().first()
+        Result.success<Player>(mapper.map(player))
     } catch (e: Throwable) {
         Result.failure(e)
     }

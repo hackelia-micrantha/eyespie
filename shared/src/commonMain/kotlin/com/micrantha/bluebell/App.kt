@@ -32,7 +32,7 @@ fun BluebellApp(
 
 @Composable
 private fun LayoutScreen(content: @Composable () -> Unit) {
-    val screen = LocalScreenContext.current.screen
+    val screen = LocalScreenContext.current.router.screen
     if (screen is Scaffolding) {
         ScaffoldScreen(screen, content)
     } else {

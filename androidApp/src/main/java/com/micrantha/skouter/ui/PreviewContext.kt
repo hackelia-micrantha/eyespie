@@ -46,7 +46,7 @@ class PreviewRouter : Router {
 class PreviewContext(
     context: Context,
     private val platform: Platform = Platform(context),
-    private val router: PreviewRouter = PreviewRouter()
+    override val router: PreviewRouter = PreviewRouter()
 ) : StoreFactory, LocalizedRepository by platform, Router by router, ScreenContext {
 
     override val dispatcher: Dispatcher = Dispatcher {}

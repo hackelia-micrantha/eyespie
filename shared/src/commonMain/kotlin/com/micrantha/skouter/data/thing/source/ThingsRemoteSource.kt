@@ -4,6 +4,7 @@ import com.micrantha.skouter.data.remote.MicranthaClient
 import com.micrantha.skouter.data.remote.SupaClient
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.model.RecognitionResponse
+import com.micrantha.skouter.data.thing.model.ThingResponse
 import com.micrantha.skouter.domain.models.Clues
 import com.micrantha.skouter.domain.models.Location
 import com.micrantha.skouter.domain.models.ThingList
@@ -19,9 +20,18 @@ class ThingsRemoteSource(
 ) {
     suspend fun recognize(image: ByteArray, contentType: String): Result<Clues> = try {
         val response: RecognitionResponse = micranthaClient.recognize(image, contentType).body()
-        Result.success(mapper(response))
+        Result.success(mapper.map(response))
     } catch (err: Throwable) {
         Napier.e("recognize", err)
+        Result.failure(err)
+    }
+
+    suspend fun things(playerID: String): Result<ThingList> = try {
+        val result = supaClient.things().select {
+            eq("created_by", playerID)
+        }.decodeList<ThingResponse>()
+        Result.success(result.map(mapper::map))
+    } catch (err: Throwable) {
         Result.failure(err)
     }
 
@@ -32,6 +42,10 @@ class ThingsRemoteSource(
     ): Flow<ThingList> =
         supaClient.nearby(playerID, location.latitude, location.longitude, distance)
             .toFlow()
-            .map { mapper(it.dataAssertNoErrors.searchThingsNearPlayer!!.edgesFilterNotNull()) }
+            .map { data ->
+                data.dataAssertNoErrors.searchThingsNearPlayer!!.edgesFilterNotNull()
+                    ?.map { it.node }
+                    ?.map(mapper::map) ?: emptyList()
+            }
 
 }

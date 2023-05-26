@@ -8,32 +8,28 @@ import com.micrantha.bluebell.domain.ext.busy
 import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.model.Ready
 import com.micrantha.bluebell.domain.model.map
+import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.skouter.domain.models.GameList
-import com.micrantha.skouter.domain.models.PlayerList
-import com.micrantha.skouter.domain.repository.AccountRepository
-import com.micrantha.skouter.domain.repository.GameRepository
-import com.micrantha.skouter.domain.repository.PlayerRepository
-import com.micrantha.skouter.domain.repository.ThingsRepository
+import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
+import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Tabs
-import io.github.aakira.napier.Napier
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
+import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
+import com.micrantha.skouter.ui.game.action.GameAction
+import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
+import com.micrantha.skouter.ui.game.details.GameDetailsScreen
+import com.micrantha.skouter.ui.scan.ScanScreen
 
 class DashboardEnvironment(
     private val context: ScreenContext,
-    private val accountRepository: AccountRepository,
-    private val gameRepository: GameRepository,
-    private val thingsRepository: ThingsRepository,
-    private val playerRepository: PlayerRepository
-) : Reducer<DashboardState>, Effect<DashboardState>, Dispatcher by context.dispatcher {
+    private val dashboardLoadUseCase: DashboardLoadUseCase
+) : Reducer<DashboardState>, Effect<DashboardState>, Dispatcher by context.dispatcher,
+    StateMapper<DashboardState, DashboardUiState> {
 
-    fun map(state: DashboardState) = DashboardUiState(
+    override fun map(state: DashboardState) = DashboardUiState(
         status = state.status.map {
             Tabs(
                 state.games ?: emptyList(),
@@ -63,27 +59,14 @@ class DashboardEnvironment(
 
     override suspend fun invoke(action: Action, state: DashboardState) {
         when (action) {
-            is Load -> {
-                val thingFlow = flow {
-                    playerRepository.things(accountRepository.currentPlayer!!.id)
-                        .onSuccess { emit(it) }
-                        .onFailure { throw it }
-                }
-                val gameFlow = flow<GameList> { emit(emptyList()) }
-                val playerFlow = flow<PlayerList> { emit(emptyList()) }
-                combine(
-                    flow = thingFlow,
-                    flow2 = gameFlow,
-                    flow3 = playerFlow
-                ) { things, games, players ->
-                    Loaded(things, games, players)
-                }.catch {
-                    Napier.e("dashboard", it)
-                    dispatch(LoadError)
-                }.collect {
+            is GameAction.GameClicked -> context.router.navigate<GameDetailsScreen, GameDetailScreenArg>(
+                arg = action.arg
+            )
+            is ScanNewThing -> context.router.navigate<ScanScreen>()
+            is Load -> dashboardLoadUseCase()
+                .collect {
                     dispatch(it)
                 }
-            }
         }
     }
 }

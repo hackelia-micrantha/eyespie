@@ -9,7 +9,7 @@ class GameDetailsScreenModel(
     environment: GameDetailsEnvironment,
     initialState: GameDetailsState = GameDetailsState(),
 ) : ScreenMappedModel<GameDetailsState, GameDetailsUiState>(
-    screenContext = screenContext,
+    context = screenContext,
     initialState = initialState,
     mapper = environment::map
 ) {

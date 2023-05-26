@@ -11,6 +11,8 @@ class ThingDataRepository(
     override suspend fun recognize(image: ByteArray, contentType: String): Result<Clues> =
         remoteSource.recognize(image, contentType)
 
+    override suspend fun things(playerID: String) = remoteSource.things(playerID)
+    
     override fun nearby(
         playerID: String,
         location: Location.Point,

@@ -17,12 +17,12 @@ import org.kodein.di.instance
  * contextual view model knows about platform, routing, localization, and global dispatching
  */
 abstract class ScreenContextModel(
-    protected val screenContext: ScreenContext
-) : Dispatcher by screenContext.dispatcher, ScreenModel {
+    protected val context: ScreenContext
+) : Dispatcher by context.dispatcher, ScreenModel {
 
-    protected val router: Router = screenContext
+    protected val router: Router = context.router
 
-    protected val i18n: LocalizedRepository = screenContext.i18n
+    protected val i18n: LocalizedRepository = context.i18n
 }
 
 private fun <State> DIAware.screenModelStore(state: State): Lazy<Store<State>> {
@@ -34,9 +34,9 @@ private fun <State> DIAware.screenModelStore(state: State): Lazy<Store<State>> {
  * View model with a store that bypasses global dispatcher with local store dispatch by default.
  */
 abstract class ScreenStoreModel<State>(
-    screenContext: ScreenContext,
+    context: ScreenContext,
     initialState: State
-) : ScreenContextModel(screenContext), DIAware by screenContext {
+) : ScreenContextModel(context), DIAware by context {
     protected val store: Store<State> by screenModelStore(initialState)
 }
 
@@ -44,21 +44,23 @@ abstract class ScreenStoreModel<State>(
  * Stateful view model with a store
  */
 abstract class ScreenStatefulModel<State>(
-    screenContext: ScreenContext,
+    context: ScreenContext,
     initialState: State
-) : ScreenStoreModel<State>(screenContext, initialState), Stateful<State> {
+) : ScreenStoreModel<State>(context, initialState), Stateful<State> {
     override fun state(): StateFlow<State> = store.state()
 }
 
-typealias StateMapper<State, UiState> = (State) -> UiState
+fun interface StateMapper<State, UiState> {
+    fun map(state: State): UiState
+}
 
 /**
  * Stateful view model that maps between internal state and ui state.
  */
 abstract class ScreenMappedModel<State, UiState>(
-    screenContext: ScreenContext,
+    context: ScreenContext,
     initialState: State,
     private val mapper: StateMapper<State, UiState>
-) : ScreenStoreModel<State>(screenContext, initialState), Stateful<UiState> {
-    override fun state(): StateFlow<UiState> = store.state().mapIn(coroutineScope, mapper)
+) : ScreenStoreModel<State>(context, initialState), Stateful<UiState> {
+    override fun state(): StateFlow<UiState> = store.state().mapIn(coroutineScope, mapper::map)
 }

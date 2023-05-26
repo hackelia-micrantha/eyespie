@@ -16,7 +16,7 @@ data class Player(
     data class Name(
         val first: String,
         val last: String,
-        val nick: String,
+        val nick: String?,
     )
 
     data class Score(

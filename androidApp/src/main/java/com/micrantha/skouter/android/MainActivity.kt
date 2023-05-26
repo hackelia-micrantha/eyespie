@@ -1,19 +1,18 @@
 package com.micrantha.skouter.android
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.fragment.app.FragmentActivity
 import com.micrantha.skouter.UIShow
 
-class MainActivity : ComponentActivity() {
-
+class MainActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             SkouterTheme {
-                UIShow(this)
+                UIShow()
             }
         }
     }
