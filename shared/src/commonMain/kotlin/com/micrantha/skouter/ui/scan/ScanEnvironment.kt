@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.scan
 
+import com.micrantha.bluebell.FileSystem
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
@@ -33,6 +34,7 @@ class ScanEnvironment(
     private val saveThingImageUseCase: SaveThingImageUseCase
 ) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState>,
     Router by context.router,
+    FileSystem by context.fileSystem,
     Dispatcher by context.dispatcher,
     LocalizedRepository by context.i18n {
 
@@ -44,17 +46,18 @@ class ScanEnvironment(
                 }.onSuccess {
                     dispatch(ImageCaptured(it))
                 }
-            is ImageCaptured -> scanImageUseCase(action.data)
+            is ImageCaptured -> scanImageUseCase(action.path)
                 .onFailure { /*dispatch(ScanError(it))*/ dispatch(TestSave) }
                 .onSuccess { dispatch(ScannedClues(it)) }
             is SaveScan -> saveThingImageUseCase(state.name, state.image!!).onSuccess {
                 Napier.d("image url: $it")
+                navigateBack()
             }
         }
     }
 
     override fun reduce(state: ScanState, action: Action) = when (action) {
-        is ImageCaptured -> state.copy(image = action.data)
+        is ImageCaptured -> state.copy(image = action.path)
         is NameChanged -> state.copy(name = action.data)
         is ScannedClues -> state.copy(clues = action.data, status = Ready())
         is TestSave -> state.copy(status = Ready())
@@ -67,7 +70,9 @@ class ScanEnvironment(
         status = state.status.map {
             ScanUiState.Data(
                 clues = state.clues,
-                image = state.image!!.toPainter(),
+                image = {
+                    read(state.image!!).toPainter()
+                },
                 name = state.name
             )
         }

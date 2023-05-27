@@ -2,10 +2,15 @@ package com.micrantha.bluebell
 
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
+import okio.FileSystem
+import okio.Path
+import okio.buffer
+import okio.use
 import platform.Foundation.NSLocalizedString
 import platform.UIKit.UIDevice
+import com.micrantha.bluebell.FileSystem as BluebellFileSystem
 
-actual class Platform : LocalizedRepository {
+actual class Platform : LocalizedRepository, BluebellFileSystem {
     actual val name: String =
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 
@@ -13,7 +18,7 @@ actual class Platform : LocalizedRepository {
         return NSLocalizedString(str.iosKey ?: str.key, *args)
     }
 
-    actual fun format(
+    actual override fun format(
         epochSeconds: Long,
         format: String,
         timeZone: String,
@@ -25,6 +30,22 @@ actual class Platform : LocalizedRepository {
         dateFormatter.locale = NSLocale(locale)
         dateFormatter.dateFormat = format
         return dateFormatter.stringFromDate(date)
+    }
+
+    actual override fun write(path: Path, data: ByteArray) {
+        FileSystem.SYSTEM.sink(path, true).use { sink ->
+            sink.buffer().use { buf ->
+                buf.write(data)
+            }
+        }
+    }
+
+    actual override fun read(path: Path): ByteArray {
+        return FileSystem.SYSTEM.source(path).use { src ->
+            src.buffer().use { buf ->
+                buf.readByteArray()
+            }
+        }
     }
 }
 

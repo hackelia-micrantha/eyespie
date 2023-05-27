@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -57,16 +58,19 @@ class ScanScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Render(data: ScanUiState.Data, dispatch: Dispatch) {
+        val painter = remember { data.image() }
+
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+
             Image(
-                modifier = Modifier.weight(1f).fillMaxWidth(),
-                painter = data.image,
+                modifier = Modifier.weight(1f),
+                painter = painter,
+                contentDescription = null,
                 alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth,
-                contentDescription = null
+                contentScale = ContentScale.FillWidth
             )
             Card(
                 modifier = Modifier.fillMaxWidth().padding(Dimensions.screen)

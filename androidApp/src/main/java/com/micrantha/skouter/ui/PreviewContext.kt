@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.screen.Screen
+import com.micrantha.bluebell.FileSystem
 import com.micrantha.bluebell.Platform
 import com.micrantha.bluebell.bluebellModules
 import com.micrantha.bluebell.domain.arch.Action
@@ -52,6 +53,8 @@ class PreviewContext(
     override val dispatcher: Dispatcher = Dispatcher {}
 
     override val i18n: LocalizedRepository = platform
+
+    override val fileSystem: FileSystem = platform
 
     override fun <T> createStore(state: T): Store<T> {
         return object : Store<T> {

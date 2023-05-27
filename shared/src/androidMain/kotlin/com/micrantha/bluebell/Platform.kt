@@ -3,13 +3,17 @@ package com.micrantha.bluebell
 import android.content.Context
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
+import okio.FileSystem
+import okio.Path
+import okio.buffer
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+import com.micrantha.bluebell.FileSystem as BluebellFileSystem
 
-actual class Platform(private val context: Context) : LocalizedRepository {
+actual class Platform(private val context: Context) : LocalizedRepository, BluebellFileSystem {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
     actual override fun resource(str: LocalizedString, vararg args: Any?): String {
@@ -29,6 +33,23 @@ actual class Platform(private val context: Context) : LocalizedRepository {
         val date = LocalDateTime.ofInstant(instant, zoneId)
         val formatter = DateTimeFormatter.ofPattern(format, Locale(locale))
         return date.format(formatter)
+    }
+
+    actual override fun write(path: Path, data: ByteArray) {
+        FileSystem.SYSTEM.sink(path).use { sink ->
+            sink.buffer().use { buf ->
+                buf.write(data)
+                buf.flush()
+            }
+        }
+    }
+
+    actual override fun read(path: Path): ByteArray {
+        return FileSystem.SYSTEM.source(path).use { src ->
+            src.buffer().use { buf ->
+                buf.readByteArray()
+            }
+        }
     }
 }
 

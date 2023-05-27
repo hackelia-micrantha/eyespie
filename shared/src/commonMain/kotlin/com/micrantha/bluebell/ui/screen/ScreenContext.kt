@@ -2,6 +2,7 @@ package com.micrantha.bluebell.ui.screen
 
 import androidx.compose.runtime.compositionLocalOf
 import cafe.adriel.voyager.core.screen.Screen
+import com.micrantha.bluebell.FileSystem
 import com.micrantha.bluebell.Platform
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
@@ -17,6 +18,8 @@ interface ScreenContext : DIAware {
     val router: Router
 
     val dispatcher: Dispatcher
+
+    val fileSystem: FileSystem
 }
 
 inline fun <reified T : Screen> ScreenContext.get() = direct.instance<T>()
@@ -33,6 +36,7 @@ class BluebellScreenContext(
 ) : ScreenContext {
     override val i18n: LocalizedRepository = platform
 
+    override val fileSystem: FileSystem = platform
 }
 
 val LocalScreenContext = compositionLocalOf<ScreenContext> {

@@ -4,11 +4,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.model.Clues
+import okio.Path
 
 data class ScanState(
     val status: UiResult<Unit> = UiResult.Default,
     val clues: Clues? = null,
-    val image: ByteArray? = null,
+    val image: Path? = null,
     val name: String = ""
 )
 
@@ -17,7 +18,7 @@ data class ScanUiState(
 ) {
     data class Data(
         val clues: Clues?,
-        val image: Painter,
+        val image: () -> Painter,
         val name: String = "",
     )
 }
@@ -29,7 +30,7 @@ sealed class ScanAction : Action {
 
     data class NameChanged(val data: String) : ScanAction()
 
-    data class ImageCaptured(val data: ByteArray) : ScanAction()
+    data class ImageCaptured(val path: Path) : ScanAction()
 
     data class NoCamera(val err: Throwable) : ScanAction()
 

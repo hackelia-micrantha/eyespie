@@ -1,26 +1,29 @@
 package com.micrantha.skouter.ui.scan.usecase
 
-import com.benasher44.uuid.uuid4
+import com.micrantha.bluebell.Platform
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.domain.repository.StorageRepository
 import com.micrantha.skouter.domain.repository.ThingsRepository
 import io.github.aakira.napier.Napier
+import okio.Path
 
 class SaveThingImageUseCase(
     private val storageRepository: StorageRepository,
     private val accountRepository: AccountRepository,
-    private val thingsRepository: ThingsRepository
+    private val thingsRepository: ThingsRepository,
+    private val platform: Platform,
 ) {
 
     suspend operator fun invoke(
         name: String,
-        data: ByteArray,
-        fileName: String = uuid4().toString()
+        path: Path
     ): Result<Thing> = try {
         val user = accountRepository.currentPlayer!!
 
-        storageRepository.upload("${user.id}/${fileName}.jpg", data).map {
+        val data = platform.read(path)
+
+        storageRepository.upload("${user.id}/${path.name}.jpg", data).map {
             thingsRepository.create(name, it, user.id).getOrThrow()
         }
 
