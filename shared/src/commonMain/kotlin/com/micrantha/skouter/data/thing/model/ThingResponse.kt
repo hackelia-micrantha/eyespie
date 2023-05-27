@@ -9,6 +9,7 @@ data class ThingResponse(
     val id: String,
     val created_at: String,
     val name: String,
+    val imageUrl: String,
     val image: JsonObject? = null,
     val clues: JsonObject? = null,
     val guessed: Boolean? = null,

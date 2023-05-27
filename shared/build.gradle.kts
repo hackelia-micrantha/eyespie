@@ -58,6 +58,8 @@ kotlin {
                 implementation("io.ktor:ktor-client-cio:2.3.0")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+                implementation("io.ktor:ktor-client-logging:2.3.0")
+
 
                 implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.3")
                 implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.3")
@@ -68,6 +70,8 @@ kotlin {
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:media-compose:0.11.0")
                 api("dev.icerock.moko:geo-compose:0.6.0")
+
+                api("io.github.qdsfdhvh:image-loader:1.4.4")
 
             }
         }

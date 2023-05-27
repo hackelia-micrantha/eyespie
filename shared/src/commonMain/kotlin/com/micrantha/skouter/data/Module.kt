@@ -6,7 +6,6 @@ import com.micrantha.skouter.data.account.source.AccountRemoteSource
 import com.micrantha.skouter.data.game.GameDataRepository
 import com.micrantha.skouter.data.game.mapping.GameDomainMapper
 import com.micrantha.skouter.data.game.source.GameRemoteSource
-import com.micrantha.skouter.data.local.mapping.DomainMapper
 import com.micrantha.skouter.data.player.PlayerDataRepository
 import com.micrantha.skouter.data.player.mapping.PlayerDomainMapper
 import com.micrantha.skouter.data.player.source.PlayerRemoteSource
@@ -26,8 +25,6 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindSingletonOf(::SupaClient)
 
     bindSingletonOf(::MicranthaClient)
-
-    bindProviderOf(::DomainMapper)
 
     bindProviderOf(::GameDomainMapper)
     bindProviderOf(::GameRemoteSource)

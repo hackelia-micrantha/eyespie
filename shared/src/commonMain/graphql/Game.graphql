@@ -37,7 +37,7 @@ query GameNode($nodeId: ID!) {
                         thing {
                             id
                             nodeId
-                            image
+                            imageUrl
                             name
                             created_at
                             clues

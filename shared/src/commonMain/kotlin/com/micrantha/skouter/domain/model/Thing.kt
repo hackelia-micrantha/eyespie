@@ -10,7 +10,7 @@ data class Thing(
     val name: String,
     val guessed: Boolean,
     val guesses: List<Guess>,
-    val image: Image,
+    val imageUrl: String,
     val clues: Clues
 ) : Entity, Creatable {
 
@@ -27,7 +27,7 @@ data class Thing(
         override val createdAt: Instant,
         val name: String,
         val guessed: Boolean,
-        val image: Image
+        val imageUrl: String
     ) : Entity, Creatable
 
 }

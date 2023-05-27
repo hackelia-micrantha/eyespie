@@ -33,7 +33,6 @@ class GameDetailsProvider : PreviewParameterProvider<GameDetailsState> {
                 things = emptyList(),
                 turnDuration = Duration.parse("8h")
             ),
-            images = mutableMapOf()
         ),
     )
 }

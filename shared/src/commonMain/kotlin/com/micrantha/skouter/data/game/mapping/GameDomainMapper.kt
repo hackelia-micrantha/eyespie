@@ -1,23 +1,17 @@
 package com.micrantha.skouter.data.game.mapping
 
-import com.micrantha.bluebell.data.err.fail
 import com.micrantha.skouter.GameListQuery
 import com.micrantha.skouter.GameNodeQuery
 import com.micrantha.skouter.GameNodeQuery.Edge2
-import com.micrantha.skouter.data.local.mapping.DomainMapper
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.domain.model.Game.Limits
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.toInstant
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import kotlin.time.Duration
 
-class GameDomainMapper(
-    private val mapper: DomainMapper
-) {
+class GameDomainMapper {
     operator fun invoke(data: GameListQuery.Node) = Game.Listing(
         id = data.id,
         nodeId = data.nodeId,
@@ -65,9 +59,7 @@ class GameDomainMapper(
                 createdAt = thing.created_at.toInstant(),
                 name = thing.name,
                 guessed = thing.guessed ?: false,
-                image = thing.image?.let { json ->
-                    mapper(Json.decodeFromString(json.toString()))
-                } ?: fail("no image for thing(${thing.id})")
+                imageUrl = thing.imageUrl
             )
         }
 }

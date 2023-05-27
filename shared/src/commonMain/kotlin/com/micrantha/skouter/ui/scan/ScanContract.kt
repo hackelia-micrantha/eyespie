@@ -15,7 +15,7 @@ data class ScanUiState(
     val status: UiResult<Data> = UiResult.Default
 ) {
     data class Data(
-        val clues: Clues,
+        val clues: Clues?,
         val image: Painter
     )
 }
@@ -25,11 +25,13 @@ sealed class ScanAction : Action {
 
     object SaveScan : ScanAction()
 
-    data class ImageCaptured(val data: Painter) : ScanAction()
+    data class ImageCaptured(val data: ByteArray) : ScanAction()
 
     data class NoCamera(val err: Throwable) : ScanAction()
 
     data class ScanError(val err: Throwable) : ScanAction()
 
     data class ScannedClues(val data: Clues) : ScanAction()
+
+    data class NoClues(val data: ByteArray) : ScanAction()
 }

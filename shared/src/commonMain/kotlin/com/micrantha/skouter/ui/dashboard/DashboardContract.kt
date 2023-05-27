@@ -3,7 +3,6 @@ package com.micrantha.skouter.ui.dashboard
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.model.GameList
-import com.micrantha.skouter.domain.model.ImageDownload
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.domain.model.ThingList
@@ -18,20 +17,16 @@ data class DashboardState(
 )
 
 data class DashboardUiState(
-    val status: UiResult<Tabs>
+    val status: UiResult<Tabs>,
 ) {
     data class Tabs(
         val games: GameList,
         val players: PlayerList,
-        val things: ThingList
+        val things: ThingList,
     )
 }
 
 sealed class DashboardAction : Action {
-
-    data class ImageLoaded(val image: ImageDownload) : DashboardAction()
-
-    data class ImageError(val err: Throwable) : DashboardAction()
 
     object ScanNewThing : DashboardAction()
 

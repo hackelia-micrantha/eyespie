@@ -12,8 +12,6 @@ import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.ui.components.S
-import com.micrantha.skouter.ui.dashboard.DashboardAction.ImageError
-import com.micrantha.skouter.ui.dashboard.DashboardAction.ImageLoaded
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
@@ -24,13 +22,10 @@ import com.micrantha.skouter.ui.game.action.GameAction
 import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
 import com.micrantha.skouter.ui.game.details.GameDetailsScreen
 import com.micrantha.skouter.ui.scan.ScanScreen
-import com.micrantha.skouter.ui.thing.ThingAction.DownloadImage
-import com.micrantha.skouter.ui.thing.usecase.LoadImageFromStorageUseCase
 
 class DashboardEnvironment(
     private val context: ScreenContext,
     private val dashboardLoadUseCase: DashboardLoadUseCase,
-    private val loadImageFromStorageUseCase: LoadImageFromStorageUseCase
 ) : Reducer<DashboardState>, Effect<DashboardState>, Dispatcher by context.dispatcher,
     StateMapper<DashboardState, DashboardUiState> {
 
@@ -71,9 +66,6 @@ class DashboardEnvironment(
             is Load -> dashboardLoadUseCase().collect {
                 dispatch(it)
             }
-            is DownloadImage -> loadImageFromStorageUseCase(action.data)
-                .onFailure { dispatch(ImageError(it)) }
-                .onSuccess { dispatch(ImageLoaded(it)) }
         }
     }
 }

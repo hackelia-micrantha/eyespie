@@ -1,11 +1,14 @@
 package com.micrantha.skouter
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.micrantha.bluebell.BluebellApp
 import com.micrantha.skouter.ui.MainScreen
+import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.LocalImageLoader
 import dev.icerock.moko.geo.LocationTracker
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy.Best
@@ -19,6 +22,7 @@ import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import org.kodein.di.DI
 import org.kodein.di.bindSingleton
+import org.kodein.di.compose.rememberInstance
 import org.kodein.di.compose.subDI
 
 @Composable
@@ -37,8 +41,14 @@ fun SkouterApp(module: DI) = subDI(parentDI = module,
             bindSingleton { mediaPicker }
             bindSingleton { locationTracker }
         }) {
-            BluebellApp {
-                CurrentScreen()
+            val imageLoader by rememberInstance<ImageLoader>()
+
+            CompositionLocalProvider(
+                LocalImageLoader provides imageLoader,
+            ) {
+                BluebellApp {
+                    CurrentScreen()
+                }
             }
         }
     }

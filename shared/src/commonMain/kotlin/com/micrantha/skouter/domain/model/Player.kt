@@ -9,7 +9,6 @@ data class Player(
     val name: Name,
     val email: String,
     val score: Score,
-    val image: Image? = null,
     val location: Location? = null,
 ) : Entity, Creatable {
 
@@ -33,7 +32,6 @@ data class Player(
         override val nodeId: String,
         override val createdAt: Instant,
         val name: String,
-        val image: Image? = null,
         val score: Int,
     ) : Entity, Creatable
 }

@@ -44,6 +44,10 @@ class SupaClient {
             install(StorageClient)
 
             install(RealtimeClient)
+
+            httpConfig {
+
+            }
         }
 
     init {
