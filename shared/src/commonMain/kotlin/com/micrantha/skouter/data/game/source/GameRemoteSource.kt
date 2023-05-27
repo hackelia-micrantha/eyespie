@@ -1,32 +1,26 @@
 package com.micrantha.skouter.data.game.source
 
-import com.micrantha.skouter.data.game.mapping.GameDomainMapper
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.domain.model.Game
-import com.micrantha.skouter.domain.model.GameList
 import io.github.aakira.napier.Napier
 
 class GameRemoteSource(
-    private val client: SupaClient,
-    private val mapper: GameDomainMapper
+    private val client: SupaClient
 ) {
-    suspend fun games(): Result<GameList> = try {
+    suspend fun games() = try {
         val games = client.games().execute()
             .dataAssertNoErrors.games!!.edges!!.filterNotNull()
-            .map {
-                mapper(it.node)
-            }
+            .map { it.node }
         Result.success(games)
     } catch (e: Throwable) {
         Napier.e("games", e)
         Result.failure(e)
     }
 
-    suspend fun game(id: String): Result<Game> = try {
+    suspend fun game(id: String) = try {
         val game = with(client.game(id).execute()) {
             dataAssertNoErrors.gameNode!!
         }
-        Result.success(mapper(game.nodeId, game.onGame!!))
+        Result.success(game)
     } catch (e: Throwable) {
         Napier.e("game", e)
         Result.failure(e)

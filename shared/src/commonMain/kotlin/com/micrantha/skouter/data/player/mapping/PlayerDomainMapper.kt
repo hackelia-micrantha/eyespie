@@ -10,15 +10,13 @@ import kotlinx.datetime.toInstant
 
 class PlayerDomainMapper {
 
-    fun map(data: List<PlayerResponse>?) = data?.map {
-        Player.Listing(
-            id = it.id,
-            nodeId = it.nodeId ?: it.user_id,
-            name = it.nick_name ?: "${it.first_name} ${it.last_name}",
-            score = it.total_score,
-            createdAt = it.created_at.toInstant()
-        )
-    } ?: emptyList()
+    fun list(data: PlayerResponse) = Player.Listing(
+        id = data.id,
+        nodeId = data.nodeId ?: data.user_id,
+        name = data.nick_name ?: "${data.first_name} ${data.last_name}",
+        score = data.total_score,
+        createdAt = data.created_at.toInstant()
+    )
 
     fun map(data: PlayerResponse) = Player(
         id = data.id,

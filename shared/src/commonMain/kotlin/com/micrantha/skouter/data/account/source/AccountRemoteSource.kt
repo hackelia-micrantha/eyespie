@@ -1,24 +1,21 @@
 package com.micrantha.skouter.data.account.source
 
-import com.micrantha.skouter.data.player.mapping.PlayerDomainMapper
 import com.micrantha.skouter.data.player.model.PlayerResponse
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.domain.model.Player
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 
 class AccountRemoteSource(
-    private val client: SupaClient,
-    private val mapper: PlayerDomainMapper,
+    private val client: SupaClient
 ) {
     fun isLoggedIn(): Boolean = client.auth().currentSessionOrNull()?.user != null
 
-    suspend fun account(): Result<Player> = try {
+    suspend fun account() = try {
         val userId = client.auth().currentSessionOrNull()!!.user!!.id
         val player = client.players().select {
             eq("user_id", userId)
             limit(1)
         }.decodeAs<List<PlayerResponse>>().first()
-        Result.success<Player>(mapper.map(player))
+        Result.success(player)
     } catch (e: Throwable) {
         Result.failure(e)
     }

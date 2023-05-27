@@ -2,17 +2,18 @@ package com.micrantha.skouter.data.game.mapping
 
 import com.micrantha.skouter.GameListQuery
 import com.micrantha.skouter.GameNodeQuery
-import com.micrantha.skouter.GameNodeQuery.Edge2
+import com.micrantha.skouter.GameNodeQuery.Node
+import com.micrantha.skouter.GameNodeQuery.Node2
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.domain.model.Game.Limits
 import com.micrantha.skouter.domain.model.Player
-import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.toInstant
 import kotlin.time.Duration
 
 class GameDomainMapper {
-    operator fun invoke(data: GameListQuery.Node) = Game.Listing(
+
+    fun list(data: GameListQuery.Node) = Game.Listing(
         id = data.id,
         nodeId = data.nodeId,
         name = data.name,
@@ -22,44 +23,46 @@ class GameDomainMapper {
         totalThings = data.things?.totalCount ?: 0
     )
 
-    operator fun invoke(nodeId: String, data: GameNodeQuery.OnGame) = Game(
-        id = data.id,
-        nodeId = nodeId,
-        name = data.name,
-        createdAt = data.created_at.toInstant(),
-        expires = data.expires.toInstant(),
-        turnDuration = Duration.parse(data.turn_duration),
-        players = mapPlayers(data.players?.edges?.filterNotNull()) ?: emptyList(),
-        things = mapThings(data.things?.edges?.filterNotNull()) ?: emptyList(),
-        limits = Limits(
-            player = IntRange(data.min_players ?: 1, data.max_players ?: 10),
-            thing = IntRange(data.min_things ?: 1, data.max_things ?: 10)
+    fun map(node: GameNodeQuery.GameNode) = node.onGame!!.let { data ->
+        Game(
+            id = data.id,
+            nodeId = node.nodeId,
+            name = data.name,
+            createdAt = data.created_at.toInstant(),
+            expires = data.expires.toInstant(),
+            turnDuration = Duration.parse(data.turn_duration),
+            players = data.players?.edges?.filterNotNull()?.map { it.node }?.map(::player)
+                ?: emptyList(),
+            things = data.things?.edges?.filterNotNull()?.map { it.node }?.map(::thing)
+                ?: emptyList(),
+            limits = Limits(
+                player = IntRange(data.min_players ?: 1, data.max_players ?: 10),
+                thing = IntRange(data.min_things ?: 1, data.max_things ?: 10)
+            )
         )
-    )
+    }
 
-    private fun mapPlayers(data: List<Edge2>?): PlayerList? =
-        data?.map { it.node }?.map { node ->
-            val score = node.score ?: 0
-            node.player.let {
-                Player.Listing(
-                    id = it.id,
-                    nodeId = it.nodeId,
-                    createdAt = it.created_at.toInstant(),
-                    name = "${it.first_name} ${it.last_name}",
-                    score = score
-                )
-            }
-        }
-
-    private fun mapThings(data: List<GameNodeQuery.Edge>?) =
-        data?.map { it.node.thing }?.map { thing ->
-            Thing.Listing(
-                id = thing.id,
-                nodeId = thing.nodeId,
-                createdAt = thing.created_at.toInstant(),
-                name = thing.name,
-                guessed = thing.guessed ?: false,
-                imageUrl = thing.imageUrl
+    private fun player(node: Node2): Player.Listing {
+        val score = node.score ?: 0
+        return node.player.let { data ->
+            Player.Listing(
+                id = data.id,
+                nodeId = data.nodeId,
+                createdAt = data.created_at.toInstant(),
+                name = "${data.first_name} ${data.last_name}",
+                score = score
             )
         }
+    }
+
+    private fun thing(node: Node) = node.thing.let { data ->
+        Thing.Listing(
+            id = data.id,
+            nodeId = data.nodeId,
+            createdAt = data.created_at.toInstant(),
+            name = data.name,
+            guessed = data.guessed ?: false,
+            imageUrl = data.imageUrl
+        )
+    }
 }

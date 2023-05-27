@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,13 +23,16 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
+import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.domain.model.UiResult.Busy
 import com.micrantha.bluebell.domain.model.UiResult.Failure
 import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
+import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.scan.ScanAction.Init
+import com.micrantha.skouter.ui.scan.ScanAction.NameChanged
 import com.micrantha.skouter.ui.scan.ScanAction.SaveScan
 
 class ScanScreen : Screen {
@@ -48,6 +54,7 @@ class ScanScreen : Screen {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun Render(data: ScanUiState.Data, dispatch: Dispatch) {
         Column(
@@ -65,7 +72,19 @@ class ScanScreen : Screen {
                 modifier = Modifier.fillMaxWidth().padding(Dimensions.screen)
                     .heightIn(200.dp)
             ) {
-                Text("clues")
+                TextField(
+                    value = data.name,
+                    maxLines = 1,
+                    singleLine = true,
+                    label = {
+                        Text(
+                            text = stringResource(S.Name),
+                            style = MaterialTheme.typography.labelSmall
+                        )
+                    }, onValueChange = {
+                        dispatch(NameChanged(it))
+                    }
+                )
             }
             Button(
                 modifier = Modifier.fillMaxWidth().padding(Dimensions.content),

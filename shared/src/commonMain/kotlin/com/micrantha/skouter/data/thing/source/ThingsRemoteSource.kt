@@ -2,12 +2,12 @@ package com.micrantha.skouter.data.thing.source
 
 import com.micrantha.skouter.data.remote.MicranthaClient
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.model.RecognitionResponse
+import com.micrantha.skouter.data.thing.model.ThingListing
+import com.micrantha.skouter.data.thing.model.ThingNearby
+import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
-import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.Location
-import com.micrantha.skouter.domain.model.ThingList
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import kotlinx.coroutines.flow.Flow
@@ -16,21 +16,28 @@ import kotlinx.coroutines.flow.map
 class ThingsRemoteSource(
     private val micranthaClient: MicranthaClient,
     private val supaClient: SupaClient,
-    private val mapper: ThingsDomainMapper
 ) {
-    suspend fun recognize(image: ByteArray, contentType: String): Result<Clues> = try {
+    suspend fun recognize(image: ByteArray, contentType: String) = try {
         val response: RecognitionResponse = micranthaClient.recognize(image, contentType).body()
-        Result.success(mapper.map(response))
+        Result.success(response)
     } catch (err: Throwable) {
         Napier.e("recognize", err)
         Result.failure(err)
     }
 
-    suspend fun things(playerID: String): Result<ThingList> = try {
+    suspend fun save(data: ThingRequest) = try {
+        val result = supaClient.things().insert(data).decodeList<ThingResponse>()
+        Result.success(result.first())
+    } catch (err: Throwable) {
+        Napier.e("save thing", err)
+        Result.failure(err)
+    }
+
+    suspend fun things(playerID: String) = try {
         val result = supaClient.things().select {
             eq("created_by", playerID)
-        }.decodeList<ThingResponse>()
-        Result.success(result.map(mapper::map))
+        }.decodeList<ThingListing>()
+        Result.success(result)
     } catch (err: Throwable) {
         Result.failure(err)
     }
@@ -39,13 +46,12 @@ class ThingsRemoteSource(
         playerID: String,
         location: Location.Point,
         distance: Double
-    ): Flow<ThingList> =
+    ): Flow<List<ThingNearby>> =
         supaClient.nearby(playerID, location.latitude, location.longitude, distance)
             .toFlow()
             .map { data ->
                 data.dataAssertNoErrors.searchThingsNearPlayer!!.edgesFilterNotNull()
-                    ?.map { it.node }
-                    ?.map(mapper::map) ?: emptyList()
+                    ?.map { it.node } ?: emptyList()
             }
 
 }

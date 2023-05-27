@@ -16,7 +16,11 @@ data class Player(
         val first: String,
         val last: String,
         val nick: String?,
-    )
+    ) {
+        override fun toString(): String {
+            return nick ?: "$first $last"
+        }
+    }
 
     data class Score(
         val total: Int

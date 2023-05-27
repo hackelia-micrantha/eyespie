@@ -1,18 +1,15 @@
 package com.micrantha.skouter.data.player.source
 
-import com.micrantha.skouter.data.player.mapping.PlayerDomainMapper
 import com.micrantha.skouter.data.player.model.PlayerResponse
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.domain.model.PlayerList
 
 class PlayerRemoteSource(
-    private val supaClient: SupaClient,
-    private val mapper: PlayerDomainMapper
+    private val supaClient: SupaClient
 ) {
-    suspend fun players(): Result<PlayerList> = try {
+    suspend fun players() = try {
         val result = supaClient.players().select()
             .decodeList<PlayerResponse>()
-        Result.success(mapper.map(result))
+        Result.success(result)
     } catch (err: Throwable) {
         Result.failure(err)
     }

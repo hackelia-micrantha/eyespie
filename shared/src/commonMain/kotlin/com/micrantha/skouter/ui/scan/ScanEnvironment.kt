@@ -15,20 +15,22 @@ import com.micrantha.bluebell.ui.toPainter
 import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.scan.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.ScanAction.Init
+import com.micrantha.skouter.ui.scan.ScanAction.NameChanged
 import com.micrantha.skouter.ui.scan.ScanAction.NoCamera
-import com.micrantha.skouter.ui.scan.ScanAction.NoClues
+import com.micrantha.skouter.ui.scan.ScanAction.SaveScan
 import com.micrantha.skouter.ui.scan.ScanAction.ScanError
 import com.micrantha.skouter.ui.scan.ScanAction.ScannedClues
+import com.micrantha.skouter.ui.scan.ScanAction.TestSave
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.ScanImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.UploadImageUseCase
 import io.github.aakira.napier.Napier
 
 class ScanEnvironment(
     context: ScreenContext,
     private val cameraCaptureUseCase: CameraCaptureUseCase,
     private val scanImageUseCase: ScanImageUseCase,
-    private val uploadImageUseCase: UploadImageUseCase
+    private val saveThingImageUseCase: SaveThingImageUseCase
 ) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState>,
     Router by context.router,
     Dispatcher by context.dispatcher,
@@ -43,27 +45,30 @@ class ScanEnvironment(
                     dispatch(ImageCaptured(it))
                 }
             is ImageCaptured -> scanImageUseCase(action.data)
-                .onFailure { /*dispatch(ScanError(it))*/ dispatch(NoClues(action.data)) }
+                .onFailure { /*dispatch(ScanError(it))*/ dispatch(TestSave) }
                 .onSuccess { dispatch(ScannedClues(it)) }
-            is NoClues -> uploadImageUseCase(action.data).onSuccess {
+            is SaveScan -> saveThingImageUseCase(state.name, state.image!!).onSuccess {
                 Napier.d("image url: $it")
             }
         }
     }
 
     override fun reduce(state: ScanState, action: Action) = when (action) {
-        is ImageCaptured -> state.copy(image = action.data.toPainter())
+        is ImageCaptured -> state.copy(image = action.data)
+        is NameChanged -> state.copy(name = action.data)
         is ScannedClues -> state.copy(clues = action.data, status = Ready())
+        is TestSave -> state.copy(status = Ready())
         is NoCamera -> state.copy(status = failure(S.NoCamera))
         is ScanError -> state.copy(status = failure(S.NoClues))
-        is NoClues -> state.copy(image = action.data.toPainter(), status = Ready())
         else -> state
     }
 
     override fun map(state: ScanState) = ScanUiState(
         status = state.status.map {
             ScanUiState.Data(
-                state.clues, state.image!!
+                clues = state.clues,
+                image = state.image!!.toPainter(),
+                name = state.name
             )
         }
     )

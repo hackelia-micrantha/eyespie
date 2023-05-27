@@ -8,7 +8,8 @@ import com.micrantha.skouter.domain.model.Clues
 data class ScanState(
     val status: UiResult<Unit> = UiResult.Default,
     val clues: Clues? = null,
-    val image: Painter? = null
+    val image: ByteArray? = null,
+    val name: String = ""
 )
 
 data class ScanUiState(
@@ -16,7 +17,8 @@ data class ScanUiState(
 ) {
     data class Data(
         val clues: Clues?,
-        val image: Painter
+        val image: Painter,
+        val name: String = "",
     )
 }
 
@@ -24,6 +26,8 @@ sealed class ScanAction : Action {
     object Init : ScanAction()
 
     object SaveScan : ScanAction()
+
+    data class NameChanged(val data: String) : ScanAction()
 
     data class ImageCaptured(val data: ByteArray) : ScanAction()
 
@@ -33,5 +37,5 @@ sealed class ScanAction : Action {
 
     data class ScannedClues(val data: Clues) : ScanAction()
 
-    data class NoClues(val data: ByteArray) : ScanAction()
+    object TestSave : ScanAction()
 }

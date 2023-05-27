@@ -32,8 +32,7 @@ fun ThingListContent(
             items(things) { thing ->
                 ThingListingCard(
                     modifier = Modifier.padding(Dimensions.content),
-                    thing = thing,
-                    dispatch = dispatch
+                    thing = thing
                 )
             }
         }
