@@ -1,11 +1,10 @@
 package com.micrantha.skouter.ui.dashboard.usecase
 
-import com.micrantha.skouter.domain.repository.AccountRepository
+import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.domain.repository.PlayerRepository
 import com.micrantha.skouter.domain.repository.ThingsRepository
 import com.micrantha.skouter.ui.dashboard.DashboardAction
-import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.Flow
@@ -17,11 +16,11 @@ class DashboardLoadUseCase(
     private val thingsRepository: ThingsRepository,
     private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
-    private val accountRepository: AccountRepository
+    private val currentSession: CurrentSession
 ) {
     operator fun invoke(): Flow<DashboardAction> {
         val thingFlow = flow {
-            thingsRepository.things(accountRepository.currentPlayer!!.id)
+            thingsRepository.things(currentSession.requirePlayer().id)
                 .onSuccess { emit(it) }
                 .onFailure { throw it }
         }
@@ -42,7 +41,7 @@ class DashboardLoadUseCase(
             Loaded(things, games, players)
         }.catch {
             Napier.e("dashboard", it)
-            LoadError
+            throw it
         }
     }
 }

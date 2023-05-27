@@ -1,5 +1,6 @@
 package com.micrantha.skouter.data.account.source
 
+import com.micrantha.skouter.data.account.model.AccountResponse
 import com.micrantha.skouter.data.player.model.PlayerResponse
 import com.micrantha.skouter.data.remote.SupaClient
 import io.github.jan.supabase.gotrue.providers.builtin.Email
@@ -9,13 +10,16 @@ class AccountRemoteSource(
 ) {
     fun isLoggedIn(): Boolean = client.auth().currentSessionOrNull()?.user != null
 
+    fun session() = client.auth().currentSessionOrNull()
+
     suspend fun account() = try {
-        val userId = client.auth().currentSessionOrNull()!!.user!!.id
+        val session = client.auth().currentSessionOrNull()!!
+        val userId = session.user!!.id
         val player = client.players().select {
             eq("user_id", userId)
             limit(1)
         }.decodeAs<List<PlayerResponse>>().first()
-        Result.success(player)
+        Result.success(AccountResponse(session.accessToken, session.refreshToken, player))
     } catch (e: Throwable) {
         Result.failure(e)
     }

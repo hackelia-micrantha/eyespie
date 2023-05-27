@@ -1,28 +1,26 @@
 package com.micrantha.skouter.data.account
 
-import com.micrantha.skouter.data.account.model.CurrentAccount
+import com.micrantha.skouter.data.account.mapping.AccountDomainMapper
+import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.data.account.source.AccountRemoteSource
-import com.micrantha.skouter.data.player.mapping.PlayerDomainMapper
-import com.micrantha.skouter.domain.model.Player
+import com.micrantha.skouter.domain.model.Session
 import com.micrantha.skouter.domain.repository.AccountRepository as DomainRepository
 
 class AccountDataRepository(
     private val remoteSource: AccountRemoteSource,
-    private val currentAccount: CurrentAccount,
-    private val mapper: PlayerDomainMapper,
+    private val currentAccount: CurrentSession,
+    private val mapper: AccountDomainMapper,
 ) : DomainRepository {
 
-    override val currentPlayer = currentAccount.player()
-
-    override suspend fun account() = remoteSource.account().map(mapper::map).onSuccess {
+    override suspend fun session() = remoteSource.account().map { mapper.map(it) }.onSuccess {
         currentAccount.update(it)
     }
 
     override suspend fun isLoggedIn() = remoteSource.isLoggedIn()
-    
-    override suspend fun login(email: String, passwd: String): Result<Player> {
+
+    override suspend fun login(email: String, passwd: String): Result<Session> {
         return remoteSource.login(email, passwd).mapCatching {
-            account().getOrThrow()
+            session().getOrThrow()
         }
     }
 

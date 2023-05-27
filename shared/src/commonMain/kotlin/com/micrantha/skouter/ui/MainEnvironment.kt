@@ -19,7 +19,7 @@ class MainEnvironment(
 
     override suspend fun invoke(action: Action, state: Unit) {
         when (action) {
-            is Load -> accountRepository.account().onFailure {
+            is Load -> accountRepository.session().onFailure {
                 dispatch(Login)
             }.onSuccess {
                 dispatch(Loaded)

@@ -1,7 +1,8 @@
 package com.micrantha.skouter.data
 
 import com.micrantha.skouter.data.account.AccountDataRepository
-import com.micrantha.skouter.data.account.model.CurrentAccount
+import com.micrantha.skouter.data.account.mapping.AccountDomainMapper
+import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.data.account.source.AccountRemoteSource
 import com.micrantha.skouter.data.game.GameDataRepository
 import com.micrantha.skouter.data.game.mapping.GameDomainMapper
@@ -36,8 +37,9 @@ internal fun dataModules() = DI.Module("Skouter Data") {
 
     bindProviderOf(::AccountRemoteSource)
     bindProviderOf(::AccountDataRepository)
+    bindProviderOf(::AccountDomainMapper)
 
-    bindSingletonOf(::CurrentAccount)
+    bindSingletonOf(::CurrentSession)
 
     bindProviderOf(::StorageLocalSource)
     bindProviderOf(::StorageRemoteSource)

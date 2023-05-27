@@ -1,8 +1,8 @@
 package com.micrantha.skouter.ui.scan.usecase
 
 import com.micrantha.bluebell.Platform
+import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.model.Thing
-import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.domain.repository.StorageRepository
 import com.micrantha.skouter.domain.repository.ThingsRepository
 import io.github.aakira.napier.Napier
@@ -10,7 +10,7 @@ import okio.Path
 
 class SaveThingImageUseCase(
     private val storageRepository: StorageRepository,
-    private val accountRepository: AccountRepository,
+    private val currentAccount: CurrentSession,
     private val thingsRepository: ThingsRepository,
     private val platform: Platform,
 ) {
@@ -19,7 +19,7 @@ class SaveThingImageUseCase(
         name: String,
         path: Path
     ): Result<Thing> = try {
-        val user = accountRepository.currentPlayer!!
+        val user = currentAccount.requirePlayer()
 
         val data = platform.read(path)
 

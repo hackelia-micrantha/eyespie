@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui
 
-import com.micrantha.skouter.ui.components.authorizedImageLoader
 import com.micrantha.skouter.ui.dashboard.DashboardEnvironment
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
 import com.micrantha.skouter.ui.dashboard.DashboardScreenModel
@@ -60,6 +59,4 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::ScanImageUseCase)
     bindProviderOf(::CameraCaptureUseCase)
     bindProviderOf(::SaveThingImageUseCase)
-
-    bindProvider { authorizedImageLoader(instance()) }
 }
