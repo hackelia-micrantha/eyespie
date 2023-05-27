@@ -7,18 +7,25 @@
 1. Dashboard with option to scan a new thing
 
    - add things to your profile
-   - a list of other things from other people nearby
+   - a list of other things
    - a list of other players
 
-2. Guessing things with clues
+2. Image recognition
+
+   - tensorflow lite image recognition
+   - rhyming api
+   - color detection
+   - shape
+   - enter manually
+
+3. Guessing things with clues
 
    - clues added to things
-   - scan the same thing and match the clues
+   - scan the same thing and match the clues automatically
    - enter clues manually
-   - highlight found clues
-   - add points for guessing correctly
+   - add profile points for guessing correctly
 
-3. Payments
+4. Payments
    - buy clues by donation
 
 #### Phase 2
@@ -27,7 +34,7 @@
 
    - permission for location
    - caching and realtime database updates
-   - detecting things nearby
+   - detecting things and players nearby
    - local notifications
 
 5. Remote background services
@@ -48,7 +55,7 @@
    - geofence an area
    - preset game parameters and objectives
    - lists of players and things
-   - a map
+   - a map to specify and search
 
 8. Preset Game Content
 
@@ -69,9 +76,3 @@
     - show distance in real world
     - show map pins in real world
     - show heat map of "getting warmer" or "getting colder"
-
----
-
-### Tech Notes
-
-- thing storage needs to be deleted with row
