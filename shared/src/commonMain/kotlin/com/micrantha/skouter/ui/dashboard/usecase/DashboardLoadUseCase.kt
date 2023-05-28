@@ -1,7 +1,6 @@
 package com.micrantha.skouter.ui.dashboard.usecase
 
 import com.micrantha.skouter.data.account.model.CurrentSession
-import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.domain.repository.PlayerRepository
 import com.micrantha.skouter.domain.repository.ThingsRepository
 import com.micrantha.skouter.ui.dashboard.DashboardAction
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.flow
 
 class DashboardLoadUseCase(
     private val thingsRepository: ThingsRepository,
-    private val gameRepository: GameRepository,
     private val playerRepository: PlayerRepository,
     private val currentSession: CurrentSession
 ) {
@@ -24,9 +22,10 @@ class DashboardLoadUseCase(
                 .onSuccess { emit(it) }
                 .onFailure { throw it }
         }
-        val gameFlow = flow {
-            gameRepository.games()
-                .onSuccess { emit(it) }.onFailure { throw it }
+        val friendFlow = flow {
+            playerRepository.players()
+                .onSuccess { emit(it) }
+                .onFailure { throw it }
         }
         val playerFlow = flow {
             playerRepository.players()
@@ -35,10 +34,10 @@ class DashboardLoadUseCase(
         }
         return combine(
             flow = thingFlow,
-            flow2 = gameFlow,
+            flow2 = friendFlow,
             flow3 = playerFlow
-        ) { things, games, players ->
-            Loaded(things, games, players)
+        ) { things, friends, players ->
+            Loaded(things, friends, players)
         }.catch {
             Napier.e("dashboard", it)
             throw it

@@ -14,55 +14,55 @@ import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.ui.components.status.EmptyContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.components.S
-import com.micrantha.skouter.ui.dashboard.DashboardAction.HasMoreNearby
+import com.micrantha.skouter.ui.dashboard.DashboardAction.HasMorePlayers
 import com.micrantha.skouter.ui.dashboard.DashboardAction.HasMoreThings
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
-import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.ThingsTab
+import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.Nearby
+import com.micrantha.skouter.ui.player.components.PlayerListCard
 import com.micrantha.skouter.ui.thing.components.ThingListingCard
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ThingTabContent(
-    things: ThingsTab,
+fun NearbyTabContent(
+    tab: Nearby,
     dispatch: Dispatch
 ) {
     when {
-        things.isEmpty -> EmptyContent(
+        tab.things.data.isEmpty() && tab.players.data.isEmpty() -> EmptyContent(
             stringResource(S.NoThingsFound),
             icon = Icons.Default.Photo
         ) {
             dispatch(ScanNewThing)
         }
         else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            stickyHeader { ListHeader(label = stringResource(S.MyThings)) }
-            items(things.owned.data) { thing ->
+
+            stickyHeader {
+                ListHeader(label = stringResource(S.Things))
+            }
+            items(tab.things.data) { thing ->
                 ThingListingCard(
                     modifier = Modifier.padding(horizontal = Dimensions.content)
                         .padding(top = Dimensions.content),
                     thing = thing
                 )
             }
-            if (things.owned.hasMore) {
+            if (tab.things.hasMore) {
                 item {
                     HasMoreFooter {
                         dispatch(HasMoreThings)
                     }
                 }
             }
-
-            stickyHeader { ListHeader(label = stringResource(S.Nearby)) }
-            items(things.nearby.data) { thing ->
-                ThingListingCard(
-                    modifier = Modifier.padding(horizontal = Dimensions.content)
-                        .padding(top = Dimensions.content),
-                    thing = thing
-                )
+            stickyHeader {
+                ListHeader(label = stringResource(S.Players))
             }
-
-            if (things.nearby.hasMore) {
+            items(tab.players.data) {
+                PlayerListCard(it)
+            }
+            if (tab.players.hasMore) {
                 item {
                     HasMoreFooter {
-                        dispatch(HasMoreNearby)
+                        dispatch(HasMorePlayers)
                     }
                 }
             }

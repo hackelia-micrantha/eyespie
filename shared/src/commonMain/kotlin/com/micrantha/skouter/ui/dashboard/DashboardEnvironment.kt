@@ -17,8 +17,8 @@ import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data
+import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.Nearby
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.TabContent
-import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.ThingsTab
 import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
 import com.micrantha.skouter.ui.game.components.GameAction
 import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
@@ -34,18 +34,19 @@ class DashboardEnvironment(
     override fun map(state: DashboardState) = DashboardUiState(
         status = state.status.map {
             Data(
-                state.games ?: emptyList(),
-                state.players ?: emptyList(),
-                ThingsTab(
-                    TabContent(
-                        state.things?.take(MaxItemCount) ?: emptyList(),
-                        hasMore = state.things?.let { it.size > MaxItemCount } ?: false
+                nearby = Nearby(
+                    players = TabContent(
+                        data = state.players ?: emptyList(),
+                        hasMore = false
                     ),
-                    TabContent(
-                        state.nearbyThings?.take(MaxItemCount) ?: emptyList(),
-                        hasMore = state.nearbyThings?.let { it.size > MaxItemCount } ?: false
+                    things = TabContent(
+                        state.things ?: emptyList(),
+                        hasMore = false
                     ),
-                    state.things?.isNotEmpty() == false && state.nearbyThings?.isNotEmpty() == false
+                ),
+                friends = TabContent(
+                    data = state.friends ?: emptyList(),
+                    hasMore = false
                 )
             )
         }
@@ -55,9 +56,9 @@ class DashboardEnvironment(
         return when (action) {
             is Loaded -> state.copy(
                 status = Ready(),
-                games = action.games,
                 things = action.things,
-                players = action.players
+                players = action.players,
+                friends = action.friends
             )
             is LoadError -> state.copy(
                 status = context.i18n.failure(S.NetworkFailure)

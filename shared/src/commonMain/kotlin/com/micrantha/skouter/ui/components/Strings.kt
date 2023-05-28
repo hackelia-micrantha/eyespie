@@ -43,5 +43,6 @@ enum class Strings(
     NoClues("no_clues"),
     MyThings("my_things"),
     Nearby("nearby"),
-    HasMore("has_more")
+    HasMore("has_more"),
+    Friends("friends")
 }
