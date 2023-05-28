@@ -2,8 +2,8 @@ package com.micrantha.bluebell.ui.screen
 
 import androidx.compose.runtime.compositionLocalOf
 import cafe.adriel.voyager.core.screen.Screen
-import com.micrantha.bluebell.FileSystem
-import com.micrantha.bluebell.Platform
+import com.micrantha.bluebell.platform.FileSystem
+import com.micrantha.bluebell.platform.Platform
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router

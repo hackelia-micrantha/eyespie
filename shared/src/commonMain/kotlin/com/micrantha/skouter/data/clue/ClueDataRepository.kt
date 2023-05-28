@@ -2,8 +2,9 @@ package com.micrantha.skouter.data.clue
 
 import com.micrantha.skouter.data.clue.mapping.ClueDomainMapper
 import com.micrantha.skouter.data.clue.source.LabelLocalSource
+import com.micrantha.skouter.platform.ImageLabelAnalyzer
 import com.micrantha.skouter.data.clue.source.LabelRemoteSource
-import com.micrantha.skouter.domain.model.CameraImage
+import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.repository.ClueRepository
 

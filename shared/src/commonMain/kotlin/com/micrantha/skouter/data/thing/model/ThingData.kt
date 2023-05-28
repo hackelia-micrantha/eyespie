@@ -1,6 +1,6 @@
 package com.micrantha.skouter.data.thing.model
 
-import com.micrantha.skouter.PlayerNearbyThingsQuery
+import com.micrantha.skouter.graphql.PlayerNearbyThingsQuery
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive

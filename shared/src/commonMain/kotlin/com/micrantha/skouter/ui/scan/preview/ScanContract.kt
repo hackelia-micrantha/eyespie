@@ -1,7 +1,7 @@
 package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.skouter.domain.model.CameraImage
+import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.LocationClue

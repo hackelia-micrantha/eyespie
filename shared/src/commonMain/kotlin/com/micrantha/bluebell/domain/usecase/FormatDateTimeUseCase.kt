@@ -1,7 +1,7 @@
 package com.micrantha.bluebell.domain.usecase
 
 import androidx.compose.ui.text.intl.Locale
-import com.micrantha.bluebell.Platform
+import com.micrantha.bluebell.platform.Platform
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 

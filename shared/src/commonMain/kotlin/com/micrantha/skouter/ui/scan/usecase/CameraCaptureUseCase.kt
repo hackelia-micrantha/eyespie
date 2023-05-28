@@ -1,7 +1,7 @@
 package com.micrantha.skouter.ui.scan.usecase
 
 import com.benasher44.uuid.uuid4
-import com.micrantha.bluebell.Platform
+import com.micrantha.bluebell.platform.Platform
 import dev.icerock.moko.media.picker.MediaPickerController
 import dev.icerock.moko.media.picker.MediaSource.CAMERA
 import okio.FileSystem

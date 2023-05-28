@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class ThingsRemoteSource(
-    private val micranthaClient: MicranthaClient,
     private val supaClient: SupaClient,
 ) {
     

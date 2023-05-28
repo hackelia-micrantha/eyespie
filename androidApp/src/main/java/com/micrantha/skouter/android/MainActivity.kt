@@ -3,7 +3,7 @@ package com.micrantha.skouter.android
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.fragment.app.FragmentActivity
-import com.micrantha.skouter.UIShow
+import com.micrantha.skouter.MainActivityContent
 
 class MainActivity : FragmentActivity() {
 
@@ -11,9 +11,7 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SkouterTheme {
-                UIShow()
-            }
+            MainActivityContent()
         }
     }
 }

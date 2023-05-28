@@ -1,6 +1,6 @@
 package com.micrantha.skouter.data.thing.mapping
 
-import com.micrantha.skouter.PlayerNearbyThingsQuery
+import com.micrantha.skouter.graphql.PlayerNearbyThingsQuery
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingNearby
 import com.micrantha.skouter.data.thing.model.ThingRequest

@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.screen.Screen
-import com.micrantha.bluebell.FileSystem
-import com.micrantha.bluebell.Platform
+import com.micrantha.bluebell.platform.FileSystem
+import com.micrantha.bluebell.platform.Platform
 import com.micrantha.bluebell.bluebellModules
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher

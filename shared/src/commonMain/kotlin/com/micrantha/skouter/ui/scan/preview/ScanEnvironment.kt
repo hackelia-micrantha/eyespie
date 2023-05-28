@@ -1,6 +1,6 @@
 package com.micrantha.skouter.ui.scan.preview
 
-import com.micrantha.bluebell.FileSystem
+import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect

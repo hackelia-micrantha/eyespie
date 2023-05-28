@@ -2,9 +2,9 @@ package com.micrantha.skouter.data.remote
 
 import Skouter.shared.BuildConfig
 import com.apollographql.apollo3.ApolloCall
-import com.micrantha.skouter.GameListQuery
-import com.micrantha.skouter.GameNodeQuery
-import com.micrantha.skouter.PlayerNearbyThingsQuery
+import com.micrantha.skouter.graphql.GameListQuery
+import com.micrantha.skouter.graphql.GameNodeQuery
+import com.micrantha.skouter.graphql.PlayerNearbyThingsQuery
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import io.github.jan.supabase.createSupabaseClient

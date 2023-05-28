@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    kotlin("native.cocoapods")
     id("com.apollographql.apollo3")
     id("com.github.gmazzo.buildconfig") version "3.1.0"
     kotlin("plugin.serialization") version "1.8.20"
@@ -25,6 +26,21 @@ kotlin {
     ).forEach {
         it.binaries.framework {
             baseName = "shared"
+        }
+    }
+
+    cocoapods {
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        version = "1.0.0"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "shared"
+            isStatic = true
+        }
+        pod("GoogleMLKit/ImageLabeling") {
+            version = "3.2.0"
         }
     }
 
@@ -61,12 +77,11 @@ kotlin {
                 implementation("io.ktor:ktor-client-logging:2.3.0")
                 implementation("io.ktor:ktor-client-auth:2.3.0")
 
-
-                implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.3")
-                implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.3")
-                implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.3")
-                implementation("io.github.jan-tennert.supabase:storage-kt:0.9.3")
-                implementation("io.github.jan-tennert.supabase:realtime-kt:0.9.3")
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.5")
+                implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.5")
+                implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.5")
+                implementation("io.github.jan-tennert.supabase:storage-kt:0.9.5")
+                implementation("io.github.jan-tennert.supabase:realtime-kt:0.9.5")
 
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:media-compose:0.11.0")
@@ -74,9 +89,9 @@ kotlin {
 
                 api("io.github.qdsfdhvh:image-loader:1.4.4")
 
-                implementation("ca.rmen:rhymer:1.2.0")
+                //implementation("ca.rmen:rhymer:1.2.0")
 
-                implementation("org.hashids:hashids:1.0.3")
+                //implementation("org.hashids:hashids:1.0.3")
 
                 implementation("com.google.mlkit:common:18.8.0")
                 implementation("com.google.mlkit:vision-common:17.3.0")
@@ -147,7 +162,7 @@ android {
 
 apollo {
     service("service") {
-        packageName.set("com.micrantha.skouter")
+        packageName.set("com.micrantha.skouter.graphql")
     }
 }
 

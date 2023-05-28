@@ -1,6 +1,6 @@
 package com.micrantha.skouter.domain.repository
 
-import com.micrantha.skouter.domain.model.CameraImage
+import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.domain.model.LabelProof
 
 interface ClueRepository {

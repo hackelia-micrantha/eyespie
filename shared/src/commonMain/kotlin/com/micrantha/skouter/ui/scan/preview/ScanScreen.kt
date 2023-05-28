@@ -20,10 +20,8 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.model.Clues
+import com.micrantha.skouter.platform.CameraScanner
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
-
-@Composable
-expect fun CameraScanner(modifier: Modifier = Modifier, dispatch: Dispatch)
 
 class ScanScreen : Screen {
     @Composable
