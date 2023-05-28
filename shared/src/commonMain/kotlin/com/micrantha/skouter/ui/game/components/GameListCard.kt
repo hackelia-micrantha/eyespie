@@ -26,7 +26,6 @@ import com.micrantha.skouter.ui.components.Strings.CreatedAt
 import com.micrantha.skouter.ui.components.Strings.ExpiresAt
 import com.micrantha.skouter.ui.components.Strings.Players
 import com.micrantha.skouter.ui.components.Strings.Things
-import com.micrantha.skouter.ui.game.action.GameAction
 
 @Composable
 fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(

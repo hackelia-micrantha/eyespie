@@ -16,9 +16,9 @@ import com.micrantha.skouter.ui.game.list.GameListScreenModel
 import com.micrantha.skouter.ui.login.LoginEnvironment
 import com.micrantha.skouter.ui.login.LoginScreen
 import com.micrantha.skouter.ui.login.LoginScreenModel
-import com.micrantha.skouter.ui.scan.ScanEnvironment
-import com.micrantha.skouter.ui.scan.ScanScreen
-import com.micrantha.skouter.ui.scan.ScanScreenModel
+import com.micrantha.skouter.ui.scan.preview.ScanEnvironment
+import com.micrantha.skouter.ui.scan.preview.ScanScreen
+import com.micrantha.skouter.ui.scan.preview.ScanScreenModel
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.ScanImageUseCase

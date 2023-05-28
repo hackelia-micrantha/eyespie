@@ -6,8 +6,8 @@ import androidx.camera.core.ImageProxy
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.skouter.domain.model.CameraImage
 import com.micrantha.skouter.domain.repository.ClueRepository
-import com.micrantha.skouter.ui.scan.ScanAction.ImageCaptured
-import com.micrantha.skouter.ui.scan.ScanAction.LabelScanned
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
+import com.micrantha.skouter.ui.scan.preview.ScanAction.LabelScanned
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

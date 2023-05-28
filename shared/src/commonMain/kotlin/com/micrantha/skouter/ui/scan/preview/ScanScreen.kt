@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan
+package com.micrantha.skouter.ui.scan.preview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,7 +20,7 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.model.Clues
-import com.micrantha.skouter.ui.scan.ScanAction.SaveScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
 
 @Composable
 expect fun CameraScanner(modifier: Modifier = Modifier, dispatch: Dispatch)

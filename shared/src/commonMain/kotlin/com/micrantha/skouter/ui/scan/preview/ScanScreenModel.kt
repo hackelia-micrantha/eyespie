@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan
+package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenMappedModel

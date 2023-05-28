@@ -15,8 +15,8 @@ import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.ui.components.Strings.LoadingGames
 import com.micrantha.skouter.ui.components.toi18n
-import com.micrantha.skouter.ui.game.action.GameAction.Failure
-import com.micrantha.skouter.ui.game.action.GameAction.GameClicked
+import com.micrantha.skouter.ui.game.components.GameAction.Failure
+import com.micrantha.skouter.ui.game.components.GameAction.GameClicked
 import com.micrantha.skouter.ui.game.create.GameCreateScreen
 import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
 import com.micrantha.skouter.ui.game.details.GameDetailsScreen

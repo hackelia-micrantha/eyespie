@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.game.action
+package com.micrantha.skouter.ui.game.components
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.Game

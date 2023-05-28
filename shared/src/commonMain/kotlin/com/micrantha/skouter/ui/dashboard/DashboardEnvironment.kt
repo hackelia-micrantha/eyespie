@@ -18,10 +18,10 @@ import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Tabs
 import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
-import com.micrantha.skouter.ui.game.action.GameAction
+import com.micrantha.skouter.ui.game.components.GameAction
 import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
 import com.micrantha.skouter.ui.game.details.GameDetailsScreen
-import com.micrantha.skouter.ui.scan.ScanScreen
+import com.micrantha.skouter.ui.scan.preview.ScanScreen
 
 class DashboardEnvironment(
     private val context: ScreenContext,

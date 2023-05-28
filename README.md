@@ -5,7 +5,11 @@
 
 > A game of "eye spy" with machine vision for clues and proof.
 
-See [ROADMAP](ROADMAP.md) for project phases.
+See the [ROADMAP](ROADMAP.md) for project phases.
+
+## History
+
+Ongoing project since 2016, doing the refactor in kotlin multiplatform in spare time.
 
 ## Author
 
@@ -26,5 +30,3 @@ Copyright © 2023 [Ryan Jennings](https://github.com/ryjen).
 This project is [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licensed.
 
 ---
-
-_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

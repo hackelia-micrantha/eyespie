@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan
+package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.CameraImage

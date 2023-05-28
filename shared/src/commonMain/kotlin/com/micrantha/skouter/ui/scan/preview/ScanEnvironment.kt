@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan
+package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.FileSystem
 import com.micrantha.bluebell.domain.arch.Action
@@ -11,9 +11,9 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.domain.model.candidate
-import com.micrantha.skouter.ui.scan.ScanAction.ImageCaptured
-import com.micrantha.skouter.ui.scan.ScanAction.LabelScanned
-import com.micrantha.skouter.ui.scan.ScanAction.SaveScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
+import com.micrantha.skouter.ui.scan.preview.ScanAction.LabelScanned
+import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
 import io.github.aakira.napier.Napier
 
