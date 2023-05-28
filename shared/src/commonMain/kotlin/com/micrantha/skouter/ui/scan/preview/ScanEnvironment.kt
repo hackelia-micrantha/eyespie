@@ -1,16 +1,15 @@
 package com.micrantha.skouter.ui.scan.preview
 
-import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
+import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clue
-import com.micrantha.skouter.domain.model.candidate
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.LabelScanned
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
@@ -28,8 +27,7 @@ class ScanEnvironment(
 
     override suspend fun invoke(action: Action, state: ScanState) {
         when (action) {
-
-            is SaveScan -> saveThingImageUseCase(state.image!!).onSuccess {
+            is SaveScan -> saveThingImageUseCase(state.image!!, state.asProof()).onSuccess {
                 Napier.d("image url: $it")
                 navigateBack()
             }
@@ -44,9 +42,10 @@ class ScanEnvironment(
     }
 
     override fun map(state: ScanState) = ScanUiState(
-        clues = mutableListOf<Clue<*>>().apply {
-            state.labels?.candidate()?.let { add(it) }
-            state.location?.let { add(it) }
-        }
+        clues = state.clues()
     )
+
+    fun ScanState.clues() = mutableListOf<Clue<*>>().apply {
+        labels?.minOrNull()?.let { add(it) }
+    }
 }

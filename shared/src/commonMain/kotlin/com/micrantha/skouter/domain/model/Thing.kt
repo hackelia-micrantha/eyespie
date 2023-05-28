@@ -11,7 +11,7 @@ data class Thing(
     val guessed: Boolean,
     val guesses: List<Guess>,
     val imageUrl: String,
-    val clues: Clues
+    val clues: Proof
 ) : Entity, Creatable {
 
 

@@ -1,10 +1,11 @@
 package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.skouter.platform.CameraImage
-import com.micrantha.skouter.domain.model.Clues
+import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.LocationClue
+import com.micrantha.skouter.domain.model.Proof
+import com.micrantha.skouter.platform.CameraImage
 
 data class ScanState(
     val labels: LabelProof? = null,
@@ -13,7 +14,7 @@ data class ScanState(
 )
 
 data class ScanUiState(
-    val clues: Clues
+    val clues: List<Clue<*>>
 )
 
 sealed class ScanAction : Action {
@@ -23,3 +24,8 @@ sealed class ScanAction : Action {
 
     data class LabelScanned(val data: LabelProof) : ScanAction()
 }
+
+
+fun ScanState.asProof() = Proof(
+    labels = labels
+)

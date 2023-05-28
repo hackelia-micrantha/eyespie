@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -19,13 +20,22 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.domain.model.Clues
+import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.platform.CameraScanner
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
+import dev.icerock.moko.permissions.Permission.CAMERA
+import dev.icerock.moko.permissions.PermissionsController
+import org.kodein.di.compose.rememberInstance
 
 class ScanScreen : Screen {
     @Composable
     override fun Content() {
+        val permissions by rememberInstance<PermissionsController>()
+
+        LaunchedEffect(Unit) {
+            permissions.providePermission(CAMERA)
+        }
+
         val viewModel: ScanScreenModel = rememberScreenModel()
 
         val state by viewModel.state().collectAsState()
@@ -58,7 +68,7 @@ class ScanScreen : Screen {
     }
 
     @Composable
-    private fun ScannedClues(modifier: Modifier, clues: Clues) {
+    private fun ScannedClues(modifier: Modifier, clues: List<Clue<*>>) {
         Surface(
             modifier = modifier.padding(Dimensions.screen)
         ) {

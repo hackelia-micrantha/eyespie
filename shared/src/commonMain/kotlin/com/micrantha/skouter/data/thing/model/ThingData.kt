@@ -1,5 +1,6 @@
 package com.micrantha.skouter.data.thing.model
 
+import com.micrantha.skouter.data.clue.model.ProofData
 import com.micrantha.skouter.graphql.PlayerNearbyThingsQuery
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
@@ -12,7 +13,7 @@ data class ThingData(
     val name: String,
     val imageUrl: String,
     val image: JsonObject? = null,
-    val clues: JsonObject? = null,
+    val proof: ProofData? = null,
     val guessed: Boolean? = null,
     val created_by: String,
     val location: JsonPrimitive? = null

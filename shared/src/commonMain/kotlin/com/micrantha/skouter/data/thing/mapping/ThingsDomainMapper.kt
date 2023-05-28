@@ -1,20 +1,24 @@
 package com.micrantha.skouter.data.thing.mapping
 
-import com.micrantha.skouter.graphql.PlayerNearbyThingsQuery
+import com.micrantha.skouter.data.clue.model.LabelClueData
+import com.micrantha.skouter.data.clue.model.ProofData
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingNearby
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
+import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.Player
+import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
 
 class ThingsDomainMapper {
 
-    fun new(name: String, url: String, createdBy: String) = ThingRequest(
+    fun new(name: String, url: String, proof: Proof, createdBy: String) = ThingRequest(
         name = name,
         imageUrl = url,
+        proof = proof(proof),
         created_by = createdBy
     )
 
@@ -39,7 +43,7 @@ class ThingsDomainMapper {
         ),
         guesses = emptyList(),
         nodeId = "",
-        clues = emptyList()
+        clues = data.proof?.let { proof(it) } ?: Proof()
     )
 
     fun list(data: ThingListing) = Thing.Listing(
@@ -60,9 +64,11 @@ class ThingsDomainMapper {
         imageUrl = data.imageUrl
     )
 
-    private fun createdBy(data: PlayerNearbyThingsQuery.Created_by) = Player.Ref(
-        id = data.nodeId,
-        name = data.name
+    private fun proof(data: Proof) = ProofData(
+        labels = data.labels?.map { LabelClueData(it.data, it.confidence) }
     )
 
+    private fun proof(data: ProofData) = Proof(
+        labels = data.labels?.map { LabelClue(it.data, it.confidence) }
+    )
 }
