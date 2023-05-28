@@ -1,4 +1,4 @@
-package com.micrantha.skouter.data.thing.model
+package com.micrantha.skouter.data.clue.model
 
 import kotlinx.serialization.Serializable
 

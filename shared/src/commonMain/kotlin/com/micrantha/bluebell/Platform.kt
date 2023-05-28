@@ -13,6 +13,7 @@ interface FileSystem {
 
 expect class Platform : LocalizedRepository, FileSystem {
     val name: String
+
     override fun resource(str: LocalizedString, vararg args: Any?): String
 
     override fun format(

@@ -1,23 +1,16 @@
 package com.micrantha.skouter.data.thing.mapping
 
 import com.micrantha.skouter.PlayerNearbyThingsQuery
-import com.micrantha.skouter.data.thing.model.RecognitionResponse
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingNearby
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
-import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
 
 class ThingsDomainMapper {
-
-    fun recognition(data: RecognitionResponse): Clues {
-        val label = data.labels.maxByOrNull { it.probability }
-        return Clues(what = label?.label)
-    }
 
     fun new(name: String, url: String, createdBy: String) = ThingRequest(
         name = name,
@@ -46,7 +39,7 @@ class ThingsDomainMapper {
         ),
         guesses = emptyList(),
         nodeId = "",
-        clues = Clues()
+        clues = emptyList()
     )
 
     fun list(data: ThingListing) = Thing.Listing(

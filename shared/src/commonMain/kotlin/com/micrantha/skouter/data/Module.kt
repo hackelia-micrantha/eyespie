@@ -4,6 +4,9 @@ import com.micrantha.skouter.data.account.AccountDataRepository
 import com.micrantha.skouter.data.account.mapping.AccountDomainMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.data.account.source.AccountRemoteSource
+import com.micrantha.skouter.data.clue.ClueDataRepository
+import com.micrantha.skouter.data.clue.mapping.ClueDomainMapper
+import com.micrantha.skouter.data.clue.source.LabelRemoteSource
 import com.micrantha.skouter.data.game.GameDataRepository
 import com.micrantha.skouter.data.game.mapping.GameDomainMapper
 import com.micrantha.skouter.data.game.source.GameRemoteSource
@@ -48,4 +51,8 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindProviderOf(::PlayerRemoteSource)
     bindProviderOf(::PlayerDomainMapper)
     bindProviderOf(::PlayerDataRepository)
+
+    bindProviderOf(::ClueDataRepository)
+    bindProviderOf(::ClueDomainMapper)
+    bindProviderOf(::LabelRemoteSource)
 }

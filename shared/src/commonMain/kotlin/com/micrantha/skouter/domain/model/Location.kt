@@ -1,6 +1,6 @@
 package com.micrantha.skouter.domain.model
 
-import com.micrantha.skouter.domain.algo.distanceTo
+import com.micrantha.skouter.domain.logic.distanceTo
 
 
 data class Location(

@@ -5,7 +5,7 @@
 
 > A game of "eye spy" with machine vision for clues and proof.
 
-See [TODO](TODO.md) for roadmap.
+See [ROADMAP](ROADMAP.md) for project phases.
 
 ## Author
 

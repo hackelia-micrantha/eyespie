@@ -2,7 +2,6 @@ package com.micrantha.skouter.data.thing
 
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
-import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Thing
 import kotlinx.coroutines.flow.map
@@ -12,8 +11,6 @@ class ThingDataRepository(
     private val remoteSource: ThingsRemoteSource,
     private val mapper: ThingsDomainMapper
 ) : DomainRepository {
-    override suspend fun recognize(image: ByteArray, contentType: String): Result<Clues> =
-        remoteSource.recognize(image, contentType).map(mapper::recognition)
 
     override suspend fun things(playerID: String) = remoteSource.things(playerID).map {
         it.map(mapper::list)

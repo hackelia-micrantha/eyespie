@@ -74,6 +74,17 @@ kotlin {
 
                 api("io.github.qdsfdhvh:image-loader:1.4.4")
 
+                implementation("ca.rmen:rhymer:1.2.0")
+
+                implementation("org.hashids:hashids:1.0.3")
+
+                implementation("com.google.mlkit:common:18.8.0")
+                implementation("com.google.mlkit:vision-common:17.3.0")
+                implementation("com.google.mlkit:image-labeling:17.0.7")
+                implementation("com.google.mlkit:image-labeling-common:18.1.0")
+                implementation("com.google.mlkit:object-detection:17.0.0")
+                implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
+                implementation("org.tensorflow:tensorflow-lite:2.3.0")
             }
         }
         val commonTest by getting {
@@ -85,16 +96,22 @@ kotlin {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.core:core-ktx:1.10.1")
-                //implementation("org.jetbrains.kotlinx:kotlin-deeplearning-api:0.5.1")
 
                 api("androidx.compose.foundation:foundation:1.4.3")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+                api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
                 api("androidx.activity:activity-compose:1.7.2")
                 api("androidx.fragment:fragment-ktx:1.5.7")
 
-                //implementation("io.github.chopyourbrain:kontrol:0.1.1")
+                implementation("androidx.camera:camera-core:1.2.3")
+                implementation("androidx.camera:camera-camera2:1.2.3")
+                implementation("androidx.camera:camera-lifecycle:1.2.3")
+                implementation("androidx.camera:camera-video:1.2.3")
+
+                implementation("androidx.camera:camera-view:1.2.3")
+                implementation("androidx.camera:camera-extensions:1.2.3")
+
             }
         }
         val androidUnitTest by getting

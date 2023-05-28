@@ -2,14 +2,24 @@ package com.micrantha.skouter
 
 import android.content.Context
 import com.micrantha.bluebell.Platform
+import com.micrantha.bluebell.domain.arch.Dispatch
+import com.micrantha.skouter.data.clue.source.LabelLocalSource
+import com.micrantha.skouter.ui.scan.ClueAnalyzer
 import org.kodein.di.DI
+import org.kodein.di.bindFactory
 import org.kodein.di.bindInstance
-import org.kodein.di.bindSingleton
+import org.kodein.di.bindProvider
+import org.kodein.di.bindSingletonOf
+import org.kodein.di.instance
 
 fun androidDependencies(
     context: Context,
 ) = DI {
     bindInstance { context }
 
-    bindSingleton { Platform(context) }
+    bindSingletonOf(::Platform)
+
+    bindProvider { LabelLocalSource() }
+
+    bindFactory<Dispatch, ClueAnalyzer> { dispatch -> ClueAnalyzer(dispatch, instance()) }
 }

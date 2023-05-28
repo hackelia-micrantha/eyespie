@@ -2,14 +2,12 @@ package com.micrantha.skouter.data.thing.source
 
 import com.micrantha.skouter.data.remote.MicranthaClient
 import com.micrantha.skouter.data.remote.SupaClient
-import com.micrantha.skouter.data.thing.model.RecognitionResponse
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingNearby
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
 import com.micrantha.skouter.domain.model.Location
 import io.github.aakira.napier.Napier
-import io.ktor.client.call.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -17,14 +15,7 @@ class ThingsRemoteSource(
     private val micranthaClient: MicranthaClient,
     private val supaClient: SupaClient,
 ) {
-    suspend fun recognize(image: ByteArray, contentType: String) = try {
-        val response: RecognitionResponse = micranthaClient.recognize(image, contentType).body()
-        Result.success(response)
-    } catch (err: Throwable) {
-        Napier.e("recognize", err)
-        Result.failure(err)
-    }
-
+    
     suspend fun save(data: ThingRequest) = try {
         val result = supaClient.things().insert(data).decodeList<ThingResponse>()
         Result.success(result.first())

@@ -1,4 +1,4 @@
-package com.micrantha.skouter.domain.algo
+package com.micrantha.skouter.domain.logic
 
 import kotlin.math.PI
 import kotlin.math.atan2
