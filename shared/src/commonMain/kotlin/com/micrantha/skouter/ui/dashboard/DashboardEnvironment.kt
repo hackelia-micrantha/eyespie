@@ -16,7 +16,9 @@ import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
-import com.micrantha.skouter.ui.dashboard.DashboardUiState.Tabs
+import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data
+import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.TabContent
+import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.ThingsTab
 import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
 import com.micrantha.skouter.ui.game.components.GameAction
 import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
@@ -31,10 +33,20 @@ class DashboardEnvironment(
 
     override fun map(state: DashboardState) = DashboardUiState(
         status = state.status.map {
-            Tabs(
+            Data(
                 state.games ?: emptyList(),
                 state.players ?: emptyList(),
-                state.things ?: emptyList()
+                ThingsTab(
+                    TabContent(
+                        state.things?.take(MaxItemCount) ?: emptyList(),
+                        hasMore = state.things?.let { it.size > MaxItemCount } ?: false
+                    ),
+                    TabContent(
+                        state.nearbyThings?.take(MaxItemCount) ?: emptyList(),
+                        hasMore = state.nearbyThings?.let { it.size > MaxItemCount } ?: false
+                    ),
+                    state.things?.isNotEmpty() == false && state.nearbyThings?.isNotEmpty() == false
+                )
             )
         }
     )

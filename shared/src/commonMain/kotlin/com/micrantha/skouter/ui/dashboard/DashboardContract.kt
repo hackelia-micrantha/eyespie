@@ -7,28 +7,46 @@ import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.domain.model.ThingList
 
+const val MaxItemCount = 3
+
 data class DashboardState(
     val playerID: String? = null,
     val location: Location? = null,
     val games: GameList? = null,
     val players: PlayerList? = null,
+    val nearbyPlayers: PlayerList? = null,
     val things: ThingList? = null,
+    val nearbyThings: ThingList? = null,
     val status: UiResult<Unit> = UiResult.Default
 )
 
 data class DashboardUiState(
-    val status: UiResult<Tabs>,
+    val status: UiResult<Data>,
 ) {
-    data class Tabs(
+    data class Data(
         val games: GameList,
         val players: PlayerList,
-        val things: ThingList,
-    )
+        val things: ThingsTab
+    ) {
+        data class ThingsTab(
+            val owned: TabContent<ThingList>,
+            val nearby: TabContent<ThingList>,
+            val isEmpty: Boolean,
+        )
+
+        data class TabContent<T>(
+            val data: T,
+            val hasMore: Boolean
+        )
+    }
 }
 
 sealed class DashboardAction : Action {
 
     object ScanNewThing : DashboardAction()
+
+    object HasMoreThings : DashboardAction()
+    object HasMoreNearby : DashboardAction()
 
     object Load : DashboardAction()
 

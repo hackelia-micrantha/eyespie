@@ -40,5 +40,8 @@ enum class Strings(
     NoGamesFound("no_games_found"),
     NoPlayersFound("no_players_found"),
     NoCamera("no_camera"),
-    NoClues("no_clues")
+    NoClues("no_clues"),
+    MyThings("my_things"),
+    Nearby("nearby"),
+    HasMore("has_more")
 }

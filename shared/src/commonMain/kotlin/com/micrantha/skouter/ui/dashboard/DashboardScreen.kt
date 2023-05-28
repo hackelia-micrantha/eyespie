@@ -31,11 +31,9 @@ import com.micrantha.skouter.ui.Skouter
 import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
-import com.micrantha.skouter.ui.dashboard.DashboardUiState.Tabs
 import com.micrantha.skouter.ui.dashboard.components.ScanNewThingCard
-import com.micrantha.skouter.ui.game.components.GameListContent
+import com.micrantha.skouter.ui.dashboard.components.ThingTabContent
 import com.micrantha.skouter.ui.player.components.PlayerListContent
-import com.micrantha.skouter.ui.thing.components.ThingListContent
 
 class DashboardScreen : Screen {
 
@@ -96,16 +94,16 @@ class DashboardScreen : Screen {
     }
 
     @Composable
-    fun ContentPager(tabs: Tabs, dispatch: Dispatch) {
+    fun ContentPager(data: DashboardUiState.Data, dispatch: Dispatch) {
         TabPager(
             stringResource(S.Things),
-            stringResource(S.Games),
+            //stringResource(S.Games),
             stringResource(S.Players)
         ) { page, _ ->
             when (page) {
-                0 -> ThingListContent(tabs.things, dispatch)
-                1 -> GameListContent(tabs.games, dispatch)
-                2 -> PlayerListContent(tabs.players, dispatch)
+                0 -> ThingTabContent(data.things, dispatch)
+                //1 -> GameListContent(tabs.games, dispatch)
+                1 -> PlayerListContent(data.players, dispatch)
             }
         }
     }
