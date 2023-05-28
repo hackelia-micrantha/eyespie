@@ -5,11 +5,13 @@
 
 > A game of "eye spy" with machine vision for clues and proof.
 
-See the [ROADMAP](ROADMAP.md) for project phases.
+See the [ROADMAP](docs/ROADMAP.md) for project phases.
 
 ## History
 
 Ongoing project since 2016, doing the refactor in kotlin multiplatform in spare time.
+
+Check out some [documentation](docs/INDEX.md) or a [blog post](https://ryanjennin.gs/posts/scouter-demo/) from the original prototype.
 
 ## Author
 
