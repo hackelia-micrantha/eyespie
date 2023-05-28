@@ -5,7 +5,7 @@
 
 > A game of "eye spy" with machine vision for clues and proof.
 
-See the [ROADMAP](docs/ROADMAP.md) for project phases.
+See the [ROADMAP](docs/PHASES.md) for project phases.
 
 ## History
 
