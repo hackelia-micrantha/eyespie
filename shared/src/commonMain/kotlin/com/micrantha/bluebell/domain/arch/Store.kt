@@ -1,5 +1,7 @@
 package com.micrantha.bluebell.domain.arch
 
+import kotlinx.coroutines.CoroutineScope
+
 interface Action
 
 fun interface ReducerStore<State> {
@@ -21,5 +23,5 @@ interface Store<State> : Stateful<State>, ReducerStore<State>, EffectedStore<Sta
 }
 
 interface StoreFactory {
-    fun <T> createStore(state: T): Store<T>
+    fun <T> createStore(initialState: T, scope: CoroutineScope): Store<T>
 }
