@@ -12,7 +12,7 @@ import org.kodein.di.delegate
 internal fun bluebellDomain() = DI.Module(name = "Bluebell Domain") {
 
     bindSingleton { Flux(FluxDispatcher()) }
-
+    
     delegate<Dispatcher>().to<Flux>()
 
     bindProviderOf(::FormatDateTimeUseCase)

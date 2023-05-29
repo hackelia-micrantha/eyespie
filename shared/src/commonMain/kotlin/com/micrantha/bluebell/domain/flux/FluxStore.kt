@@ -18,7 +18,7 @@ import kotlinx.coroutines.plus
 
 class FluxStore<State> internal constructor(
     initialState: State,
-    private val stateScope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined) + Job()
+    private val effectScope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined) + Job()
 ) : Store<State>, Store.Listener<State> {
     private val reducers = mutableListOf<Reducer<State>>()
     private val effects = mutableListOf<Effect<State>>()
@@ -28,7 +28,7 @@ class FluxStore<State> internal constructor(
         current.update { state ->
             reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
         }
-        stateScope.launch {
+        effectScope.launch {
             effects.forEach { effect -> effect(action, current.value) }
         }
     }
@@ -46,7 +46,7 @@ class FluxStore<State> internal constructor(
     override fun state(): StateFlow<State> = current.asStateFlow()
 
     override fun listen(block: (State) -> Unit): Store<State> {
-        current.onEach(block).launchIn(stateScope)
+        current.onEach(block).launchIn(effectScope)
         return this
     }
 }
