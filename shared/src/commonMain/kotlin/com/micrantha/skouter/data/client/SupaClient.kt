@@ -57,7 +57,7 @@ class SupaClient {
     fun storage(bucketId: String): StorageCall = supabase.storage[bucketId]
 
     suspend fun nearby(request: NearbyRequest) = supabase.postgrest.rpc(
-        function = "thingsNearby",
+        function = "thingsnearby",
         parameters = request
     )
 }

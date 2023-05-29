@@ -7,6 +7,7 @@ import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Player.Name
 import com.micrantha.skouter.domain.model.Player.Score
 import kotlinx.datetime.toInstant
+import kotlinx.serialization.json.jsonPrimitive
 
 class PlayerDomainMapper {
 
@@ -30,10 +31,26 @@ class PlayerDomainMapper {
         score = Score(
             total = data.total_score
         ),
-        location = data.last_location?.let {
-            Location(point = Point(it.first, it.second))
+        location = data.last_location?.let { json ->
+            point(json.jsonPrimitive.content)?.let {
+                Location(point = it)
+            }
         },
         createdAt = data.created_at.toInstant()
     )
 
+    private fun point(data: String): Point? {
+        var start = data.indexOf('(')
+        if (start == -1) return null
+        var end = data.indexOf(',', start)
+        if (end == -1 || start >= end) return null
+        val latitude = data.substring(start + 1, end).toDouble()
+
+        start = end
+        end = data.indexOf(')', start)
+        if (end == -1 || start >= end) return null
+        val longitude = data.substring(start + 1, end).toDouble()
+        
+        return Point(latitude = latitude, longitude = longitude)
+    }
 }
