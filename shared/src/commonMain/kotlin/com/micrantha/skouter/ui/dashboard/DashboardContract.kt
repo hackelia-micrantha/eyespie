@@ -50,4 +50,6 @@ sealed class DashboardAction : Action {
 
     data class Loaded(val things: ThingList, val friends: PlayerList, val players: PlayerList) :
         DashboardAction()
+
+    object AddFriendClicked : DashboardAction()
 }

@@ -1,6 +1,8 @@
 package com.micrantha.skouter.ui.dashboard.usecase
 
 import com.micrantha.skouter.data.account.model.CurrentSession
+import com.micrantha.skouter.domain.model.PlayerList
+import com.micrantha.skouter.domain.model.ThingList
 import com.micrantha.skouter.domain.repository.PlayerRepository
 import com.micrantha.skouter.domain.repository.ThingsRepository
 import com.micrantha.skouter.ui.dashboard.DashboardAction
@@ -21,25 +23,25 @@ class DashboardLoadUseCase(
         val lastLocation = currentSession.requirePlayer().location
         val playerID = currentSession.requirePlayer().id
 
-        val thingFlow = flow {
+        val thingFlow = flow<ThingList> {
             val res = if (lastLocation != null) {
                 thingsRepository.nearby(location = lastLocation.point)
             } else {
                 thingsRepository.things(playerID)
             }
             res.onSuccess { emit(it) }
-                .onFailure { throw it }
+                .onFailure { emit(emptyList()) }
         }
 
-        val friendFlow = flow {
+        val friendFlow = flow<PlayerList> {
             playerRepository.players()
                 .onSuccess { emit(it) }
-                .onFailure { throw it }
+                .onFailure { emit(emptyList()) }
         }
-        val playerFlow = flow {
+        val playerFlow = flow<PlayerList> {
             playerRepository.players()
                 .onSuccess { emit(it) }
-                .onFailure { throw it }
+                .onFailure { emit(emptyList()) }
         }
         combine(
             flow = thingFlow,

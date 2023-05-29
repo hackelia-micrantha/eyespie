@@ -34,3 +34,7 @@ Copyright © 2023 [Ryan Jennings](https://github.com/ryjen).
 This project is [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licensed.
 
 ---
+
+## Screenshot(s)
+
+[Screenshot 1](docs/screenshot.png)

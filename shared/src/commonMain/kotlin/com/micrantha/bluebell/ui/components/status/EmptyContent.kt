@@ -15,10 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import com.micrantha.bluebell.ui.theme.Dimensions
 
 @Composable
-fun EmptyContent(message: String? = null, icon: ImageVector? = null, onClick: () -> Unit = {}) {
+fun EmptyContent(
+    message: String? = null,
+    icon: ImageVector? = null,
+    size: Dp = Dimensions.List.placeholder,
+    onClick: () -> Unit = {}
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize().padding(Dimensions.screen)
@@ -32,7 +38,7 @@ fun EmptyContent(message: String? = null, icon: ImageVector? = null, onClick: ()
                     it,
                     tint = MaterialTheme.colorScheme.secondary,
                     contentDescription = null,
-                    modifier = Modifier.size(Dimensions.List.placeholder)
+                    modifier = Modifier.size(size)
                 )
             }
             message?.let {
