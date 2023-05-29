@@ -1,12 +1,10 @@
-package com.micrantha.skouter.data.remote
+package com.micrantha.skouter.data.client
 
 import Skouter.shared.BuildConfig
 import com.apollographql.apollo3.ApolloCall
+import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.graphql.GameListQuery
 import com.micrantha.skouter.graphql.GameNodeQuery
-import com.micrantha.skouter.graphql.PlayerNearbyThingsQuery
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.gotrue.GoTrue
 import io.github.jan.supabase.gotrue.gotrue
@@ -15,8 +13,8 @@ import io.github.jan.supabase.graphql.graphql
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.postgrest.query.PostgrestBuilder
+import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.realtime.Realtime
-import io.github.jan.supabase.realtime.realtime
 import io.github.jan.supabase.storage.BucketApi
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
@@ -42,17 +40,7 @@ class SupaClient {
             install(AuthClient)
 
             install(StorageClient)
-
-            install(RealtimeClient)
-
-            httpConfig {
-
-            }
         }
-
-    init {
-        Napier.base(DebugAntilog())
-    }
 
     fun auth(): AuthCall = supabase.gotrue
 
@@ -68,20 +56,8 @@ class SupaClient {
 
     fun storage(bucketId: String): StorageCall = supabase.storage[bucketId]
 
-    fun realtime(): RealtimeClient = supabase.realtime
-
-    fun nearby(
-        playerID: String,
-        latitude: Double,
-        longitude: Double,
-        distance: Double
-    ): GraphCall<PlayerNearbyThingsQuery.Data> =
-        supabase.graphql.apolloClient.query(
-            PlayerNearbyThingsQuery(
-                playerID,
-                latitude,
-                longitude,
-                distance
-            )
-        )
+    suspend fun nearby(request: NearbyRequest) = supabase.postgrest.rpc(
+        function = "thingsNearby",
+        parameters = request
+    )
 }

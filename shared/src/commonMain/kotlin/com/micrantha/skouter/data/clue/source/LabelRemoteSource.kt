@@ -1,7 +1,7 @@
 package com.micrantha.skouter.data.clue.source
 
+import com.micrantha.skouter.data.client.MicranthaClient
 import com.micrantha.skouter.data.clue.model.RecognitionResponse
-import com.micrantha.skouter.data.remote.MicranthaClient
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 

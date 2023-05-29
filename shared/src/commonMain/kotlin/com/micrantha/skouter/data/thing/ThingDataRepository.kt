@@ -5,7 +5,6 @@ import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
-import kotlinx.coroutines.flow.map
 import com.micrantha.skouter.domain.repository.ThingsRepository as DomainRepository
 
 class ThingDataRepository(
@@ -25,9 +24,10 @@ class ThingDataRepository(
     ): Result<Thing> =
         remoteSource.save(mapper.new(name, url, proof, playerID)).map(mapper::map)
 
-    override fun nearby(
-        playerID: String,
+    override suspend fun nearby(
         location: Location.Point,
         distance: Double
-    ) = remoteSource.nearby(playerID, location, distance).map { it.map(mapper::nearby) }
+    ) = remoteSource.nearby(mapper.nearby(location, distance)).map {
+        it.map(mapper::list)
+    }
 }

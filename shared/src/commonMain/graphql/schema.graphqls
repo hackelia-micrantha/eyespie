@@ -96,6 +96,22 @@ type PlayerRef implements Entity, Node {
     name: String!
 }
 
+type PlayerFriend {
+    player: Player!
+    friend: Player!
+}
+
+type PlayerFriendConnection {
+    totalCount: Int!
+    pageInfo: PageInfo!
+    edges: [PlayerFriendEdge]
+}
+
+type PlayerFriendEdge {
+    cursor: String!
+    node: PlayerFriend!
+}
+
 type PlayerThingConnection {
     totalCount: Int!
     pageInfo: PageInfo!
