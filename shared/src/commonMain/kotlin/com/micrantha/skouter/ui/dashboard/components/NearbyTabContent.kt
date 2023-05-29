@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.runtime.Composable
@@ -39,10 +40,14 @@ fun NearbyTabContent(
             stickyHeader {
                 ListHeader(label = stringResource(S.Things))
             }
-            items(tab.things.data) { thing ->
+            itemsIndexed(tab.things.data) { index, thing ->
                 ThingListingCard(
-                    modifier = Modifier.padding(horizontal = Dimensions.content)
-                        .padding(top = Dimensions.content),
+                    modifier = Modifier.padding(horizontal = Dimensions.content).then(
+                        if (index == 0)
+                            Modifier.padding(vertical = Dimensions.content)
+                        else
+                            Modifier.padding(bottom = Dimensions.content)
+                    ),
                     thing = thing
                 )
             }
@@ -57,7 +62,10 @@ fun NearbyTabContent(
                 ListHeader(label = stringResource(S.Players))
             }
             items(tab.players.data) {
-                PlayerListCard(it)
+                PlayerListCard(
+                    modifier = Modifier.padding(horizontal = Dimensions.content)
+                        .padding(bottom = Dimensions.content), player = it
+                )
             }
             if (tab.players.hasMore) {
                 item {

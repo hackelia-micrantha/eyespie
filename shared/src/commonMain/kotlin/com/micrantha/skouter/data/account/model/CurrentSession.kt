@@ -1,5 +1,6 @@
 package com.micrantha.skouter.data.account.model
 
+import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Session
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,6 +11,12 @@ class CurrentSession {
 
     fun update(value: Session) {
         response.update { value }
+    }
+
+    fun update(value: Location) {
+        response.update {
+            it?.copy(player = it.player.copy(location = value))
+        }
     }
 
     fun requirePlayer() = response.value!!.player

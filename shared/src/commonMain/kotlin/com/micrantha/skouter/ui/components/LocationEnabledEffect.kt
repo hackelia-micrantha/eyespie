@@ -3,22 +3,22 @@ package com.micrantha.skouter.ui.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import dev.icerock.moko.geo.LocationTracker
+import com.micrantha.skouter.domain.repository.LocationRepository
 import kotlinx.coroutines.launch
 import org.kodein.di.compose.rememberInstance
 
 @Composable
-fun LocationEnabledEffect(key: Any? = null) {
+fun LocationEnabledEffect(key: Any? = Unit) {
     val scope = rememberCoroutineScope()
-    val tracker by rememberInstance<LocationTracker>()
+    val repository by rememberInstance<LocationRepository>()
 
     DisposableEffect(key) {
         scope.launch {
-            tracker.startTracking()
+            repository.start()
         }
 
         onDispose {
-            tracker.stopTracking()
+            repository.stop()
         }
     }
 }

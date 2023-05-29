@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import org.kodein.di.compose.rememberInstance
 
 @Composable
-fun RealtimeDataEffect(key: Any?) {
+fun RealtimeDataEffect(key: Any? = Unit) {
     val repository by rememberInstance<RealtimeRepository>()
     val scope = rememberCoroutineScope()
 

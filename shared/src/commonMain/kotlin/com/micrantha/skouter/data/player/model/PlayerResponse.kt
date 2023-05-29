@@ -1,6 +1,7 @@
 package com.micrantha.skouter.data.player.model
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class PlayerResponse(
@@ -13,5 +14,5 @@ data class PlayerResponse(
     val nick_name: String? = null,
     val email: String? = null,
     val total_score: Int,
-    val last_location: Pair<Double, Double>? = null
+    val last_location: JsonElement? = null
 )

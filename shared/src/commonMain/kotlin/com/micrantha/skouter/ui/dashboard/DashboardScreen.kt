@@ -29,6 +29,7 @@ import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.Skouter
 import com.micrantha.skouter.ui.components.LocationEnabledEffect
+import com.micrantha.skouter.ui.components.RealtimeDataEffect
 import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
@@ -42,7 +43,9 @@ class DashboardScreen : Screen {
     override fun Content() {
         val screenModel: DashboardScreenModel = rememberScreenModel()
 
-        LocationEnabledEffect(Unit)
+        LocationEnabledEffect()
+
+        RealtimeDataEffect()
 
         LaunchedEffect(Unit) {
             screenModel.dispatch(Load)
