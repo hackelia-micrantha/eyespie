@@ -1,20 +1,18 @@
 package com.micrantha.skouter.data.thing.source
 
-import com.micrantha.skouter.data.remote.MicranthaClient
-import com.micrantha.skouter.data.remote.SupaClient
+import com.micrantha.skouter.data.client.SupaClient
+import com.micrantha.skouter.data.client.SupaRealtimeClient
+import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
-import com.micrantha.skouter.data.thing.model.ThingNearby
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
-import com.micrantha.skouter.domain.model.Location
 import io.github.aakira.napier.Napier
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class ThingsRemoteSource(
     private val supaClient: SupaClient,
+    private val realtimeClient: SupaRealtimeClient
 ) {
-    
+
     suspend fun save(data: ThingRequest) = try {
         val result = supaClient.things().insert(data).decodeList<ThingResponse>()
         Result.success(result.first())
@@ -32,16 +30,11 @@ class ThingsRemoteSource(
         Result.failure(err)
     }
 
-    fun nearby(
-        playerID: String,
-        location: Location.Point,
-        distance: Double
-    ): Flow<List<ThingNearby>> =
-        supaClient.nearby(playerID, location.latitude, location.longitude, distance)
-            .toFlow()
-            .map { data ->
-                data.dataAssertNoErrors.searchThingsNearPlayer!!.edgesFilterNotNull()
-                    ?.map { it.node } ?: emptyList()
-            }
+    suspend fun nearby(request: NearbyRequest) = try {
+        val res = supaClient.nearby(request).decodeList<ThingResponse>()
+        Result.success(res)
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
 
 }

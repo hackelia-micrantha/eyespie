@@ -2,11 +2,12 @@ package com.micrantha.skouter.data.thing.mapping
 
 import com.micrantha.skouter.data.clue.model.LabelClueData
 import com.micrantha.skouter.data.clue.model.ProofData
+import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
-import com.micrantha.skouter.data.thing.model.ThingNearby
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
 import com.micrantha.skouter.domain.model.LabelClue
+import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
@@ -55,13 +56,10 @@ class ThingsDomainMapper {
         imageUrl = data.imageUrl
     )
 
-    fun nearby(data: ThingNearby) = Thing.Listing(
-        id = data.id,
-        nodeId = data.nodeId,
-        createdAt = data.created_at.toInstant(),
-        name = data.name,
-        guessed = data.guessed ?: false,
-        imageUrl = data.imageUrl
+    fun nearby(location: Location.Point, distance: Double) = NearbyRequest(
+        latitude = location.latitude,
+        longitude = location.longitude,
+        distance = distance
     )
 
     private fun proof(data: Proof) = ProofData(

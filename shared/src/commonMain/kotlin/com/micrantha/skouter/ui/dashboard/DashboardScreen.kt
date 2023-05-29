@@ -28,6 +28,7 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.Skouter
+import com.micrantha.skouter.ui.components.LocationEnabledEffect
 import com.micrantha.skouter.ui.components.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
@@ -39,15 +40,17 @@ class DashboardScreen : Screen {
 
     @Composable
     override fun Content() {
-        val viewModel: DashboardScreenModel = rememberScreenModel()
+        val screenModel: DashboardScreenModel = rememberScreenModel()
 
-        LaunchedEffect(viewModel) {
-            viewModel.dispatch(Load)
+        LocationEnabledEffect(Unit)
+
+        LaunchedEffect(Unit) {
+            screenModel.dispatch(Load)
         }
 
-        val state by viewModel.state().collectAsState()
+        val state by screenModel.state().collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, screenModel::dispatch)
     }
 
     @Composable

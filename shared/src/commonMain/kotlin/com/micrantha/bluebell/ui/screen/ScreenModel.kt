@@ -9,6 +9,7 @@ import com.micrantha.bluebell.domain.flux.Flux
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.mapIn
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import org.kodein.di.DIAware
 import org.kodein.di.instance
@@ -25,11 +26,6 @@ abstract class ScreenContextModel(
     protected val i18n: LocalizedRepository = context.i18n
 }
 
-private fun <State> DIAware.screenModelStore(state: State): Lazy<Store<State>> {
-    val flux by instance<Flux>()
-    return lazy { flux.createStore(state) }
-}
-
 /**
  * View model with a store that bypasses global dispatcher with local store dispatch by default.
  */
@@ -37,7 +33,15 @@ abstract class ScreenStoreModel<State>(
     context: ScreenContext,
     initialState: State
 ) : ScreenContextModel(context), DIAware by context {
-    protected val store: Store<State> by screenModelStore(initialState)
+    protected val store: Store<State> by screenModelStore(initialState, coroutineScope)
+}
+
+private fun <State> ScreenStoreModel<State>.screenModelStore(
+    initialState: State,
+    scope: CoroutineScope
+): Lazy<Store<State>> {
+    val flux by instance<Flux>()
+    return lazy { flux.createStore(initialState, scope) }
 }
 
 /**

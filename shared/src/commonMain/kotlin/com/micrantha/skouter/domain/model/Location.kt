@@ -15,6 +15,9 @@ data class Location(
         val latitude: Double = Double.NaN,
         val longitude: Double = Double.NaN
     ) : Comparable<Point> {
+
+        val isValid = !latitude.isNaN() && !longitude.isNaN()
+
         override fun compareTo(other: Point): Int {
             return distanceTo(latitude, longitude, other.latitude, other.longitude).toInt()
         }

@@ -1,6 +1,6 @@
 package com.micrantha.skouter.data.game.source
 
-import com.micrantha.skouter.data.remote.SupaClient
+import com.micrantha.skouter.data.client.SupaClient
 import io.github.aakira.napier.Napier
 
 class GameRemoteSource(

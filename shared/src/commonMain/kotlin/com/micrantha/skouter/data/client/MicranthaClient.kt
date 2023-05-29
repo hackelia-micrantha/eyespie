@@ -1,4 +1,4 @@
-package com.micrantha.skouter.data.remote
+package com.micrantha.skouter.data.client
 
 import Skouter.shared.BuildConfig
 import io.github.aakira.napier.DebugAntilog

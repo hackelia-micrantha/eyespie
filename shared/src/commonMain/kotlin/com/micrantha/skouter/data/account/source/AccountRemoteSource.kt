@@ -1,8 +1,8 @@
 package com.micrantha.skouter.data.account.source
 
 import com.micrantha.skouter.data.account.model.AccountResponse
+import com.micrantha.skouter.data.client.SupaClient
 import com.micrantha.skouter.data.player.model.PlayerResponse
-import com.micrantha.skouter.data.remote.SupaClient
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 
 class AccountRemoteSource(

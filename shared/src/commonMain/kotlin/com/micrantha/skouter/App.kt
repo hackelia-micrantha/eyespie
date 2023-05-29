@@ -33,14 +33,14 @@ fun SkouterApp(module: DI) = subDI(parentDI = module,
         val permissions = rememberPermissionsController()
         val mediaPicker = rememberMediaPickerController(permissions)
         val locationTracker = rememberLocationTracker(permissions)
+        val imageLoader = rememberImageLoader()
 
         subDI(diBuilder = {
             bindSingleton { navigator }
             bindSingleton { permissions }
             bindSingleton { mediaPicker }
-            bindSingleton { locationTracker }
+            bindSingleton(overrides = true) { locationTracker }
         }) {
-            val imageLoader = rememberImageLoader()
 
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,

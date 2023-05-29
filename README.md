@@ -25,6 +25,8 @@ Check out some [documentation](docs/INDEX.md) or a [blog post](https://ryanjenni
 
 Give a ⭐️ if this project helped you!
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/B0B1LPW9M)
+
 ## 📝 License
 
 Copyright © 2023 [Ryan Jennings](https://github.com/ryjen).

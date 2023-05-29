@@ -30,7 +30,7 @@ class ClueAnalyzer(
         dispatch(ImageCaptured(cameraImage))
 
         identifyClues(cameraImage)
-    
+
         //image.close()
     }
 

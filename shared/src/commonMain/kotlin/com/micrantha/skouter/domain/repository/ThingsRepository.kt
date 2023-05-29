@@ -4,7 +4,6 @@ import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.model.ThingList
-import kotlinx.coroutines.flow.Flow
 
 interface ThingsRepository {
 
@@ -12,9 +11,8 @@ interface ThingsRepository {
 
     suspend fun create(name: String, url: String, proof: Proof, playerID: String): Result<Thing>
 
-    fun nearby(
-        playerID: String,
+    suspend fun nearby(
         location: Location.Point,
         distance: Double = 10.0
-    ): Flow<ThingList>
+    ): Result<ThingList>
 }
