@@ -17,7 +17,7 @@ import org.kodein.di.instance
 /**
  * contextual view model knows about platform, routing, localization, and global dispatching
  */
-abstract class ScreenContextModel(
+abstract class ContextualScreenModel(
     protected val context: ScreenContext
 ) : Dispatcher by context.dispatcher, ScreenModel {
 
@@ -29,14 +29,14 @@ abstract class ScreenContextModel(
 /**
  * View model with a store that bypasses global dispatcher with local store dispatch by default.
  */
-abstract class ScreenStoreModel<State>(
+abstract class FluxScreenModel<State>(
     context: ScreenContext,
     initialState: State
-) : ScreenContextModel(context), DIAware by context {
+) : ContextualScreenModel(context), DIAware by context {
     protected val store: Store<State> by screenModelStore(initialState, coroutineScope)
 }
 
-private fun <State> ScreenStoreModel<State>.screenModelStore(
+private fun <State> FluxScreenModel<State>.screenModelStore(
     initialState: State,
     scope: CoroutineScope
 ): Lazy<Store<State>> {
@@ -47,10 +47,10 @@ private fun <State> ScreenStoreModel<State>.screenModelStore(
 /**
  * Stateful view model with a store
  */
-abstract class ScreenStatefulModel<State>(
+abstract class StatefulScreenModel<State>(
     context: ScreenContext,
     initialState: State
-) : ScreenStoreModel<State>(context, initialState), Stateful<State> {
+) : FluxScreenModel<State>(context, initialState), Stateful<State> {
     override fun state(): StateFlow<State> = store.state()
 }
 
@@ -61,10 +61,10 @@ fun interface StateMapper<State, UiState> {
 /**
  * Stateful view model that maps between internal state and ui state.
  */
-abstract class ScreenMappedModel<State, UiState>(
+abstract class MappedScreenModel<State, UiState>(
     context: ScreenContext,
     initialState: State,
     private val mapper: StateMapper<State, UiState>
-) : ScreenStoreModel<State>(context, initialState), Stateful<UiState> {
+) : FluxScreenModel<State>(context, initialState), Stateful<UiState> {
     override fun state(): StateFlow<UiState> = store.state().mapIn(coroutineScope, mapper::map)
 }

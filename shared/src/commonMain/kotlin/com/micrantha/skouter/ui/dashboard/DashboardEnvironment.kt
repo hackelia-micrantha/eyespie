@@ -11,7 +11,7 @@ import com.micrantha.bluebell.domain.model.map
 import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
-import com.micrantha.skouter.ui.components.S
+import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
@@ -20,9 +20,9 @@ import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.Nearby
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.TabContent
 import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
-import com.micrantha.skouter.ui.game.components.GameAction
-import com.micrantha.skouter.ui.game.details.GameDetailScreenArg
-import com.micrantha.skouter.ui.game.details.GameDetailsScreen
+import com.micrantha.skouter.ui.game.component.GameAction
+import com.micrantha.skouter.ui.game.detail.GameDetailScreenArg
+import com.micrantha.skouter.ui.game.detail.GameDetailsScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
 
 class DashboardEnvironment(

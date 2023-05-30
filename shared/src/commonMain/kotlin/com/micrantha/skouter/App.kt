@@ -7,7 +7,7 @@ import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.micrantha.bluebell.BluebellApp
 import com.micrantha.skouter.ui.MainScreen
-import com.micrantha.skouter.ui.components.rememberImageLoader
+import com.micrantha.skouter.ui.component.rememberImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import dev.icerock.moko.geo.LocationTracker
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect

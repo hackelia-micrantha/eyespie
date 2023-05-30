@@ -28,20 +28,20 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.Skouter
-import com.micrantha.skouter.ui.components.LocationEnabledEffect
-import com.micrantha.skouter.ui.components.RealtimeDataEffect
-import com.micrantha.skouter.ui.components.S
+import com.micrantha.skouter.ui.component.LocationEnabledEffect
+import com.micrantha.skouter.ui.component.RealtimeDataEffect
+import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.ScanNewThing
-import com.micrantha.skouter.ui.dashboard.components.FriendsTabContent
-import com.micrantha.skouter.ui.dashboard.components.NearbyTabContent
-import com.micrantha.skouter.ui.dashboard.components.ScanNewThingCard
+import com.micrantha.skouter.ui.dashboard.component.FriendsTabContent
+import com.micrantha.skouter.ui.dashboard.component.NearbyTabContent
+import com.micrantha.skouter.ui.dashboard.component.ScanNewThingCard
 
 class DashboardScreen : Screen {
 
     @Composable
     override fun Content() {
-        val screenModel: DashboardScreenModel = rememberScreenModel()
+        val screenModel: DashboardContextualScreenModel = rememberScreenModel()
 
         LocationEnabledEffect()
 

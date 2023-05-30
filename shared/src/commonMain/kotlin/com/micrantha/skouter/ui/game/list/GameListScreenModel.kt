@@ -1,13 +1,13 @@
 package com.micrantha.skouter.ui.game.list
 
+import com.micrantha.bluebell.ui.screen.MappedScreenModel
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.bluebell.ui.screen.ScreenMappedModel
 
 class GameListScreenModel(
     context: ScreenContext,
     environment: GameListEnvironment,
     initialState: GameListState = GameListState()
-) : ScreenMappedModel<GameListState, GameListUiState>(
+) : MappedScreenModel<GameListState, GameListUiState>(
     context,
     initialState,
     environment::map

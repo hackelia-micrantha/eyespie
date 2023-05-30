@@ -13,7 +13,7 @@ import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.repository.AccountRepository
-import com.micrantha.skouter.ui.components.Strings
+import com.micrantha.skouter.ui.component.Strings
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
 import com.micrantha.skouter.ui.login.LoginAction.ChangedEmail
 import com.micrantha.skouter.ui.login.LoginAction.ChangedPassword

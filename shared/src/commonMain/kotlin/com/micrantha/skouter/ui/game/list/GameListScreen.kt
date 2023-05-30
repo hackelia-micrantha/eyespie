@@ -19,8 +19,8 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.scaffold.Scaffolding
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.skouter.ui.components.Strings.Games
-import com.micrantha.skouter.ui.game.components.GameListContent
+import com.micrantha.skouter.ui.component.Strings.Games
+import com.micrantha.skouter.ui.game.component.GameListContent
 import com.micrantha.skouter.ui.game.list.GameListAction.Load
 import com.micrantha.skouter.ui.game.list.GameListAction.NewGame
 import com.micrantha.skouter.ui.navi.NavAction

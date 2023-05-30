@@ -22,6 +22,12 @@ sealed class UiResult<out T> {
 
 fun Ready() = Ready(Unit)
 
+val <T> UiResult<T>.value: T?
+    get() = when (this) {
+        is Ready -> data
+        else -> null
+    }
+
 fun <T> UiResult<T>.copy(ready: (T) -> T) = when (this) {
     is Ready -> this.copy(data = ready(this.data))
     else -> this

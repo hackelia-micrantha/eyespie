@@ -8,7 +8,7 @@ class ScanEditScreen : Screen {
 
     @Composable
     override fun Content() {
-        val viewModel: ScanEditViewModel = rememberScreenModel()
+        val viewModel: ScanEditViewScreenModel = rememberScreenModel()
     }
 
 }
