@@ -51,7 +51,7 @@ class DashboardScreen : Screen {
             screenModel.dispatch(Load)
         }
 
-        val state by screenModel.state().collectAsState()
+        val state by screenModel.state.collectAsState()
 
         Render(state, screenModel::dispatch)
     }

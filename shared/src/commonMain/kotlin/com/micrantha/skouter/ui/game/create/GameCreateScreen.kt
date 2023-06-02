@@ -28,7 +28,7 @@ class GameCreateScreen : Screen {
     @Composable
     override fun Content() {
         val viewModel = rememberScreenModel<GameCreateScreenModel>()
-        val state by viewModel.state().collectAsState()
+        val state by viewModel.state.collectAsState()
 
         Render(state, viewModel::dispatch)
     }

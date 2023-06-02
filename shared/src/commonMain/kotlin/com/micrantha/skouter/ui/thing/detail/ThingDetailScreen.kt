@@ -16,7 +16,7 @@ class ThingDetailScreen : Screen {
     override fun Content() {
         val screenModel = rememberScreenModel<ThingDetailScreenModel>()
 
-        val state by screenModel.state().collectAsState()
+        val state by screenModel.state.collectAsState()
 
         Render(state, screenModel::dispatch)
     }

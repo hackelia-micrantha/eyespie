@@ -51,7 +51,7 @@ abstract class StatefulScreenModel<State>(
     context: ScreenContext,
     initialState: State
 ) : FluxScreenModel<State>(context, initialState), Stateful<State> {
-    override fun state(): StateFlow<State> = store.state()
+    override val state: StateFlow<State> = store.state
 }
 
 fun interface StateMapper<State, UiState> {
@@ -66,5 +66,6 @@ abstract class MappedScreenModel<State, UiState>(
     initialState: State,
     private val mapper: StateMapper<State, UiState>
 ) : FluxScreenModel<State>(context, initialState), Stateful<UiState> {
-    override fun state(): StateFlow<UiState> = store.state().mapIn(coroutineScope, mapper::map)
+
+    override val state: StateFlow<UiState> = store.state.mapIn(coroutineScope, mapper::map)
 }

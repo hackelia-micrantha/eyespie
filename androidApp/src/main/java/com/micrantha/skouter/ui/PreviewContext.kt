@@ -59,7 +59,7 @@ class PreviewContext(
 
     override fun <T> createStore(initialState: T, scope: CoroutineScope): Store<T> {
         return object : Store<T> {
-            override fun state(): StateFlow<T> = MutableStateFlow(initialState)
+            override val state: StateFlow<T> = MutableStateFlow(initialState)
             override fun dispatch(action: Action) = Unit
             override fun applyEffect(effect: Effect<T>): Store<T> = this
             override fun addReducer(reducer: Reducer<T>): Store<T> = this

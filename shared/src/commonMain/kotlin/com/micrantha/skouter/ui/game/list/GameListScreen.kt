@@ -36,7 +36,7 @@ class GameListScreen(
             viewModel.dispatch(Load)
         }
 
-        val state by viewModel.state().collectAsState()
+        val state by viewModel.state.collectAsState()
 
         render(state, viewModel::dispatch)
     }

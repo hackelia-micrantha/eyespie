@@ -38,7 +38,7 @@ class ScanScreen : Screen {
 
         val viewModel: ScanScreenModel = rememberScreenModel()
 
-        val state by viewModel.state().collectAsState()
+        val state by viewModel.state.collectAsState()
 
         Render(state, viewModel::dispatch)
     }

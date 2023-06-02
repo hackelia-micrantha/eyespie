@@ -36,7 +36,7 @@ class LoginScreen : Screen {
     override fun Content() {
         val viewModel = rememberScreenModel<LoginScreenModel>()
 
-        val state by viewModel.state().collectAsState()
+        val state by viewModel.state.collectAsState()
 
         Render(state, viewModel::dispatch)
     }

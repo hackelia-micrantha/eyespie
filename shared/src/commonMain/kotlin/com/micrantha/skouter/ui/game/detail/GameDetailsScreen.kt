@@ -35,7 +35,7 @@ data class GameDetailsScreen(private val arg: GameDetailScreenArg) : Screen, Sca
     override fun Content() {
         val viewModel: GameDetailsScreenModel = rememberScreenModel(arg = arg)
 
-        val state by viewModel.state().collectAsState()
+        val state by viewModel.state.collectAsState()
 
         Render(state, viewModel::dispatch)
     }

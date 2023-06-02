@@ -43,7 +43,7 @@ class FluxStore<State> internal constructor(
         return this
     }
 
-    override fun state(): StateFlow<State> = current.asStateFlow()
+    override val state: StateFlow<State> = current.asStateFlow()
 
     override fun listen(block: (State) -> Unit): Store<State> {
         current.onEach(block).launchIn(effectScope)
