@@ -77,11 +77,11 @@ kotlin {
                 implementation("io.ktor:ktor-client-logging:2.3.0")
                 implementation("io.ktor:ktor-client-auth:2.3.0")
 
-                implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.5")
-                implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.5")
-                implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.5")
-                implementation("io.github.jan-tennert.supabase:storage-kt:0.9.5")
-                implementation("io.github.jan-tennert.supabase:realtime-kt:0.9.5")
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:1.0.1")
+                implementation("io.github.jan-tennert.supabase:postgrest-kt:1.0.1")
+                implementation("io.github.jan-tennert.supabase:apollo-graphql:1.0.1")
+                implementation("io.github.jan-tennert.supabase:storage-kt:1.0.1")
+                implementation("io.github.jan-tennert.supabase:realtime-kt:1.0.1")
 
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:media-compose:0.11.0")
@@ -166,21 +166,30 @@ apollo {
     }
 }
 
+
+// TODO: plugin
+val propertyKeys = listOf(
+    "apiKey", "apiDomain",
+    "supaBaseKey", "supaBaseDomain",
+    "userLoginEmail", "userLoginPassword",
+    "keyStore", "keyStorePassword"
+)
+
 fun localProperties(): Properties {
     val properties = Properties()
-    properties.load(project.rootProject.file("config.properties").reader())
+    try {
+        properties.load(project.rootProject.file("config.properties").reader())
+    } catch (err: Throwable) {
+        println("Please setup 'config.properties' with the following keys:")
+        propertyKeys.forEach(::println)
+    }
     return properties
 }
 
 val config = localProperties()
 
 buildConfig {
-    listOf(
-        "apiKey", "apiDomain",
-        "supaBaseKey", "supaBaseDomain",
-        "userLoginEmail", "userLoginPassword",
-        "keyStore", "keyStorePassword"
-    ).forEach { key ->
+    propertyKeys.forEach { key ->
         config[key]?.let {
             buildConfigField("String", key, "\"${it}\"")
         }
