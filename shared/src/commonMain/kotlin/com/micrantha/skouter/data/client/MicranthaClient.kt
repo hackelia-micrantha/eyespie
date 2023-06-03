@@ -1,8 +1,8 @@
 package com.micrantha.skouter.data.client
 
 import Skouter.shared.BuildConfig
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
+import com.micrantha.bluebell.data.Log
+import com.micrantha.bluebell.data.init
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
@@ -21,7 +21,7 @@ class MicranthaClient {
         install(Logging) {
             logger = object : Logger {
                 override fun log(message: String) {
-                    Napier.v("ImageLoader", null, message)
+                    Log.v("ImageLoader", null, message)
                 }
             }
             level = LogLevel.HEADERS
@@ -31,7 +31,7 @@ class MicranthaClient {
                 "apiKey" to BuildConfig.apiKey
             }
         }
-    }.also { Napier.base(DebugAntilog()) }
+    }.also { Log.init() }
 
     suspend fun recognize(data: ByteArray, contentType: String) =
         httpClient.submitFormWithBinaryData(

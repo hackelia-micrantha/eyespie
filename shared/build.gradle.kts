@@ -53,6 +53,8 @@ kotlin {
                 api(compose.foundation)
                 api(compose.materialIconsExtended)
                 api(compose.material3)
+                api(compose.animation)
+                api(compose.animationGraphics)
 
                 api("org.kodein.di:kodein-di:7.20.1")
                 api("org.kodein.di:kodein-di-framework-compose:7.20.1")
@@ -77,11 +79,11 @@ kotlin {
                 implementation("io.ktor:ktor-client-logging:2.3.0")
                 implementation("io.ktor:ktor-client-auth:2.3.0")
 
-                implementation("io.github.jan-tennert.supabase:gotrue-kt:0.9.5")
-                implementation("io.github.jan-tennert.supabase:postgrest-kt:0.9.5")
-                implementation("io.github.jan-tennert.supabase:apollo-graphql:0.9.5")
-                implementation("io.github.jan-tennert.supabase:storage-kt:0.9.5")
-                implementation("io.github.jan-tennert.supabase:realtime-kt:0.9.5")
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:1.0.0")
+                implementation("io.github.jan-tennert.supabase:postgrest-kt:1.0.0")
+                implementation("io.github.jan-tennert.supabase:apollo-graphql:1.0.0")
+                implementation("io.github.jan-tennert.supabase:storage-kt:1.0.0")
+                implementation("io.github.jan-tennert.supabase:realtime-kt:1.0.0")
 
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:media-compose:0.11.0")
@@ -123,7 +125,6 @@ kotlin {
                 implementation("androidx.camera:camera-camera2:1.2.3")
                 implementation("androidx.camera:camera-lifecycle:1.2.3")
                 implementation("androidx.camera:camera-video:1.2.3")
-
                 implementation("androidx.camera:camera-view:1.2.3")
                 implementation("androidx.camera:camera-extensions:1.2.3")
 

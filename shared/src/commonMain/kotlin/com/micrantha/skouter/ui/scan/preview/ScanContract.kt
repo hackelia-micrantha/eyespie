@@ -10,15 +10,19 @@ import com.micrantha.skouter.platform.CameraImage
 data class ScanState(
     val labels: LabelProof? = null,
     val location: LocationClue? = null,
-    val image: CameraImage? = null
+    val image: CameraImage? = null,
+    val enabled: Boolean = true
 )
 
 data class ScanUiState(
-    val clues: List<Clue<*>>
+    val clues: List<Clue<*>>,
+    val enabled: Boolean
 )
 
 sealed class ScanAction : Action {
     object SaveScan : ScanAction()
+
+    object SaveError : ScanAction()
 
     data class ImageCaptured(val image: CameraImage) : ScanAction()
 

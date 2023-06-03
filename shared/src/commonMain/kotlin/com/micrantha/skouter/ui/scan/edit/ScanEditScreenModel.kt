@@ -3,7 +3,7 @@ package com.micrantha.skouter.ui.scan.edit
 import com.micrantha.bluebell.ui.screen.MappedScreenModel
 import com.micrantha.bluebell.ui.screen.ScreenContext
 
-class ScanEditViewScreenModel(
+class ScanEditScreenModel(
     context: ScreenContext,
     environment: ScanEditEnvironment
 ) : MappedScreenModel<ScanEditState, ScanEditUiState>(

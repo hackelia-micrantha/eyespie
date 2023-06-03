@@ -49,7 +49,11 @@ class ScanScreen : Screen {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CameraScanner(modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(), dispatch)
+            CameraScanner(
+                modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
+                state.enabled,
+                dispatch
+            )
 
             if (state.clues.isEmpty().not()) {
                 ScannedClues(
@@ -58,6 +62,7 @@ class ScanScreen : Screen {
                 )
             }
             Button(
+                enabled = state.enabled,
                 modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
                     .padding(Dimensions.content),
                 onClick = { dispatch(SaveScan) }

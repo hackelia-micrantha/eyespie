@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui
 
+import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.ui.dashboard.DashboardContextualScreenModel
 import com.micrantha.skouter.ui.dashboard.DashboardEnvironment
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
@@ -16,12 +17,14 @@ import com.micrantha.skouter.ui.game.list.GameListScreenModel
 import com.micrantha.skouter.ui.login.LoginEnvironment
 import com.micrantha.skouter.ui.login.LoginScreen
 import com.micrantha.skouter.ui.login.LoginScreenModel
+import com.micrantha.skouter.ui.scan.edit.ScanEditEnvironment
+import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
+import com.micrantha.skouter.ui.scan.edit.ScanEditScreenModel
 import com.micrantha.skouter.ui.scan.preview.ScanEnvironment
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreenModel
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.ScanImageUseCase
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProvider
@@ -41,7 +44,7 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProvider { GameListScreen(instance()) }
 
     bindProviderOf(::GameDetailsEnvironment)
-    bindFactory { arg: GameDetailScreenArg -> GameDetailsScreenModel(arg, instance(), instance()) }
+    bindProvider { GameDetailsScreenModel(instance(), instance()) }
     bindFactory { arg: GameDetailScreenArg -> GameDetailsScreen(arg) }
 
     bindProvider { GameCreateScreenModel(instance()) }
@@ -56,7 +59,10 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::ScanEnvironment)
     bindProviderOf(::ScanScreenModel)
 
-    bindProviderOf(::ScanImageUseCase)
+    bindProviderOf(::ScanEditEnvironment)
+    bindProviderOf(::ScanEditScreenModel)
+    bindFactory { proof: Proof -> ScanEditScreen(proof) }
+
     bindProviderOf(::CameraCaptureUseCase)
     bindProviderOf(::SaveThingImageUseCase)
 }

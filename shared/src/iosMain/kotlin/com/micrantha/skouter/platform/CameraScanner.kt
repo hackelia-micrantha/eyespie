@@ -5,5 +5,5 @@ import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.domain.arch.Dispatch
 
 @Composable
-actual fun CameraScanner(modifier: Modifier, dispatch: Dispatch) {
+actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatch) {
 }

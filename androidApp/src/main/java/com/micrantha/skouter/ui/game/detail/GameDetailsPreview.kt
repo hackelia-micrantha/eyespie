@@ -10,6 +10,7 @@ import com.micrantha.skouter.domain.model.Game.Limits
 import com.micrantha.skouter.ui.PreviewContext
 import kotlinx.datetime.Clock.System
 import org.kodein.di.bind
+import org.kodein.di.bindProvider
 import org.kodein.di.factory
 import org.kodein.di.instance
 import kotlin.time.Duration
@@ -43,15 +44,12 @@ fun GameDetailsPreview(
     @PreviewParameter(GameDetailsProvider::class) state: GameDetailsState
 ) = PreviewContext(
     bindings = {
-        bind {
-            factory { arg: GameDetailScreenArg ->
-                GameDetailsScreenModel(
-                    arg,
+        bindProvider {
+            GameDetailsScreenModel(
                     instance(),
                     instance(),
                     state
                 )
-            }
         }
     }
 ) {

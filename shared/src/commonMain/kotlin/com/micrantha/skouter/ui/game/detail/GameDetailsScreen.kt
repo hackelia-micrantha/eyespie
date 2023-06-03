@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import com.micrantha.bluebell.ui.scaffold.Scaffolding
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.ui.component.Strings
+import com.micrantha.skouter.ui.game.detail.GameDetailsAction.Load
 import com.micrantha.skouter.ui.player.component.PlayerListContent
 import com.micrantha.skouter.ui.thing.component.ThingListContent
 
@@ -33,7 +35,11 @@ data class GameDetailsScreen(private val arg: GameDetailScreenArg) : Screen, Sca
 
     @Composable
     override fun Content() {
-        val viewModel: GameDetailsScreenModel = rememberScreenModel(arg = arg)
+        val viewModel: GameDetailsScreenModel = rememberScreenModel()
+
+        LaunchedEffect(Unit) {
+            viewModel.dispatch(Load(arg.id))
+        }
 
         val state by viewModel.state.collectAsState()
 

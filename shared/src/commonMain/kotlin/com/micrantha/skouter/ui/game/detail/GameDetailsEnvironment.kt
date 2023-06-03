@@ -43,7 +43,7 @@ class GameDetailsEnvironment(
     override suspend fun invoke(action: Action, state: GameDetailsState) {
         when (action) {
             is Load -> {
-                gameRepository.game(action.arg.id).onFailure {
+                gameRepository.game(action.id).onFailure {
                     dispatch(Failure(it))
                 }.onSuccess { game ->
                     dispatch(Loaded(game))

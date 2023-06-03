@@ -2,6 +2,7 @@ package com.micrantha.skouter.platform
 
 import com.google.android.gms.tasks.Tasks
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.label.ImageLabel
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import com.micrantha.skouter.data.clue.model.LabelResponse
@@ -21,14 +22,14 @@ actual class ImageLabelAnalyzer {
 
                 val result = Tasks.await(labeler.process(input))
 
-                continuation.resume(Result.success(result.map {
-                    LabelResponse(
-                        it.confidence,
-                        it.text
-                    )
-                }))
+                continuation.resume(Result.success(result.map(::map)))
             } catch (err: Throwable) {
                 continuation.resume(Result.failure(err))
             }
         }
+
+    private fun map(label: ImageLabel) = LabelResponse(
+        confidence = label.confidence,
+        text = label.text
+    )
 }

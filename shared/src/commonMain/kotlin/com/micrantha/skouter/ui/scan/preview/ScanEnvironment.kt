@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.scan.preview
 
+import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
@@ -7,18 +8,21 @@ import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clue
+import com.micrantha.skouter.domain.model.Proof
+import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.LabelScanned
+import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveError
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
-import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
-import io.github.aakira.napier.Napier
+import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 
 class ScanEnvironment(
     context: ScreenContext,
-    private val saveThingImageUseCase: SaveThingImageUseCase
+    private val cameraCaptureUseCase: CameraCaptureUseCase
 ) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState>,
     Router by context.router,
     FileSystem by context.fileSystem,
@@ -27,22 +31,29 @@ class ScanEnvironment(
 
     override suspend fun invoke(action: Action, state: ScanState) {
         when (action) {
-            is SaveScan -> saveThingImageUseCase(state.image!!, state.asProof()).onSuccess {
-                Napier.d("image url: $it")
-                navigateBack()
+            is SaveScan -> cameraCaptureUseCase(
+                state.image!!.toByteArray()
+            ).onSuccess {
+                Log.d("image url: $it")
+                navigate<ScanEditScreen, Proof>(arg = state.asProof())
+            }.onFailure {
+                Log.d("unable to save scan", it)
+                dispatch(SaveError)
             }
-            is LabelScanned -> Napier.d("scanned label ${action.data}")
+            is LabelScanned -> Log.d("scanned label ${action.data}")
         }
     }
 
     override fun reduce(state: ScanState, action: Action) = when (action) {
         is ImageCaptured -> state.copy(image = action.image)
         is LabelScanned -> state.copy(labels = action.data)
+        is SaveScan -> state.copy(enabled = false)
         else -> state
     }
 
     override fun map(state: ScanState) = ScanUiState(
-        clues = state.clues()
+        clues = state.clues(),
+        enabled = state.enabled
     )
 
     fun ScanState.clues() = mutableListOf<Clue<*>>().apply {

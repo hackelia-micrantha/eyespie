@@ -4,7 +4,6 @@ import com.micrantha.bluebell.ui.screen.MappedScreenModel
 import com.micrantha.bluebell.ui.screen.ScreenContext
 
 class GameDetailsScreenModel(
-    private val arg: GameDetailScreenArg,
     screenContext: ScreenContext,
     environment: GameDetailsEnvironment,
     initialState: GameDetailsState = GameDetailsState(),
@@ -16,12 +15,5 @@ class GameDetailsScreenModel(
     init {
         store.addReducer(environment::reduce)
             .applyEffect(environment::invoke)
-
-        onActive()
-    }
-
-    private fun onActive() {
-
-        dispatch(GameDetailsAction.Load(arg))
     }
 }

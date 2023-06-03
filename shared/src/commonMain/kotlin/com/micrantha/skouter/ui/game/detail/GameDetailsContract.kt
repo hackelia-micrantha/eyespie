@@ -19,7 +19,7 @@ data class GameDetailsUiState(
 )
 
 sealed class GameDetailsAction : Action {
-    data class Load(val arg: GameDetailScreenArg) : GameDetailsAction()
+    data class Load(val id: String) : GameDetailsAction()
     data class Loaded(val game: Game) : GameDetailsAction()
 }
 

@@ -3,6 +3,7 @@ package com.micrantha.skouter.platform
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
+import androidx.camera.core.UseCaseGroup
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
@@ -16,7 +17,7 @@ import com.micrantha.bluebell.domain.arch.Dispatch
 import org.kodein.di.compose.rememberFactory
 
 @Composable
-actual fun CameraScanner(modifier: Modifier, dispatch: Dispatch) {
+actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatch) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -27,29 +28,38 @@ actual fun CameraScanner(modifier: Modifier, dispatch: Dispatch) {
         factory = { ctx ->
             val previewView = PreviewView(ctx)
             val executor = ContextCompat.getMainExecutor(ctx)
-            cameraProviderFuture.addListener({
-                val cameraProvider = cameraProviderFuture.get()
-                val preview = Preview.Builder().build().also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
-                }
 
-                val cameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                    .build()
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
+            }
 
+            val useCases = UseCaseGroup.Builder()
+
+            useCases.addUseCase(preview)
+
+            if (enabled) {
                 val imageAnalysis = ImageAnalysis.Builder()
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
                     .apply {
                         setAnalyzer(executor, analyzer(dispatch))
                     }
+                useCases.addUseCase(imageAnalysis)
+            }
+
+            val cameraSelector = CameraSelector.Builder()
+                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                .build()
+
+
+            cameraProviderFuture.addListener({
+                val cameraProvider = cameraProviderFuture.get()
 
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     lifecycleOwner,
                     cameraSelector,
-                    imageAnalysis,
-                    preview
+                    useCases.build()
                 )
             }, executor)
             previewView

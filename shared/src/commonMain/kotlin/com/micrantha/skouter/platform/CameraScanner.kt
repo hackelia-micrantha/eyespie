@@ -5,4 +5,4 @@ import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.domain.arch.Dispatch
 
 @Composable
-expect fun CameraScanner(modifier: Modifier, dispatch: Dispatch)
+expect fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatch)

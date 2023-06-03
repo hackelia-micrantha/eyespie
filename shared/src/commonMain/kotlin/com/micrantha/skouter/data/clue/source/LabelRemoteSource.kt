@@ -1,8 +1,8 @@
 package com.micrantha.skouter.data.clue.source
 
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.data.client.MicranthaClient
 import com.micrantha.skouter.data.clue.model.RecognitionResponse
-import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 
 class LabelRemoteSource(
@@ -12,7 +12,7 @@ class LabelRemoteSource(
         val response: RecognitionResponse = micranthaClient.recognize(image, contentType).body()
         Result.success(response)
     } catch (err: Throwable) {
-        Napier.e("recognize", err)
+        Log.e("recognize", err)
         Result.failure(err)
     }
 
