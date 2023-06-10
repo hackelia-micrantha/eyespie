@@ -11,7 +11,8 @@ data class Thing(
     val guessed: Boolean,
     val guesses: List<Guess>,
     val imageUrl: String,
-    val clues: Proof
+    val clues: Proof,
+    val location: Location.Point
 ) : Entity, Creatable {
 
 
@@ -30,6 +31,10 @@ data class Thing(
         val imageUrl: String
     ) : Entity, Creatable
 
+    data class Create(
+        val name: String,
+        val proof: Proof
+    )
 }
 
 typealias ThingList = List<Thing.Listing>

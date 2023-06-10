@@ -22,6 +22,7 @@ import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.platform.CameraScanner
+import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
 import dev.icerock.moko.permissions.Permission.CAMERA
 import dev.icerock.moko.permissions.PermissionsController
@@ -35,6 +36,8 @@ class ScanScreen : Screen {
         LaunchedEffect(Unit) {
             permissions.providePermission(CAMERA)
         }
+
+        LocationEnabledEffect(Unit)
 
         val viewModel: ScanScreenModel = rememberScreenModel()
 

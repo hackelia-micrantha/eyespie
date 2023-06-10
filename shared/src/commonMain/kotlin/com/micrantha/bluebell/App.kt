@@ -3,7 +3,7 @@ package com.micrantha.bluebell
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.micrantha.bluebell.ui.scaffold.ScaffoldScreen
+import cafe.adriel.voyager.core.screen.Screen
 import com.micrantha.bluebell.ui.scaffold.Scaffolding
 import com.micrantha.bluebell.ui.screen.LocalDispatcher
 import com.micrantha.bluebell.ui.screen.LocalScreenContext
@@ -18,7 +18,7 @@ fun BluebellApp(
     module: DI = localDI(),
     content: @Composable () -> Unit
 ) = subDI(parentDI = module, diBuilder = {
-    import(bluebellModules())
+    importOnce(bluebellModules())
 }) {
     val screenContext by rememberInstance<ScreenContext>()
 
@@ -26,15 +26,16 @@ fun BluebellApp(
         LocalScreenContext provides screenContext,
         LocalDispatcher provides screenContext.dispatcher
     ) {
-        LayoutScreen(content)
+        val screen = LocalScreenContext.current.router.screen
+
+        LayoutScreen(screen, content)
     }
 }
 
 @Composable
-private fun LayoutScreen(content: @Composable () -> Unit) {
-    val screen = LocalScreenContext.current.router.screen
+private fun LayoutScreen(screen: Screen, content: @Composable () -> Unit) {
     if (screen is Scaffolding) {
-        ScaffoldScreen(screen, content)
+        content()
     } else {
         Surface(content = content)
     }

@@ -13,7 +13,8 @@ sealed interface Clue<T : Comparable<T>> : Comparable<Clue<T>> {
 }
 
 data class Clues(
-    val label: LabelClue? = null
+    val label: LabelClue? = null,
+    val location: LocationClue? = null,
 )
 
 data class ColorClue(

@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui
 
-import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.ui.dashboard.DashboardContextualScreenModel
 import com.micrantha.skouter.ui.dashboard.DashboardEnvironment
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
@@ -18,7 +17,6 @@ import com.micrantha.skouter.ui.login.LoginEnvironment
 import com.micrantha.skouter.ui.login.LoginScreen
 import com.micrantha.skouter.ui.login.LoginScreenModel
 import com.micrantha.skouter.ui.scan.edit.ScanEditEnvironment
-import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreenModel
 import com.micrantha.skouter.ui.scan.preview.ScanEnvironment
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
@@ -32,7 +30,7 @@ import org.kodein.di.bindProviderOf
 import org.kodein.di.instance
 
 internal fun uiModules() = DI.Module("Skouter UI") {
-    bindProviderOf(::MainEnvironment)
+    bindProviderOf(::MainScreenModel)
     bindProviderOf(::MainScreen)
 
     bindProviderOf(::LoginEnvironment)
@@ -61,7 +59,6 @@ internal fun uiModules() = DI.Module("Skouter UI") {
 
     bindProviderOf(::ScanEditEnvironment)
     bindProviderOf(::ScanEditScreenModel)
-    bindFactory { proof: Proof -> ScanEditScreen(proof) }
 
     bindProviderOf(::CameraCaptureUseCase)
     bindProviderOf(::SaveThingImageUseCase)

@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.model.UiResult.Busy
@@ -17,7 +16,7 @@ import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.bluebell.ui.components.status.EmptyContent
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
-import com.micrantha.bluebell.ui.scaffold.Scaffolding
+import com.micrantha.bluebell.ui.scaffold.ScaffoldScreen
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.ui.component.Strings.Games
 import com.micrantha.skouter.ui.game.component.GameListContent
@@ -27,9 +26,9 @@ import com.micrantha.skouter.ui.navi.NavAction
 
 class GameListScreen(
     private val context: ScreenContext
-) : Screen, Scaffolding {
+) : ScaffoldScreen() {
     @Composable
-    override fun Content() {
+    override fun Render() {
         val viewModel = rememberScreenModel<GameListScreenModel>()
 
         LaunchedEffect(Unit) {
@@ -48,7 +47,6 @@ class GameListScreen(
         }
     ))
 
-    @Composable
     override fun title() = context.i18n.string(Games)
 
     @Composable

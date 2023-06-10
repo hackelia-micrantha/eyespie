@@ -10,32 +10,40 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
-import com.micrantha.bluebell.domain.ext.rememberStore
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.ui.theme.Dimensions.List
 import com.micrantha.skouter.ui.MainAction.Load
-import org.kodein.di.compose.rememberInstance
+
+class SplashScreen : Screen {
+    @Composable
+    override fun Content() {
+        SplashScreenContent()
+    }
+}
 
 class MainScreen : Screen {
 
     @Composable
     override fun Content() {
 
-        val environment by rememberInstance<MainEnvironment>()
-
-        // TODO: double check profiling on this
-        val store = rememberStore(Unit).applyEffect(environment::invoke)
+        val model = rememberScreenModel<MainScreenModel>()
 
         LaunchedEffect(Unit) {
-            store.dispatch(Load)
+            model.dispatch(Load)
         }
 
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Icon(
-                imageVector = Skouter.defaultIcon,
-                modifier = Modifier.size(List.placeholder),
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }
+        SplashScreenContent()
+    }
+}
+
+@Composable
+private fun SplashScreenContent() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Icon(
+            imageVector = Skouter.defaultIcon,
+            modifier = Modifier.size(List.placeholder),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
     }
 }

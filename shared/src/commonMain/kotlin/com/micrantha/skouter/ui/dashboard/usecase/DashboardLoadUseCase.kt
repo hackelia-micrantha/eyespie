@@ -4,7 +4,7 @@ import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.domain.model.ThingList
 import com.micrantha.skouter.domain.repository.PlayerRepository
-import com.micrantha.skouter.domain.repository.ThingsRepository
+import com.micrantha.skouter.domain.repository.ThingRepository
 import com.micrantha.skouter.ui.dashboard.DashboardAction
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
 import io.github.aakira.napier.Napier
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
 
 class DashboardLoadUseCase(
-    private val thingsRepository: ThingsRepository,
+    private val thingsRepository: ThingRepository,
     private val playerRepository: PlayerRepository,
     private val currentSession: CurrentSession
 ) {

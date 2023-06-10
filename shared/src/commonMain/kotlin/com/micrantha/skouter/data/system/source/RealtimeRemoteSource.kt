@@ -11,5 +11,5 @@ class RealtimeRemoteSource(
 
     fun disconnect() = supaRealtimeClient.disconnect()
 
-    fun things() = supaRealtimeClient.subscribe("Thing")
+    fun subscribe(table: String) = supaRealtimeClient.subscribe(table)
 }

@@ -1,30 +1,32 @@
 package com.micrantha.skouter.ui.scan.usecase
 
-import com.benasher44.uuid.uuid4
 import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.data.account.model.CurrentSession
-import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.repository.StorageRepository
-import com.micrantha.skouter.domain.repository.ThingsRepository
+import com.micrantha.skouter.domain.repository.ThingRepository
+import com.micrantha.skouter.platform.CameraImage
 
 class SaveThingImageUseCase(
     private val storageRepository: StorageRepository,
-    private val currentAccount: CurrentSession,
-    private val thingsRepository: ThingsRepository
+    private val currentSession: CurrentSession,
+    private val thingRepository: ThingRepository,
 ) {
 
     suspend operator fun invoke(
-        data: ByteArray,
-        proof: Proof,
-        name: String = uuid4().toString()
+        thing: Thing.Create,
+        image: CameraImage
     ): Result<Thing> = try {
-        val user = currentAccount.requirePlayer()
+        val user = currentSession.requirePlayer()
 
-        storageRepository.upload("${user.id}/${name}.jpg", data).map {
-            thingsRepository.create(name, it, proof, user.id).getOrThrow()
+        val location = user.location!!
+
+        storageRepository.upload(
+            "${user.id}/${thing.name}.jpg",
+            image.toByteArray()
+        ).map { url ->
+            thingRepository.create(thing, url, user.id, location).getOrThrow()
         }
-
     } catch (err: Throwable) {
         Log.e("upload image", err)
         Result.failure(err)

@@ -11,12 +11,17 @@ data class Location(
     var country: String? = null,
     var accuracy: Float = Float.NaN
 ) : Comparable<Location> {
+
     data class Point(
         val latitude: Double = Double.NaN,
         val longitude: Double = Double.NaN
     ) : Comparable<Point> {
 
         val isValid = !latitude.isNaN() && !longitude.isNaN()
+
+        override fun toString(): String {
+            return "($latitude,$longitude)"
+        }
 
         override fun compareTo(other: Point): Int {
             return distanceTo(latitude, longitude, other.latitude, other.longitude).toInt()

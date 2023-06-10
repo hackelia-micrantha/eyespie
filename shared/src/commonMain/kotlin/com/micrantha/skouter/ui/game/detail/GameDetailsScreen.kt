@@ -10,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.i18n.longDateTime
@@ -20,7 +19,7 @@ import com.micrantha.bluebell.ui.components.LabeledText
 import com.micrantha.bluebell.ui.components.TabPager
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
-import com.micrantha.bluebell.ui.scaffold.Scaffolding
+import com.micrantha.bluebell.ui.scaffold.ScaffoldScreen
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.ui.component.Strings
@@ -28,13 +27,12 @@ import com.micrantha.skouter.ui.game.detail.GameDetailsAction.Load
 import com.micrantha.skouter.ui.player.component.PlayerListContent
 import com.micrantha.skouter.ui.thing.component.ThingListContent
 
-data class GameDetailsScreen(private val arg: GameDetailScreenArg) : Screen, Scaffolding {
+data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScreen() {
 
-    @Composable
     override fun title() = arg.title
 
     @Composable
-    override fun Content() {
+    override fun Render() {
         val viewModel: GameDetailsScreenModel = rememberScreenModel()
 
         LaunchedEffect(Unit) {

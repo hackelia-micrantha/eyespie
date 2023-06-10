@@ -1,15 +1,15 @@
 package com.micrantha.skouter.data.player.mapping
 
 import com.micrantha.skouter.data.player.model.PlayerResponse
-import com.micrantha.skouter.domain.model.Location
-import com.micrantha.skouter.domain.model.Location.Point
+import com.micrantha.skouter.data.system.mapping.LocationDomainMapper
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Player.Name
 import com.micrantha.skouter.domain.model.Player.Score
 import kotlinx.datetime.toInstant
-import kotlinx.serialization.json.jsonPrimitive
 
-class PlayerDomainMapper {
+class PlayerDomainMapper(
+    private val locationMapper: LocationDomainMapper
+) {
 
     fun list(data: PlayerResponse) = Player.Listing(
         id = data.id,
@@ -32,25 +32,9 @@ class PlayerDomainMapper {
             total = data.total_score
         ),
         location = data.last_location?.let { json ->
-            point(json.jsonPrimitive.content)?.let {
-                Location(point = it)
-            }
+            locationMapper.map(json)
         },
         createdAt = data.created_at.toInstant()
     )
 
-    private fun point(data: String): Point? {
-        var start = data.indexOf('(')
-        if (start == -1) return null
-        var end = data.indexOf(',', start)
-        if (end == -1 || start >= end) return null
-        val latitude = data.substring(start + 1, end).toDouble()
-
-        start = end
-        end = data.indexOf(')', start)
-        if (end == -1 || start >= end) return null
-        val longitude = data.substring(start + 1, end).toDouble()
-        
-        return Point(latitude = latitude, longitude = longitude)
-    }
 }

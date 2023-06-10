@@ -5,12 +5,17 @@ import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.bluebell.ui.bluebellUi
 import org.kodein.di.DI
+import org.kodein.di.DITrigger
 import org.kodein.di.delegate
 
-fun bluebellModules() = DI.Module(name = "Bluebell") {
+fun bluebellModules(trigger: DITrigger? = null) = DI.Module(name = "Bluebell") {
 
-    import(bluebellDomain())
-    import(bluebellUi())
+    importOnce(bluebellDomain())
+    importOnce(bluebellUi())
 
     delegate<LocalizedRepository>().to<Platform>()
+
+    onReady {
+        trigger?.trigger()
+    }
 }

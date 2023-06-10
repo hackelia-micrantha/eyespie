@@ -3,15 +3,15 @@ package com.micrantha.skouter.data.clue
 import com.micrantha.skouter.data.clue.mapping.ClueDomainMapper
 import com.micrantha.skouter.data.clue.source.LabelLocalSource
 import com.micrantha.skouter.data.clue.source.LabelRemoteSource
-import com.micrantha.skouter.data.system.source.LocationLocalSource
 import com.micrantha.skouter.domain.model.LabelProof
+import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.repository.ClueRepository
 import com.micrantha.skouter.platform.CameraImage
 
 class ClueDataRepository(
     private val labelLocalSource: LabelLocalSource,
     private val labelRemoteSource: LabelRemoteSource,
-    private val locationLocalSource: LocationLocalSource,
     private val mapper: ClueDomainMapper,
 ) : ClueRepository {
     override suspend fun recognize(image: ByteArray, contentType: String) =
@@ -19,5 +19,11 @@ class ClueDataRepository(
 
     override suspend fun label(image: CameraImage): Result<LabelProof> {
         return labelLocalSource.analyze(image).map(mapper::labels)
+    }
+
+    override fun location(location: Location): Result<LocationClue> {
+        return Result.success(
+            mapper.clue(location)
+        )
     }
 }

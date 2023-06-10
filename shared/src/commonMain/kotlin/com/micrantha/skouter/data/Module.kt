@@ -21,6 +21,7 @@ import com.micrantha.skouter.data.storage.source.StorageLocalSource
 import com.micrantha.skouter.data.storage.source.StorageRemoteSource
 import com.micrantha.skouter.data.system.LocationDataRepository
 import com.micrantha.skouter.data.system.RealtimeDataRepository
+import com.micrantha.skouter.data.system.mapping.LocationDomainMapper
 import com.micrantha.skouter.data.system.mapping.RealtimeDomainMapper
 import com.micrantha.skouter.data.system.source.LocationLocalSource
 import com.micrantha.skouter.data.system.source.RealtimeRemoteSource
@@ -65,9 +66,10 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindProviderOf(::ClueDomainMapper)
     bindProviderOf(::LabelRemoteSource)
 
+    bindProviderOf(::LocationDomainMapper)
     bindProviderOf(::LocationDataRepository)
     bindProviderOf(::RealtimeDataRepository)
-    bindProviderOf(::RealtimeRemoteSource)
+    bindSingletonOf(::RealtimeRemoteSource)
     bindProviderOf(::RealtimeDomainMapper)
 
     delegate<LocationLocalSource>().to<LocationTracker>()

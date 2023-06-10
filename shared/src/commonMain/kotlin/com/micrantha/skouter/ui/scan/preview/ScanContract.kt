@@ -31,5 +31,6 @@ sealed class ScanAction : Action {
 
 
 fun ScanState.asProof() = Proof(
-    labels = labels
+    labels = labels,
+    location = location
 )

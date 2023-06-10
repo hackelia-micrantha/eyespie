@@ -1,13 +1,13 @@
 package com.micrantha.skouter.data.game.mapping
 
-import com.micrantha.skouter.graphql.GameListQuery
-import com.micrantha.skouter.graphql.GameNodeQuery
-import com.micrantha.skouter.graphql.GameNodeQuery.Node
-import com.micrantha.skouter.graphql.GameNodeQuery.Node2
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.domain.model.Game.Limits
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Thing
+import com.micrantha.skouter.graphql.GameListQuery
+import com.micrantha.skouter.graphql.GameNodeQuery
+import com.micrantha.skouter.graphql.GameNodeQuery.Node
+import com.micrantha.skouter.graphql.GameNodeQuery.Node2
 import kotlinx.datetime.toInstant
 import kotlin.time.Duration
 

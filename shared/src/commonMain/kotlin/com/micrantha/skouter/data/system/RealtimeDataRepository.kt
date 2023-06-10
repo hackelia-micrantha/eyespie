@@ -20,7 +20,7 @@ class RealtimeDataRepository(
 
     override suspend fun pause() = remoteSource.block()
 
-    suspend fun things() = remoteSource.things().map(mapper::thing).onEach {
+    suspend fun things() = remoteSource.subscribe("Thing").map(mapper::thing).onEach {
         dispatcher.dispatch(it)
     }.collect()
 }

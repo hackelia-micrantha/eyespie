@@ -1,10 +1,10 @@
 package com.micrantha.skouter
 
 import android.content.Context
-import com.micrantha.bluebell.platform.Platform
 import com.micrantha.bluebell.domain.arch.Dispatch
-import com.micrantha.skouter.platform.ImageLabelAnalyzer
+import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.platform.ClueAnalyzer
+import com.micrantha.skouter.platform.ImageLabelAnalyzer
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindInstance

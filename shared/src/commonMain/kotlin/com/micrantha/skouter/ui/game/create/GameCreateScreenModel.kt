@@ -9,6 +9,4 @@ class GameCreateScreenModel(
 ) : StatefulScreenModel<GameCreateState>(
     context = screenContext,
     initialState = initialState
-) {
-
-}
+)

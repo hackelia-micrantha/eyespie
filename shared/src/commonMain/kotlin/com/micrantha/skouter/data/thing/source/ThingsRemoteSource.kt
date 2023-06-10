@@ -1,7 +1,6 @@
 package com.micrantha.skouter.data.thing.source
 
 import com.micrantha.skouter.data.client.SupaClient
-import com.micrantha.skouter.data.client.SupaRealtimeClient
 import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingRequest
@@ -10,7 +9,6 @@ import io.github.aakira.napier.Napier
 
 class ThingsRemoteSource(
     private val supaClient: SupaClient,
-    private val realtimeClient: SupaRealtimeClient
 ) {
 
     suspend fun save(data: ThingRequest) = try {

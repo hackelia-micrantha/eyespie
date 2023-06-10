@@ -6,6 +6,7 @@ import com.micrantha.skouter.data.system.source.LocationLocalSource
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.repository.LocationRepository
 import dev.icerock.moko.geo.LatLng
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
@@ -25,6 +26,8 @@ class LocationDataRepository(
         flowToCurrentSession()
         exponentialBackoffToRemote()
     }
+
+    override fun flow(): Flow<Location> = location.filterNotNull()
 
     override fun stop() = localSource.stopTracking()
 

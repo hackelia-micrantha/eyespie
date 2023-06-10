@@ -7,7 +7,7 @@ import org.kodein.di.DI
 
 
 fun skouterModules() = DI.Module("Skouter") {
-    import(dataModules())
-    import(domainModules())
-    import(uiModules())
+    importOnce(dataModules())
+    importOnce(domainModules())
+    importOnce(uiModules())
 }

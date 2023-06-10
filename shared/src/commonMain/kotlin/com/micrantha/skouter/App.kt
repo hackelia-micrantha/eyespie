@@ -1,12 +1,15 @@
 package com.micrantha.skouter
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.micrantha.bluebell.BluebellApp
 import com.micrantha.skouter.ui.MainScreen
+import com.micrantha.skouter.ui.SplashScreen
 import com.micrantha.skouter.ui.component.rememberImageLoader
 import com.seiko.imageloader.LocalImageLoader
 import dev.icerock.moko.geo.LocationTracker
@@ -21,31 +24,46 @@ import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
 import org.kodein.di.DI
+import org.kodein.di.DITrigger
 import org.kodein.di.bindSingleton
+import org.kodein.di.compose.localDI
 import org.kodein.di.compose.subDI
 
+internal val modulesDITrigger = DITrigger()
+
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun SkouterApp(module: DI) = subDI(parentDI = module,
-    diBuilder = { import(skouterModules()) }
+fun SkouterApp(module: DI = localDI()) = subDI(
+    parentDI = module,
+    diBuilder = {
+        importOnce(skouterModules())
+    }
 ) {
-    Navigator(MainScreen()) { navigator ->
+    Navigator(SplashScreen()) { navigator ->
 
         val permissions = rememberPermissionsController()
         val mediaPicker = rememberMediaPickerController(permissions)
         val locationTracker = rememberLocationTracker(permissions)
         val imageLoader = rememberImageLoader()
 
-        subDI(diBuilder = {
-            bindSingleton { navigator }
-            bindSingleton { permissions }
-            bindSingleton { mediaPicker }
-            bindSingleton(overrides = true) { locationTracker }
-        }) {
-
+        subDI(
+            diBuilder = {
+                bindSingleton { navigator }
+                bindSingleton { permissions }
+                bindSingleton { mediaPicker }
+                bindSingleton(overrides = true) { locationTracker }
+            }
+        ) {
             CompositionLocalProvider(
                 LocalImageLoader provides imageLoader,
             ) {
                 BluebellApp {
+                    LaunchedEffect(Unit) {
+                        if (navigator.lastItem is SplashScreen) {
+                            navigator.replaceAll(MainScreen())
+                        }
+                    }
+
                     CurrentScreen()
                 }
             }

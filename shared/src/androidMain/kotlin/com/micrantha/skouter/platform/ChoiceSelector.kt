@@ -16,7 +16,7 @@ actual fun ChoiceSelector(
     onSelect: (Choice) -> Unit,
 ) {
     DropdownMenu(expanded = active, onDismissRequest = onDismiss) {
-        choices.forEachIndexed { index, choice ->
+        choices.forEach { choice ->
             DropdownMenuItem(text = {
                 Text(choice.label)
             }, onClick = { onSelect(choice) })
