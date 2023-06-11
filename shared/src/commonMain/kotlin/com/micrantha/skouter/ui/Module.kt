@@ -1,8 +1,8 @@
 package com.micrantha.skouter.ui
 
-import com.micrantha.skouter.ui.dashboard.DashboardContextualScreenModel
 import com.micrantha.skouter.ui.dashboard.DashboardEnvironment
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
+import com.micrantha.skouter.ui.dashboard.DashboardScreenModel
 import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
 import com.micrantha.skouter.ui.game.create.GameCreateScreen
 import com.micrantha.skouter.ui.game.create.GameCreateScreenModel
@@ -51,7 +51,7 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::DashboardScreen)
     bindProviderOf(::DashboardLoadUseCase)
     bindProviderOf(::DashboardEnvironment)
-    bindProvider { DashboardContextualScreenModel(instance(), instance()) }
+    bindProvider { DashboardScreenModel(instance(), instance()) }
 
     bindProviderOf(::ScanScreen)
     bindProviderOf(::ScanEnvironment)

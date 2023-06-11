@@ -87,7 +87,7 @@ class ThingsDomainMapper(
     )
 
     private fun prove(data: ProofData) = Proof(
-        labels = data.labels?.map { LabelClue(it.data, it.confidence) },
+        labels = data.labels?.map { LabelClue(it.data, it.confidence) }?.toSet(),
         location = data.location?.let {
             clueMapper.clue(it)
         }

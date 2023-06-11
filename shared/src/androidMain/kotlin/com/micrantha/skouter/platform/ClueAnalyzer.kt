@@ -7,6 +7,7 @@ import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.skouter.domain.repository.ClueRepository
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.LabelScanned
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ObjectScanned
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -26,7 +27,7 @@ class ClueAnalyzer(
         val rotation = image.imageInfo.rotationDegrees
 
         val cameraImage = with(image.image!!) {
-            CameraImage(this, this.toByteArray(), rotation)
+            CameraImage(this, rotation)
         }
 
         dispatch(ImageCaptured(cameraImage))
@@ -39,8 +40,12 @@ class ClueAnalyzer(
         }
     }
 
-    private suspend fun identifyClues(image: CameraImage) =
+    private suspend fun identifyClues(image: CameraImage) {
         repository.label(image).onSuccess { labels ->
             dispatch(LabelScanned(labels))
         }
+        repository.recognize(image).onSuccess { obj ->
+            dispatch(ObjectScanned(obj))
+        }
+    }
 }

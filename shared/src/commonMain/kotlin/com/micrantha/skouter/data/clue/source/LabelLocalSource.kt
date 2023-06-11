@@ -1,5 +1,5 @@
 package com.micrantha.skouter.data.clue.source
 
-import com.micrantha.skouter.platform.ImageLabelAnalyzer
+import com.micrantha.skouter.platform.analyzer.LabelImageAnalyzer
 
-typealias LabelLocalSource = ImageLabelAnalyzer
+typealias ImageLocalSource = LabelImageAnalyzer

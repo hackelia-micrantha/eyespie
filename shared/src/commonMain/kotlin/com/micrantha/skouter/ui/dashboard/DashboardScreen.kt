@@ -30,7 +30,7 @@ class DashboardScreen : Screen {
 
     @Composable
     override fun Content() {
-        val screenModel: DashboardContextualScreenModel = rememberScreenModel()
+        val screenModel: DashboardScreenModel = rememberScreenModel()
 
         LocationEnabledEffect()
 

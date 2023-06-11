@@ -4,14 +4,14 @@ import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
-import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.ui.component.Choice
+import okio.Path
 
 data class ScanEditState(
     val labels: MutableMap<String, LabelClue>? = null,
     val customLabel: String? = null,
     val name: String? = null,
-    val image: CameraImage? = null
+    val path: Path? = null
 )
 
 data class ScanEditUiState(
@@ -22,7 +22,7 @@ data class ScanEditUiState(
 
 data class ScanEditArg(
     val proof: Proof,
-    val image: CameraImage
+    val path: Path
 )
 
 sealed class ScanEditAction : Action {
@@ -40,7 +40,8 @@ sealed class ScanEditAction : Action {
 
 fun ScanEditState.asNewThing() = Thing.Create(
     proof = Proof(
-        labels = labels?.values?.toList()
+        labels = labels?.values?.toSet()
     ),
-    name = name!!
+    name = name!!,
+    path = path!!
 )

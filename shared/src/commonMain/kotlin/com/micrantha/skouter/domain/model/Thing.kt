@@ -1,6 +1,7 @@
 package com.micrantha.skouter.domain.model
 
 import kotlinx.datetime.Instant
+import okio.Path
 
 data class Thing(
     override val id: String,
@@ -33,7 +34,8 @@ data class Thing(
 
     data class Create(
         val name: String,
-        val proof: Proof
+        val proof: Proof,
+        val path: Path
     )
 }
 

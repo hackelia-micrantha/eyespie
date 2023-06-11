@@ -1,17 +1,34 @@
 ## Clues
 
-Clues are all about points for the user.
-
-The degree of difficulty of finding a clue should increase the points.
+- help players guess things
+- provide points based on difficulty
 
 ### Proofs
 
-Before a clue is selected, there are clue candidates used as proof
+- groups of candidate clues
+- use to verify a guess
+- used to select the best clue
 
-A proof is used to verify the guess, but also to select the best clue for description with the maximum point value.
+### Types
+
+#### Location
+
+- accuracy
+- importance (landmark, terrain)
+- distance from player home
+
+#### Labels
+
+- confidence level
+- number of labels found
+
+#### Color
+
+- color names
+- closest color
+- number of matches
 
 ### Storage
 
-Clues are saved as a serialized json object.
-
-Clues are naturally sortable so the first clue is the candidate.
+- serialized json
+- sortable by point value

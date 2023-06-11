@@ -1,6 +1,7 @@
 package com.micrantha.skouter.data.account.model
 
 import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Session
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +21,8 @@ class CurrentSession {
     }
 
     fun requirePlayer() = response.value!!.player
+    
+    val player: Player? = response.value?.player
 
     fun requireAccessToken() = response.value!!.accessToken
 

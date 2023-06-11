@@ -1,5 +1,7 @@
 package com.micrantha.skouter.platform
 
+import android.view.ScaleGestureDetector
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -32,7 +34,6 @@ actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatc
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(previewView.surfaceProvider)
             }
-
             val useCases = UseCaseGroup.Builder()
 
             useCases.addUseCase(preview)
@@ -51,16 +52,31 @@ actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatc
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build()
 
-
             cameraProviderFuture.addListener({
                 val cameraProvider = cameraProviderFuture.get()
 
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
+                val camera = cameraProvider.bindToLifecycle(
                     lifecycleOwner,
                     cameraSelector,
                     useCases.build()
                 )
+
+                val scaleGestureDetector =
+                    ScaleGestureDetector(context, object : SimpleOnScaleGestureListener() {
+                        override fun onScale(detector: ScaleGestureDetector): Boolean {
+                            return camera.cameraInfo.zoomState.value?.let { zoom ->
+                                val scale = zoom.zoomRatio * detector.scaleFactor
+                                camera.cameraControl.setZoomRatio(scale)
+                                true
+                            } ?: false
+                        }
+                    })
+
+                previewView.setOnTouchListener { view, event ->
+                    view.performClick()
+                    scaleGestureDetector.onTouchEvent(event)
+                }
             }, executor)
             previewView
         },

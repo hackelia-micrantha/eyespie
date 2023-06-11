@@ -23,7 +23,7 @@ class ScanEditEnvironment(
             labels = action.arg.proof.labels?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
-            image = action.arg.image
+            path = action.arg.path
         )
         is LabelChanged -> state.copy(
             customLabel = null,
@@ -41,8 +41,7 @@ class ScanEditEnvironment(
     override suspend fun invoke(action: Action, state: ScanEditState) {
         when (action) {
             is SaveScanEdit -> saveThingImageUseCase(
-                state.asNewThing(),
-                image = state.image!!
+                state.asNewThing()
             ).onSuccess {
                 context.router.navigateBack()
             }.onFailure {

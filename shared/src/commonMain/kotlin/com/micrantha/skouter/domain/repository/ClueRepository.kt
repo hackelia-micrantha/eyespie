@@ -1,8 +1,8 @@
 package com.micrantha.skouter.domain.repository
 
+import com.micrantha.skouter.domain.model.ColorProof
+import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelProof
-import com.micrantha.skouter.domain.model.Location
-import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.platform.CameraImage
 
 interface ClueRepository {
@@ -11,5 +11,7 @@ interface ClueRepository {
 
     suspend fun label(image: CameraImage): Result<LabelProof>
 
-    fun location(location: Location): Result<LocationClue>
+    suspend fun color(image: CameraImage): Result<ColorProof>
+
+    suspend fun recognize(image: CameraImage): Result<DetectProof>
 }
