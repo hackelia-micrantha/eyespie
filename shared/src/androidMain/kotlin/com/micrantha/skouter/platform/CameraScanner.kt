@@ -2,6 +2,7 @@ package com.micrantha.skouter.platform
 
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -23,7 +24,7 @@ actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatc
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-    val analyzer by rememberFactory<Dispatch, ClueAnalyzer>()
+    val analyzer by rememberFactory<CameraAnalyzerOptions, CameraAnalyzer>()
 
     AndroidView(
         modifier = modifier,
@@ -31,19 +32,28 @@ actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatc
             val previewView = PreviewView(ctx)
             val executor = ContextCompat.getMainExecutor(ctx)
 
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(previewView.surfaceProvider)
-            }
+            val preview = Preview.Builder()
+                .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                .build().also {
+                    it.setSurfaceProvider(previewView.surfaceProvider)
+                }
             val useCases = UseCaseGroup.Builder()
 
             useCases.addUseCase(preview)
 
+            val cameraAnalyzerOptions = CameraAnalyzerOptions(
+                dispatch = dispatch,
+                image = { previewView.bitmap }
+            )
+
             if (enabled) {
                 val imageAnalysis = ImageAnalysis.Builder()
+                    .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+                    .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
                     .apply {
-                        setAnalyzer(executor, analyzer(dispatch))
+                        setAnalyzer(executor, analyzer(cameraAnalyzerOptions))
                     }
                 useCases.addUseCase(imageAnalysis)
             }

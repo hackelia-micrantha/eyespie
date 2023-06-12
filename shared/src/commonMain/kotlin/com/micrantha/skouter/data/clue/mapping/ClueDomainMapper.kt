@@ -8,15 +8,17 @@ import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
-import com.micrantha.skouter.domain.model.DetectClue.Box
 import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.LocationClue
+import com.micrantha.skouter.domain.model.SegmentClue
+import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.ImageColor
 import com.micrantha.skouter.platform.ImageLabel
 import com.micrantha.skouter.platform.ImageObject
+import com.micrantha.skouter.platform.ImageSegment
 
 class ClueDomainMapper {
 
@@ -29,12 +31,19 @@ class ClueDomainMapper {
     fun label(data: List<ImageLabel>): LabelProof = data.map(::label).toSet()
 
     fun detect(data: ImageObject) = DetectClue(
-        data = with(data.box) { Box(this.topLeft.x, this.topLeft.y, this.width, this.height) },
+        rect = data.rect,
         labels = data.labels.map { LabelClue(it.data, it.confidence) }.toSet(),
-        id = data.id
+        data = data.id
     )
 
     fun detect(data: List<ImageObject>): DetectProof = data.map(::detect).toSet()
+
+    fun segment(data: ImageSegment) = SegmentClue(
+        data = data.mask.toImageBitmap(),
+        labels = data.labels
+    )
+
+    fun segment(data: List<ImageSegment>): SegmentProof = data.map(::segment)
 
     fun color(data: ImageColor) = ColorClue(
         data = data.name,

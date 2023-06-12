@@ -1,6 +1,7 @@
 package com.micrantha.skouter.platform
 
 import androidx.compose.ui.geometry.Rect
+import com.micrantha.bluebell.domain.arch.Action
 
 interface ImageAnalyzer<T> {
     suspend fun analyze(image: CameraImage): Result<T>
@@ -15,7 +16,7 @@ typealias ImageLabels = List<ImageLabel>
 
 data class ImageObject(
     val id: Int,
-    val box: Rect,
+    val rect: Rect,
     val labels: ImageLabels
 )
 
@@ -27,3 +28,12 @@ data class ImageColor(
 )
 
 typealias ImageColors = List<ImageColor>
+
+data class ImageCaptured(val image: CameraImage) : Action
+
+data class ImageSegment(
+    val labels: Set<String>,
+    val mask: CameraImage
+)
+
+typealias ImageSegments = List<ImageSegment>

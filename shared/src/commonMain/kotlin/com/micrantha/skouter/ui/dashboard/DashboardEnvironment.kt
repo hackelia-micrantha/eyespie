@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.dashboard
 
+import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
@@ -76,8 +77,10 @@ class DashboardEnvironment(
                 arg = action.arg
             )
             is ScanNewThing -> context.router.navigate<ScanScreen>()
-            is Load -> dashboardLoadUseCase().collect {
-                dispatch(it)
+            is Load -> dashboardLoadUseCase().collect { result ->
+                result.onSuccess { dispatch(it) }.onFailure {
+                    Log.e("unable to load dashboard", it)
+                }
             }
         }
     }

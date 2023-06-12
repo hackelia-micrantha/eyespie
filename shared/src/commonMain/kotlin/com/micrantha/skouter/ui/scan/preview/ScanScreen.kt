@@ -2,8 +2,8 @@ package com.micrantha.skouter.ui.scan.preview
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,21 +22,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.platform.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
@@ -63,10 +64,9 @@ class ScanScreen : Screen {
         Render(state, viewModel::dispatch)
     }
 
-    @OptIn(ExperimentalTextApi::class)
     @Composable
     private fun Render(state: ScanUiState, dispatch: Dispatch) {
-        BoxWithConstraints(
+        Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
@@ -76,15 +76,13 @@ class ScanScreen : Screen {
                 dispatch
             )
 
-            state.current?.let { (rect, label) ->
-                ScannedBox(
-                    rect = rect,
-                    label = label,
-                    imageSize = state.imageSize
+            if (state.overlays.isNotEmpty()) {
+                ScannedOverlays(
+                    data = state.overlays
                 )
             }
 
-            if (state.clues.isEmpty().not()) {
+            if (state.clues.isNotEmpty()) {
                 ScannedClues(
                     clues = state.clues,
                     modifier = Modifier.align(Alignment.TopEnd)
@@ -117,13 +115,10 @@ class ScanScreen : Screen {
 
     @OptIn(ExperimentalTextApi::class)
     @Composable
-    private fun BoxScope.ScannedBox(
+    private fun BoxScope.ScannedOverlays(
         modifier: Modifier = Modifier,
-        rect: Rect,
-        label: String,
-        imageSize: Size
+        data: List<ScanOverlay>
     ) {
-
         val measurer = rememberTextMeasurer()
 
         val textStyle = MaterialTheme.typography.labelMedium.copy(color = Color.Red)
@@ -133,32 +128,57 @@ class ScanScreen : Screen {
         Canvas(
             modifier = modifier.align(Alignment.TopCenter).fillMaxSize()
         ) {
-            matrix.reset()
-
-            matrix.scale(
-                size.width / imageSize.width,
-                size.height / imageSize.height
-            )
-            //matrix.translate(size.width, size.height)
-
-            val bounds = matrix.map(rect)
-
-            drawOutline(
-                outline = Outline.Rectangle(bounds),
-                color = Color.Red,
-                style = Stroke(1f)
-            )
-            drawText(
-                textMeasurer = measurer,
-                text = label,
-                topLeft = bounds.topLeft,
-                style = textStyle
-            )
+            data.forEach {
+                when (it) {
+                    is ScanBox -> DrawScanBox(it, matrix, textStyle, measurer)
+                    is ScanMask -> DrawScanMask(it, textStyle, measurer)
+                }
+            }
         }
     }
 
+    @OptIn(ExperimentalTextApi::class)
+    private fun DrawScope.DrawScanBox(
+        data: ScanBox,
+        matrix: Matrix,
+        textStyle: TextStyle,
+        measurer: TextMeasurer
+    ) {
+        matrix.reset()
+        matrix.scale(data.scale, data.scale)
+
+        val bounds = matrix.map(data.rect)
+
+        drawOutline(
+            outline = Outline.Rectangle(bounds),
+            color = Color.Red,
+            style = Stroke(1f)
+        )
+        drawText(
+            textMeasurer = measurer,
+            text = data.label,
+            topLeft = bounds.topLeft,
+            style = textStyle
+        )
+    }
+
+    @OptIn(ExperimentalTextApi::class)
+    private fun DrawScope.DrawScanMask(
+        data: ScanMask,
+        textStyle: TextStyle,
+        textMeasurer: TextMeasurer
+    ) {
+        drawImage(data.mask)
+        drawText(
+            textMeasurer = textMeasurer,
+            topLeft = Offset(Dimensions.screen.toPx(), Dimensions.screen.toPx()),
+            text = data.label,
+            style = textStyle
+        )
+    }
+
     @Composable
-    private fun ScannedClues(modifier: Modifier, clues: Set<Clue<*>>) {
+    private fun ScannedClues(modifier: Modifier, clues: List<String>) {
         Surface(
             modifier = modifier.padding(Dimensions.screen)
         ) {
@@ -168,7 +188,7 @@ class ScanScreen : Screen {
             ) {
                 clues.forEach {
                     Text(
-                        text = it.display(),
+                        text = it,
                         maxLines = 1,
                         modifier = Modifier.padding(Dimensions.content)
                     )

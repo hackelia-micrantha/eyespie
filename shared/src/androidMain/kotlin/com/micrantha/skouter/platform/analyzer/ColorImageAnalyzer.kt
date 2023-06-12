@@ -3,15 +3,12 @@ package com.micrantha.skouter.platform.analyzer
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Rect
 import androidx.palette.graphics.Palette
-import com.micrantha.bluebell.platform.toBitmap
 import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageColor
 import com.micrantha.skouter.platform.ImageColors
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.sqrt
 
@@ -24,29 +21,15 @@ actual class ColorImageAnalyzer(
     actual override suspend fun analyze(image: CameraImage): Result<ImageColors> =
         suspendCoroutine { continuation ->
             try {
-                val bitmap = image.image.toBitmap()!!
-
-                val colors = candidateColors(bitmap)
+                val colors = candidateColors(image.bitmap)
 
                 continuation.resume(Result.success(colors))
             } catch (err: Throwable) {
-                continuation.resumeWithException(err)
+                continuation.resume(Result.failure(err))
             }
         }
 
-    suspend fun analyze(image: CameraImage, bounds: Rect) = suspendCoroutine { continuation ->
-        try {
-            val bitmap = image.image.toBitmap(bounds)!!
-
-            val colors = candidateColors(bitmap)
-
-            continuation.resume(colors)
-        } catch (err: Throwable) {
-            continuation.resumeWithException(err)
-        }
-    }
-
-    private fun candidateColors(bitmap: Bitmap): List<ImageColor> {
+    private fun candidateColors(bitmap: Bitmap): ImageColors {
         val palette = Palette.from(bitmap).generate()
 
         val rgb = palette.dominantSwatch!!.rgb
@@ -58,7 +41,7 @@ actual class ColorImageAnalyzer(
         }.sortedBy { it.second }.take(5).map { (key, _) ->
             ImageColor(
                 key,
-                colorNames[key]!!.let { Color.rgb(it[0], it[1], it[2]) }
+                colorNames[key]!!.let { Color.rgb(it[0], it[1], it[2]) },
             )
         }.toList()
 

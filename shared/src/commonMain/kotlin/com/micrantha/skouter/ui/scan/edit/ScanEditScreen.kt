@@ -1,10 +1,12 @@
 package com.micrantha.skouter.ui.scan.edit
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
@@ -26,6 +28,7 @@ import com.micrantha.skouter.ui.component.ChoiceField
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.navi.NavAction
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ColorChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.CustomLabelChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.Init
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.LabelChanged
@@ -76,6 +79,14 @@ class ScanEditScreen(
             Column(
                 modifier = Modifier.align(Alignment.TopCenter)
             ) {
+                state.image?.let {
+                    Image(
+                        modifier = Modifier.size(Dimensions.Image.placeholder)
+                            .align(Alignment.CenterHorizontally),
+                        painter = it,
+                        contentDescription = null,
+                    )
+                }
                 OutlinedTextField(
                     modifier = Modifier
                         .padding(bottom = Dimensions.content)
@@ -85,7 +96,7 @@ class ScanEditScreen(
                     label = { Text(text = "Name") },
                     singleLine = true,
                     maxLines = 1,
-                    placeholder = { Text(text = "Please enter an identifying name for this thing") }
+                    placeholder = { Text(text = "Enter an identifying name") }
                 )
 
                 if (state.labels.isNotEmpty()) {
@@ -100,6 +111,18 @@ class ScanEditScreen(
                         }
                     ) { choice ->
                         dispatch(LabelChanged(choice))
+                    }
+                }
+
+                if (state.colors.isNotEmpty()) {
+                    ChoiceField(
+                        label = { Text(text = "Color") },
+                        choices = state.colors,
+                        onValue = {
+                            it.label
+                        },
+                    ) { choice ->
+                        dispatch(ColorChanged(choice))
                     }
                 }
             }

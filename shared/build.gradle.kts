@@ -100,8 +100,10 @@ kotlin {
                 implementation("com.google.mlkit:image-labeling:17.0.7")
                 implementation("com.google.mlkit:image-labeling-common:18.1.0")
                 implementation("com.google.mlkit:object-detection:17.0.0")
+
                 implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
-                implementation("org.tensorflow:tensorflow-lite:2.3.0")
+
+                implementation("org.tensorflow:tensorflow-lite:2.10.0")
             }
         }
         val commonTest by getting {
@@ -129,6 +131,12 @@ kotlin {
                 implementation("androidx.camera:camera-video:1.2.3")
                 implementation("androidx.camera:camera-view:1.2.3")
                 implementation("androidx.camera:camera-extensions:1.2.3")
+
+                implementation("org.tensorflow:tensorflow-lite-metadata:0.4.3")
+
+                implementation("org.tensorflow:tensorflow-lite-task-vision:0.4.3")
+                // Import the GPU delegate plugin Library for GPU inference
+                implementation("org.tensorflow:tensorflow-lite-gpu-delegate-plugin:0.4.3")
 
             }
         }

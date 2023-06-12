@@ -1,6 +1,6 @@
 package com.micrantha.skouter.ui.scan.usecase
 
-import com.micrantha.bluebell.data.Log
+import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.model.Thing
@@ -16,7 +16,7 @@ class SaveThingImageUseCase(
 
     suspend operator fun invoke(
         thing: Thing.Create
-    ): Result<Thing> = try {
+    ) = dispatchUseCase {
         val user = currentSession.requirePlayer()
 
         val location = user.location!!
@@ -29,8 +29,5 @@ class SaveThingImageUseCase(
         ).map { url ->
             thingRepository.create(thing, url, user.id, location).getOrThrow()
         }
-    } catch (err: Throwable) {
-        Log.e("upload image", err)
-        Result.failure(err)
     }
 }

@@ -31,7 +31,7 @@ fun ChoiceField(
     choices: List<Choice>,
     onValue: (Choice) -> String = { it.label },
     label: @Composable (Choice) -> Unit,
-    onCustom: (String) -> Unit = {},
+    onCustom: ((String) -> Unit)? = null,
     onSelect: (Choice) -> Unit,
 ) {
     var current by remember { mutableStateOf(choices.first()) }
@@ -43,8 +43,8 @@ fun ChoiceField(
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = onValue(current),
-            readOnly = true,
-            onValueChange = onCustom,
+            readOnly = onCustom == null,
+            onValueChange = onCustom ?: { },
             label = { label(current) },
             trailingIcon = {
                 Icon(

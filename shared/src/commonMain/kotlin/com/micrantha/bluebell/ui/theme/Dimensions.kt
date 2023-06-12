@@ -15,6 +15,11 @@ object Dimensions {
         val Large = 26.sp
     }
 
+    object Image {
+        val placeholder = 200.dp
+        val border = 1.dp
+    }
+
     object List {
         val placeholder = 200.dp
         val thumbnail = 80.dp

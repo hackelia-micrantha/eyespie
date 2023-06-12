@@ -9,7 +9,6 @@ import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageLabel
 import com.micrantha.skouter.platform.ImageLabels
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 import com.google.mlkit.vision.label.ImageLabel as MLImageLabel
 
@@ -22,13 +21,13 @@ actual class LabelImageAnalyzer : ImageAnalyzer<ImageLabels> {
     actual override suspend fun analyze(image: CameraImage): Result<ImageLabels> =
         suspendCoroutine { continuation ->
             try {
-                val input = InputImage.fromMediaImage(image.image, image.rotation)
+                val input = InputImage.fromBitmap(image.bitmap, image.rotation)
 
                 val result = Tasks.await(labeler.process(input))
 
                 continuation.resume(Result.success(result.map(::map)))
             } catch (err: Throwable) {
-                continuation.resumeWithException(err)
+                continuation.resume(Result.failure(err))
             }
         }
 

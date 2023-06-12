@@ -5,9 +5,11 @@ import com.micrantha.skouter.data.clue.source.ColorLocalSource
 import com.micrantha.skouter.data.clue.source.ImageLocalSource
 import com.micrantha.skouter.data.clue.source.LabelRemoteSource
 import com.micrantha.skouter.data.clue.source.ObjectLocalSource
+import com.micrantha.skouter.data.clue.source.SegmentLocalSource
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelProof
+import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.domain.repository.ClueRepository
 import com.micrantha.skouter.platform.CameraImage
 
@@ -16,10 +18,11 @@ class ClueDataRepository(
     private val labelRemoteSource: LabelRemoteSource,
     private val colorLocalSource: ColorLocalSource,
     private val objectLocalSource: ObjectLocalSource,
+    private val segmentLocalSource: SegmentLocalSource,
     private val mapper: ClueDomainMapper,
 ) : ClueRepository {
 
-    @Deprecated("do not want to have dependency on backend for functionality")
+    @Deprecated("use local label source")
     override suspend fun recognize(image: ByteArray, contentType: String): Result<LabelProof> =
         labelRemoteSource.recognize(image, contentType).map(mapper::recognition)
 
@@ -32,10 +35,10 @@ class ClueDataRepository(
     }
 
     override suspend fun recognize(image: CameraImage): Result<DetectProof> {
-        // TODO: there is more to do here with tracking identified
-        // objects and running analyzers on sub images
-        // could eventually become the main entry point
-        // but for now will collect from the entire image
         return objectLocalSource.analyze(image).map(mapper::detect)
+    }
+
+    override suspend fun segments(image: CameraImage): Result<SegmentProof> {
+        return segmentLocalSource.analyze(image).map(mapper::segment)
     }
 }

@@ -10,3 +10,15 @@ fun <K, V> MutableMap<K, V>.updateKey(key: K, transform: (V) -> V): MutableMap<K
     }
     return this
 }
+
+
+fun <T> Set<T>?.combine(other: Set<T>): Set<T> {
+    if (this == null) return other
+    return this.plus(other)
+}
+
+fun <T> Set<T>?.combine(other: T): Set<T> {
+    if (this == null) return setOf(other)
+    return this.plus(other)
+}
+
