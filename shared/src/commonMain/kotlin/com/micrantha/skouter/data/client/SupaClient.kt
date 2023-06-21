@@ -31,7 +31,7 @@ typealias StorageCall = BucketApi
 typealias AuthCall = GoTrue
 
 class SupaClient {
-    private val supabase =
+    private val supabase by lazy {
         createSupabaseClient("https://${BuildConfig.supaBaseDomain}", BuildConfig.supaBaseKey) {
             install(GraphClient)
 
@@ -41,6 +41,7 @@ class SupaClient {
 
             install(StorageClient)
         }
+    }
 
     fun auth(): AuthCall = supabase.gotrue
 

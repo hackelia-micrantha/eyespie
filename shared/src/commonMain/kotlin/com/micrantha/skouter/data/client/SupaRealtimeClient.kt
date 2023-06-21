@@ -12,10 +12,11 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 
 class SupaRealtimeClient {
-    private val realtime =
+    private val realtime by lazy {
         createSupabaseClient("https://${BuildConfig.supaBaseDomain}", BuildConfig.supaBaseKey) {
             install(RealtimeClient)
         }.realtime
+    }
 
     suspend fun connect() = realtime.connect()
 
