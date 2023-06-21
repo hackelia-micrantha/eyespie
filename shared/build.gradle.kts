@@ -169,7 +169,6 @@ val propertyKeys = listOf(
     "apiKey", "apiDomain",
     "supaBaseKey", "supaBaseDomain",
     "userLoginEmail", "userLoginPassword",
-    "keyStore", "keyStorePassword"
 )
 
 fun localProperties(): Properties {

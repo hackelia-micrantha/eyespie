@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.login
 
+import com.micrantha.bluebell.data.hash
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
@@ -31,13 +32,13 @@ class LoginEnvironment(
 
     override fun map(state: LoginState) = LoginUiState(
         email = state.email,
-        password = state.password,
+        password = state.hash,
         status = state.status
     )
 
     override fun reduce(state: LoginState, action: Action) = when (action) {
         is ChangedEmail -> state.copy(email = action.email)
-        is ChangedPassword -> state.copy(password = action.password)
+        is ChangedPassword -> state.copy(hash = hash(action.password))
         is OnSuccess -> state.copy(status = Default)
         is OnLogin -> state.copy(status = busy(Strings.LoggingIn))
         is OnError -> state.copy(status = failure(Strings.LoginFailed))
@@ -47,7 +48,7 @@ class LoginEnvironment(
     override suspend fun invoke(action: Action, state: LoginState) {
         when (action) {
 
-            is OnLogin -> accountRepository.login(state.email, state.password)
+            is OnLogin -> accountRepository.login(state.email, state.hash)
                 .onFailure {
                     dispatch(OnError(it))
                 }.onSuccess {
