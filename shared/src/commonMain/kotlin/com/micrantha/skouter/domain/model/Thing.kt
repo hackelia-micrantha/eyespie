@@ -12,7 +12,7 @@ data class Thing(
     val guessed: Boolean,
     val guesses: List<Guess>,
     val imageUrl: String,
-    val clues: Proof,
+    val clues: Clues,
     val location: Location.Point
 ) : Entity, Creatable {
 
@@ -34,7 +34,7 @@ data class Thing(
 
     data class Create(
         val name: String,
-        val proof: Proof,
+        val clues: Clues,
         val path: Path
     )
 }

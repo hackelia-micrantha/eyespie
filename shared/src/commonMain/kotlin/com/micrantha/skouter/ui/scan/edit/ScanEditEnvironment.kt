@@ -28,10 +28,10 @@ class ScanEditEnvironment(
     Router by context.router {
     override fun reduce(state: ScanEditState, action: Action) = when (action) {
         is Init -> state.copy(
-            labels = action.arg.proof.labels?.associate {
+            labels = action.arg.clues.labels?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
-            colors = action.arg.proof.colors?.associate {
+            colors = action.arg.clues.colors?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
             path = action.arg.path

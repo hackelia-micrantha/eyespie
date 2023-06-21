@@ -2,9 +2,9 @@ package com.micrantha.skouter.ui.scan.edit
 
 import androidx.compose.ui.graphics.painter.Painter
 import com.micrantha.bluebell.domain.arch.Action
+import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.LabelClue
-import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.ui.component.Choice
 import okio.Path
@@ -27,7 +27,7 @@ data class ScanEditUiState(
 )
 
 data class ScanEditArg(
-    val proof: Proof,
+    val clues: Clues,
     val path: Path
 )
 
@@ -48,8 +48,9 @@ sealed class ScanEditAction : Action {
 
 
 fun ScanEditState.asNewThing() = Thing.Create(
-    proof = Proof(
-        labels = labels?.values?.toSet()
+    clues = Clues(
+        labels = labels?.values?.toSet(),
+        colors = colors?.values?.toSet()
     ),
     name = name!!,
     path = path!!

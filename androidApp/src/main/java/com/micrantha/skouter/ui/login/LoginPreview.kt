@@ -20,7 +20,7 @@ fun LoginPreview() = PreviewContext(
                     instance(), instance(),
                     LoginState(
                         email = "",
-                        password = "",
+                        hash = "",
                         status = Default
                     )
                 )

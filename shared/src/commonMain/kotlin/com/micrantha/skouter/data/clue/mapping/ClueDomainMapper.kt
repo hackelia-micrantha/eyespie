@@ -46,16 +46,15 @@ class ClueDomainMapper {
 
     fun color(data: ImageColor) = ColorClue(
         data = data.name,
-        rgb = data.rgb
     )
 
     fun color(data: List<ImageColor>): ColorProof = data.map(::color).toSet()
 
-    fun clue(data: Location) = LocationClue(
+    fun clue(data: Location.Data) = LocationClue(
         data = data,
     )
 
-    fun location(data: Location) = LocationClueData(
+    fun location(data: Location.Data) = LocationClueData(
         name = data.name,
         city = data.city,
         region = data.region,
@@ -64,7 +63,7 @@ class ClueDomainMapper {
     )
 
     fun clue(data: LocationClueData) = clue(
-        Location(
+        Location.Data(
             name = data.name,
             city = data.city,
             region = data.region,
@@ -81,11 +80,11 @@ class ClueDomainMapper {
         is LabelClue -> LabelClueData(data = data.data, confidence = data.confidence)
         is LocationClue -> with(data.data) {
             LocationClueData(
-                name = name,
-                city = city,
-                region = region,
-                country = country,
-                accuracy = accuracy
+                name = this.name,
+                city = this.city,
+                region = this.region,
+                country = this.country,
+                accuracy = this.accuracy
             )
         }
         else -> fail("unknown clue type $data")

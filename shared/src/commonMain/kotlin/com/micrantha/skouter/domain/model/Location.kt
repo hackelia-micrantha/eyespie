@@ -5,11 +5,7 @@ import com.micrantha.skouter.domain.logic.distanceTo
 
 data class Location(
     val point: Point = Point(),
-    val name: String? = null,
-    val city: String? = null,
-    var region: String? = null,
-    var country: String? = null,
-    var accuracy: Float = Float.NaN
+    val data: Data? = null,
 ) : Comparable<Location> {
 
     data class Point(
@@ -26,6 +22,17 @@ data class Location(
         override fun compareTo(other: Point): Int {
             return distanceTo(latitude, longitude, other.latitude, other.longitude).toInt()
         }
+    }
+
+    data class Data(
+        val name: String? = null,
+        val city: String? = null,
+        var region: String? = null,
+        var country: String? = null,
+        var accuracy: Float = Float.NaN
+    ) : Comparable<Data> {
+        override fun compareTo(other: Data) =
+            accuracy.compareTo(other.accuracy)
     }
 
     override fun compareTo(other: Location): Int {

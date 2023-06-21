@@ -6,7 +6,7 @@ import kotlin.math.max
 
 class GameLogic {
 
-    fun calculatePoints(location: Location): Int {
+    fun calculatePoints(location: Location.Data): Int {
         return max(1, (location.accuracy * 10).toInt())
     }
 

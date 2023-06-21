@@ -3,6 +3,24 @@ package com.micrantha.skouter.domain.model
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 
+data class Clues(
+    val labels: Set<LabelClue>? = null,
+    val location: LocationClue? = null, // TODO: Geofence
+    val colors: Set<ColorClue>? = null
+)
+
+
+typealias LabelProof = Set<LabelClue>
+
+typealias ColorProof = Set<ColorClue>
+
+typealias LocationProof = LocationClue
+
+typealias DetectProof = Set<DetectClue>
+
+typealias SegmentProof = List<SegmentClue>
+
+
 sealed interface Clue<T> {
     val data: T
 
@@ -13,17 +31,8 @@ sealed interface SortedClue<T : Comparable<T>> : Clue<T>, Comparable<SortedClue<
     override fun compareTo(other: SortedClue<T>) = data.compareTo(other.data)
 }
 
-data class Clues(
-    val label: LabelClue? = null,
-    val location: LocationClue? = null,
-    val color: ColorClue? = null,
-    val detect: DetectClue? = null,
-    val segment: SegmentClue? = null,
-)
-
 data class ColorClue(
     override val data: String,
-    private val rgb: Int,
 ) : Clue<String> {
     override fun hashCode() = data.hashCode()
 
@@ -59,16 +68,8 @@ data class LabelClue(
 }
 
 data class LocationClue(
-    override val data: Location, // TODO: make a geofence area
-) : SortedClue<Location> {
-    override fun compareTo(other: SortedClue<Location>): Int {
-        return if (other is LocationClue) {
-            other.data.accuracy.compareTo(data.accuracy)
-        } else {
-            data.compareTo(other.data)
-        }
-    }
-}
+    override val data: Location.Data, // TODO: make a geofence area
+) : SortedClue<Location.Data>
 
 data class RhymeClue(
     override val data: String,

@@ -3,6 +3,7 @@ package com.micrantha.skouter.ui.scan.preview
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import com.micrantha.bluebell.domain.arch.Action
+import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
@@ -10,7 +11,6 @@ import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.LocationClue
-import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.platform.CameraImage
 import kotlin.math.max
@@ -60,7 +60,7 @@ data class ScanBox(
 ) : ScanOverlay
 
 
-internal fun ScanState.asProof() = Proof(
+internal fun ScanState.asProof() = Clues(
     labels = labels,
     location = location,
     colors = colors

@@ -83,7 +83,7 @@ class ScanEnvironment(
         )
         is SaveScan, is EditScan -> state.copy(
             enabled = false,
-            location = currentSession.player?.location?.let { LocationClue(it) }
+            location = currentSession.player?.location?.data?.let { LocationClue(it) }
         )
         else -> state
     }
@@ -103,7 +103,7 @@ class ScanEnvironment(
     )
 
     private fun ScanState.newThing(path: Path) = Thing.Create(
-        proof = asProof(),
+        clues = asProof(),
         name = "Something that is ${colors?.first()}",
         path = path
     )

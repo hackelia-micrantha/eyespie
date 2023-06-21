@@ -9,6 +9,7 @@ sealed interface ClueData
 @Serializable
 data class ProofData(
     val labels: List<LabelClueData>? = null,
+    val colors: List<String>? = null,
     val location: LocationClueData? = null,
 )
 
