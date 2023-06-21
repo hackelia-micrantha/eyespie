@@ -92,5 +92,4 @@ data class DetectClue(
 
 data class SegmentClue(
     val data: ImageBitmap,
-    val labels: Set<String>
 )

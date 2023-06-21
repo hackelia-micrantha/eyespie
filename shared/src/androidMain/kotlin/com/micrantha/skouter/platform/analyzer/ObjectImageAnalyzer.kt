@@ -1,11 +1,14 @@
 package com.micrantha.skouter.platform.analyzer
 
+import android.content.Context
 import androidx.compose.ui.graphics.toComposeRect
-import com.google.android.gms.tasks.Tasks
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.objects.DetectedObject
-import com.google.mlkit.vision.objects.ObjectDetection
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
+import androidx.core.graphics.toRect
+import com.google.mediapipe.framework.image.BitmapImageBuilder
+import com.google.mediapipe.tasks.components.containers.Detection
+import com.google.mediapipe.tasks.core.BaseOptions
+import com.google.mediapipe.tasks.vision.core.RunningMode.IMAGE
+import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector
+import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector.ObjectDetectorOptions
 import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageLabel
@@ -14,32 +17,36 @@ import com.micrantha.skouter.platform.ImageObjects
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-actual class ObjectImageAnalyzer : ImageAnalyzer<ImageObjects> {
+actual class ObjectImageAnalyzer(context: Context) : ImageAnalyzer<ImageObjects> {
     private val client by lazy {
-        val options = ObjectDetectorOptions.Builder()
-            .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)
-            .enableMultipleObjects()
-            .enableClassification()
+        val options = ObjectDetectorOptions.builder()
+            .setBaseOptions(
+                BaseOptions.builder()
+                    .setModelAssetPath("objects.tflite")
+                    .build()
+            )
+            .setRunningMode(IMAGE)
+            .setScoreThreshold(0.6f)
             .build()
-        ObjectDetection.getClient(options)
+        ObjectDetector.createFromOptions(context, options)
     }
 
     actual override suspend fun analyze(image: CameraImage): Result<ImageObjects> =
         suspendCoroutine { continuation ->
             try {
-                val input = InputImage.fromBitmap(image.bitmap, image.rotation)
+                val input = BitmapImageBuilder(image.bitmap).build()
 
-                val result = Tasks.await(client.process(input))
+                val result = client.detect(input).detections().map(::map)
 
-                continuation.resume(Result.success(result.map(::map)))
+                continuation.resume(Result.success(result))
             } catch (err: Throwable) {
                 continuation.resume(Result.failure(err))
             }
         }
 
-    private fun map(obj: DetectedObject) = ImageObject(
-        labels = obj.labels.map { ImageLabel(it.text, it.confidence) },
-        rect = obj.boundingBox.toComposeRect(),
-        id = obj.trackingId ?: -1
+    private fun map(obj: Detection) = ImageObject(
+        labels = obj.categories().map { ImageLabel(it.categoryName(), it.score()) },
+        rect = obj.boundingBox().toRect().toComposeRect(),
+        id = -1
     )
 }

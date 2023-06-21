@@ -22,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
@@ -131,7 +130,7 @@ class ScanScreen : Screen {
             data.forEach {
                 when (it) {
                     is ScanBox -> DrawScanBox(it, matrix, textStyle, measurer)
-                    is ScanMask -> DrawScanMask(it, textStyle, measurer)
+                    is ScanMask -> DrawScanMask(it)
                 }
             }
         }
@@ -162,19 +161,10 @@ class ScanScreen : Screen {
         )
     }
 
-    @OptIn(ExperimentalTextApi::class)
     private fun DrawScope.DrawScanMask(
-        data: ScanMask,
-        textStyle: TextStyle,
-        textMeasurer: TextMeasurer
+        data: ScanMask
     ) {
         drawImage(data.mask)
-        drawText(
-            textMeasurer = textMeasurer,
-            topLeft = Offset(Dimensions.screen.toPx(), Dimensions.screen.toPx()),
-            text = data.label,
-            style = textStyle
-        )
     }
 
     @Composable

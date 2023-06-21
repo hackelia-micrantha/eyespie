@@ -5,6 +5,7 @@ plugins {
     kotlin("multiplatform").version("1.8.20").apply(false)
     id("org.jetbrains.compose").version("1.4.0").apply(false)
     id("com.apollographql.apollo3").version("3.8.0").apply(false)
+    kotlin("plugin.serialization").version("1.8.20").apply(false)
 }
 
 tasks.register("clean", Delete::class) {

@@ -21,9 +21,9 @@ fun androidDependencies(
 
     bindSingletonOf(::Platform)
 
-    bindProvider { LabelImageAnalyzer() }
+    bindProvider { LabelImageAnalyzer(context) }
     bindProvider { ColorImageAnalyzer(context) }
-    bindProvider { ObjectImageAnalyzer() }
+    bindProvider { ObjectImageAnalyzer(context) }
     bindProvider { SegmentImageAnalyzer(context) }
 
     bindFactory<CameraAnalyzerOptions, CameraAnalyzer> { options ->

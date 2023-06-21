@@ -32,8 +32,13 @@ typealias ImageColors = List<ImageColor>
 data class ImageCaptured(val image: CameraImage) : Action
 
 data class ImageSegment(
-    val labels: Set<String>,
     val mask: CameraImage
 )
 
 typealias ImageSegments = List<ImageSegment>
+
+data class ImageEmbedding(
+    val embedding: ByteArray
+)
+
+typealias ImageEmbeddings = List<ImageEmbedding>

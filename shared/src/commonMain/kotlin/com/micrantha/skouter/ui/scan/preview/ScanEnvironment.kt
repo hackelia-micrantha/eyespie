@@ -12,7 +12,6 @@ import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
-import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.platform.ImageCaptured
@@ -76,10 +75,7 @@ class ScanEnvironment(
             image = action.image,
         )
         is ImageScanned -> state.copy(
-            labels = state.labels.combine(action.labels).combine(
-                action.segments.labels
-                    .map { LabelClue(it, 1f) }.toSet()
-            ),
+            labels = state.labels.combine(action.labels),
             colors = state.colors.combine(action.colors),
             detections = state.detections.combine(action.detections),
             currentThing = action.detections,

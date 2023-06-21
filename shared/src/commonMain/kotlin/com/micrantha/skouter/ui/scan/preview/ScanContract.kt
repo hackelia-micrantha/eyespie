@@ -51,7 +51,6 @@ sealed interface ScanOverlay
 
 data class ScanMask(
     val mask: ImageBitmap,
-    val label: String
 ) : ScanOverlay
 
 data class ScanBox(
@@ -82,7 +81,7 @@ internal fun ScanState.overlays(): List<ScanOverlay> {
         result.add(it.asScanBoxIn(image.width, image.height))
     }
     currentSegment?.let {
-        result.add(ScanMask(it.data, it.labels.firstOrNull() ?: ""))
+        result.add(ScanMask(it.data))
     }
     return result
 }

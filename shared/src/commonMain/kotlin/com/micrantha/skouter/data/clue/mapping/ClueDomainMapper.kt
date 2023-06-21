@@ -39,8 +39,7 @@ class ClueDomainMapper {
     fun detect(data: List<ImageObject>): DetectProof = data.map(::detect).toSet()
 
     fun segment(data: ImageSegment) = SegmentClue(
-        data = data.mask.toImageBitmap(),
-        labels = data.labels
+        data = data.mask.toImageBitmap()
     )
 
     fun segment(data: List<ImageSegment>): SegmentProof = data.map(::segment)
