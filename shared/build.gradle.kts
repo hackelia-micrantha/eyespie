@@ -39,9 +39,6 @@ kotlin {
             baseName = "shared"
             isStatic = true
         }
-        pod("GoogleMLKit/ImageLabeling") {
-            version = "3.2.0"
-        }
     }
 
     sourceSets {
@@ -86,7 +83,6 @@ kotlin {
                 implementation("io.github.jan-tennert.supabase:realtime-kt:1.0.1")
 
                 api("dev.icerock.moko:permissions-compose:0.16.0")
-                api("dev.icerock.moko:media-compose:0.11.0")
                 api("dev.icerock.moko:geo-compose:0.6.0")
 
                 api("io.github.qdsfdhvh:image-loader:1.4.4")
