@@ -4,6 +4,8 @@ plugins {
     id("com.android.library")
     id("com.apollographql.apollo3")
     kotlin("plugin.serialization")
+    kotlin("native.cocoapods")
+    id("com.micrantha.bluebell")
 }
 
 kotlin {
@@ -15,15 +17,22 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
+    cocoapods {
+        summary = "Skouter Shared Module"
+        homepage = "https://github.com/hackelia-micrantha/skouter"
+        version = "1.0.0"
+        ios.deploymentTarget = "14.1"
+        podfile = project.file("../iosApp/Podfile")
+        framework {
+            baseName = "iosEntryPoint"
+            isStatic = true
         }
     }
+
+
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
 
     sourceSets {
 
@@ -36,8 +45,8 @@ kotlin {
                 api(compose.material3)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                //api(compose.animation)
-                //api(compose.animationGraphics)
+                implementation(compose.animation)
+                implementation(compose.animationGraphics)
 
                 api("org.kodein.di:kodein-di:7.20.1")
                 api("org.kodein.di:kodein-di-framework-compose:7.20.1")
@@ -142,5 +151,13 @@ android {
 apollo {
     service("service") {
         packageName.set("com.micrantha.skouter.graphql")
+    }
+}
+
+bluebell {
+    config {
+        packageName = "com.micrantha.skouter"
+        className = "SkouterConfig"
+        fileName = "skouter.properties"
     }
 }

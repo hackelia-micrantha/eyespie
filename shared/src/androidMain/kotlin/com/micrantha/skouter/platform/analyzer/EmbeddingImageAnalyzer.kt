@@ -9,8 +9,8 @@ import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedder
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedder.ImageEmbedderOptions
 import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.platform.ImageAnalyzer
-import com.micrantha.skouter.platform.ImageEmbedding
 import com.micrantha.skouter.platform.ImageEmbeddings
+import okio.ByteString.Companion.toByteString
 
 actual class EmbeddingImageAnalyzer(context: Context) : ImageAnalyzer<ImageEmbeddings> {
 
@@ -37,7 +37,6 @@ actual class EmbeddingImageAnalyzer(context: Context) : ImageAnalyzer<ImageEmbed
         Result.failure(err)
     }
 
-    private fun map(data: Embedding) = ImageEmbedding(
-        data.quantizedEmbedding()
-    )
+    private fun map(data: Embedding) =
+        data.quantizedEmbedding().toByteString()
 }

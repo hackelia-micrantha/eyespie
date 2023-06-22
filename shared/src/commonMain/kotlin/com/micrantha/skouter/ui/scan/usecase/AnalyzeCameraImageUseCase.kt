@@ -19,9 +19,10 @@ class AnalyzeCameraImageUseCase(
             flow = labels(image),
             flow2 = colors(image),
             flow3 = detections(image),
-            flow4 = segments(image)
-        ) { labels, colors, detections, segments ->
-            Result.success(ImageScanned(labels, colors, detections, segments))
+            flow4 = segments(image),
+            flow5 = matches(image)
+        ) { label, color, detection, segment, match ->
+            Result.success(ImageScanned(label, color, detection, segment, match))
         }
     }
 
@@ -42,9 +43,9 @@ class AnalyzeCameraImageUseCase(
             throw it
         }
     }
-    
+
     private fun detections(image: CameraImage) = flow {
-        clueRepository.recognize(image).onSuccess { detection ->
+        clueRepository.detect(image).onSuccess { detection ->
             emitAll(detection.asFlow())
         }.onFailure {
             Log.e("unable to flow detections", it)
@@ -57,6 +58,15 @@ class AnalyzeCameraImageUseCase(
             emitAll(segment.asFlow())
         }.onFailure {
             Log.e("unable to flow segments", it)
+            throw it
+        }
+    }
+
+    private fun matches(image: CameraImage) = flow {
+        clueRepository.match(image).onSuccess { match ->
+            emitAll(match.asFlow())
+        }.onFailure {
+            Log.e("unable to flow matches", it)
             throw it
         }
     }

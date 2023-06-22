@@ -2,6 +2,8 @@ package com.micrantha.skouter.domain.model
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
+import com.micrantha.skouter.platform.ImageEmbedding
+import okio.Path
 
 data class Clues(
     val labels: Set<LabelClue>? = null,
@@ -9,6 +11,14 @@ data class Clues(
     val colors: Set<ColorClue>? = null
 )
 
+data class Proof(
+    val clues: Clues,
+    val location: Location,
+    val match: ImageEmbedding,
+    val image: Path,
+    val name: String,
+    val playerID: String
+)
 
 typealias LabelProof = Set<LabelClue>
 
@@ -20,6 +30,7 @@ typealias DetectProof = Set<DetectClue>
 
 typealias SegmentProof = List<SegmentClue>
 
+typealias MatchProof = List<MatchClue>
 
 sealed interface Clue<T> {
     val data: T
@@ -93,4 +104,8 @@ data class DetectClue(
 
 data class SegmentClue(
     val data: ImageBitmap,
+)
+
+data class MatchClue(
+    val data: ImageEmbedding
 )

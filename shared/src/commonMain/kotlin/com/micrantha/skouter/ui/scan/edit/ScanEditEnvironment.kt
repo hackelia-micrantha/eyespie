@@ -7,15 +7,18 @@ import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.screen.MappedScreenEnvironment
 import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.ui.component.Choice
 import com.micrantha.skouter.ui.component.updateKey
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ColorChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.CustomLabelChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.Init
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.LabelChanged
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.LoadError
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.LoadedImage
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.NameChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.SaveScanEdit
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.SaveThingError
 import com.micrantha.skouter.ui.scan.usecase.LoadCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
 
@@ -28,31 +31,36 @@ class ScanEditEnvironment(
     Router by context.router {
     override fun reduce(state: ScanEditState, action: Action) = when (action) {
         is Init -> state.copy(
-            labels = action.arg.clues.labels?.associate {
+            labels = action.proof.clues.labels?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
-            colors = action.arg.clues.colors?.associate {
+            colors = action.proof.clues.colors?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
-            path = action.arg.path
+            proof = action.proof
         )
+
         is LabelChanged -> state.copy(
             customLabel = null,
             labels = state.labels?.updateKey(action.data.key) { clue ->
                 clue.copy(data = action.data.tag)
             }
         )
+
         is ColorChanged -> state.copy(
             colors = state.colors?.updateKey(action.data.key) { clue ->
                 clue.copy(data = action.data.tag)
             }
         )
+
         is NameChanged -> state.copy(
             name = action.data
         )
+
         is LoadedImage -> state.copy(
             image = action.data
         )
+
         is CustomLabelChanged -> state.copy(customLabel = action.data)
         else -> state
     }
@@ -60,17 +68,20 @@ class ScanEditEnvironment(
     override suspend fun invoke(action: Action, state: ScanEditState) {
         when (action) {
             is SaveScanEdit -> saveThingImageUseCase(
-                state.asNewThing()
+                state.asProof()
             ).onSuccess {
                 navigateBack()
             }.onFailure {
                 Log.e("saving scan", it)
+                dispatch(SaveThingError)
             }
-            is Init -> loadCameraImageUseCase(action.arg.path)
+
+            is Init -> loadCameraImageUseCase(action.proof.image)
                 .onSuccess {
                     dispatch(LoadedImage(it))
                 }.onFailure {
                     Log.e("unable to load image", it)
+                    dispatch(LoadError)
                 }
         }
     }
@@ -92,6 +103,17 @@ class ScanEditEnvironment(
             )
         } ?: emptyList(),
         name = state.name ?: "",
-        image = state.image
+        image = state.image,
+        enabled = state.disabled.not()
     )
+
+
+    private fun ScanEditState.asProof() = proof!!.copy(
+        clues = Clues(
+            labels = labels?.values?.toSet(),
+            colors = colors?.values?.toSet()
+        ),
+        name = name!!,
+    )
+
 }

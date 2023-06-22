@@ -2,6 +2,7 @@ package com.micrantha.skouter.platform
 
 import androidx.compose.ui.geometry.Rect
 import com.micrantha.bluebell.domain.arch.Action
+import okio.ByteString
 
 interface ImageAnalyzer<T> {
     suspend fun analyze(image: CameraImage): Result<T>
@@ -37,8 +38,6 @@ data class ImageSegment(
 
 typealias ImageSegments = List<ImageSegment>
 
-data class ImageEmbedding(
-    val embedding: ByteArray
-)
+typealias ImageEmbedding = ByteString
 
 typealias ImageEmbeddings = List<ImageEmbedding>

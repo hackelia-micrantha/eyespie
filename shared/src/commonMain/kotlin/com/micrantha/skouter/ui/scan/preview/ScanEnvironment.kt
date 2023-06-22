@@ -12,20 +12,19 @@ import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
-import com.micrantha.skouter.domain.model.LocationClue
-import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.platform.ImageCaptured
 import com.micrantha.skouter.ui.component.combine
-import com.micrantha.skouter.ui.scan.edit.ScanEditArg
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
+import com.micrantha.skouter.ui.scan.preview.ScanAction.EditSaved
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageSaved
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageScanned
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveError
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScanSavable
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
-import okio.Path
 
 class ScanEnvironment(
     private val context: ScreenContext,
@@ -45,22 +44,31 @@ class ScanEnvironment(
                 state.image!!
             ).onSuccess { url ->
                 Log.d("image url: $url")
-                navigate(state.editScreen(url), options = Replace)
+                dispatch(EditSaved(url))
             }.onFailure {
                 Log.d("unable to save scan", it)
                 dispatch(SaveError)
             }
+
+            is EditSaved -> navigate(state.editScreen(), options = Replace)
+
+            is ImageSaved -> saveThingImageUseCase(state.asProof())
+                .onFailure {
+                    Log.e("unable to save scan", it)
+                    dispatch(SaveError)
+                }
+                .onSuccess {
+                    navigateBack()
+                }
+
             is SaveScan -> cameraCaptureUseCase(
                 state.image!!
             ).onSuccess { url ->
-                saveThingImageUseCase(state.newThing(url))
-                    .onFailure {
-                        Log.e("unable to save scan", it)
-                    }
-                    .onSuccess {
-                        navigateBack()
-                    }
+                dispatch(ImageSaved(url))
+            }.onFailure {
+                dispatch(SaveError)
             }
+
             is ImageCaptured -> analyzeCameraImageUseCase(action.image)
                 .collect { result ->
                     result
@@ -74,17 +82,29 @@ class ScanEnvironment(
         is ImageCaptured -> state.copy(
             image = action.image,
         )
+
         is ImageScanned -> state.copy(
-            labels = state.labels.combine(action.labels),
-            colors = state.colors.combine(action.colors),
-            detections = state.detections.combine(action.detections),
-            currentThing = action.detections,
-            currentSegment = action.segments
+            labels = state.labels.combine(action.label),
+            colors = state.colors.combine(action.color),
+            detection = action.detection,
+            segment = action.segment,
+            match = action.match.data
         )
+
+        is ScanSavable -> state.copy(
+            path = action.path,
+            location = currentSession.player?.location,
+            playerID = currentSession.player?.id
+        )
+
         is SaveScan, is EditScan -> state.copy(
             enabled = false,
-            location = currentSession.player?.location?.data?.let { LocationClue(it) }
         )
+
+        is SaveError -> state.copy(
+            enabled = false
+        )
+
         else -> state
     }
 
@@ -94,17 +114,8 @@ class ScanEnvironment(
         enabled = state.enabled
     )
 
-    private fun ScanState.editScreen(path: Path) = ScanEditScreen(
+    private fun ScanState.editScreen() = ScanEditScreen(
         context = context,
-        arg = ScanEditArg(
-            asProof(),
-            path,
-        )
-    )
-
-    private fun ScanState.newThing(path: Path) = Thing.Create(
-        clues = asProof(),
-        name = "Something that is ${colors?.first()}",
-        path = path
+        proof = asProof()
     )
 }

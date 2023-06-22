@@ -24,6 +24,7 @@ import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.scaffold.ScaffoldScreen
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.theme.Dimensions
+import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.ui.component.ChoiceField
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.component.S
@@ -36,7 +37,7 @@ import com.micrantha.skouter.ui.scan.edit.ScanEditAction.NameChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.SaveScanEdit
 
 class ScanEditScreen(
-    private val arg: ScanEditArg,
+    private val proof: Proof,
     private val context: ScreenContext
 ) : ScaffoldScreen() {
 
@@ -58,7 +59,7 @@ class ScanEditScreen(
         val viewModel: ScanEditScreenModel = rememberScreenModel()
 
         LaunchedEffect(Unit) {
-            viewModel.dispatch(Init(arg))
+            viewModel.dispatch(Init(proof))
         }
 
         LocationEnabledEffect()
@@ -127,6 +128,7 @@ class ScanEditScreen(
                 }
             }
             Button(
+                enabled = state.enabled,
                 modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
                     .padding(Dimensions.content),
                 onClick = { dispatch(SaveScanEdit) }

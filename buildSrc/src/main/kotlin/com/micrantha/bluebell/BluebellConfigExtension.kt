@@ -4,8 +4,6 @@ import com.github.gmazzo.gradle.plugins.BuildConfigExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
-import java.io.File
 import java.util.Properties
 import javax.inject.Inject
 
@@ -41,15 +39,23 @@ private fun Project.loadProperties(config: BluebellConfig): Properties {
     return properties
 }
 
-fun Project.configureBuilds(config: BluebellConfig) =
-    this.extensions.configure(BuildConfigExtension::class.java) {
-        packageName.set(config.packageName)
+fun Project.configureBuilds(config: BluebellConfig) {
+    val properties by lazy { loadProperties(config) }
 
-        className.set(config.className)
+    extensions.configure(BuildConfigExtension::class.java) {
+        packageName(config.packageName)
+        className(config.className)
 
-        val properties by lazy { loadProperties(config) }
+        val task = tasks.register("generateBluebellConfig") {
+            group = "Bluebell"
+            description = "Generates the variables for build config"
 
-        properties.stringPropertyNames().forEach { key ->
-            buildConfigField("String", key, "\"${properties[key] ?: ""}\"")
+            properties.stringPropertyNames().forEach { key ->
+                buildConfigField("String", key, "\"${properties[key] ?: ""}\"")
+            }
         }
+
+        generateTask.get().dependsOn(task)
     }
+
+}

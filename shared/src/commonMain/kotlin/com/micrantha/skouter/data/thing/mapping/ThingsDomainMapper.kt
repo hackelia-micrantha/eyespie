@@ -14,6 +14,7 @@ import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Location.Point
 import com.micrantha.skouter.domain.model.Player
+import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
@@ -23,13 +24,14 @@ class ThingsDomainMapper(
     private val clueMapper: ClueDomainMapper
 ) {
 
-    fun new(thing: Thing.Create, url: String, playerID: String, location: Location) =
+    fun new(proof: Proof) =
         ThingRequest(
-            name = thing.name,
-            imageUrl = url,
-            proof = proof(thing.clues, location),
-            created_by = playerID,
-            location = location.point.toString()
+            name = proof.name,
+            imageUrl = proof.image.toString(),
+            proof = proof(proof.clues, proof.location),
+            created_by = proof.playerID,
+            location = proof.location.point.toString(),
+            embedding = proof.match.toByteArray()
         )
 
     fun map(thing: Thing) = ThingRequest(

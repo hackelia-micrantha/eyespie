@@ -2,8 +2,8 @@ package com.micrantha.skouter.data.thing
 
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
-import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Location.Point
+import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.repository.ThingRepository as DomainRepository
 
@@ -17,12 +17,9 @@ class ThingDataRepository(
     }
 
     override suspend fun create(
-        thing: Thing.Create,
-        url: String,
-        playerID: String,
-        location: Location
+        proof: Proof
     ): Result<Thing> =
-        remoteSource.save(mapper.new(thing, url, playerID, location)).map(mapper::map)
+        remoteSource.save(mapper.new(proof)).map(mapper::map)
 
     override suspend fun nearby(
         location: Point,

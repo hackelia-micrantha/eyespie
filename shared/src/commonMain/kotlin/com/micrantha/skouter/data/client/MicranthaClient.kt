@@ -1,6 +1,7 @@
 package com.micrantha.skouter.data.client
 
 import com.micrantha.bluebell.data.Log
+import com.micrantha.skouter.SkouterConfig
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
@@ -39,7 +40,7 @@ class MicranthaClient {
     private val httpClient by lazy {
         createHttpClient {
             headers {
-                "apiKey" to ""//SkouterConfig.apiKey
+                "apiKey" to SkouterConfig.apiKey
             }
         }
     }

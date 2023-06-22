@@ -13,9 +13,12 @@ import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.LocationClue
+import com.micrantha.skouter.domain.model.MatchClue
+import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.ImageColor
+import com.micrantha.skouter.platform.ImageEmbedding
 import com.micrantha.skouter.platform.ImageLabel
 import com.micrantha.skouter.platform.ImageObject
 import com.micrantha.skouter.platform.ImageSegment
@@ -43,6 +46,12 @@ class ClueDomainMapper {
     )
 
     fun segment(data: List<ImageSegment>): SegmentProof = data.map(::segment)
+
+    fun match(data: ImageEmbedding) = MatchClue(
+        data = data
+    )
+
+    fun match(data: List<ImageEmbedding>): MatchProof = data.map(::match)
 
     fun color(data: ImageColor) = ColorClue(
         data = data.name,
@@ -87,6 +96,7 @@ class ClueDomainMapper {
                 accuracy = this.accuracy
             )
         }
+
         else -> fail("unknown clue type $data")
     }
 

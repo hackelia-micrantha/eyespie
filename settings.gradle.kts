@@ -30,4 +30,3 @@ dependencyResolutionManagement {
 rootProject.name = "Skouter"
 include(":shared")
 include(":androidApp")
-include(":iosEntryPoint")

@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/kotlin,androidstudio,android
 # Edit at https://www.toptal.com/developers/gitignore?templates=kotlin,androidstudio,android
 
-iosEntryPoint/iosentrypoint.podspec
+iosEntryPoint/iosEntryPoint.podspec
 shared/shared.podspec
 
 

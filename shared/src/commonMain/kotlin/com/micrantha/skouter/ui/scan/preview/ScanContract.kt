@@ -7,23 +7,29 @@ import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
-import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
+import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.LocationClue
+import com.micrantha.skouter.domain.model.MatchClue
+import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.platform.CameraImage
+import com.micrantha.skouter.platform.ImageEmbedding
+import okio.Path
 import kotlin.math.max
 
 data class ScanState(
     val labels: LabelProof? = null,
-    val location: LocationClue? = null,
+    val location: Location? = null,
     val colors: ColorProof? = null,
-    val detections: DetectProof? = null,
     val image: CameraImage? = null,
     val enabled: Boolean = true,
-    val currentThing: DetectClue? = null,
-    val currentSegment: SegmentClue? = null,
+    val detection: DetectClue? = null,
+    val segment: SegmentClue? = null,
+    val match: ImageEmbedding? = null,
+    val path: Path? = null,
+    val playerID: String? = null
 )
 
 data class ScanUiState(
@@ -33,17 +39,25 @@ data class ScanUiState(
 )
 
 sealed class ScanAction : Action {
+    interface ScanSavable {
+        val path: Path
+    }
+
     object SaveScan : ScanAction()
 
     object EditScan : ScanAction()
 
     object SaveError : ScanAction()
 
+    data class EditSaved(override val path: Path) : ScanAction(), ScanSavable
+    data class ImageSaved(override val path: Path) : ScanAction(), ScanSavable
+
     data class ImageScanned(
-        val labels: LabelClue,
-        val colors: ColorClue,
-        val detections: DetectClue,
-        val segments: SegmentClue
+        val label: LabelClue,
+        val color: ColorClue,
+        val detection: DetectClue,
+        val segment: SegmentClue,
+        val match: MatchClue
     ) : ScanAction()
 }
 
@@ -60,10 +74,17 @@ data class ScanBox(
 ) : ScanOverlay
 
 
-internal fun ScanState.asProof() = Clues(
-    labels = labels,
+internal fun ScanState.asProof() = Proof(
+    clues = Clues(
+        labels = labels,
+        location = LocationClue(location!!.data!!),
+        colors = colors
+    ),
+    name = "",
+    image = path!!,
+    match = match!!,
     location = location,
-    colors = colors
+    playerID = playerID!!
 )
 
 internal fun ScanState.clues() = mutableListOf<String>().apply {
@@ -71,16 +92,16 @@ internal fun ScanState.clues() = mutableListOf<String>().apply {
         add("What: ${it.display()} +${labels.size - 1}")
     }
     colors?.firstOrNull { add("Color: ${it.display()} +${colors.size - 1}") }
-    location?.let { add("Location: ${it.display()}") }
+    location?.let { add("Location: ${it.point}") }
 }
 
 internal fun ScanState.overlays(): List<ScanOverlay> {
     val result = mutableListOf<ScanOverlay>()
     if (image == null) return result
-    currentThing?.let {
+    detection?.let {
         result.add(it.asScanBoxIn(image.width, image.height))
     }
-    currentSegment?.let {
+    segment?.let {
         result.add(ScanMask(it.data))
     }
     return result

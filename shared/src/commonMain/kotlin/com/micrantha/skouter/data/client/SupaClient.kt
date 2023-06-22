@@ -1,6 +1,7 @@
 package com.micrantha.skouter.data.client
 
 import com.apollographql.apollo3.ApolloCall
+import com.micrantha.skouter.SkouterConfig
 import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.graphql.GameListQuery
 import com.micrantha.skouter.graphql.GameNodeQuery
@@ -31,7 +32,7 @@ typealias AuthCall = GoTrue
 
 class SupaClient {
     private val supabase by lazy {
-        createSupabaseClient("https://", "") {//${SkouterConfig.supaBaseDomain}", SkouterConfig.supaBaseKey) {
+        createSupabaseClient("https://${SkouterConfig.supaBaseDomain}", SkouterConfig.supaBaseKey) {
             install(GraphClient)
 
             install(DatabaseClient)

@@ -1,7 +1,6 @@
 package com.micrantha.skouter.domain.model
 
 import kotlinx.datetime.Instant
-import okio.Path
 
 data class Thing(
     override val id: String,
@@ -31,12 +30,6 @@ data class Thing(
         val guessed: Boolean,
         val imageUrl: String
     ) : Entity, Creatable
-
-    data class Create(
-        val name: String,
-        val clues: Clues,
-        val path: Path
-    )
 }
 
 typealias ThingList = List<Thing.Listing>

@@ -1,2 +1,0 @@
-
-fun AppController() = MainViewController()
