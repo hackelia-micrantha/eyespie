@@ -1,9 +1,9 @@
 pluginManagement {
     repositories {
         google()
-        gradlePluginPortal()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        gradlePluginPortal()
     }
 
     plugins {
@@ -23,9 +23,11 @@ dependencyResolutionManagement {
         maven("https://jitpack.io")
         maven("https://repo.repsy.io/mvn/chrynan/public")
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        maven("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
     }
 }
 
 rootProject.name = "Skouter"
-include(":androidApp")
 include(":shared")
+include(":androidApp")
+include(":iosEntryPoint")

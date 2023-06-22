@@ -7,6 +7,7 @@ import com.micrantha.skouter.platform.ImageEmbeddings
 actual class EmbeddingImageAnalyzer : ImageAnalyzer<ImageEmbeddings> {
 
     actual override suspend fun analyze(image: CameraImage): Result<ImageEmbeddings> {
+        // Use CoreML similarity search
         return Result.failure(NotImplementedError())
     }
 }

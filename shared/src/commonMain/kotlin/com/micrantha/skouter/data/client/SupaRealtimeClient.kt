@@ -1,6 +1,5 @@
 package com.micrantha.skouter.data.client
 
-import Skouter.shared.BuildConfig
 import com.benasher44.uuid.uuid4
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.realtime.PostgresAction
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.onStart
 
 class SupaRealtimeClient {
     private val realtime by lazy {
-        createSupabaseClient("https://${BuildConfig.supaBaseDomain}", BuildConfig.supaBaseKey) {
+        createSupabaseClient("https://", "") {//${SkouterConfig.supaBaseDomain}", SkouterConfig.supaBaseKey) {
             install(RealtimeClient)
         }.realtime
     }

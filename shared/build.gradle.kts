@@ -1,12 +1,8 @@
-import java.util.*
-
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
-    kotlin("native.cocoapods")
     id("com.apollographql.apollo3")
-    id("com.github.gmazzo.buildconfig") version "3.1.0"
     kotlin("plugin.serialization")
 }
 
@@ -29,18 +25,6 @@ kotlin {
         }
     }
 
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        version = "1.0.0"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
-
     sourceSets {
 
         val commonMain by getting {
@@ -50,8 +34,10 @@ kotlin {
                 api(compose.foundation)
                 api(compose.materialIconsExtended)
                 api(compose.material3)
-                api(compose.animation)
-                api(compose.animationGraphics)
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+                //api(compose.animation)
+                //api(compose.animationGraphics)
 
                 api("org.kodein.di:kodein-di:7.20.1")
                 api("org.kodein.di:kodein-di-framework-compose:7.20.1")
@@ -64,23 +50,23 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
                 api("cafe.adriel.voyager:voyager-navigator:1.0.0-rc06")
                 implementation("cafe.adriel.voyager:voyager-transitions:1.0.0-rc06")
                 implementation("cafe.adriel.voyager:voyager-kodein:1.0.0-rc06")
 
                 implementation("io.ktor:ktor-client-cio:2.3.0")
-                implementation("io.ktor:ktor-client-content-negotiation:2.3.0")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.0")
+                implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
                 implementation("io.ktor:ktor-client-logging:2.3.0")
                 implementation("io.ktor:ktor-client-auth:2.3.0")
 
-                implementation("io.github.jan-tennert.supabase:gotrue-kt:1.0.1")
-                implementation("io.github.jan-tennert.supabase:postgrest-kt:1.0.1")
-                implementation("io.github.jan-tennert.supabase:apollo-graphql:1.0.1")
-                implementation("io.github.jan-tennert.supabase:storage-kt:1.0.1")
-                implementation("io.github.jan-tennert.supabase:realtime-kt:1.0.1")
+                implementation("io.github.jan-tennert.supabase:gotrue-kt:1.0.4")
+                implementation("io.github.jan-tennert.supabase:postgrest-kt:1.0.4")
+                implementation("io.github.jan-tennert.supabase:apollo-graphql:1.0.4")
+                implementation("io.github.jan-tennert.supabase:storage-kt:1.0.4")
+                implementation("io.github.jan-tennert.supabase:realtime-kt:1.0.4")
 
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:geo-compose:0.6.0")
@@ -158,33 +144,3 @@ apollo {
         packageName.set("com.micrantha.skouter.graphql")
     }
 }
-
-
-// TODO: plugin
-val propertyKeys = listOf(
-    "apiKey", "apiDomain",
-    "supaBaseKey", "supaBaseDomain",
-    "userLoginEmail", "userLoginPassword",
-)
-
-fun localProperties(): Properties {
-    val properties = Properties()
-    try {
-        properties.load(project.rootProject.file("config.properties").reader())
-    } catch (err: Throwable) {
-        println("Please setup 'config.properties' with the following keys:")
-        propertyKeys.forEach(::println)
-    }
-    return properties
-}
-
-val config = localProperties()
-
-buildConfig {
-    propertyKeys.forEach { key ->
-        config[key]?.let {
-            buildConfigField("String", key, "\"${it}\"")
-        }
-    }
-}
-
