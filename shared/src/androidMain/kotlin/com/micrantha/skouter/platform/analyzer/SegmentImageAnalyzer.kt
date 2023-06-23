@@ -13,9 +13,9 @@ import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageSegment
 import com.micrantha.skouter.platform.ImageSegments
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlin.math.min
+
+private const val MODEL_ASSET = "models/segmentation/image.tflite"
 
 actual class SegmentImageAnalyzer(
     context: Context,
@@ -25,7 +25,7 @@ actual class SegmentImageAnalyzer(
         val options = ImageSegmenterOptions.builder()
             .setBaseOptions(
                 BaseOptions.builder()
-                    .setModelAssetPath("segmentations.tflite")
+                    .setModelAssetPath(MODEL_ASSET)
                     .build()
             )
             .setRunningMode(IMAGE)
@@ -34,68 +34,63 @@ actual class SegmentImageAnalyzer(
         ImageSegmenter.createFromOptions(context, options)
     }
 
-    actual override suspend fun analyze(image: CameraImage): Result<ImageSegments> =
-        suspendCoroutine { continuation ->
-            try {
+    actual override suspend fun analyze(image: CameraImage): Result<ImageSegments> = try {
 
-                val input = BitmapImageBuilder(image.bitmap).build()
+        val input = BitmapImageBuilder(image.bitmap).build()
 
-                val segments = client.segment(input)
+        val segments = client.segment(input)
 
-                val maskImage = segments.categoryMask().get()
+        val maskImage = segments.categoryMask().get()
 
-                segments.confidenceMasks()
+        segments.confidenceMasks()
 
-                val byteBuffer = ByteBufferExtractor.extract(maskImage)
-                // Create the mask bitmap with colors and the set of detected labels.
-                val pixels = IntArray(byteBuffer.capacity())
-                for (i in pixels.indices) {
-                    // Using unsigned int here because selfie segmentation returns 0 or 255U (-1 signed)
-                    // with 0 being the found person, 255U for no label.
-                    // Deeplab uses 0 for background and other labels are 1-19,
-                    // so only providing 20 colors from ImageSegmenterHelper -> labelColors
-                    val index = byteBuffer.get(i).toUInt() % 20U
-                    val color = with(labelColors[index.toInt()]) {
-                        Color.argb(
-                            ALPHA_COLOR,
-                            Color.red(this),
-                            Color.green(this),
-                            Color.blue(this)
-                        )
-                    }
-                    pixels[i] = color
-                }
-                val coloredMaskImage = Bitmap.createBitmap(
-                    pixels,
-                    maskImage.width,
-                    maskImage.height,
-                    Bitmap.Config.ARGB_8888
+        val byteBuffer = ByteBufferExtractor.extract(maskImage)
+        // Create the mask bitmap with colors and the set of detected labels.
+        val pixels = IntArray(byteBuffer.capacity())
+        for (i in pixels.indices) {
+            // Using unsigned int here because selfie segmentation returns 0 or 255U (-1 signed)
+            // with 0 being the found person, 255U for no label.
+            // Deeplab uses 0 for background and other labels are 1-19,
+            // so only providing 20 colors from ImageSegmenterHelper -> labelColors
+            val index = byteBuffer.get(i).toUInt() % 20U
+            val color = with(labelColors[index.toInt()]) {
+                Color.argb(
+                    ALPHA_COLOR,
+                    Color.red(this),
+                    Color.green(this),
+                    Color.blue(this)
                 )
-
-                val scaleFactor =
-                    min(image.width * 1f / maskImage.width, image.height * 1f / maskImage.height)
-
-
-                val scaleWidth = (maskImage.width * scaleFactor).toInt()
-                val scaleHeight = (maskImage.height * scaleFactor).toInt()
-
-                val scaleBitmap = Bitmap.createScaledBitmap(
-                    coloredMaskImage, scaleWidth, scaleHeight, false
-                )
-
-                continuation.resume(
-                    Result.success(
-                        listOf(
-                            ImageSegment(
-                                CameraImage(scaleBitmap, image.rotation)
-                            )
-                        )
-                    )
-                )
-            } catch (err: Throwable) {
-                continuation.resume(Result.failure(err))
             }
+            pixels[i] = color
         }
+        val coloredMaskImage = Bitmap.createBitmap(
+            pixels,
+            maskImage.width,
+            maskImage.height,
+            Bitmap.Config.ARGB_8888
+        )
+
+        val scaleFactor =
+            min(image.width * 1f / maskImage.width, image.height * 1f / maskImage.height)
+
+
+        val scaleWidth = (maskImage.width * scaleFactor).toInt()
+        val scaleHeight = (maskImage.height * scaleFactor).toInt()
+
+        val scaleBitmap = Bitmap.createScaledBitmap(
+            coloredMaskImage, scaleWidth, scaleHeight, false
+        )
+
+        Result.success(
+            listOf(
+                ImageSegment(
+                    CameraImage(scaleBitmap, image.rotation)
+                )
+            )
+        )
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
 
 
     companion object {

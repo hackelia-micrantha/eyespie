@@ -16,11 +16,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.micrantha.bluebell.domain.arch.Dispatch
 import org.kodein.di.compose.rememberFactory
 
 @Composable
-actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatch) {
+actual fun CameraScanner(
+    modifier: Modifier,
+    enabled: Boolean,
+    onCameraImage: (CameraImage) -> Unit
+) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
@@ -42,7 +45,7 @@ actual fun CameraScanner(modifier: Modifier, enabled: Boolean, dispatch: Dispatc
             useCases.addUseCase(preview)
 
             val cameraAnalyzerOptions = CameraAnalyzerOptions(
-                dispatch = dispatch,
+                callback = onCameraImage,
                 image = { previewView.bitmap }
             )
 

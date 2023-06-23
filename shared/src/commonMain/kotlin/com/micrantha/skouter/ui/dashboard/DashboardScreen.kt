@@ -1,7 +1,10 @@
 package com.micrantha.skouter.ui.dashboard
 
+import androidx.compose.foundation.gestures.Orientation.Vertical
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -51,7 +54,7 @@ class DashboardScreen : Screen {
         dispatch: Dispatch
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().scrollable(rememberScrollState(), Vertical)
         ) {
 
             AppTitle()

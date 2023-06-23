@@ -5,6 +5,7 @@ import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.platform.CameraAnalyzer
 import com.micrantha.skouter.platform.CameraAnalyzerOptions
 import com.micrantha.skouter.platform.analyzer.ColorImageAnalyzer
+import com.micrantha.skouter.platform.analyzer.EmbeddingImageAnalyzer
 import com.micrantha.skouter.platform.analyzer.LabelImageAnalyzer
 import com.micrantha.skouter.platform.analyzer.ObjectImageAnalyzer
 import com.micrantha.skouter.platform.analyzer.SegmentImageAnalyzer
@@ -25,6 +26,7 @@ fun androidDependencies(
     bindProvider { ColorImageAnalyzer(context) }
     bindProvider { ObjectImageAnalyzer(context) }
     bindProvider { SegmentImageAnalyzer(context) }
+    bindProvider { EmbeddingImageAnalyzer(context) }
 
     bindFactory<CameraAnalyzerOptions, CameraAnalyzer> { options ->
         CameraAnalyzer(options)

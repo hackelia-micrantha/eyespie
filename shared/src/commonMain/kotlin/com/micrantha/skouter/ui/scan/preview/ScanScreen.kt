@@ -40,6 +40,7 @@ import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.platform.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
 import dev.icerock.moko.permissions.Permission.CAMERA
 import dev.icerock.moko.permissions.PermissionsController
@@ -71,9 +72,10 @@ class ScanScreen : Screen {
         ) {
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-                state.enabled,
-                dispatch
-            )
+                state.enabled
+            ) {
+                dispatch(ImageCaptured(it))
+            }
 
             if (state.overlays.isNotEmpty()) {
                 ScannedOverlays(

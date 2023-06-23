@@ -1,13 +1,12 @@
 package com.micrantha.skouter.ui.login
 
-import com.micrantha.bluebell.data.hash
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.SkouterConfig
 
 data class LoginState(
     val email: String = SkouterConfig.userLoginEmail,
-    val hash: String = hash(SkouterConfig.userLoginPassword),
+    val hash: String = SkouterConfig.userLoginPassword,
     val status: UiResult<Unit> = UiResult.Default
 )
 

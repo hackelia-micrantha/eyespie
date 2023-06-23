@@ -1,7 +1,6 @@
 package com.micrantha.skouter.platform
 
 import androidx.compose.ui.geometry.Rect
-import com.micrantha.bluebell.domain.arch.Action
 import okio.ByteString
 
 interface ImageAnalyzer<T> {
@@ -29,8 +28,6 @@ data class ImageColor(
 )
 
 typealias ImageColors = List<ImageColor>
-
-data class ImageCaptured(val image: CameraImage) : Action
 
 data class ImageSegment(
     val mask: CameraImage

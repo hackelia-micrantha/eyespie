@@ -1,6 +1,7 @@
 package com.micrantha.bluebell.domain.usecase
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,11 +17,11 @@ import kotlinx.coroutines.withContext
  */
 suspend fun <Out> dispatchUseCase(
     coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    block: suspend () -> Out
+    block: suspend CoroutineScope.() -> Out
 ): Result<Out> {
     return try {
         withContext(coroutineDispatcher) {
-            Result.success(block())
+            Result.success(block(this))
         }
     } catch (e: Exception) {
         Result.failure(e)

@@ -14,35 +14,33 @@ import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageLabel
 import com.micrantha.skouter.platform.ImageObject
 import com.micrantha.skouter.platform.ImageObjects
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+
+private const val MODEL_ASSET = "models/detection/image.tflite"
 
 actual class ObjectImageAnalyzer(context: Context) : ImageAnalyzer<ImageObjects> {
     private val client by lazy {
         val options = ObjectDetectorOptions.builder()
             .setBaseOptions(
                 BaseOptions.builder()
-                    .setModelAssetPath("objects.tflite")
+                    .setModelAssetPath(MODEL_ASSET)
                     .build()
             )
             .setRunningMode(IMAGE)
-            .setScoreThreshold(0.6f)
+            .setScoreThreshold(0.7f)
+            .setMaxResults(5)
             .build()
         ObjectDetector.createFromOptions(context, options)
     }
 
-    actual override suspend fun analyze(image: CameraImage): Result<ImageObjects> =
-        suspendCoroutine { continuation ->
-            try {
-                val input = BitmapImageBuilder(image.bitmap).build()
+    actual override suspend fun analyze(image: CameraImage): Result<ImageObjects> = try {
+        val input = BitmapImageBuilder(image.bitmap).build()
 
-                val result = client.detect(input).detections().map(::map)
+        val result = client.detect(input).detections().map(::map)
 
-                continuation.resume(Result.success(result))
-            } catch (err: Throwable) {
-                continuation.resume(Result.failure(err))
-            }
-        }
+        Result.success(result)
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
 
     private fun map(obj: Detection) = ImageObject(
         labels = obj.categories().map { ImageLabel(it.categoryName(), it.score()) },

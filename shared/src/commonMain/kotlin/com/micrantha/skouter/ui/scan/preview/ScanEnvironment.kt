@@ -12,16 +12,20 @@ import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
-import com.micrantha.skouter.platform.ImageCaptured
 import com.micrantha.skouter.ui.component.combine
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditSaved
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageSaved
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageScanned
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveError
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScanSavable
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedColors
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedLabels
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedMatch
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedObjects
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedSegments
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
@@ -70,11 +74,6 @@ class ScanEnvironment(
             }
 
             is ImageCaptured -> analyzeCameraImageUseCase(action.image)
-                .collect { result ->
-                    result
-                        .onSuccess { dispatch(it) }
-                        .onFailure { Log.e("unable to analyze image", it) }
-                }
         }
     }
 
@@ -83,12 +82,24 @@ class ScanEnvironment(
             image = action.image,
         )
 
-        is ImageScanned -> state.copy(
-            labels = state.labels.combine(action.label),
-            colors = state.colors.combine(action.color),
-            detection = action.detection,
-            segment = action.segment,
-            match = action.match.data
+        is ScannedLabels -> state.copy(
+            labels = state.labels.combine(action.labels)
+        )
+
+        is ScannedColors -> state.copy(
+            colors = state.colors.combine(action.colors)
+        )
+
+        is ScannedObjects -> state.copy(
+            detection = action.detections.firstOrNull(),
+        )
+
+        is ScannedSegments -> state.copy(
+            segment = action.segments.firstOrNull()
+        )
+
+        is ScannedMatch -> state.copy(
+            match = action.matches.firstOrNull()
         )
 
         is ScanSavable -> state.copy(

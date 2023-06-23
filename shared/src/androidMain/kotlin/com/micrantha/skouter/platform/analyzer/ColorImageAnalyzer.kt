@@ -12,6 +12,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.sqrt
 
+private const val MODEL_ASSET = "colors.csv"
+
 actual class ColorImageAnalyzer(
     context: Context
 ) : ImageAnalyzer<ImageColors> {
@@ -58,7 +60,7 @@ actual class ColorImageAnalyzer(
     }
 
     private fun Context.readColorNames() =
-        assets.open("color_names.csv").bufferedReader().use { reader ->
+        assets.open(MODEL_ASSET).bufferedReader().use { reader ->
             reader.readLine()
             reader.lineSequence()
                 .filter { it.isNotBlank() }

@@ -4,18 +4,18 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.Clues
-import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
-import com.micrantha.skouter.domain.model.LabelClue
+import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.model.MatchClue
+import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.SegmentClue
+import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.CameraImage
-import com.micrantha.skouter.platform.ImageEmbedding
 import okio.Path
 import kotlin.math.max
 
@@ -27,7 +27,7 @@ data class ScanState(
     val enabled: Boolean = true,
     val detection: DetectClue? = null,
     val segment: SegmentClue? = null,
-    val match: ImageEmbedding? = null,
+    val match: MatchClue? = null,
     val path: Path? = null,
     val playerID: String? = null
 )
@@ -52,12 +52,26 @@ sealed class ScanAction : Action {
     data class EditSaved(override val path: Path) : ScanAction(), ScanSavable
     data class ImageSaved(override val path: Path) : ScanAction(), ScanSavable
 
-    data class ImageScanned(
-        val label: LabelClue,
-        val color: ColorClue,
-        val detection: DetectClue,
-        val segment: SegmentClue,
-        val match: MatchClue
+    data class ImageCaptured(val image: CameraImage) : ScanAction()
+
+    data class ScannedLabels(
+        val labels: LabelProof
+    ) : ScanAction()
+
+    data class ScannedColors(
+        val colors: ColorProof
+    ) : ScanAction()
+
+    data class ScannedObjects(
+        val detections: DetectProof
+    ) : ScanAction()
+
+    data class ScannedSegments(
+        val segments: SegmentProof
+    ) : ScanAction()
+
+    data class ScannedMatch(
+        val matches: MatchProof
     ) : ScanAction()
 }
 
@@ -82,7 +96,7 @@ internal fun ScanState.asProof() = Proof(
     ),
     name = "",
     image = path!!,
-    match = match!!,
+    match = match!!.data,
     location = location,
     playerID = playerID!!
 )

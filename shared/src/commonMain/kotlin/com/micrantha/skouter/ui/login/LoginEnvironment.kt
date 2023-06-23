@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui.login
 
-import com.micrantha.bluebell.data.hash
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
@@ -38,7 +37,7 @@ class LoginEnvironment(
 
     override fun reduce(state: LoginState, action: Action) = when (action) {
         is ChangedEmail -> state.copy(email = action.email)
-        is ChangedPassword -> state.copy(hash = hash(action.password))
+        is ChangedPassword -> state.copy(hash = action.password)
         is OnSuccess -> state.copy(status = Default)
         is OnLogin -> state.copy(status = busy(Strings.LoggingIn))
         is OnError -> state.copy(status = failure(Strings.LoginFailed))
@@ -54,6 +53,7 @@ class LoginEnvironment(
                 }.onSuccess {
                     dispatch(OnSuccess)
                 }
+
             is OnSuccess -> navigate<DashboardScreen>()
         }
     }

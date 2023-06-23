@@ -12,13 +12,15 @@ import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageEmbeddings
 import okio.ByteString.Companion.toByteString
 
+private const val MODEL_ASSET = "models/embeddings/image.tflite"
+
 actual class EmbeddingImageAnalyzer(context: Context) : ImageAnalyzer<ImageEmbeddings> {
 
     private val client by lazy {
         val options = ImageEmbedderOptions.builder()
             .setBaseOptions(
                 BaseOptions.builder()
-                    .setModelAssetPath("embeddings.tflite")
+                    .setModelAssetPath(MODEL_ASSET)
                     .build()
             )
             .setQuantize(true)

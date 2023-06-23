@@ -11,8 +11,8 @@ import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageLabel
 import com.micrantha.skouter.platform.ImageLabels
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+
+private const val MODEL_ASSET = "models/classification/image.tflite"
 
 actual class LabelImageAnalyzer(context: Context) : ImageAnalyzer<ImageLabels> {
 
@@ -21,7 +21,7 @@ actual class LabelImageAnalyzer(context: Context) : ImageAnalyzer<ImageLabels> {
             .setRunningMode(IMAGE)
             .setBaseOptions(
                 BaseOptions.builder()
-                    .setModelAssetPath("classifier.tflite")
+                    .setModelAssetPath(MODEL_ASSET)
                     .build()
             )
             .setScoreThreshold(0.6f)
@@ -29,20 +29,18 @@ actual class LabelImageAnalyzer(context: Context) : ImageAnalyzer<ImageLabels> {
         ImageClassifier.createFromOptions(context, options)
     }
 
-    actual override suspend fun analyze(image: CameraImage): Result<ImageLabels> =
-        suspendCoroutine { continuation ->
-            try {
-                val input = BitmapImageBuilder(image.bitmap).build()
+    actual override suspend fun analyze(image: CameraImage): Result<ImageLabels> = try {
+        val input = BitmapImageBuilder(image.bitmap).build()
 
-                val result = client.classify(input)
-                    .classificationResult().classifications().flatMap { it.categories() }
-                    .map(::map)
+        val result = client.classify(input)
+            .classificationResult().classifications().flatMap { it.categories() }
+            .map(::map)
 
-                continuation.resume(Result.success(result))
-            } catch (err: Throwable) {
-                continuation.resume(Result.failure(err))
-            }
-        }
+        Result.success(result)
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
+        
 
     private fun map(label: Category) = ImageLabel(
         confidence = label.score(),

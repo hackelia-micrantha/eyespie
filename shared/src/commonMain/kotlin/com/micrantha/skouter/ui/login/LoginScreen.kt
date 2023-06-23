@@ -1,5 +1,7 @@
 package com.micrantha.skouter.ui.login
 
+import androidx.compose.foundation.gestures.Orientation.Vertical
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,7 +47,10 @@ class LoginScreen : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun Render(state: LoginUiState, dispatch: Dispatch) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+                .scrollable(rememberScrollState(), Vertical), contentAlignment = Alignment.Center
+        ) {
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
