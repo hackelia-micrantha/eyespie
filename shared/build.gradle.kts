@@ -5,6 +5,7 @@ plugins {
     id("com.apollographql.apollo3")
     kotlin("plugin.serialization")
     kotlin("native.cocoapods")
+    id("com.micrantha.bluebell")
 }
 
 kotlin {
@@ -150,5 +151,17 @@ android {
 apollo {
     service("service") {
         packageName.set("com.micrantha.skouter.graphql")
+    }
+}
+
+
+bluebell {
+    config {
+        packageName = "com.micrantha.skouter"
+        className = "SkouterConfig"
+        fileName = "skouter.properties"
+    }
+    models {
+        ids = listOf("microsoft/resnet-50")
     }
 }
