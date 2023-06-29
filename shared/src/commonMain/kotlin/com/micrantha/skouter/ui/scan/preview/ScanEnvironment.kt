@@ -32,11 +32,12 @@ import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
 
 class ScanEnvironment(
     private val context: ScreenContext,
+    private val mapper: ScanStateMapper,
     private val cameraCaptureUseCase: CameraCaptureUseCase,
     private val saveThingImageUseCase: SaveThingImageUseCase,
     private val analyzeCameraImageUseCase: AnalyzeCameraImageUseCase,
     private val currentSession: CurrentSession
-) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState>,
+) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState> by mapper,
     Router by context.router,
     FileSystem by context.fileSystem,
     Dispatcher by context.dispatcher,
@@ -54,9 +55,14 @@ class ScanEnvironment(
                 dispatch(SaveError)
             }
 
-            is EditSaved -> navigate(state.editScreen(), options = Replace)
+            is EditSaved -> navigate(
+                ScanEditScreen(
+                    context = context,
+                    proof = mapper.prove(state)
+                ), options = Replace
+            )
 
-            is ImageSaved -> saveThingImageUseCase(state.asProof())
+            is ImageSaved -> saveThingImageUseCase(mapper.prove(state))
                 .onFailure {
                     Log.e("unable to save scan", it)
                     dispatch(SaveError)
@@ -118,15 +124,4 @@ class ScanEnvironment(
 
         else -> state
     }
-
-    override fun map(state: ScanState) = ScanUiState(
-        clues = state.clues(),
-        overlays = emptyList(),
-        enabled = state.enabled
-    )
-
-    private fun ScanState.editScreen() = ScanEditScreen(
-        context = context,
-        proof = asProof()
-    )
 }

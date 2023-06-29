@@ -3,21 +3,17 @@ package com.micrantha.skouter.ui.scan.preview
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
 import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
-import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.model.MatchClue
 import com.micrantha.skouter.domain.model.MatchProof
-import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.CameraImage
 import okio.Path
-import kotlin.math.max
 
 data class ScanState(
     val labels: LabelProof? = null,
@@ -86,43 +82,3 @@ data class ScanBox(
     val label: String,
     val scale: Float
 ) : ScanOverlay
-
-
-internal fun ScanState.asProof() = Proof(
-    clues = Clues(
-        labels = labels,
-        location = LocationClue(location!!.data!!),
-        colors = colors
-    ),
-    name = "",
-    image = path!!,
-    match = match!!.data,
-    location = location,
-    playerID = playerID!!
-)
-
-internal fun ScanState.clues() = mutableListOf<String>().apply {
-    labels?.firstOrNull {
-        add("What: ${it.display()} +${labels.size - 1}")
-    }
-    colors?.firstOrNull { add("Color: ${it.display()} +${colors.size - 1}") }
-    location?.let { add("Location: ${it.point}") }
-}
-
-internal fun ScanState.overlays(): List<ScanOverlay> {
-    val result = mutableListOf<ScanOverlay>()
-    if (image == null) return result
-    detection?.let {
-        result.add(it.asScanBoxIn(image.width, image.height))
-    }
-    segment?.let {
-        result.add(ScanMask(it.data))
-    }
-    return result
-}
-
-internal fun DetectClue.asScanBoxIn(width: Int, height: Int) = ScanBox(
-    rect,
-    labels.firstOrNull()?.display() ?: "",
-    max(rect.width / width, rect.height / height)
-)

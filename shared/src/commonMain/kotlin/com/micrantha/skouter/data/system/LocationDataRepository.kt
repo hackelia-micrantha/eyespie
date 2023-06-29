@@ -4,6 +4,7 @@ import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.data.system.mapping.copy
 import com.micrantha.skouter.data.system.source.LocationLocalSource
 import com.micrantha.skouter.domain.model.Location
+import com.micrantha.skouter.domain.model.Location.Point
 import com.micrantha.skouter.domain.repository.LocationRepository
 import dev.icerock.moko.geo.LatLng
 import kotlinx.coroutines.flow.Flow
@@ -36,10 +37,13 @@ class LocationDataRepository(
     private suspend fun flowToCurrentSession() =
         localSource.getLocationsFlow().map(::save).filterNotNull().onEach(::update).collect()
 
-    private fun save(latLon: LatLng): Location? {
-        return location.updateAndGet { loc ->
-            loc?.copy(point = loc.point.copy(latLng = latLon))
-        }
+    private fun save(latLon: LatLng) = location.updateAndGet { loc ->
+        loc?.copy(point = loc.point.copy(latLng = latLon)) ?: Location(
+            point = Point(
+                latitude = latLon.latitude,
+                longitude = latLon.longitude
+            )
+        )
     }
 
     private fun update(location: Location) {

@@ -131,15 +131,15 @@ class ScanScreen : Screen {
         ) {
             data.forEach {
                 when (it) {
-                    is ScanBox -> DrawScanBox(it, matrix, textStyle, measurer)
-                    is ScanMask -> DrawScanMask(it)
+                    is ScanBox -> drawScanBox(it, matrix, textStyle, measurer)
+                    is ScanMask -> drawScanMask(it)
                 }
             }
         }
     }
 
     @OptIn(ExperimentalTextApi::class)
-    private fun DrawScope.DrawScanBox(
+    private fun DrawScope.drawScanBox(
         data: ScanBox,
         matrix: Matrix,
         textStyle: TextStyle,
@@ -163,7 +163,7 @@ class ScanScreen : Screen {
         )
     }
 
-    private fun DrawScope.DrawScanMask(
+    private fun DrawScope.drawScanMask(
         data: ScanMask
     ) {
         drawImage(data.mask)

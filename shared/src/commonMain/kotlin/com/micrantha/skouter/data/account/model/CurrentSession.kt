@@ -8,25 +8,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class CurrentSession {
-    private val response = MutableStateFlow<Session?>(null)
+    private val data = MutableStateFlow<Session?>(null)
 
     fun update(value: Session) {
-        response.update { value }
+        data.update { value }
     }
 
     fun update(value: Location) {
-        response.update {
+        data.update {
             it?.copy(player = it.player.copy(location = value))
         }
     }
 
-    fun requirePlayer() = response.value!!.player
-    
-    val player: Player? = response.value?.player
+    fun requirePlayer() = data.value!!.player
 
-    fun requireAccessToken() = response.value!!.accessToken
+    val player: Player? = data.value?.player
 
-    fun requireRefreshToken() = response.value!!.refreshToken
+    fun requireAccessToken() = data.value!!.accessToken
 
-    fun asStateFlow() = response.asStateFlow()
+    fun requireRefreshToken() = data.value!!.refreshToken
+
+    fun asStateFlow() = data.asStateFlow()
 }
