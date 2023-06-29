@@ -11,6 +11,7 @@ open class BluebellPlugin : Plugin<Project> {
 
         afterEvaluate {
             configureBuilds(buildConfig.config)
+            downloadModels(buildConfig.models)
         }
     }
 }

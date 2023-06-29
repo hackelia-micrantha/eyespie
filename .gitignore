@@ -3,6 +3,7 @@
 
 iosEntryPoint/iosEntryPoint.podspec
 shared/shared.podspec
+models
 
 
 ### Android ###
