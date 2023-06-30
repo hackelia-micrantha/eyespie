@@ -1,8 +1,7 @@
 package com.micrantha.skouter.ui.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -37,11 +36,11 @@ fun ChoiceField(
     var current by remember { mutableStateOf(choices.first()) }
     var active by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = modifier
     ) {
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.matchParentSize(),
             value = onValue(current),
             readOnly = onCustom == null,
             onValueChange = onCustom ?: { },
@@ -64,7 +63,7 @@ fun ChoiceField(
         )
 
         ChoiceSelector(
-            modifier = Modifier.align(Alignment.End),
+            modifier = Modifier.align(Alignment.BottomEnd),
             active = active,
             onDismiss = {
                 active = false

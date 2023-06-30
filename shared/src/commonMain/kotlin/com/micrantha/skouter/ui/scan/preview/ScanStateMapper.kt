@@ -1,7 +1,6 @@
 package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.data.weightedRandomSample
-import com.micrantha.bluebell.data.weightedTo
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.DetectClue
@@ -10,7 +9,7 @@ import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.model.Proof
 import kotlin.math.max
 
-object ScanStateMapper : StateMapper<ScanState, ScanUiState> {
+class ScanStateMapper : StateMapper<ScanState, ScanUiState> {
 
     override fun map(state: ScanState) = ScanUiState(
         clues = clues(state),
@@ -21,18 +20,18 @@ object ScanStateMapper : StateMapper<ScanState, ScanUiState> {
     fun prove(state: ScanState) = Proof(
         clues = Clues(
             labels = state.labels,
-            location = LocationClue(state.location!!.data!!),
+            location = state.location?.data?.let { LocationClue(it) },
             colors = state.colors
         ),
         name = "",
         image = state.path!!,
         match = state.match!!.data,
-        location = state.location,
+        location = state.location?.point,
         playerID = state.playerID!!
     )
 
     private fun LabelProof.sample() = this.weightedRandomSample {
-        it.data weightedTo (it.confidence * 10).toInt()
+        it.confidence.toDouble()
     }
 
     private fun <T> format(item: T?, size: Int): String? = when {

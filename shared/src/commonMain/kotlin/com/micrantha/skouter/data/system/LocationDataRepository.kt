@@ -24,8 +24,10 @@ class LocationDataRepository(
 
     override suspend fun start() {
         localSource.startTracking()
-        flowToCurrentSession()
+
         exponentialBackoffToRemote()
+        
+        flowToCurrentSession()
     }
 
     override fun flow(): Flow<Location> = location.filterNotNull()

@@ -10,6 +10,8 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.ui.component.Choice
 import com.micrantha.skouter.ui.component.updateKey
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ClearColor
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ClearLabel
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ColorChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.CustomLabelChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.Init
@@ -29,12 +31,13 @@ class ScanEditEnvironment(
 ) : MappedScreenEnvironment<ScanEditState, ScanEditUiState>,
     Dispatcher by context.dispatcher,
     Router by context.router {
+    
     override fun reduce(state: ScanEditState, action: Action) = when (action) {
         is Init -> state.copy(
-            labels = action.proof.clues.labels?.associate {
+            labels = action.proof.clues?.labels?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
-            colors = action.proof.clues.colors?.associate {
+            colors = action.proof.clues?.colors?.associate {
                 uuid4().toString() to it
             }?.toMutableMap(),
             proof = action.proof
@@ -59,6 +62,14 @@ class ScanEditEnvironment(
 
         is LoadedImage -> state.copy(
             image = action.data
+        )
+
+        is ClearLabel -> state.copy(
+            customLabel = ""
+        )
+
+        is ClearColor -> state.copy(
+            customColor = ""
         )
 
         is CustomLabelChanged -> state.copy(customLabel = action.data)
@@ -102,6 +113,7 @@ class ScanEditEnvironment(
                 key = it.key
             )
         } ?: emptyList(),
+        customColor = state.customColor,
         name = state.name ?: "",
         image = state.image,
         enabled = state.disabled.not()
@@ -113,7 +125,7 @@ class ScanEditEnvironment(
             labels = labels?.values?.toSet(),
             colors = colors?.values?.toSet()
         ),
-        name = name!!,
+        name = name,
     )
 
 }

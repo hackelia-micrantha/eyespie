@@ -4,6 +4,8 @@ import com.micrantha.skouter.data.clue.mapping.ClueDomainMapper
 import com.micrantha.skouter.data.clue.model.LabelClueData
 import com.micrantha.skouter.data.clue.model.ProofData
 import com.micrantha.skouter.data.system.mapping.LocationDomainMapper
+import com.micrantha.skouter.data.thing.model.MatchRequest
+import com.micrantha.skouter.data.thing.model.MatchResponse
 import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingRequest
@@ -11,13 +13,16 @@ import com.micrantha.skouter.data.thing.model.ThingResponse
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.LabelClue
-import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.Location.Point
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
+import com.micrantha.skouter.platform.ImageEmbedding
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
 
 class ThingsDomainMapper(
     private val locationMapper: LocationDomainMapper,
@@ -28,10 +33,10 @@ class ThingsDomainMapper(
         ThingRequest(
             name = proof.name,
             imageUrl = proof.image.toString(),
-            proof = proof(proof.clues, proof.location),
+            proof = proof.clues?.let { prove(it) },
             created_by = proof.playerID,
-            location = proof.location.point.toString(),
-            embedding = proof.match.toByteArray()
+            location = proof.location.toString(),
+            embedding = Json.encodeToJsonElement(proof.match.toByteArray())
         )
 
     fun map(thing: Thing) = ThingRequest(
@@ -58,7 +63,6 @@ class ThingsDomainMapper(
                 name = "" // TODO: graphql
             ),
             guesses = emptyList(),
-            nodeId = "", // TODO
             location = point,
             clues = data.proof?.let { prove(it) } ?: Clues()
         )
@@ -79,9 +83,21 @@ class ThingsDomainMapper(
         distance = distance
     )
 
-    private fun proof(data: Clues, location: Location) = ProofData(
+    fun match(embedding: ImageEmbedding) = MatchRequest(
+        embedding = Json.encodeToJsonElement(embedding),
+        threshold = 0.5f,
+        count = 5,
+    )
+
+    fun match(data: MatchResponse) = Thing.Match(
+        id = data.id,
+        image = Json.decodeFromJsonElement(data.content),
+        similarity = data.similarity
+    )
+
+    private fun prove(data: Clues) = ProofData(
         labels = data.labels?.map { LabelClueData(it.data, it.confidence) },
-        location = location.data?.let { clueMapper.location(it) },
+        location = data.location?.data?.let { clueMapper.location(it) },
         colors = data.colors?.map { it.data }
     )
 

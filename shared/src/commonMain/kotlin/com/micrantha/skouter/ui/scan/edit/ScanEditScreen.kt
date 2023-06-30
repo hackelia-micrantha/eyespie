@@ -3,14 +3,20 @@ package com.micrantha.skouter.ui.scan.edit
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +35,8 @@ import com.micrantha.skouter.ui.component.ChoiceField
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.navi.NavAction
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ClearColor
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ClearLabel
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ColorChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.CustomLabelChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.Init
@@ -101,29 +109,53 @@ class ScanEditScreen(
                 )
 
                 if (state.labels.isNotEmpty()) {
-                    ChoiceField(
-                        label = { Text(text = "What") },
-                        choices = state.labels,
-                        onValue = {
-                            state.customLabel ?: it.label
-                        },
-                        onCustom = {
-                            dispatch(CustomLabelChanged(it))
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        ChoiceField(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text(text = "What") },
+                            choices = state.labels,
+                            onValue = {
+                                state.customLabel ?: it.label
+                            },
+                            onCustom = {
+                                dispatch(CustomLabelChanged(it))
+                            }
+                        ) { choice ->
+                            dispatch(LabelChanged(choice))
                         }
-                    ) { choice ->
-                        dispatch(LabelChanged(choice))
+                        Spacer(Modifier.width(Dimensions.content))
+                        IconButton(onClick = { dispatch(ClearLabel) }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
 
                 if (state.colors.isNotEmpty()) {
-                    ChoiceField(
-                        label = { Text(text = "Color") },
-                        choices = state.colors,
-                        onValue = {
-                            it.label
-                        },
-                    ) { choice ->
-                        dispatch(ColorChanged(choice))
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        ChoiceField(
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text(text = "Color") },
+                            choices = state.colors,
+                            onValue = {
+                                state.customColor ?: it.label
+                            },
+                        ) { choice ->
+                            dispatch(ColorChanged(choice))
+                        }
+                        Spacer(Modifier.width(Dimensions.content))
+                        IconButton(onClick = { dispatch(ClearColor) }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = null
+                            )
+                        }
                     }
                 }
             }

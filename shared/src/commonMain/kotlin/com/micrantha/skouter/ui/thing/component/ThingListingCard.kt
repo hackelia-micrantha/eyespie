@@ -30,12 +30,10 @@ fun ThingListingCard(modifier: Modifier = Modifier, thing: Thing.Listing) {
             Column(
                 modifier = Modifier.padding(Dimensions.content)
             ) {
-                Text(
-                    text = thing.name
-                )
-                Text(
-                    text = longDateTime(thing.createdAt)
-                )
+                thing.name?.let {
+                    Text(text = it)
+                }
+                Text(text = longDateTime(thing.createdAt))
             }
         }
     }

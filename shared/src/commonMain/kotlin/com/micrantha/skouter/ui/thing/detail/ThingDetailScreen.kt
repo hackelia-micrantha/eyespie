@@ -10,7 +10,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 
-class ThingDetailScreen : Screen {
+class ThingDetailScreen(
+    private val id: String,
+) : Screen {
 
     @Composable
     override fun Content() {

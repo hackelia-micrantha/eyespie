@@ -21,6 +21,7 @@ import com.micrantha.skouter.ui.scan.edit.ScanEditScreenModel
 import com.micrantha.skouter.ui.scan.preview.ScanEnvironment
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreenModel
+import com.micrantha.skouter.ui.scan.preview.ScanStateMapper
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.LoadCameraImageUseCase
@@ -58,6 +59,7 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::ScanScreen)
     bindProviderOf(::ScanEnvironment)
     bindProviderOf(::ScanScreenModel)
+    bindProviderOf(::ScanStateMapper)
 
     bindProviderOf(::ScanEditEnvironment)
     bindProviderOf(::ScanEditScreenModel)

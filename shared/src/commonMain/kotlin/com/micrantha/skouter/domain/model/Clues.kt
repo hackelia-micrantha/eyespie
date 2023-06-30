@@ -12,11 +12,11 @@ data class Clues(
 )
 
 data class Proof(
-    val clues: Clues,
-    val location: Location,
+    val clues: Clues?,
+    val location: Location.Point?,
     val match: ImageEmbedding,
     val image: Path,
-    val name: String,
+    val name: String?,
     val playerID: String
 )
 

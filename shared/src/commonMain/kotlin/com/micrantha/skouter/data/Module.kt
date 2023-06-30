@@ -31,6 +31,7 @@ import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
 import dev.icerock.moko.geo.LocationTracker
 import org.kodein.di.DI
 import org.kodein.di.bindProviderOf
+import org.kodein.di.bindSingleton
 import org.kodein.di.bindSingletonOf
 import org.kodein.di.delegate
 
@@ -52,7 +53,7 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindProviderOf(::AccountDataRepository)
     bindProviderOf(::AccountDomainMapper)
 
-    bindSingletonOf(::CurrentSession)
+    bindSingleton { CurrentSession }
 
     bindProviderOf(::StorageLocalSource)
     bindProviderOf(::StorageRemoteSource)

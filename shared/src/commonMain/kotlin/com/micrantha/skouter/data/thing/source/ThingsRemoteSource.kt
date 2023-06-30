@@ -1,6 +1,8 @@
 package com.micrantha.skouter.data.thing.source
 
 import com.micrantha.skouter.data.client.SupaClient
+import com.micrantha.skouter.data.thing.model.MatchRequest
+import com.micrantha.skouter.data.thing.model.MatchResponse
 import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingRequest
@@ -35,4 +37,10 @@ class ThingsRemoteSource(
         Result.failure(err)
     }
 
+    suspend fun match(request: MatchRequest) = try {
+        val res = supaClient.match(request).decodeList<MatchResponse>()
+        Result.success(res)
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
 }

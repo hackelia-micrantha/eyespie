@@ -5,7 +5,6 @@ import kotlin.time.Duration
 
 data class Game(
     override val id: String,
-    override val nodeId: String,
     override val createdAt: Instant,
     val name: String,
     val expires: Instant,
@@ -22,7 +21,7 @@ data class Game(
 
     data class Listing(
         override val id: String,
-        override val nodeId: String,
+        val nodeId: String,
         override val createdAt: Instant,
         val name: String,
         val expiresAt: Instant,
