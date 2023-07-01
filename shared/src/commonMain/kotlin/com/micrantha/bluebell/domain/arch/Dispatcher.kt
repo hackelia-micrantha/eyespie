@@ -1,7 +1,5 @@
 package com.micrantha.bluebell.domain.arch
 
-import kotlinx.coroutines.flow.Flow
-
 typealias Dispatch = (Action) -> Unit
 
 fun interface Dispatcher {
@@ -11,7 +9,7 @@ fun interface Dispatcher {
         fun register(dispatch: Dispatch)
     }
 
-    fun interface Observer {
-        fun actions(): Flow<Action>
+    interface Observer {
+        suspend fun receive(action: Action)
     }
 }

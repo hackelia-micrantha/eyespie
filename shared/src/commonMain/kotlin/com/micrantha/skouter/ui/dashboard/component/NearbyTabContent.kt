@@ -16,6 +16,7 @@ import com.micrantha.bluebell.ui.components.status.EmptyContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.AddFriendClicked
+import com.micrantha.skouter.ui.dashboard.DashboardAction.GuessThing
 import com.micrantha.skouter.ui.dashboard.DashboardAction.HasMorePlayers
 import com.micrantha.skouter.ui.dashboard.DashboardAction.HasMoreThings
 import com.micrantha.skouter.ui.dashboard.DashboardUiState.Data.Nearby
@@ -42,7 +43,9 @@ fun NearbyTabContent(
                         Modifier.padding(bottom = Dimensions.content)
                 ),
                 thing = thing
-            )
+            ) {
+                dispatch(GuessThing(thing))
+            }
         }
         when {
             tab.things.data.isEmpty() -> item {
@@ -52,6 +55,7 @@ fun NearbyTabContent(
                     icon = Icons.Default.Photo
                 )
             }
+
             tab.things.hasMore -> item {
                 HasMoreFooter {
                     dispatch(HasMoreThings)
@@ -83,6 +87,7 @@ fun NearbyTabContent(
                     dispatch(AddFriendClicked)
                 }
             }
+
             tab.players.hasMore -> item {
                 HasMoreFooter {
                     dispatch(HasMorePlayers)

@@ -17,6 +17,7 @@ import kotlinx.coroutines.withContext
  */
 suspend fun <Out> dispatchUseCase(
     coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    always: () -> Unit = {},
     block: suspend CoroutineScope.() -> Out
 ): Result<Out> {
     return try {
@@ -25,6 +26,8 @@ suspend fun <Out> dispatchUseCase(
         }
     } catch (e: Exception) {
         Result.failure(e)
+    } finally {
+        always()
     }
 }
 

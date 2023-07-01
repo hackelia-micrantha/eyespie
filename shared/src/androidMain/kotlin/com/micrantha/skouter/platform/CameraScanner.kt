@@ -22,7 +22,7 @@ import org.kodein.di.compose.rememberFactory
 actual fun CameraScanner(
     modifier: Modifier,
     enabled: Boolean,
-    onCameraImage: (CameraImage) -> Unit
+    onCameraImage: ImageAnalyzerCallback
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current

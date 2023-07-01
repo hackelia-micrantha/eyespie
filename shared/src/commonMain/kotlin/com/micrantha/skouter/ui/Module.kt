@@ -18,6 +18,11 @@ import com.micrantha.skouter.ui.login.LoginScreen
 import com.micrantha.skouter.ui.login.LoginScreenModel
 import com.micrantha.skouter.ui.scan.edit.ScanEditEnvironment
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreenModel
+import com.micrantha.skouter.ui.scan.guess.ScanGuessArgs
+import com.micrantha.skouter.ui.scan.guess.ScanGuessEnvironment
+import com.micrantha.skouter.ui.scan.guess.ScanGuessMapper
+import com.micrantha.skouter.ui.scan.guess.ScanGuessScreen
+import com.micrantha.skouter.ui.scan.guess.ScanGuessScreenModel
 import com.micrantha.skouter.ui.scan.preview.ScanEnvironment
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreenModel
@@ -25,6 +30,7 @@ import com.micrantha.skouter.ui.scan.preview.ScanStateMapper
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.LoadCameraImageUseCase
+import com.micrantha.skouter.ui.scan.usecase.MatchCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
@@ -64,8 +70,14 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::ScanEditEnvironment)
     bindProviderOf(::ScanEditScreenModel)
 
+    bindFactory { args: ScanGuessArgs -> ScanGuessEnvironment(args, instance(), instance()) }
+    bindProviderOf(::ScanGuessMapper)
+    bindFactory { args: ScanGuessArgs -> ScanGuessScreenModel(args, instance(), instance()) }
+    bindFactory { args: ScanGuessArgs -> ScanGuessScreen(args) }
+
     bindProviderOf(::CameraCaptureUseCase)
     bindProviderOf(::SaveThingImageUseCase)
+    bindProviderOf(::MatchCameraImageUseCase)
     bindProviderOf(::AnalyzeCameraImageUseCase)
     bindProviderOf(::LoadCameraImageUseCase)
 }

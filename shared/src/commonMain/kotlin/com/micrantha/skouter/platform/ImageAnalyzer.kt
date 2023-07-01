@@ -7,6 +7,9 @@ interface ImageAnalyzer<T> {
     suspend fun analyze(image: CameraImage): Result<T>
 }
 
+// Should return a delay if necessary
+typealias ImageAnalyzerCallback = suspend (CameraImage) -> Unit
+
 data class ImageLabel(
     val data: String,
     val confidence: Float,

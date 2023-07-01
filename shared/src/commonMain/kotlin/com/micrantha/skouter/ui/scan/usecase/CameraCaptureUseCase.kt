@@ -19,7 +19,6 @@ class CameraCaptureUseCase(
     suspend operator fun invoke(image: CameraImage) = dispatchUseCase(
         Dispatchers.IO
     ) {
-        val rotatedImage = image.rotate()
         clueRepository.match(image).onSuccess {
             dispatch(ScannedMatch(it))
         }.onFailure {
@@ -27,7 +26,7 @@ class CameraCaptureUseCase(
         }
 
         FileSystem.SYSTEM_TEMPORARY_DIRECTORY.div(uuid4().toString()).apply {
-            platform.write(this, rotatedImage.toByteArray())
+            platform.write(this, image.toByteArray())
         }
     }
 }

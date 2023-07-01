@@ -2,19 +2,20 @@ package com.micrantha.skouter.platform
 
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config.ARGB_8888
+import android.graphics.Matrix
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import kotlinx.coroutines.sync.Mutex
 import kotlin.coroutines.CoroutineContext
 
 data class CameraAnalyzerOptions(
-    val callback: (CameraImage) -> Unit,
+    val callback: ImageAnalyzerCallback,
     val image: () -> Bitmap?
 )
 
@@ -24,20 +25,33 @@ class CameraAnalyzer(
     private val scope: CoroutineScope = CoroutineScope(coroutineContext) + Job()
 ) : ImageAnalysis.Analyzer {
 
+    private var currentJob: Job? = null
+    private var lastJob: Long = 0
+    private val mutex = Mutex()
+
+    private val matrix = Matrix()
+
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
-        scope.launch {
-            val bitmap = image.toBitmap()
 
-            val cameraImage = CameraImage(bitmap, image.imageInfo.rotationDegrees)
+        if (currentJob?.isActive == true || image.imageInfo.timestamp - lastJob < 500) {
+            return
+        }
 
-            options.callback(cameraImage)
+        lastJob = image.imageInfo.timestamp
 
-            delay(500)
+        currentJob = scope.launch {
+
+            mutex.lock()
+
+            CameraImage(mutex, image.toBitmap()).apply {
+                options.callback(this)
+            }
 
             image.close()
         }
     }
+
 
     private lateinit var bitmapBuffer: Bitmap
 
@@ -47,7 +61,17 @@ class CameraAnalyzer(
         }
         bitmapBuffer.copyPixelsFromBuffer(planes[0].buffer)
 
-        return bitmapBuffer
+        matrix.reset()
+        matrix.postRotate(imageInfo.rotationDegrees.toFloat())
+        return Bitmap.createBitmap(
+            bitmapBuffer,
+            0,
+            0,
+            width,
+            height,
+            matrix,
+            false
+        )
     }
 
 }

@@ -4,6 +4,7 @@ import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.PlayerList
+import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.model.ThingList
 
 const val MaxItemCount = 3
@@ -52,4 +53,6 @@ sealed class DashboardAction : Action {
         DashboardAction()
 
     object AddFriendClicked : DashboardAction()
+
+    data class GuessThing(val thing: Thing.Listing) : DashboardAction()
 }
