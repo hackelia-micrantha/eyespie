@@ -44,12 +44,13 @@ actual fun CameraScanner(
 
             useCases.addUseCase(preview)
 
-            val cameraAnalyzerOptions = CameraAnalyzerOptions(
-                callback = onCameraImage,
-                image = { previewView.bitmap }
-            )
-
             if (enabled) {
+
+                val cameraAnalyzerOptions = CameraAnalyzerOptions(
+                    callback = onCameraImage,
+                    image = { previewView.bitmap }
+                )
+
                 val imageAnalysis = ImageAnalysis.Builder()
                     .setTargetAspectRatio(AspectRatio.RATIO_4_3)
                     .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)

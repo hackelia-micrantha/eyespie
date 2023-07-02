@@ -84,7 +84,7 @@ actual class SegmentImageAnalyzer(
         Result.success(
             listOf(
                 ImageSegment(
-                    CameraImage(image.mutex, scaleBitmap)
+                    CameraImage(scaleBitmap, image.onRelease)
                 )
             )
         )

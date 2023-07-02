@@ -10,6 +10,8 @@ import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
+import com.micrantha.skouter.data.thing.model.toImageEmbedding
+import com.micrantha.skouter.data.thing.model.toJsonElement
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.LabelClue
@@ -22,7 +24,6 @@ import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
 
 class ThingsDomainMapper(
     private val locationMapper: LocationDomainMapper,
@@ -36,7 +37,7 @@ class ThingsDomainMapper(
             proof = proof.clues?.let { prove(it) },
             created_by = proof.playerID,
             location = proof.location.toString(),
-            embedding = Json.encodeToJsonElement(proof.match.toByteArray())
+            embedding = proof.match.toJsonElement()
         )
 
     fun map(thing: Thing) = ThingRequest(
@@ -46,7 +47,8 @@ class ThingsDomainMapper(
         imageUrl = thing.imageUrl,
         guessed = thing.guessed,
         created_by = thing.createdBy.id,
-        location = thing.location.toString()
+        location = thing.location.toString(),
+        embedding = thing.embedding.toJsonElement()
     )
 
     fun map(data: ThingResponse): Thing {
@@ -64,7 +66,8 @@ class ThingsDomainMapper(
             ),
             guesses = emptyList(),
             location = point,
-            clues = data.proof?.let { prove(it) } ?: Clues()
+            clues = data.proof?.let { prove(it) } ?: Clues(),
+            embedding = data.embedding.toImageEmbedding()
         )
     }
 
@@ -84,7 +87,7 @@ class ThingsDomainMapper(
     )
 
     fun match(embedding: ImageEmbedding) = MatchRequest(
-        embedding = Json.encodeToJsonElement(embedding),
+        embedding = embedding.toJsonElement(),
         threshold = 0.5f,
         count = 5,
     )

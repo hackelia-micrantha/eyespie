@@ -47,14 +47,14 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::LoginScreen)
 
     bindProviderOf(::GameListEnvironment)
-    bindProvider { GameListScreenModel(instance(), instance()) }
-    bindProvider { GameListScreen(instance()) }
+    bindProviderOf(::GameListScreenModel)
+    bindProviderOf(::GameListScreen)
 
     bindProviderOf(::GameDetailsEnvironment)
-    bindProvider { GameDetailsScreenModel(instance(), instance()) }
+    bindProviderOf(::GameDetailsScreenModel)
     bindFactory { arg: GameDetailScreenArg -> GameDetailsScreen(arg) }
 
-    bindProvider { GameCreateScreenModel(instance()) }
+    bindProviderOf(::GameCreateScreenModel)
     bindProviderOf(::GameCreateScreen)
 
     bindProviderOf(::DashboardScreen)
@@ -70,10 +70,23 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::ScanEditEnvironment)
     bindProviderOf(::ScanEditScreenModel)
 
-    bindFactory { args: ScanGuessArgs -> ScanGuessEnvironment(args, instance(), instance()) }
     bindProviderOf(::ScanGuessMapper)
-    bindFactory { args: ScanGuessArgs -> ScanGuessScreenModel(args, instance(), instance()) }
+    bindFactory { args: ScanGuessArgs ->
+        ScanGuessScreenModel(
+            args,
+            instance(),
+            instance()
+        )
+    }
     bindFactory { args: ScanGuessArgs -> ScanGuessScreen(args) }
+    bindFactory { args: ScanGuessArgs ->
+        ScanGuessEnvironment(
+            args,
+            instance(),
+            instance(),
+            instance()
+        )
+    }
 
     bindProviderOf(::CameraCaptureUseCase)
     bindProviderOf(::SaveThingImageUseCase)

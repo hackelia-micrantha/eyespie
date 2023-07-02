@@ -8,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -20,7 +21,9 @@ class FluxDispatcher internal constructor(
     private val actions = MutableSharedFlow<Action>()
 
     override fun register(dispatch: Dispatch) {
-        actions.onEach(dispatch).launchIn(scope)
+        actions.onEach(dispatch)
+            .catch { Log.e(message = "registered dispatch", tag = "dispatcher", throwable = it) }
+            .launchIn(scope)
     }
 
     override suspend fun receive(action: Action) {

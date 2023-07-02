@@ -29,11 +29,11 @@ class ScanGuessScreen constructor(
     override fun Content() {
         val permissions by rememberInstance<PermissionsController>()
 
+        val model: ScanGuessScreenModel = rememberScreenModel(arg = args)
+
         LaunchedEffect(Unit) {
             permissions.providePermission(CAMERA)
         }
-
-        val model: ScanGuessScreenModel = rememberScreenModel(arg = args)
 
         val state by model.state.collectAsState()
 
@@ -48,7 +48,7 @@ class ScanGuessScreen constructor(
         ) {
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-                state.enabled
+                true
             ) {
                 dispatch(ImageCaptured(it))
             }

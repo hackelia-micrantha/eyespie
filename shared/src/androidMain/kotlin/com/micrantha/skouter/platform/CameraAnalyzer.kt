@@ -11,7 +11,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import kotlinx.coroutines.sync.Mutex
 import kotlin.coroutines.CoroutineContext
 
 data class CameraAnalyzerOptions(
@@ -25,31 +24,29 @@ class CameraAnalyzer(
     private val scope: CoroutineScope = CoroutineScope(coroutineContext) + Job()
 ) : ImageAnalysis.Analyzer {
 
-    private var currentJob: Job? = null
     private var lastJob: Long = 0
-    private val mutex = Mutex()
+    //private val mutex = Mutex()
 
     private val matrix = Matrix()
 
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
 
-        if (currentJob?.isActive == true || image.imageInfo.timestamp - lastJob < 500) {
+        if (image.imageInfo.timestamp - lastJob < 500) {
             return
         }
 
         lastJob = image.imageInfo.timestamp
 
-        currentJob = scope.launch {
+        scope.launch {
 
-            mutex.lock()
-
-            CameraImage(mutex, image.toBitmap()).apply {
-                options.callback(this)
+            val uiImage = CameraImage(image.toBitmap()) {
+                image.close()
             }
 
-            image.close()
+            options.callback(uiImage)
         }
+
     }
 
 

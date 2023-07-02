@@ -17,6 +17,9 @@ class ThingDataRepository(
         it.map(mapper::list)
     }
 
+    override suspend fun thing(thingID: String) = remoteSource.thing(thingID)
+        .map(mapper::map)
+
     override suspend fun create(
         proof: Proof
     ): Result<Thing> =

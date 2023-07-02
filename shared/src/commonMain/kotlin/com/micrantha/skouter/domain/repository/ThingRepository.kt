@@ -11,6 +11,8 @@ interface ThingRepository {
 
     suspend fun things(playerID: String): Result<ThingList>
 
+    suspend fun thing(thingID: String): Result<Thing>
+
     suspend fun match(embedding: ImageEmbedding): Result<ThingMatches>
 
     suspend fun create(

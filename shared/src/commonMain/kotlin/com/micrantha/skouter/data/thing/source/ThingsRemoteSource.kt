@@ -30,6 +30,15 @@ class ThingsRemoteSource(
         Result.failure(err)
     }
 
+    suspend fun thing(thingID: String) = try {
+        val result = supaClient.things().select {
+            eq("id", thingID)
+        }.decodeSingle<ThingResponse>()
+        Result.success(result)
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
+
     suspend fun nearby(request: NearbyRequest) = try {
         val res = supaClient.nearby(request).decodeList<ThingResponse>()
         Result.success(res)

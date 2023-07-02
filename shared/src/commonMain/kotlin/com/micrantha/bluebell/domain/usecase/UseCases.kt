@@ -24,7 +24,7 @@ suspend fun <Out> dispatchUseCase(
         withContext(coroutineDispatcher) {
             Result.success(block(this))
         }
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         Result.failure(e)
     } finally {
         always()

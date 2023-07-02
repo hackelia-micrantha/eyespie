@@ -3,19 +3,16 @@ package com.micrantha.skouter.platform
 import android.graphics.Bitmap
 import com.micrantha.bluebell.platform.toByteArray
 import com.seiko.imageloader.asImageBitmap
-import kotlinx.coroutines.sync.Mutex
 import kotlin.math.max
 
 actual class CameraImage(
-    val mutex: Mutex,
-    val bitmap: Bitmap
+    val bitmap: Bitmap,
+    val onRelease: () -> Unit
 ) {
     actual val width = bitmap.width
     actual val height = bitmap.height
 
-    actual fun release() {
-        mutex.unlock()
-    }
+    actual fun release() = onRelease()
 
     actual fun toImageBitmap() = bitmap.asImageBitmap()
 
@@ -29,7 +26,7 @@ actual class CameraImage(
 
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaleWidth, scaleHeight, false)
 
-        return CameraImage(mutex, scaledBitmap)
+        return CameraImage(scaledBitmap, onRelease)
     }
 
 }
