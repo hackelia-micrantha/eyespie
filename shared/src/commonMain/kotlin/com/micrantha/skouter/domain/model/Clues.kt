@@ -87,25 +87,14 @@ data class RhymeClue(
 ) : Clue<String>
 
 data class DetectClue(
-    val rect: Rect,
-    override val data: Int,
+    override val data: Rect,
     val labels: LabelProof
-) : Clue<Int> {
-
-    override fun hashCode() = data.hashCode()
-
-    override fun equals(other: Any?): Boolean {
-        if (other is DetectClue) {
-            return data == other.data
-        }
-        return super.equals(other)
-    }
-}
+) : Clue<Rect>
 
 data class SegmentClue(
-    val data: ImageBitmap,
-)
+    override val data: ImageBitmap,
+) : Clue<ImageBitmap>
 
 data class MatchClue(
-    val data: ImageEmbedding
-)
+    override val data: ImageEmbedding
+) : Clue<ImageEmbedding>

@@ -18,11 +18,7 @@ class AnalyzeCameraImageUseCase(
     private val dispatcher: Dispatcher
 ) : Dispatcher by dispatcher {
 
-    suspend operator fun invoke(image: CameraImage) = dispatchUseCase(
-        always = {
-            image.release()
-        }
-    ) {
+    suspend operator fun invoke(image: CameraImage) = dispatchUseCase {
         joinAll(
             launch {
                 labels(image)

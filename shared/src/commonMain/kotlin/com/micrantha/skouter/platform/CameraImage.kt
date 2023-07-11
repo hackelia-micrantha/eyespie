@@ -7,8 +7,6 @@ expect class CameraImage {
     val width: Int
     val height: Int
 
-    fun release()
-
     fun toByteArray(): ByteArray
 
     fun toImageBitmap(): ImageBitmap

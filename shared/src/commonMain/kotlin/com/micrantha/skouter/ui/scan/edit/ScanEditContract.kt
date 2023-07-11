@@ -28,25 +28,25 @@ data class ScanEditUiState(
     val enabled: Boolean
 )
 
-sealed class ScanEditAction : Action {
-    data class Init(val proof: Proof) : ScanEditAction()
+sealed interface ScanEditAction : Action {
+    data class Init(val proof: Proof) : ScanEditAction
 
-    data class LabelChanged(val data: Choice) : ScanEditAction()
-    data class ColorChanged(val data: Choice) : ScanEditAction()
+    data class LabelChanged(val data: Choice) : ScanEditAction
+    data class ColorChanged(val data: Choice) : ScanEditAction
 
-    data class CustomLabelChanged(val data: String) : ScanEditAction()
+    data class CustomLabelChanged(val data: String) : ScanEditAction
 
-    object SaveScanEdit : ScanEditAction()
+    object SaveScanEdit : ScanEditAction
 
-    object SaveThingError : ScanEditAction()
+    object SaveThingError : ScanEditAction
 
-    object LoadError : ScanEditAction()
+    object LoadError : ScanEditAction
 
-    data class LoadedImage(val data: Painter) : ScanEditAction()
+    data class LoadedImage(val data: Painter) : ScanEditAction
 
-    data class NameChanged(val data: String) : ScanEditAction()
+    data class NameChanged(val data: String) : ScanEditAction
 
-    object ClearColor : ScanEditAction()
+    object ClearColor : ScanEditAction
 
-    object ClearLabel : ScanEditAction()
+    object ClearLabel : ScanEditAction
 }

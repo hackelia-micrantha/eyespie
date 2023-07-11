@@ -4,4 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-expect fun CameraScanner(modifier: Modifier, enabled: Boolean, onCameraImage: ImageAnalyzerCallback)
+expect fun CameraScanner(
+    modifier: Modifier,
+    onCameraImage: ImageAnalyzerCallback
+)

@@ -17,6 +17,10 @@ kotlin {
         }
     }
 
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+
     cocoapods {
         summary = "Skouter Shared Module"
         homepage = "https://github.com/hackelia-micrantha/skouter"
@@ -24,15 +28,11 @@ kotlin {
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
-            baseName = "iosEntryPoint"
+            baseName = "shared"
+            binaryOption("bundleId", "com.micrantha.skouter")
             isStatic = true
         }
     }
-
-
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
 
     sourceSets {
 

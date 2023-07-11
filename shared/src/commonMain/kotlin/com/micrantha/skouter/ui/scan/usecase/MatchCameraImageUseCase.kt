@@ -14,9 +14,7 @@ class MatchCameraImageUseCase(
         image: CameraImage,
         embedding: ImageEmbedding
     ): Result<Boolean> =
-        dispatchUseCase(always = {
-            image.release()
-        }) {
+        dispatchUseCase {
             val proof = clueRepository.match(image).getOrNull()
             if (proof.isNullOrEmpty()) {
                 return@dispatchUseCase false

@@ -37,22 +37,22 @@ data class DashboardUiState(
     }
 }
 
-sealed class DashboardAction : Action {
+sealed interface DashboardAction : Action {
 
-    object ScanNewThing : DashboardAction()
+    object ScanNewThing : DashboardAction
 
-    object HasMoreThings : DashboardAction()
+    object HasMoreThings : DashboardAction
 
-    object HasMorePlayers : DashboardAction()
+    object HasMorePlayers : DashboardAction
 
-    object Load : DashboardAction()
+    object Load : DashboardAction
 
-    object LoadError : DashboardAction()
+    object LoadError : DashboardAction
 
     data class Loaded(val things: ThingList, val friends: PlayerList, val players: PlayerList) :
-        DashboardAction()
+        DashboardAction
 
-    object AddFriendClicked : DashboardAction()
+    object AddFriendClicked : DashboardAction
 
-    data class GuessThing(val thing: Thing.Listing) : DashboardAction()
+    data class GuessThing(val thing: Thing.Listing) : DashboardAction
 }

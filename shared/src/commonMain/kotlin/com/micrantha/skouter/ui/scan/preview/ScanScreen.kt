@@ -1,6 +1,6 @@
 package com.micrantha.skouter.ui.scan.preview
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,13 +50,12 @@ class ScanScreen : Screen {
 
     @Composable
     private fun Render(state: ScanUiState, dispatch: Dispatch) {
-        Box(
+        BoxWithConstraints(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-                state.enabled
             ) {
                 dispatch(ImageCaptured(it))
             }
@@ -85,7 +84,7 @@ class ScanScreen : Screen {
                 ) {
                     Text("Edit")
                 }
-                
+
                 Spacer(modifier = Modifier.width(Dimensions.content))
 
                 Button(
@@ -98,5 +97,4 @@ class ScanScreen : Screen {
             }
         }
     }
-
 }

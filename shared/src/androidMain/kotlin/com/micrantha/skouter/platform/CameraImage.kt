@@ -7,12 +7,9 @@ import kotlin.math.max
 
 actual class CameraImage(
     val bitmap: Bitmap,
-    val onRelease: () -> Unit
 ) {
     actual val width = bitmap.width
     actual val height = bitmap.height
-
-    actual fun release() = onRelease()
 
     actual fun toImageBitmap() = bitmap.asImageBitmap()
 
@@ -26,7 +23,7 @@ actual class CameraImage(
 
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaleWidth, scaleHeight, false)
 
-        return CameraImage(scaledBitmap, onRelease)
+        return CameraImage(scaledBitmap)
     }
 
 }

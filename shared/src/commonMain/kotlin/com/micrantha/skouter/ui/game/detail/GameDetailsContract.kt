@@ -18,8 +18,8 @@ data class GameDetailsUiState(
     val status: UiResult<Game>
 )
 
-sealed class GameDetailsAction : Action {
-    data class Load(val id: String) : GameDetailsAction()
-    data class Loaded(val game: Game) : GameDetailsAction()
+sealed interface GameDetailsAction : Action {
+    data class Load(val id: String) : GameDetailsAction
+    data class Loaded(val game: Game) : GameDetailsAction
 }
 

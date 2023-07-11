@@ -3,13 +3,18 @@ package com.micrantha.skouter.platform
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import androidx.camera.core.AspectRatio
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.core.UseCaseGroup
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,82 +22,95 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import org.kodein.di.compose.rememberFactory
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+
+private fun PreviewView.enableZoom(camera: Camera) {
+
+    val scaleGestureDetector =
+        ScaleGestureDetector(context, object : SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector): Boolean {
+                return camera.cameraInfo.zoomState.value?.let { zoom ->
+                    val scale = zoom.zoomRatio * detector.scaleFactor
+                    camera.cameraControl.setZoomRatio(scale)
+                    true
+                } ?: false
+            }
+        })
+
+    setOnTouchListener { view, event ->
+        view.performClick()
+        scaleGestureDetector.onTouchEvent(event)
+    }
+}
+
+private fun CameraSelector.toggle() = when (this) {
+    CameraSelector.DEFAULT_BACK_CAMERA -> CameraSelector.DEFAULT_FRONT_CAMERA
+    else -> CameraSelector.DEFAULT_BACK_CAMERA
+}
 
 @Composable
 actual fun CameraScanner(
     modifier: Modifier,
-    enabled: Boolean,
     onCameraImage: ImageAnalyzerCallback
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val analyzer by rememberFactory<CameraAnalyzerOptions, CameraAnalyzer>()
+    val imageCapture = remember { ImageCapture.Builder().build() }
+    val executor = ContextCompat.getMainExecutor(context)
+    val cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
+    val previewView = remember {
+        PreviewView(context).apply { this.scaleType = PreviewView.ScaleType.FILL_CENTER }
+    }
 
+    LaunchedEffect(cameraSelector) {
+        val cameraProvider = suspendCoroutine<ProcessCameraProvider> { continuation ->
+            ProcessCameraProvider.getInstance(context).also { future ->
+                future.addListener({
+                    continuation.resume(future.get())
+                }, executor)
+            }
+        }
+
+        val useCases = UseCaseGroup.Builder()
+
+        useCases.addUseCase(imageCapture)
+
+        val previewUseCase = Preview.Builder()
+            .build()
+            .also { it.setSurfaceProvider(previewView.surfaceProvider) }
+
+        useCases.addUseCase(previewUseCase)
+
+        val cameraAnalyzerOptions = CameraAnalyzerOptions(
+            callback = onCameraImage,
+            image = { previewView.bitmap }
+        )
+
+        val imageAnalysis = ImageAnalysis.Builder()
+            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+            .apply {
+                setAnalyzer(executor, analyzer(cameraAnalyzerOptions))
+            }
+        useCases.addUseCase(imageAnalysis)
+
+        runCatching {
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(
+                lifecycleOwner,
+                cameraSelector,
+                useCases.build()
+            ).apply {
+                previewView.enableZoom(this)
+            }
+        }
+    }
     AndroidView(
         modifier = modifier,
-        factory = { ctx ->
-            val previewView = PreviewView(ctx)
-            val executor = ContextCompat.getMainExecutor(ctx)
-
-            val preview = Preview.Builder()
-                .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                .build().also {
-                    it.setSurfaceProvider(previewView.surfaceProvider)
-                }
-            val useCases = UseCaseGroup.Builder()
-
-            useCases.addUseCase(preview)
-
-            if (enabled) {
-
-                val cameraAnalyzerOptions = CameraAnalyzerOptions(
-                    callback = onCameraImage,
-                    image = { previewView.bitmap }
-                )
-
-                val imageAnalysis = ImageAnalysis.Builder()
-                    .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                    .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                    .build()
-                    .apply {
-                        setAnalyzer(executor, analyzer(cameraAnalyzerOptions))
-                    }
-                useCases.addUseCase(imageAnalysis)
-            }
-
-            val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
-
-            cameraProviderFuture.addListener({
-                val cameraProvider = cameraProviderFuture.get()
-
-                cameraProvider.unbindAll()
-                val camera = cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    cameraSelector,
-                    useCases.build()
-                )
-
-                val scaleGestureDetector =
-                    ScaleGestureDetector(context, object : SimpleOnScaleGestureListener() {
-                        override fun onScale(detector: ScaleGestureDetector): Boolean {
-                            return camera.cameraInfo.zoomState.value?.let { zoom ->
-                                val scale = zoom.zoomRatio * detector.scaleFactor
-                                camera.cameraControl.setZoomRatio(scale)
-                                true
-                            } ?: false
-                        }
-                    })
-
-                previewView.setOnTouchListener { view, event ->
-                    view.performClick()
-                    scaleGestureDetector.onTouchEvent(event)
-                }
-            }, executor)
-            previewView
-        },
+        factory = { previewView },
     )
 }

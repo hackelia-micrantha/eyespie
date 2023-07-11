@@ -19,11 +19,11 @@ data class ScanGuessArgs(
     val id: String
 )
 
-sealed class ScanGuessAction : Action {
-    data class ImageCaptured(val image: CameraImage) : ScanGuessAction()
-    object ThingMatched : ScanGuessAction()
-    object ThingNotFound : ScanGuessAction()
+sealed interface ScanGuessAction : Action {
+    data class ImageCaptured(val image: CameraImage) : ScanGuessAction
+    object ThingMatched : ScanGuessAction
+    object ThingNotFound : ScanGuessAction
 
-    object Load : ScanGuessAction()
-    data class Loaded(val thing: Thing) : ScanGuessAction()
+    object Load : ScanGuessAction
+    data class Loaded(val thing: Thing) : ScanGuessAction
 }

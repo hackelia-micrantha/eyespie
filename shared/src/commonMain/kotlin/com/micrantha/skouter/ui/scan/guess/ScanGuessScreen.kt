@@ -42,13 +42,13 @@ class ScanGuessScreen constructor(
 
     @Composable
     private fun Render(state: ScanGuessUiState, dispatch: Dispatch) {
+
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-                true
             ) {
                 dispatch(ImageCaptured(it))
             }

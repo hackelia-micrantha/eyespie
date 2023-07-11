@@ -25,7 +25,6 @@ class CameraAnalyzer(
 ) : ImageAnalysis.Analyzer {
 
     private var lastJob: Long = 0
-    //private val mutex = Mutex()
 
     private val matrix = Matrix()
 
@@ -35,21 +34,16 @@ class CameraAnalyzer(
         if (image.imageInfo.timestamp - lastJob < 500) {
             return
         }
-
         lastJob = image.imageInfo.timestamp
 
         scope.launch {
 
-            val uiImage = CameraImage(image.toBitmap()) {
-                image.close()
-            }
+            val uiImage = CameraImage(image.toBitmap())
 
             options.callback(uiImage)
         }
-
     }
-
-
+    
     private lateinit var bitmapBuffer: Bitmap
 
     private fun ImageProxy.toBitmap(): Bitmap {
