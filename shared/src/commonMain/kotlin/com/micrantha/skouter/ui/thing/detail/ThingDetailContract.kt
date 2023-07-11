@@ -10,3 +10,7 @@ data class ThingDetailState(
 data class ThingDetailUiState(
     val status: UiResult<Thing>
 )
+
+data class ThingDetailArg(
+    val id: String
+)

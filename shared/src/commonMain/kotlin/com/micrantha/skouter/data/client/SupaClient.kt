@@ -2,6 +2,7 @@ package com.micrantha.skouter.data.client
 
 import com.apollographql.apollo3.ApolloCall
 import com.micrantha.skouter.SkouterConfig
+import com.micrantha.skouter.data.thing.model.MatchRequest
 import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.graphql.GameListQuery
 import com.micrantha.skouter.graphql.GameNodeQuery
@@ -59,6 +60,11 @@ class SupaClient {
 
     suspend fun nearby(request: NearbyRequest) = supabase.postgrest.rpc(
         function = "thingsnearby",
+        parameters = request
+    )
+    
+    suspend fun match(request: MatchRequest) = supabase.postgrest.rpc(
+        function = "match_things",
         parameters = request
     )
 }

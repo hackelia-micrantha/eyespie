@@ -20,7 +20,6 @@ class GameDetailsProvider : PreviewParameterProvider<GameDetailsState> {
             status = Ready(),
             game = Game(
                 id = "123",
-                nodeId = "123",
                 name = "Game Preview",
                 createdAt = System.now(),
                 expires = System.now().plus(Duration.parse("8h")),

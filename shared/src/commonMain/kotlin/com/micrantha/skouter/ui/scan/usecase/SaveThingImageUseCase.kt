@@ -19,7 +19,7 @@ class SaveThingImageUseCase(
         val image = fileSystem.read(proof.image)
 
         storageRepository.upload(
-            "${proof.playerID}/${proof.name}.jpg",
+            "${proof.playerID}/${proof.image.name}.jpg",
             image
         ).map { url ->
             thingRepository.create(proof.copy(image = url.toPath())).getOrThrow()

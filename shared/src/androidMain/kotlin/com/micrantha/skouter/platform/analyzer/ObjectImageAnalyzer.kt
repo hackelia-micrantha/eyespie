@@ -45,6 +45,5 @@ actual class ObjectImageAnalyzer(context: Context) : ImageAnalyzer<ImageObjects>
     private fun map(obj: Detection) = ImageObject(
         labels = obj.categories().map { ImageLabel(it.categoryName(), it.score()) },
         rect = obj.boundingBox().toRect().toComposeRect(),
-        id = -1
     )
 }

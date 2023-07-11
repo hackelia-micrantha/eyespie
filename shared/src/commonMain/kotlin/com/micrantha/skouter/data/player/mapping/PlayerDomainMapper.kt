@@ -21,7 +21,6 @@ class PlayerDomainMapper(
 
     fun map(data: PlayerResponse) = Player(
         id = data.id,
-        nodeId = data.nodeId ?: data.user_id,
         name = Name(
             first = data.first_name,
             last = data.last_name,

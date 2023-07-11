@@ -11,19 +11,20 @@ fun hash(input: String): String = Buffer().use {
     sha256(it).hash.base64Url()
 }
 
-data class WeightedItem<T>(val item: T, val weight: Int)
+fun <T> Collection<T>.weightedRandomSample(block: (T) -> Double): T? {
+    if (isEmpty()) return null
 
-infix fun <T> T.weightedTo(that: Int): WeightedItem<T> = WeightedItem(this, that)
+    val weights = this.map(block)
 
-fun <T, D> Collection<T>.weightedRandomSample(block: (T) -> WeightedItem<D>): T? {
-    val cumulativeSum = this.map(block).scan(0) { sum, item -> sum + item.weight }
+    val totalWeight = weights.sum()
 
-    val totalWeight = cumulativeSum.lastOrNull() ?: return null
-    val randomNumber = Random.nextInt(totalWeight)
+    val randomNumber = Random.nextDouble() * totalWeight
 
-    for (i in cumulativeSum.indices) {
-        if (randomNumber < cumulativeSum[i]) {
-            return this.elementAt(i)
+    var cumulativeWeight = 0.0
+    for (i in indices) {
+        cumulativeWeight += weights[i]
+        if (randomNumber < cumulativeWeight) {
+            return elementAt(i)
         }
     }
 

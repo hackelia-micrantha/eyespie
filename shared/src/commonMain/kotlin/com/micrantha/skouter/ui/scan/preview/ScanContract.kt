@@ -13,7 +13,9 @@ import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.CameraImage
+import kotlinx.coroutines.flow.Flow
 import okio.Path
+import kotlin.math.min
 
 data class ScanState(
     val labels: LabelProof? = null,
@@ -25,7 +27,7 @@ data class ScanState(
     val segment: SegmentClue? = null,
     val match: MatchClue? = null,
     val path: Path? = null,
-    val playerID: String? = null
+    val playerID: String? = null,
 )
 
 data class ScanUiState(
@@ -34,41 +36,45 @@ data class ScanUiState(
     val enabled: Boolean
 )
 
-sealed class ScanAction : Action {
+sealed interface ScanAction : Action {
     interface ScanSavable {
         val path: Path
     }
 
-    object SaveScan : ScanAction()
+    object SaveScan : ScanAction
 
-    object EditScan : ScanAction()
+    object EditScan : ScanAction
 
-    object SaveError : ScanAction()
+    object SaveError : ScanAction
 
-    data class EditSaved(override val path: Path) : ScanAction(), ScanSavable
-    data class ImageSaved(override val path: Path) : ScanAction(), ScanSavable
+    object LoadError : ScanAction
 
-    data class ImageCaptured(val image: CameraImage) : ScanAction()
+    data class Loaded(val data: Flow<CameraImage>) : ScanAction
+
+    data class EditSaved(override val path: Path) : ScanAction, ScanSavable
+    data class ImageSaved(override val path: Path) : ScanAction, ScanSavable
+
+    data class ImageCaptured(val image: CameraImage) : ScanAction
 
     data class ScannedLabels(
         val labels: LabelProof
-    ) : ScanAction()
+    ) : ScanAction
 
     data class ScannedColors(
         val colors: ColorProof
-    ) : ScanAction()
+    ) : ScanAction
 
     data class ScannedObjects(
         val detections: DetectProof
-    ) : ScanAction()
+    ) : ScanAction
 
     data class ScannedSegments(
         val segments: SegmentProof
-    ) : ScanAction()
+    ) : ScanAction
 
     data class ScannedMatch(
         val matches: MatchProof
-    ) : ScanAction()
+    ) : ScanAction
 }
 
 sealed interface ScanOverlay
@@ -80,5 +86,19 @@ data class ScanMask(
 data class ScanBox(
     val rect: Rect,
     val label: String,
-    val scale: Float
-) : ScanOverlay
+    val imageWidth: Int,
+    val imageHeight: Int
+) : ScanOverlay {
+
+    fun scale(width: Float, height: Float): Rect {
+        val scale = min(width * 1f / imageWidth, height * 1f / imageHeight)
+        return with(rect) {
+            Rect(
+                left = left * scale,
+                top = top * scale,
+                right = right * scale,
+                bottom = bottom * scale
+            )
+        }
+    }
+}

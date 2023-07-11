@@ -1,11 +1,23 @@
 package com.micrantha.skouter.platform
 
 import androidx.compose.ui.geometry.Rect
+import kotlinx.coroutines.flow.Flow
 import okio.ByteString
 
 interface ImageAnalyzer<T> {
     suspend fun analyze(image: CameraImage): Result<T>
 }
+
+interface ImageFlowAnalyzer<T> {
+    val results: Flow<ImageAnalyzerResult<T>>
+}
+
+typealias ImageAnalyzerCallback = suspend (CameraImage) -> Unit
+
+data class ImageAnalyzerResult<T>(
+    val image: CameraImage,
+    val data: T
+)
 
 data class ImageLabel(
     val data: String,
@@ -15,7 +27,6 @@ data class ImageLabel(
 typealias ImageLabels = List<ImageLabel>
 
 data class ImageObject(
-    val id: Int,
     val rect: Rect,
     val labels: ImageLabels
 )

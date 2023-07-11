@@ -2,35 +2,48 @@ package com.micrantha.skouter.platform
 
 import android.graphics.Bitmap
 import android.graphics.Bitmap.Config.ARGB_8888
-import android.os.Looper
+import android.graphics.Matrix
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
+import kotlin.coroutines.CoroutineContext
 
 data class CameraAnalyzerOptions(
-    val callback: (CameraImage) -> Unit,
+    val callback: ImageAnalyzerCallback,
     val image: () -> Bitmap?
 )
 
 class CameraAnalyzer(
-    private val options: CameraAnalyzerOptions
+    private val options: CameraAnalyzerOptions,
+    private val coroutineContext: CoroutineContext = Dispatchers.Default,
+    private val scope: CoroutineScope = CoroutineScope(coroutineContext) + Job()
 ) : ImageAnalysis.Analyzer {
+
+    private var lastJob: Long = 0
+
+    private val matrix = Matrix()
 
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
-        val rotation = image.imageInfo.rotationDegrees
 
-        val bitmap = options.image() ?: image.toBitmap()
-
-        val cameraImage = CameraImage(bitmap, rotation)
-
-        options.callback(cameraImage)
-
-        image.close()
-
-        if (Looper.getMainLooper().isCurrentThread.not()) {
-            Thread.sleep(250)
+        if (image.imageInfo.timestamp - lastJob < 500) {
+            return
         }
+
+        lastJob = image.imageInfo.timestamp
+
+        scope.launch {
+
+            val uiImage = CameraImage(image.toBitmap())
+
+            options.callback(uiImage)
+        }
+
     }
 
 
@@ -42,7 +55,17 @@ class CameraAnalyzer(
         }
         bitmapBuffer.copyPixelsFromBuffer(planes[0].buffer)
 
-        return bitmapBuffer
+        matrix.reset()
+        matrix.postRotate(imageInfo.rotationDegrees.toFloat())
+        return Bitmap.createBitmap(
+            bitmapBuffer,
+            0,
+            0,
+            width,
+            height,
+            matrix,
+            false
+        )
     }
 
 }

@@ -4,7 +4,6 @@ import kotlinx.datetime.Instant
 
 data class Player(
     override val id: String,
-    override val nodeId: String,
     override val createdAt: Instant,
     val name: Name,
     val email: String,
@@ -33,7 +32,7 @@ data class Player(
 
     data class Listing(
         override val id: String,
-        override val nodeId: String,
+        val nodeId: String,
         override val createdAt: Instant,
         val name: String,
         val score: Int,

@@ -1,8 +1,10 @@
 package com.micrantha.skouter.ui.component
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -16,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.platform.ChoiceSelector
 
 data class Choice(
@@ -31,13 +34,14 @@ fun ChoiceField(
     choices: List<Choice>,
     onValue: (Choice) -> String = { it.label },
     label: @Composable (Choice) -> Unit,
+    trailingIcon: @Composable () -> Unit,
     onCustom: ((String) -> Unit)? = null,
     onSelect: (Choice) -> Unit,
 ) {
     var current by remember { mutableStateOf(choices.first()) }
     var active by remember { mutableStateOf(false) }
 
-    Column(
+    Box(
         modifier = modifier
     ) {
         OutlinedTextField(
@@ -47,24 +51,28 @@ fun ChoiceField(
             onValueChange = onCustom ?: { },
             label = { label(current) },
             trailingIcon = {
-                Icon(
-                    modifier = Modifier.clickable {
-                        active = active.not()
-                        if (active.not()) {
-                            onSelect(current)
-                        }
-                    },
-                    imageVector = if (active)
-                        Icons.Default.ArrowDropUp
-                    else
-                        Icons.Default.ArrowDropDown,
-                    contentDescription = null,
-                )
+                Row {
+                    Icon(
+                        modifier = Modifier.padding(end = Dimensions.content)
+                            .clickable {
+                                active = active.not()
+                                if (active.not()) {
+                                    onSelect(current)
+                                }
+                            },
+                        imageVector = if (active)
+                            Icons.Default.ArrowDropUp
+                        else
+                            Icons.Default.ArrowDropDown,
+                        contentDescription = null,
+                    )
+                    trailingIcon()
+                }
             }
         )
 
         ChoiceSelector(
-            modifier = Modifier.align(Alignment.End),
+            modifier = Modifier.align(Alignment.BottomEnd),
             active = active,
             onDismiss = {
                 active = false

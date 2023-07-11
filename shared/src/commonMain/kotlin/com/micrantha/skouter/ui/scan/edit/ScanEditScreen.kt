@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +32,7 @@ import com.micrantha.skouter.ui.component.ChoiceField
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.navi.NavAction
+import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ClearLabel
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.ColorChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.CustomLabelChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.Init
@@ -102,10 +106,19 @@ class ScanEditScreen(
 
                 if (state.labels.isNotEmpty()) {
                     ChoiceField(
+                        modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "What") },
                         choices = state.labels,
                         onValue = {
                             state.customLabel ?: it.label
+                        },
+                        trailingIcon = {
+                            IconButton(onClick = { dispatch(ClearLabel) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = null
+                                )
+                            }
                         },
                         onCustom = {
                             dispatch(CustomLabelChanged(it))
@@ -117,10 +130,19 @@ class ScanEditScreen(
 
                 if (state.colors.isNotEmpty()) {
                     ChoiceField(
+                        modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Color") },
                         choices = state.colors,
+                        trailingIcon = {
+                            IconButton(onClick = { dispatch(ClearLabel) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = null
+                                )
+                            }
+                        },
                         onValue = {
-                            it.label
+                            state.customColor ?: it.label
                         },
                     ) { choice ->
                         dispatch(ColorChanged(choice))

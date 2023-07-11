@@ -10,10 +10,10 @@ data class GameCreateState(
     val thingLimits: IntRange? = null
 )
 
-sealed class GameCreateAction : Action {
-    object Save : GameCreateAction()
+sealed interface GameCreateAction : Action {
+    object Save : GameCreateAction
 
-    data class NameChanged(val name: String) : GameCreateAction()
+    data class NameChanged(val name: String) : GameCreateAction
 
-    object NameDone : GameCreateAction()
+    object NameDone : GameCreateAction
 }

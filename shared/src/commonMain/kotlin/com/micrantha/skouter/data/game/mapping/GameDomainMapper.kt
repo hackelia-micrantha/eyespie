@@ -26,7 +26,6 @@ class GameDomainMapper {
     fun map(node: GameNodeQuery.GameNode) = node.onGame!!.let { data ->
         Game(
             id = data.id,
-            nodeId = node.nodeId,
             name = data.name,
             createdAt = data.created_at.toInstant(),
             expires = data.expires.toInstant(),

@@ -17,15 +17,15 @@ data class LoginUiState(
 )
 
 
-sealed class LoginAction : Action {
+sealed interface LoginAction : Action {
 
-    object OnLogin : LoginAction()
+    object OnLogin : LoginAction
 
-    data class OnError(val err: Throwable) : LoginAction()
+    data class OnError(val err: Throwable) : LoginAction
 
-    object OnSuccess : LoginAction()
+    object OnSuccess : LoginAction
 
-    data class ChangedPassword(val password: String) : LoginAction()
+    data class ChangedPassword(val password: String) : LoginAction
 
-    data class ChangedEmail(val email: String) : LoginAction()
+    data class ChangedEmail(val email: String) : LoginAction
 }

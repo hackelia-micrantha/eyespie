@@ -4,7 +4,6 @@ import kotlinx.datetime.Instant
 
 interface Entity {
     val id: String
-    val nodeId: String
 }
 
 interface Creatable {

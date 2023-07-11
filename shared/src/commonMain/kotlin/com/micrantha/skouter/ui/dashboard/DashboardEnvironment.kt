@@ -13,6 +13,7 @@ import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.ui.component.S
+import com.micrantha.skouter.ui.dashboard.DashboardAction.GuessThing
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
 import com.micrantha.skouter.ui.dashboard.DashboardAction.LoadError
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Loaded
@@ -24,6 +25,7 @@ import com.micrantha.skouter.ui.dashboard.usecase.DashboardLoadUseCase
 import com.micrantha.skouter.ui.game.component.GameAction
 import com.micrantha.skouter.ui.game.detail.GameDetailScreenArg
 import com.micrantha.skouter.ui.game.detail.GameDetailsScreen
+import com.micrantha.skouter.ui.scan.guess.ScanGuessScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
 
 class DashboardEnvironment(
@@ -61,12 +63,15 @@ class DashboardEnvironment(
                 players = action.players,
                 friends = action.friends
             )
+
             is LoadError -> state.copy(
                 status = context.i18n.failure(S.NetworkFailure)
             )
+
             is Load -> state.copy(
                 status = context.i18n.busy(S.LoadingDashboard)
             )
+
             else -> state
         }
     }
@@ -76,12 +81,19 @@ class DashboardEnvironment(
             is GameAction.GameClicked -> context.router.navigate<GameDetailsScreen, GameDetailScreenArg>(
                 arg = action.arg
             )
+
             is ScanNewThing -> context.router.navigate<ScanScreen>()
             is Load -> dashboardLoadUseCase().collect { result ->
                 result.onSuccess { dispatch(it) }.onFailure {
                     Log.e("unable to load dashboard", it)
                 }
             }
+
+            is GuessThing -> context.router.navigate(
+                ScanGuessScreen(
+                    action.thing.id
+                )
+            )
         }
     }
 }

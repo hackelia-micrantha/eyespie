@@ -12,9 +12,8 @@ data class GameListUiState(
     val status: UiResult<GameList>
 )
 
-sealed class GameListAction : Action {
-    object NewGame : GameListAction()
-    object Load : GameListAction()
-    data class Loaded(val data: GameList) : GameListAction()
-
+sealed interface GameListAction : Action {
+    object NewGame : GameListAction
+    object Load : GameListAction
+    data class Loaded(val data: GameList) : GameListAction
 }

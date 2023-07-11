@@ -84,7 +84,7 @@ actual class SegmentImageAnalyzer(
         Result.success(
             listOf(
                 ImageSegment(
-                    CameraImage(scaleBitmap, image.rotation)
+                    CameraImage(scaleBitmap)
                 )
             )
         )

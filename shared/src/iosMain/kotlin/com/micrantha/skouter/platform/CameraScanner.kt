@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 @Composable
 actual fun CameraScanner(
     modifier: Modifier,
-    enabled: Boolean,
-    onCameraImage: (CameraImage) -> Unit
+    onCameraImage: ImageAnalyzerCallback
 ) {
 }

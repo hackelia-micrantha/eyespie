@@ -44,5 +44,7 @@ enum class Strings(
     MyThings("my_things"),
     Nearby("nearby"),
     HasMore("has_more"),
-    Friends("friends")
+    Friends("friends"),
+    OK("ok"),
+    NoDataFound("no_data_found")
 }

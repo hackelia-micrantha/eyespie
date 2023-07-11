@@ -34,9 +34,8 @@ class ClueDomainMapper {
     fun label(data: List<ImageLabel>): LabelProof = data.map(::label).toSet()
 
     fun detect(data: ImageObject) = DetectClue(
-        rect = data.rect,
+        data = data.rect,
         labels = data.labels.map { LabelClue(it.data, it.confidence) }.toSet(),
-        data = data.id
     )
 
     fun detect(data: List<ImageObject>): DetectProof = data.map(::detect).toSet()

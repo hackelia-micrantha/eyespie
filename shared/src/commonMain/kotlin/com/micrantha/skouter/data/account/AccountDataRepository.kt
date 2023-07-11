@@ -8,12 +8,12 @@ import com.micrantha.skouter.domain.repository.AccountRepository as DomainReposi
 
 class AccountDataRepository(
     private val remoteSource: AccountRemoteSource,
-    private val currentAccount: CurrentSession,
+    private val currentSession: CurrentSession,
     private val mapper: AccountDomainMapper,
 ) : DomainRepository {
 
     override suspend fun session() = remoteSource.account().map { mapper.map(it) }.onSuccess {
-        currentAccount.update(it)
+        currentSession.update(it)
     }
 
     override suspend fun isLoggedIn() = remoteSource.isLoggedIn()

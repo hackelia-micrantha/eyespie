@@ -1,10 +1,8 @@
 package com.micrantha.skouter.ui.scan.preview
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,25 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Matrix
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
@@ -39,6 +27,9 @@ import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.platform.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
+import com.micrantha.skouter.ui.scan.components.ScannedClues
+import com.micrantha.skouter.ui.scan.components.drawScanBox
+import com.micrantha.skouter.ui.scan.components.drawScanMask
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
@@ -72,7 +63,6 @@ class ScanScreen : Screen {
         ) {
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-                state.enabled
             ) {
                 dispatch(ImageCaptured(it))
             }
@@ -124,66 +114,13 @@ class ScanScreen : Screen {
 
         val textStyle = MaterialTheme.typography.labelMedium.copy(color = Color.Red)
 
-        val matrix = remember { Matrix() }
-
         Canvas(
             modifier = modifier.align(Alignment.TopCenter).fillMaxSize()
         ) {
             data.forEach {
                 when (it) {
-                    is ScanBox -> drawScanBox(it, matrix, textStyle, measurer)
+                    is ScanBox -> drawScanBox(it, textStyle, measurer)
                     is ScanMask -> drawScanMask(it)
-                }
-            }
-        }
-    }
-
-    @OptIn(ExperimentalTextApi::class)
-    private fun DrawScope.drawScanBox(
-        data: ScanBox,
-        matrix: Matrix,
-        textStyle: TextStyle,
-        measurer: TextMeasurer
-    ) {
-        matrix.reset()
-        matrix.scale(data.scale, data.scale)
-
-        val bounds = matrix.map(data.rect)
-
-        drawOutline(
-            outline = Outline.Rectangle(bounds),
-            color = Color.Red,
-            style = Stroke(1f)
-        )
-        drawText(
-            textMeasurer = measurer,
-            text = data.label,
-            topLeft = bounds.topLeft,
-            style = textStyle
-        )
-    }
-
-    private fun DrawScope.drawScanMask(
-        data: ScanMask
-    ) {
-        drawImage(data.mask)
-    }
-
-    @Composable
-    private fun ScannedClues(modifier: Modifier, clues: List<String>) {
-        Surface(
-            modifier = modifier.padding(Dimensions.screen)
-        ) {
-            Column(
-                modifier = modifier
-                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                clues.forEach {
-                    Text(
-                        text = it,
-                        maxLines = 1,
-                        modifier = Modifier.padding(Dimensions.content)
-                    )
                 }
             }
         }

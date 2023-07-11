@@ -13,10 +13,10 @@ class AccountRemoteSource(
     fun session() = client.auth().currentSessionOrNull()
 
     suspend fun account() = try {
+        val user = client.auth().retrieveUserForCurrentSession(true)
         val session = client.auth().currentSessionOrNull()!!
-        val userId = session.user!!.id
         val player = client.players().select {
-            eq("user_id", userId)
+            eq("user_id", user.id)
             limit(1)
         }.decodeAs<List<PlayerResponse>>().first()
         Result.success(AccountResponse(session.accessToken, session.refreshToken, player))

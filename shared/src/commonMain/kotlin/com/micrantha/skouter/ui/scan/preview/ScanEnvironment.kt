@@ -12,6 +12,7 @@ import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
+import com.micrantha.skouter.domain.repository.LocationRepository
 import com.micrantha.skouter.ui.component.combine
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditSaved
@@ -36,7 +37,8 @@ class ScanEnvironment(
     private val cameraCaptureUseCase: CameraCaptureUseCase,
     private val saveThingImageUseCase: SaveThingImageUseCase,
     private val analyzeCameraImageUseCase: AnalyzeCameraImageUseCase,
-    private val currentSession: CurrentSession
+    private val currentSession: CurrentSession,
+    private val locationRepository: LocationRepository
 ) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState> by mapper,
     Router by context.router,
     FileSystem by context.fileSystem,
@@ -110,11 +112,12 @@ class ScanEnvironment(
 
         is ScanSavable -> state.copy(
             path = action.path,
-            location = currentSession.player?.location,
-            playerID = currentSession.player?.id
         )
 
         is SaveScan, is EditScan -> state.copy(
+            playerID = currentSession.requirePlayer().id,
+            location = locationRepository.currentLocation()
+                ?: currentSession.requirePlayer().location,
             enabled = false,
         )
 
