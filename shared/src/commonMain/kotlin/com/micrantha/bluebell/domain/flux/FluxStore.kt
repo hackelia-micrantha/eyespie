@@ -10,27 +10,34 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
 class FluxStore<State> internal constructor(
     initialState: State,
     private val effectScope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined) + Job()
-) : Store<State>, Store.Listener<State> {
+) : Store<State> {
     private val reducers = mutableListOf<Reducer<State>>()
     private val effects = mutableListOf<Effect<State>>()
     private val current = MutableStateFlow(initialState)
 
     override fun dispatch(action: Action) {
-        current.update { state ->
+        val value = current.updateAndGet { state ->
             reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
         }
+
         effectScope.launch {
-            effects.forEach { effect -> effect(action, current.value) }
+            effects.forEach { effect -> effect(action, value) }
         }
+    }
+
+    override suspend fun invoke(action: Action) {
+        val value = current.updateAndGet { state ->
+            reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
+        }
+
+        effects.forEach { effect -> effect(action, value) }
     }
 
     override fun addReducer(reducer: Reducer<State>): FluxStore<State> {
@@ -44,10 +51,5 @@ class FluxStore<State> internal constructor(
     }
 
     override val state: StateFlow<State> = current.asStateFlow()
-
-    override fun listen(block: (State) -> Unit): Store<State> {
-        current.onEach(block).launchIn(effectScope)
-        return this
-    }
 }
 

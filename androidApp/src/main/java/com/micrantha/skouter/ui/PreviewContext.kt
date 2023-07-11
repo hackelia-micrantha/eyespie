@@ -61,6 +61,7 @@ class PreviewContext(
         return object : Store<T> {
             override val state: StateFlow<T> = MutableStateFlow(initialState)
             override fun dispatch(action: Action) = Unit
+            override suspend fun invoke(action: Action) = Unit
             override fun applyEffect(effect: Effect<T>): Store<T> = this
             override fun addReducer(reducer: Reducer<T>): Store<T> = this
         }

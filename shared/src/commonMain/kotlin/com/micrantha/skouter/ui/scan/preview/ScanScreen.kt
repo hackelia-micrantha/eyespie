@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
+import com.micrantha.bluebell.domain.arch.StoreDispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.platform.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
@@ -45,11 +46,11 @@ class ScanScreen : Screen {
 
         val state by viewModel.state.collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, viewModel::invoke, viewModel::dispatch)
     }
 
     @Composable
-    private fun Render(state: ScanUiState, dispatch: Dispatch) {
+    private fun Render(state: ScanUiState, onScan: StoreDispatch, dispatch: Dispatch) {
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -57,7 +58,7 @@ class ScanScreen : Screen {
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
             ) {
-                dispatch(ImageCaptured(it))
+                onScan(ImageCaptured(it))
             }
 
             if (state.overlays.isNotEmpty()) {

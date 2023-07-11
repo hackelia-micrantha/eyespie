@@ -41,9 +41,11 @@ class CameraAnalyzer(
             val uiImage = CameraImage(image.toBitmap())
 
             options.callback(uiImage)
+
+            image.close()
         }
     }
-    
+
     private lateinit var bitmapBuffer: Bitmap
 
     private fun ImageProxy.toBitmap(): Bitmap {

@@ -23,12 +23,12 @@ class AnalyzeCameraImageUseCase(
             launch {
                 labels(image)
             },
-            /*launch {
+            launch {
                 detections(image)
             },
             launch {
                 segments(image)
-            },*/
+            },
             launch {
                 colors(image)
             },

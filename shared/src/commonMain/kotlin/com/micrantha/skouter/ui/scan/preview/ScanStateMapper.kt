@@ -2,6 +2,7 @@ package com.micrantha.skouter.ui.scan.preview
 
 import com.micrantha.bluebell.data.weightedRandomSample
 import com.micrantha.bluebell.ui.screen.StateMapper
+import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.LocationClue
@@ -32,10 +33,10 @@ class ScanStateMapper : StateMapper<ScanState, ScanUiState> {
         it.confidence.toDouble()
     }
 
-    private fun <T> format(item: T?, size: Int): String? = when {
+    private fun <T : Clue<*>> format(item: T?, size: Int): String? = when {
         size == 0 || item == null -> null
-        size == 1 -> "What: $item"
-        else -> "What: $item +${size - 1}"
+        size == 1 -> "What: ${item.display()}"
+        else -> "What: ${item.display()} +${size - 1}"
     }
 
     private fun clues(state: ScanState) = mutableListOf<String>().apply {

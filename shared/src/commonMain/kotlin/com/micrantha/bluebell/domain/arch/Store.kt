@@ -15,7 +15,10 @@ fun interface EffectedStore<State> {
     operator fun plus(effect: Effect<State>) = applyEffect(effect)
 }
 
-interface Store<State> : Stateful<State>, ReducerStore<State>, EffectedStore<State>, Dispatcher {
+typealias StoreDispatch = suspend (Action) -> Unit
+
+interface Store<State> : Stateful<State>, ReducerStore<State>, EffectedStore<State>, Dispatcher,
+    StoreDispatch {
 
     fun interface Listener<State> {
         fun listen(block: (State) -> Unit): Store<State>

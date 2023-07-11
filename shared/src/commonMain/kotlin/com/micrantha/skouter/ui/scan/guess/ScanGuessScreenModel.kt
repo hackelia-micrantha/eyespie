@@ -17,11 +17,9 @@ class ScanGuessScreenModel(
 ) {
     private val environment: ScanGuessEnvironment by di.on(this).instance(arg = args)
 
-
     init {
         store.addReducer(environment::reduce).applyEffect(environment::invoke)
 
         dispatch(Load)
     }
-
 }
