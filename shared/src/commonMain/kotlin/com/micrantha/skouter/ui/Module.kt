@@ -32,6 +32,7 @@ import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.LoadCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.MatchCameraImageUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
+import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProvider
@@ -59,8 +60,8 @@ internal fun uiModules() = DI.Module("Skouter UI") {
 
     bindProviderOf(::DashboardScreen)
     bindProviderOf(::DashboardLoadUseCase)
-    bindProviderOf(::DashboardEnvironment)
-    bindProvider { DashboardScreenModel(instance(), instance()) }
+    bindFactory { scope: CoroutineScope -> DashboardEnvironment(scope, instance(), instance()) }
+    bindProvider { DashboardScreenModel(instance()) }
 
     bindProviderOf(::ScanScreen)
     bindProviderOf(::ScanEnvironment)

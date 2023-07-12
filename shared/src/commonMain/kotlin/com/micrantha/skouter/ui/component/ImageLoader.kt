@@ -3,79 +3,65 @@ package com.micrantha.skouter.ui.component
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.model.Session
+import com.micrantha.skouter.platform.generateImageLoader
 import com.seiko.imageloader.ImageLoader
-import com.seiko.imageloader.component.setupBase64Components
-import com.seiko.imageloader.component.setupCommonComponents
-import com.seiko.imageloader.component.setupKtorComponents
-import io.github.aakira.napier.DebugAntilog
-import io.github.aakira.napier.Napier
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.plugins.auth.providers.bearer
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel.ALL
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.headers
+import io.ktor.http.HttpHeaders
 import org.kodein.di.compose.rememberInstance
 
-fun authorizedImageLoader(
-    session: Session?
-): ImageLoader {
-    return ImageLoader {
-        components {
-            setupCommonComponents()
-            setupBase64Components()
-            setupKtorComponents {
-                HttpClient(CIO) {
+private fun Session?.authorizedHttpClient() = HttpClient(CIO) {
 
+    if (this@authorizedHttpClient != null) {
 
-                    if (session != null) {
-
-                        defaultRequest {
-                            headers {
-                                "apiKey" to session.accessToken
-                                HttpHeaders.Authorization to "Bearer ${session.accessToken}"
-                            }
-                        }
-
-                        install(Auth) {
-                            bearer {
-                                loadTokens {
-                                    BearerTokens(
-                                        session.accessToken,
-                                        session.refreshToken
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    install(Logging) {
-                        logger = object : Logger {
-                            override fun log(message: String) {
-                                Napier.v("ImageLoader", null, message)
-                            }
-                        }
-                        level = LogLevel.ALL
-                    }
-
-                }.apply {
-                    Napier.base(DebugAntilog())
-                }
+        defaultRequest {
+            headers {
+                "apiKey" to accessToken
+                HttpHeaders.Authorization to "Bearer $accessToken"
             }
         }
 
+        install(Auth) {
+            bearer {
+                loadTokens {
+                    BearerTokens(accessToken, refreshToken)
+                }
+            }
+        }
     }
+
+    install(Logging) {
+        logger = object : Logger {
+            override fun log(message: String) {
+                Log.v(message, null, "ImageLoader")
+            }
+        }
+        level = ALL
+    }
+
 }
 
 @Composable
 fun rememberImageLoader(): ImageLoader {
-    val client by rememberInstance<CurrentSession>()
+    val session by rememberInstance<CurrentSession>()
 
-    val session by client.asStateFlow().collectAsState()
+    val data by session.asStateFlow().collectAsState()
 
-    return authorizedImageLoader(session)
+    val client = remember { data.authorizedHttpClient() }
+
+    val loader = generateImageLoader(data, client)
+
+    return remember { loader }
 }

@@ -13,7 +13,7 @@ data class GameListUiState(
 )
 
 sealed interface GameListAction : Action {
-    object NewGame : GameListAction
-    object Load : GameListAction
+    data object NewGame : GameListAction
+    data object Load : GameListAction
     data class Loaded(val data: GameList) : GameListAction
 }

@@ -11,9 +11,9 @@ data class GameCreateState(
 )
 
 sealed interface GameCreateAction : Action {
-    object Save : GameCreateAction
+    data object Save : GameCreateAction
 
     data class NameChanged(val name: String) : GameCreateAction
 
-    object NameDone : GameCreateAction
+    data object NameDone : GameCreateAction
 }

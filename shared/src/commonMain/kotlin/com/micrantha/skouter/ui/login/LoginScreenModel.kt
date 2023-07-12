@@ -10,7 +10,7 @@ class LoginScreenModel(
 ) : MappedScreenModel<LoginState, LoginUiState>(
     screenContext,
     initialState,
-    environment::map
+    LoginEnvironment::map
 ) {
 
     init {

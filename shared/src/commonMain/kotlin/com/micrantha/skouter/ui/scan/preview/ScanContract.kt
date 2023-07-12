@@ -41,13 +41,13 @@ sealed interface ScanAction : Action {
         val path: Path
     }
 
-    object SaveScan : ScanAction
+    data object SaveScan : ScanAction
 
-    object EditScan : ScanAction
+    data object EditScan : ScanAction
 
-    object SaveError : ScanAction
+    data object SaveError : ScanAction
 
-    object LoadError : ScanAction
+    data object LoadError : ScanAction
 
     data class Loaded(val data: Flow<CameraImage>) : ScanAction
 

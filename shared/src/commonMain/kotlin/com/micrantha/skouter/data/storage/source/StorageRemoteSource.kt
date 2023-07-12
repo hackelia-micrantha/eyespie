@@ -1,7 +1,8 @@
 package com.micrantha.skouter.data.storage.source
 
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.data.client.SupaClient
-import io.github.aakira.napier.Napier
+import kotlin.time.Duration.Companion.days
 
 class StorageRemoteSource(
     private val supabase: SupaClient,
@@ -19,7 +20,7 @@ class StorageRemoteSource(
             .downloadAuthenticated(path)
         Result.success(result)
     } catch (err: Throwable) {
-        Napier.e("image", err)
+        Log.e("image", err)
         Result.failure(err)
     }
 
@@ -29,12 +30,12 @@ class StorageRemoteSource(
         data: ByteArray
     ): Result<Pair<String, String>> = try {
         with(supabase.storage(bucketId)) {
-            val key = upload(path, data)
-            val url = authenticatedRenderUrl(path)
+            val url = upload(path, data)
+            val key = createSignedUrl(path, 365.days)
             Result.success(Pair(key, url))
         }
     } catch (err: Throwable) {
-        Napier.e("upload", err)
+        Log.e("upload", err)
         Result.failure(err)
     }
 }

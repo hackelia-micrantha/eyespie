@@ -14,7 +14,7 @@ class DashboardLoadUseCase(
     private val playerRepository: PlayerRepository,
     private val currentSession: CurrentSession
 ) {
-    suspend operator fun invoke() = flowUseCase {
+    operator fun invoke() = flowUseCase {
         val player = currentSession.requirePlayer()
         val location = player.location?.point
 
@@ -24,7 +24,7 @@ class DashboardLoadUseCase(
             flow3 = players
         )
         { things, friends, players ->
-            Result.success(Loaded(things, friends, players))
+            Loaded(things, friends, players)
         }
     }
 

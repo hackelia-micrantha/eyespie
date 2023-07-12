@@ -36,17 +36,17 @@ sealed interface ScanEditAction : Action {
 
     data class CustomLabelChanged(val data: String) : ScanEditAction
 
-    object SaveScanEdit : ScanEditAction
+    data object SaveScanEdit : ScanEditAction
 
-    object SaveThingError : ScanEditAction
+    data object SaveThingError : ScanEditAction
 
-    object LoadError : ScanEditAction
+    data object LoadError : ScanEditAction
 
     data class LoadedImage(val data: Painter) : ScanEditAction
 
     data class NameChanged(val data: String) : ScanEditAction
 
-    object ClearColor : ScanEditAction
+    data object ClearColor : ScanEditAction
 
-    object ClearLabel : ScanEditAction
+    data object ClearLabel : ScanEditAction
 }

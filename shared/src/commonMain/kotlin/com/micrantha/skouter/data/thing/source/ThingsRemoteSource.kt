@@ -1,5 +1,6 @@
 package com.micrantha.skouter.data.thing.source
 
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.data.client.SupaClient
 import com.micrantha.skouter.data.thing.model.MatchRequest
 import com.micrantha.skouter.data.thing.model.MatchResponse
@@ -7,7 +8,6 @@ import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.data.thing.model.ThingListing
 import com.micrantha.skouter.data.thing.model.ThingRequest
 import com.micrantha.skouter.data.thing.model.ThingResponse
-import io.github.aakira.napier.Napier
 
 class ThingsRemoteSource(
     private val supaClient: SupaClient,
@@ -17,7 +17,7 @@ class ThingsRemoteSource(
         val result = supaClient.things().insert(data).decodeList<ThingResponse>()
         Result.success(result.first())
     } catch (err: Throwable) {
-        Napier.e("save thing", err)
+        Log.e("save thing", err)
         Result.failure(err)
     }
 

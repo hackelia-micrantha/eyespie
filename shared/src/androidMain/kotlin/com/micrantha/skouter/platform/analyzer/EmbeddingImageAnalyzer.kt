@@ -31,7 +31,7 @@ actual class EmbeddingImageAnalyzer(context: Context) : ImageAnalyzer<ImageEmbed
 
     actual override suspend fun analyze(image: CameraImage): Result<ImageEmbeddings> = try {
         val input = BitmapImageBuilder(image.bitmap).build()
-
+        
         val result = client.embed(input).embeddingResult().embeddings().map(::map)
 
         Result.success(result)

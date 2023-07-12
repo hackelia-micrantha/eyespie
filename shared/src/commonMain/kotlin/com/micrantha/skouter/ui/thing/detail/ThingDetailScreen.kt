@@ -11,7 +11,7 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 
 class ThingDetailScreen(
-    private val id: String,
+    private val arg: ThingDetailArg,
 ) : Screen {
 
     @Composable

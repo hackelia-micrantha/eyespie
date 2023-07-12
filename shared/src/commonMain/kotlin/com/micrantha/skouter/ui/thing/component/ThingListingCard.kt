@@ -9,15 +9,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BrokenImage
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.domain.model.Thing
-import com.seiko.imageloader.rememberAsyncImagePainter
+import com.seiko.imageloader.rememberImagePainter
 
 @Composable
 fun ThingListingCard(
@@ -46,7 +50,15 @@ fun ThingListingCard(
 
 @Composable
 private fun GameThingImage(imageUrl: String) {
-    val painter = rememberAsyncImagePainter(imageUrl)
+    val painter = rememberImagePainter(
+        url = imageUrl,
+        placeholderPainter = {
+            rememberVectorPainter(Icons.Default.Image)
+        },
+        errorPainter = {
+            rememberVectorPainter(Icons.Default.BrokenImage)
+        }
+    )
 
     Box(
         modifier = Modifier.size(Dimensions.List.thumbnail),

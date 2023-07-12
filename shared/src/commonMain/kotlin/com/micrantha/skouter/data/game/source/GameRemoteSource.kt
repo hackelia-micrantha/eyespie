@@ -1,7 +1,7 @@
 package com.micrantha.skouter.data.game.source
 
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.data.client.SupaClient
-import io.github.aakira.napier.Napier
 
 class GameRemoteSource(
     private val client: SupaClient
@@ -12,7 +12,7 @@ class GameRemoteSource(
             .map { it.node }
         Result.success(games)
     } catch (e: Throwable) {
-        Napier.e("games", e)
+        Log.e("games", e)
         Result.failure(e)
     }
 
@@ -22,7 +22,7 @@ class GameRemoteSource(
         }
         Result.success(game)
     } catch (e: Throwable) {
-        Napier.e("game", e)
+        Log.e("game", e)
         Result.failure(e)
     }
 }

@@ -28,7 +28,7 @@ data class Thing(
         override val createdAt: Instant,
         val name: String?,
         val guessed: Boolean,
-        val imageUrl: String
+        val imageUrl: String,
     ) : Entity, Creatable
 
     data class Match(

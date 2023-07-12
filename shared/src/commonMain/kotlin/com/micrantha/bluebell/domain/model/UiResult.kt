@@ -28,6 +28,9 @@ val <T> UiResult<T>.value: T?
         else -> null
     }
 
+val <T> UiResult<T>.isReady: Boolean
+    get() = this is Ready
+
 fun <T> UiResult<T>.copy(ready: (T) -> T) = when (this) {
     is Ready -> this.copy(data = ready(this.data))
     else -> this

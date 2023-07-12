@@ -5,8 +5,9 @@ import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.ui.components.Router
-import com.micrantha.bluebell.ui.screen.MappedScreenEnvironment
 import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.ScreenEnvironment
+import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.ui.component.Choice
 import com.micrantha.skouter.ui.component.updateKey
@@ -28,10 +29,10 @@ class ScanEditEnvironment(
     private val context: ScreenContext,
     private val saveThingImageUseCase: SaveThingImageUseCase,
     private val loadCameraImageUseCase: LoadCameraImageUseCase,
-) : MappedScreenEnvironment<ScanEditState, ScanEditUiState>,
+) : ScreenEnvironment<ScanEditState>,
     Dispatcher by context.dispatcher,
     Router by context.router {
-    
+
     override fun reduce(state: ScanEditState, action: Action) = when (action) {
         is Init -> state.copy(
             labels = action.proof.clues?.labels?.associate {
@@ -97,35 +98,38 @@ class ScanEditEnvironment(
         }
     }
 
-    override fun map(state: ScanEditState) = ScanEditUiState(
-        labels = state.labels?.map {
-            Choice(
-                label = it.value.display(),
-                tag = it.value.data,
-                key = it.key
-            )
-        } ?: emptyList(),
-        customLabel = state.customLabel,
-        colors = state.colors?.map {
-            Choice(
-                label = it.value.display(),
-                tag = it.value.data,
-                key = it.key
-            )
-        } ?: emptyList(),
-        customColor = state.customColor,
-        name = state.name ?: "",
-        image = state.image,
-        enabled = state.disabled.not()
-    )
+    companion object : StateMapper<ScanEditState, ScanEditUiState> {
+
+        override fun map(state: ScanEditState) = ScanEditUiState(
+            labels = state.labels?.map {
+                Choice(
+                    label = it.value.display(),
+                    tag = it.value.data,
+                    key = it.key
+                )
+            } ?: emptyList(),
+            customLabel = state.customLabel,
+            colors = state.colors?.map {
+                Choice(
+                    label = it.value.display(),
+                    tag = it.value.data,
+                    key = it.key
+                )
+            } ?: emptyList(),
+            customColor = state.customColor,
+            name = state.name ?: "",
+            image = state.image,
+            enabled = state.disabled.not()
+        )
 
 
-    private fun ScanEditState.asProof() = proof!!.copy(
-        clues = Clues(
-            labels = labels?.values?.toSet(),
-            colors = colors?.values?.toSet()
-        ),
-        name = name,
-    )
+        private fun ScanEditState.asProof() = proof!!.copy(
+            clues = Clues(
+                labels = labels?.values?.toSet(),
+                colors = colors?.values?.toSet()
+            ),
+            name = name,
+        )
+    }
 
 }

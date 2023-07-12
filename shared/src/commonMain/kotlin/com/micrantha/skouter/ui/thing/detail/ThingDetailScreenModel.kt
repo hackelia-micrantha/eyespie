@@ -5,11 +5,12 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 
 class ThingDetailScreenModel(
     context: ScreenContext,
-    private val environment: ThingDetailEnvironment
+    private val environment: ThingDetailEnvironment,
+    initialState: ThingDetailState = ThingDetailState(),
 ) : MappedScreenModel<ThingDetailState, ThingDetailUiState>(
     context,
-    ThingDetailState(),
-    environment::map
+    initialState,
+    ThingDetailEnvironment::map
 ) {
     init {
         store.addReducer(environment::reduce).applyEffect(environment)

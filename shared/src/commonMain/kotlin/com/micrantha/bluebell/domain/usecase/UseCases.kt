@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 /** Executes the use case asynchronously and returns a [Result].
@@ -36,8 +37,8 @@ suspend fun <Out> dispatchUseCase(
  * [Result<R>].
  * Handling an exception (emit [Result.Failure] to the result) is the subclasses responsibility.
  */
-suspend fun <Out> flowUseCase(
+fun <Out> flowUseCase(
     coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,
-    block: suspend () -> Flow<Result<Out>>
-) = block().catch { e -> emit(Result.failure(Exception(e))) }
+    block: () -> Flow<Out>
+) = block().map { Result.success(it) }.catch { e -> emit(Result.failure(Exception(e))) }
     .flowOn(coroutineDispatcher)

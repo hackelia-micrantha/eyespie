@@ -19,11 +19,11 @@ data class LoginUiState(
 
 sealed interface LoginAction : Action {
 
-    object OnLogin : LoginAction
+    data object OnLogin : LoginAction
 
     data class OnError(val err: Throwable) : LoginAction
 
-    object OnSuccess : LoginAction
+    data object OnSuccess : LoginAction
 
     data class ChangedPassword(val password: String) : LoginAction
 

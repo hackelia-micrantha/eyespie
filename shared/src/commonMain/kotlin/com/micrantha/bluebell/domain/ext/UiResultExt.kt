@@ -16,3 +16,4 @@ fun <T> List<T>.status() = if (isEmpty()) Empty() else Ready(this)
 
 fun <T> UiResult<T>.enabled(): Boolean = this !is Busy
 
+

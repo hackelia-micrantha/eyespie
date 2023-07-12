@@ -21,9 +21,9 @@ data class ScanGuessArgs(
 
 sealed interface ScanGuessAction : Action {
     data class ImageCaptured(val image: CameraImage) : ScanGuessAction
-    object ThingMatched : ScanGuessAction
-    object ThingNotFound : ScanGuessAction
+    data object ThingMatched : ScanGuessAction
+    data object ThingNotFound : ScanGuessAction
 
-    object Load : ScanGuessAction
+    data object Load : ScanGuessAction
     data class Loaded(val thing: Thing) : ScanGuessAction
 }

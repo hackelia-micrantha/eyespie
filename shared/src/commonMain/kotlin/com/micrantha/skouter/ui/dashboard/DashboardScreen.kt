@@ -35,13 +35,13 @@ class DashboardScreen : Screen {
     override fun Content() {
         val screenModel: DashboardScreenModel = rememberScreenModel()
 
-        LocationEnabledEffect()
-
-        RealtimeDataEnabledEffect()
-
         LaunchedEffect(Unit) {
             screenModel.dispatch(Load)
         }
+
+        LocationEnabledEffect()
+
+        RealtimeDataEnabledEffect()
 
         val state by screenModel.state.collectAsState()
 

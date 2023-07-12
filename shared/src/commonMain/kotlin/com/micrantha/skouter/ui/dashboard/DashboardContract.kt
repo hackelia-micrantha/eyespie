@@ -7,8 +7,6 @@ import com.micrantha.skouter.domain.model.PlayerList
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.model.ThingList
 
-const val MaxItemCount = 3
-
 data class DashboardState(
     val playerID: String? = null,
     val location: Location? = null,
@@ -39,20 +37,20 @@ data class DashboardUiState(
 
 sealed interface DashboardAction : Action {
 
-    object ScanNewThing : DashboardAction
+    data object ScanNewThing : DashboardAction
 
-    object HasMoreThings : DashboardAction
+    data object HasMoreThings : DashboardAction
 
-    object HasMorePlayers : DashboardAction
+    data object HasMorePlayers : DashboardAction
 
-    object Load : DashboardAction
+    data object Load : DashboardAction
 
-    object LoadError : DashboardAction
+    data object LoadError : DashboardAction
 
     data class Loaded(val things: ThingList, val friends: PlayerList, val players: PlayerList) :
         DashboardAction
 
-    object AddFriendClicked : DashboardAction
+    data object AddFriendClicked : DashboardAction
 
     data class GuessThing(val thing: Thing.Listing) : DashboardAction
 }

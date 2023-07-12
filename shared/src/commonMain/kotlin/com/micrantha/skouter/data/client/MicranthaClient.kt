@@ -25,7 +25,7 @@ fun createHttpClient(block: DefaultRequestBuilder.() -> Unit) = HttpClient(CIO) 
     install(Logging) {
         logger = object : Logger {
             override fun log(message: String) {
-                Log.v("ImageLoader", null, message)
+                Log.v(message = message, tag = "ImageLoader")
             }
         }
         level = LogLevel.HEADERS

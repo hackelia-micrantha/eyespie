@@ -1,9 +1,10 @@
 package com.micrantha.skouter.ui.thing.detail
 
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.ui.screen.MappedScreenEnvironment
+import com.micrantha.bluebell.ui.screen.ScreenEnvironment
+import com.micrantha.bluebell.ui.screen.StateMapper
 
-class ThingDetailEnvironment : MappedScreenEnvironment<ThingDetailState, ThingDetailUiState> {
+class ThingDetailEnvironment : ScreenEnvironment<ThingDetailState> {
     override fun reduce(state: ThingDetailState, action: Action) = when (action) {
         else -> state
     }
@@ -13,8 +14,10 @@ class ThingDetailEnvironment : MappedScreenEnvironment<ThingDetailState, ThingDe
         }
     }
 
-    override fun map(state: ThingDetailState) = ThingDetailUiState(
-        status = state.status
-    )
+    companion object : StateMapper<ThingDetailState, ThingDetailUiState> {
 
+        override fun map(state: ThingDetailState) = ThingDetailUiState(
+            status = state.status
+        )
+    }
 }

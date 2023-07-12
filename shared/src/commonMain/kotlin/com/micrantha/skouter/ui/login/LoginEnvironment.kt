@@ -25,15 +25,16 @@ class LoginEnvironment(
     private val context: ScreenContext,
     private val accountRepository: AccountRepository,
 ) : Reducer<LoginState>, Effect<LoginState>,
-    StateMapper<LoginState, LoginUiState>,
     Dispatcher by context.dispatcher,
     LocalizedRepository by context.i18n, Router by context.router {
 
-    override fun map(state: LoginState) = LoginUiState(
-        email = state.email,
-        password = state.hash,
-        status = state.status
-    )
+    companion object : StateMapper<LoginState, LoginUiState> {
+        override fun map(state: LoginState) = LoginUiState(
+            email = state.email,
+            password = state.hash,
+            status = state.status
+        )
+    }
 
     override fun reduce(state: LoginState, action: Action) = when (action) {
         is ChangedEmail -> state.copy(email = action.email)

@@ -9,7 +9,7 @@ class ScanEditScreenModel(
 ) : MappedScreenModel<ScanEditState, ScanEditUiState>(
     context,
     ScanEditState(),
-    environment::map
+    ScanEditEnvironment::map
 ) {
     init {
         store.addReducer(environment::reduce).applyEffect(environment)

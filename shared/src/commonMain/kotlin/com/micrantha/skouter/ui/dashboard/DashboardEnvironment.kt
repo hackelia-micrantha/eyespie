@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui.dashboard
 
-import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Effect
@@ -8,6 +7,7 @@ import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.ext.busy
 import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.model.Ready
+import com.micrantha.bluebell.domain.model.isReady
 import com.micrantha.bluebell.domain.model.map
 import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
@@ -27,33 +27,38 @@ import com.micrantha.skouter.ui.game.detail.GameDetailScreenArg
 import com.micrantha.skouter.ui.game.detail.GameDetailsScreen
 import com.micrantha.skouter.ui.scan.guess.ScanGuessScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class DashboardEnvironment(
+    private val scope: CoroutineScope,
     private val context: ScreenContext,
-    private val dashboardLoadUseCase: DashboardLoadUseCase,
-) : Reducer<DashboardState>, Effect<DashboardState>, Dispatcher by context.dispatcher,
-    StateMapper<DashboardState, DashboardUiState> {
+    private val dashboardLoadUseCase: DashboardLoadUseCase
+) : Reducer<DashboardState>, Effect<DashboardState>, Dispatcher by context.dispatcher {
 
-    override fun map(state: DashboardState) = DashboardUiState(
-        status = state.status.map {
-            Data(
-                nearby = Nearby(
-                    players = TabContent(
-                        data = state.players ?: emptyList(),
-                        hasMore = false
+    companion object : StateMapper<DashboardState, DashboardUiState> {
+        override fun map(state: DashboardState) = DashboardUiState(
+            status = state.status.map {
+                Data(
+                    nearby = Nearby(
+                        players = TabContent(
+                            data = state.players ?: emptyList(),
+                            hasMore = false
+                        ),
+                        things = TabContent(
+                            state.things ?: emptyList(),
+                            hasMore = false
+                        ),
                     ),
-                    things = TabContent(
-                        state.things ?: emptyList(),
+                    friends = TabContent(
+                        data = state.friends ?: emptyList(),
                         hasMore = false
-                    ),
-                ),
-                friends = TabContent(
-                    data = state.friends ?: emptyList(),
-                    hasMore = false
+                    )
                 )
-            )
-        }
-    )
+            }
+        )
+    }
 
     override fun reduce(state: DashboardState, action: Action): DashboardState {
         return when (action) {
@@ -68,7 +73,7 @@ class DashboardEnvironment(
                 status = context.i18n.failure(S.NetworkFailure)
             )
 
-            is Load -> state.copy(
+            is Load -> if (state.status.isReady) state else state.copy(
                 status = context.i18n.busy(S.LoadingDashboard)
             )
 
@@ -82,12 +87,13 @@ class DashboardEnvironment(
                 arg = action.arg
             )
 
+            is Load ->
+                dashboardLoadUseCase().onEach { res ->
+                    res.onSuccess { dispatch(it) }
+                        .onFailure { dispatch(LoadError) }
+                }.launchIn(scope)
+
             is ScanNewThing -> context.router.navigate<ScanScreen>()
-            is Load -> dashboardLoadUseCase().collect { result ->
-                result.onSuccess { dispatch(it) }.onFailure {
-                    Log.e("unable to load dashboard", it)
-                }
-            }
 
             is GuessThing -> context.router.navigate(
                 ScanGuessScreen(
