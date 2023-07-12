@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.micrantha.bluebell.data.Log
+import com.micrantha.skouter.SkouterConfig
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.model.Session
 import com.micrantha.skouter.platform.generateImageLoader
@@ -15,24 +16,31 @@ import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel.ALL
+import io.ktor.client.plugins.logging.LogLevel.INFO
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.headers
-import io.ktor.http.HttpHeaders
+import io.ktor.http.URLProtocol
+import io.ktor.http.headers
+import io.ktor.http.path
 import org.kodein.di.compose.rememberInstance
 
 private fun Session?.authorizedHttpClient() = HttpClient(CIO) {
 
-    if (this@authorizedHttpClient != null) {
-
-        defaultRequest {
-            headers {
-                "apiKey" to accessToken
-                HttpHeaders.Authorization to "Bearer $accessToken"
-            }
+    defaultRequest {
+        url {
+            protocol = URLProtocol.HTTPS
+            host = SkouterConfig.supaBaseDomain
+            path("storage", "v1")
         }
 
+        if (this@authorizedHttpClient != null) {
+            headers {
+                "apiKey" to accessToken
+            }
+        }
+    }
+
+    if (this@authorizedHttpClient != null) {
         install(Auth) {
             bearer {
                 loadTokens {
@@ -48,7 +56,7 @@ private fun Session?.authorizedHttpClient() = HttpClient(CIO) {
                 Log.v(message, null, "ImageLoader")
             }
         }
-        level = ALL
+        level = INFO
     }
 
 }
