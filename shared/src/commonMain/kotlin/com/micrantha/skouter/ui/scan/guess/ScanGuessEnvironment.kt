@@ -4,8 +4,8 @@ import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.model.UiMessage
-import com.micrantha.bluebell.domain.model.popup
 import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.components.message.popup
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenEnvironment
 import com.micrantha.skouter.domain.repository.ThingRepository

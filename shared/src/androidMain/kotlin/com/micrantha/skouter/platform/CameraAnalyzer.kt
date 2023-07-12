@@ -41,7 +41,7 @@ class CameraAnalyzer(
             val uiImage = CameraImage(image.toBitmap())
 
             options.callback(uiImage)
-
+            
             image.close()
         }
     }

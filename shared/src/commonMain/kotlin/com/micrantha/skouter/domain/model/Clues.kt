@@ -44,7 +44,7 @@ sealed interface SortedClue<T : Comparable<T>> : Clue<T>, Comparable<SortedClue<
 
 data class ColorClue(
     override val data: String,
-) : Clue<String> {
+) : SortedClue<String> {
     override fun hashCode() = data.hashCode()
 
     override fun equals(other: Any?): Boolean {

@@ -7,7 +7,6 @@ import com.micrantha.skouter.domain.repository.ClueRepository
 import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedColors
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedLabels
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedMatch
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedObjects
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedSegments
 import kotlinx.coroutines.joinAll
@@ -61,13 +60,6 @@ class AnalyzeCameraImageUseCase(
             dispatch(ScannedSegments(segments))
         }.onFailure {
             Log.e("unable to scan segments", it)
-        }
-
-    private suspend fun matches(image: CameraImage) =
-        clueRepository.match(image).onSuccess { matches ->
-            dispatch(ScannedMatch(matches))
-        }.onFailure {
-            Log.e("unable to scan matches", it)
         }
 
 }
