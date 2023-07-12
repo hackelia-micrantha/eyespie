@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
@@ -80,7 +83,7 @@ kotlin {
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:geo-compose:0.6.0")
 
-                api("io.github.qdsfdhvh:image-loader:1.4.4")
+                api("io.github.qdsfdhvh:image-loader:1.6.0")
 
                 //implementation("ca.rmen:rhymer:1.2.0")
 
@@ -165,3 +168,11 @@ bluebell {
         ids = listOf("microsoft/resnet-50")
     }
 }
+
+tasks
+    .withType<KotlinCompilationTask<*>>()
+    .configureEach {
+        compilerOptions
+            .languageVersion
+            .set(KotlinVersion.KOTLIN_1_9)
+    }

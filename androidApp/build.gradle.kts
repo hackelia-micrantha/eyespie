@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -44,3 +47,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
 }
+
+
+tasks
+    .withType<KotlinCompilationTask<*>>()
+    .configureEach {
+        compilerOptions
+            .languageVersion
+            .set(KotlinVersion.KOTLIN_1_9)
+    }
