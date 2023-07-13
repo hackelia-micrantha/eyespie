@@ -1,8 +1,8 @@
 package com.micrantha.skouter.platform
 
 import android.graphics.Bitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import com.micrantha.bluebell.platform.toByteArray
-import com.seiko.imageloader.asImageBitmap
 import kotlin.math.max
 
 actual class CameraImage(

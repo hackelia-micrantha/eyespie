@@ -10,7 +10,7 @@ data class Thing(
     val name: String?,
     val guessed: Boolean,
     val guesses: List<Guess>,
-    val imageUrl: String,
+    val imageUrl: ImagePath,
     val clues: Clues,
     val location: Location.Point,
     val embedding: ImageEmbedding
@@ -28,7 +28,7 @@ data class Thing(
         override val createdAt: Instant,
         val name: String?,
         val guessed: Boolean,
-        val imageUrl: String,
+        val imageUrl: ImagePath,
     ) : Entity, Creatable
 
     data class Match(
@@ -40,3 +40,5 @@ data class Thing(
 
 typealias ThingList = List<Thing.Listing>
 typealias ThingMatches = List<Thing.Match>
+
+typealias ImagePath = String

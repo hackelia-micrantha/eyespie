@@ -15,7 +15,7 @@ kotlin {
     android {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
@@ -82,8 +82,7 @@ kotlin {
 
                 api("dev.icerock.moko:permissions-compose:0.16.0")
                 api("dev.icerock.moko:geo-compose:0.6.0")
-
-                api("io.github.qdsfdhvh:image-loader:1.6.0")
+                implementation("media.kamel:kamel-image:0.6.0")
 
                 //implementation("ca.rmen:rhymer:1.2.0")
 
@@ -148,6 +147,11 @@ android {
     compileSdk = 33
     defaultConfig {
         minSdk = 26
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 }
 

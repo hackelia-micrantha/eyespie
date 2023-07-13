@@ -34,7 +34,10 @@ fun NearbyTabContent(
         stickyHeader {
             ListHeader(label = stringResource(S.Things))
         }
-        itemsIndexed(tab.things.data) { index, thing ->
+        itemsIndexed(
+            items = tab.things.data,
+            key = { index, item -> item.id }
+        ) { index, thing ->
             ThingListingCard(
                 modifier = Modifier.padding(horizontal = Dimensions.content).then(
                     if (index == 0)

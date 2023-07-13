@@ -13,7 +13,7 @@ class AccountRemoteSource(
     fun session() = client.auth().currentSessionOrNull()
 
     suspend fun account() = try {
-        val session = client.auth().currentSessionOrNull()!!
+        val session = client.auth().apply { loadFromStorage() }.currentSessionOrNull()!!
         val user = session.user!!
         val player = client.players().select {
             eq("user_id", user.id)
