@@ -5,13 +5,11 @@
 
 > A game of "eye spy" with machine vision for clues and proof.
 
-See the [ROADMAP](docs/PHASES.md) for project phases.
+See the [ROADMAP](https://github.com/orgs/hackelia-micrantha/projects/3/views/2) for project phases.
 
 ## History
 
-Ongoing project since 2016, doing the refactor in kotlin multiplatform in spare time.
-
-Check out some [documentation](docs/INDEX.md) or a [blog post](https://ryanjennin.gs/posts/scouter-demo/) from the original prototype.
+[Ongoing prototype since 2016](https://ryanjennin.gs/posts/scouter-demo/), doing the redo in spare time.
 
 ## Author
 
@@ -33,8 +31,3 @@ Copyright © 2023 [Ryan Jennings](https://github.com/ryjen).
 
 This project is [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licensed.
 
----
-
-## Screenshot(s)
-
-[Screenshot 1](docs/screenshot.png)
