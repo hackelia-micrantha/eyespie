@@ -1,8 +1,8 @@
 package com.micrantha.skouter.platform
 
+import android.util.Size
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
-import androidx.camera.core.AspectRatio
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import org.kodein.di.compose.rememberFactory
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+
 
 private fun PreviewView.enableZoom(camera: Camera) {
 
@@ -54,16 +55,28 @@ actual fun CameraScanner(
     modifier: Modifier,
     onCameraImage: ImageAnalyzerCallback
 ) {
+
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+
+    val config = context.resources.displayMetrics
+    val statusBarHeight = Math.ceil((24 * config.density).toDouble()).toInt()
+
+    val screenSize = Size(config.widthPixels, config.heightPixels + statusBarHeight)
+
     val analyzer by rememberFactory<CameraAnalyzerOptions, CameraAnalyzer>()
-    val imageCapture = remember { ImageCapture.Builder().build() }
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            .setTargetResolution(screenSize)
+            .build()
+    }
     val executor = ContextCompat.getMainExecutor(context)
     val cameraSelector by remember { mutableStateOf(CameraSelector.DEFAULT_BACK_CAMERA) }
     val previewView = remember {
-        PreviewView(context).apply { this.scaleType = PreviewView.ScaleType.FILL_CENTER }
+        PreviewView(context).apply {
+            this.scaleType = PreviewView.ScaleType.FILL_CENTER
+        }
     }
-
     LaunchedEffect(cameraSelector) {
         val cameraProvider = suspendCoroutine<ProcessCameraProvider> { continuation ->
             ProcessCameraProvider.getInstance(context).also { future ->
@@ -78,6 +91,7 @@ actual fun CameraScanner(
         useCases.addUseCase(imageCapture)
 
         val previewUseCase = Preview.Builder()
+            .setTargetResolution(screenSize)
             .build()
             .also { it.setSurfaceProvider(previewView.surfaceProvider) }
 
@@ -89,7 +103,7 @@ actual fun CameraScanner(
         )
 
         val imageAnalysis = ImageAnalysis.Builder()
-            .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+            .setTargetResolution(screenSize)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()

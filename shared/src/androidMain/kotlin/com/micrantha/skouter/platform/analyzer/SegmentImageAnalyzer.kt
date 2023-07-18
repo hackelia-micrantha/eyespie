@@ -13,7 +13,6 @@ import com.micrantha.skouter.platform.CameraImage
 import com.micrantha.skouter.platform.ImageAnalyzer
 import com.micrantha.skouter.platform.ImageSegment
 import com.micrantha.skouter.platform.ImageSegments
-import kotlin.math.min
 
 private const val MODEL_ASSET = "models/segmentation/image.tflite"
 
@@ -48,10 +47,6 @@ actual class SegmentImageAnalyzer(
         // Create the mask bitmap with colors and the set of detected labels.
         val pixels = IntArray(byteBuffer.capacity())
         for (i in pixels.indices) {
-            // Using unsigned int here because selfie segmentation returns 0 or 255U (-1 signed)
-            // with 0 being the found person, 255U for no label.
-            // Deeplab uses 0 for background and other labels are 1-19,
-            // so only providing 20 colors from ImageSegmenterHelper -> labelColors
             val index = byteBuffer.get(i).toUInt() % 20U
             val color = with(labelColors[index.toInt()]) {
                 Color.argb(
@@ -70,21 +65,10 @@ actual class SegmentImageAnalyzer(
             Bitmap.Config.ARGB_8888
         )
 
-        val scaleFactor =
-            min(image.width * 1f / maskImage.width, image.height * 1f / maskImage.height)
-
-
-        val scaleWidth = (maskImage.width * scaleFactor).toInt()
-        val scaleHeight = (maskImage.height * scaleFactor).toInt()
-
-        val scaleBitmap = Bitmap.createScaledBitmap(
-            coloredMaskImage, scaleWidth, scaleHeight, false
-        )
-
         Result.success(
             listOf(
                 ImageSegment(
-                    CameraImage(scaleBitmap)
+                    CameraImage(coloredMaskImage)
                 )
             )
         )
@@ -94,7 +78,7 @@ actual class SegmentImageAnalyzer(
 
 
     companion object {
-        const val ALPHA_COLOR = 128
+        const val ALPHA_COLOR = 80
 
         val labelColors = listOf(
             -16777216,
