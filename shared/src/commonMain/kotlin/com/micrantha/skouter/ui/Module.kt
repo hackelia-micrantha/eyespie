@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui
 
+import com.micrantha.bluebell.get
 import com.micrantha.skouter.ui.dashboard.DashboardEnvironment
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
 import com.micrantha.skouter.ui.dashboard.DashboardScreenModel
@@ -27,24 +28,23 @@ import com.micrantha.skouter.ui.scan.preview.ScanEnvironment
 import com.micrantha.skouter.ui.scan.preview.ScanScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreenModel
 import com.micrantha.skouter.ui.scan.preview.ScanStateMapper
-import com.micrantha.skouter.ui.scan.usecase.AnalyzeCameraImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
-import com.micrantha.skouter.ui.scan.usecase.LoadCameraImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.MatchCameraImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
+import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.EditCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.GetEditCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.MatchCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
 import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProvider
 import org.kodein.di.bindProviderOf
-import org.kodein.di.instance
 
 internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::MainScreenModel)
     bindProviderOf(::MainScreen)
 
     bindProviderOf(::LoginEnvironment)
-    bindProvider { LoginScreenModel(instance(), instance()) }
+    bindProvider { LoginScreenModel(get(), get()) }
     bindProviderOf(::LoginScreen)
 
     bindProviderOf(::GameListEnvironment)
@@ -60,38 +60,33 @@ internal fun uiModules() = DI.Module("Skouter UI") {
 
     bindProviderOf(::DashboardScreen)
     bindProviderOf(::DashboardLoadUseCase)
-    bindFactory { scope: CoroutineScope -> DashboardEnvironment(scope, instance(), instance()) }
-    bindProvider { DashboardScreenModel(instance()) }
+    bindFactory { scope: CoroutineScope -> DashboardEnvironment(scope, get(), get()) }
+    bindProvider { DashboardScreenModel(get()) }
 
     bindProviderOf(::ScanScreen)
-    bindProviderOf(::ScanEnvironment)
-    bindProviderOf(::ScanScreenModel)
     bindProviderOf(::ScanStateMapper)
+    bindProviderOf(::ScanScreenModel)
+    bindFactory { scope: CoroutineScope ->
+        ScanEnvironment(
+            scope, get(), get(), get(), get(), get(), get(), get()
+        )
+    }
 
     bindProviderOf(::ScanEditEnvironment)
     bindProviderOf(::ScanEditScreenModel)
 
     bindProviderOf(::ScanGuessMapper)
     bindFactory { args: ScanGuessArgs ->
-        ScanGuessScreenModel(
-            args,
-            instance(),
-            instance()
-        )
+        ScanGuessScreenModel(args, get(), get())
     }
     bindFactory { args: ScanGuessArgs -> ScanGuessScreen(args) }
     bindFactory { args: ScanGuessArgs ->
-        ScanGuessEnvironment(
-            args,
-            instance(),
-            instance(),
-            instance()
-        )
+        ScanGuessEnvironment(args, get(), get(), get())
     }
 
-    bindProviderOf(::CameraCaptureUseCase)
-    bindProviderOf(::SaveThingImageUseCase)
-    bindProviderOf(::MatchCameraImageUseCase)
-    bindProviderOf(::AnalyzeCameraImageUseCase)
-    bindProviderOf(::LoadCameraImageUseCase)
+    bindProviderOf(::EditCaptureUseCase)
+    bindProviderOf(::SaveCaptureUseCase)
+    bindProviderOf(::MatchCaptureUseCase)
+    bindProviderOf(::AnalyzeCaptureUseCase)
+    bindProviderOf(::GetEditCaptureUseCase)
 }

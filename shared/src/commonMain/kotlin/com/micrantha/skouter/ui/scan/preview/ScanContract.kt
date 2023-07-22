@@ -2,17 +2,18 @@ package com.micrantha.skouter.ui.scan.preview
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.Painter
 import com.micrantha.bluebell.domain.arch.Action
+import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
-import com.micrantha.skouter.domain.model.DetectProof
+import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.MatchClue
 import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
-import com.micrantha.skouter.domain.model.SegmentProof
-import com.micrantha.skouter.platform.CameraImage
+import com.micrantha.skouter.platform.scan.CameraImage
 import kotlinx.coroutines.flow.Flow
 import okio.Path
 import kotlin.math.min
@@ -33,7 +34,8 @@ data class ScanState(
 data class ScanUiState(
     val clues: List<String>,
     val overlays: List<ScanOverlay>,
-    val enabled: Boolean
+    val enabled: Boolean,
+    val capture: Painter?
 )
 
 sealed interface ScanAction : Action {
@@ -49,31 +51,33 @@ sealed interface ScanAction : Action {
 
     data object LoadError : ScanAction
 
+    data object ScanError : ScanAction
+
     data class Loaded(val data: Flow<CameraImage>) : ScanAction
 
     data class EditSaved(override val path: Path) : ScanAction, ScanSavable
     data class ImageSaved(override val path: Path) : ScanAction, ScanSavable
 
-    data class ImageCaptured(val image: CameraImage) : ScanAction
+    data class ScannedImage(val image: CameraImage) : ScanAction
 
-    data class ScannedLabels(
-        val labels: LabelProof
+    data class ScannedLabel(
+        val label: LabelClue
     ) : ScanAction
 
-    data class ScannedColors(
-        val colors: ColorProof
+    data class ScannedColor(
+        val color: ColorClue
     ) : ScanAction
 
-    data class ScannedObjects(
-        val detections: DetectProof
+    data class ScannedDetection(
+        val detection: DetectClue
     ) : ScanAction
 
-    data class ScannedSegments(
-        val segments: SegmentProof
+    data class ScannedSegment(
+        val segment: SegmentClue
     ) : ScanAction
 
     data class ScannedMatch(
-        val matches: MatchProof
+        val match: MatchProof
     ) : ScanAction
 }
 

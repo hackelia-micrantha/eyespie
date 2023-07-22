@@ -10,36 +10,39 @@ import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.repository.LocationRepository
 import com.micrantha.skouter.ui.component.combine
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditSaved
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageSaved
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveError
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScanSavable
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedColors
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedLabels
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedColor
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedDetection
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedImage
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedLabel
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedMatch
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedObjects
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedSegments
-import com.micrantha.skouter.ui.scan.usecase.AnalyzeCameraImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.CameraCaptureUseCase
-import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedSegment
+import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.EditCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ScanEnvironment(
+    private val scope: CoroutineScope,
     private val context: ScreenContext,
-    private val mapper: ScanStateMapper,
-    private val cameraCaptureUseCase: CameraCaptureUseCase,
-    private val saveThingImageUseCase: SaveThingImageUseCase,
-    private val analyzeCameraImageUseCase: AnalyzeCameraImageUseCase,
+    private val editCaptureUseCase: EditCaptureUseCase,
+    private val saveCaptureUseCase: SaveCaptureUseCase,
+    private val analyzeCaptureUseCase: AnalyzeCaptureUseCase,
     private val currentSession: CurrentSession,
-    private val locationRepository: LocationRepository
-) : Reducer<ScanState>, Effect<ScanState>, StateMapper<ScanState, ScanUiState> by mapper,
+    private val locationRepository: LocationRepository,
+    private val mapper: ScanStateMapper,
+) : Reducer<ScanState>, Effect<ScanState>,
     Router by context.router,
     FileSystem by context.fileSystem,
     Dispatcher by context.dispatcher,
@@ -47,7 +50,7 @@ class ScanEnvironment(
 
     override suspend fun invoke(action: Action, state: ScanState) {
         when (action) {
-            is EditScan -> cameraCaptureUseCase(
+            is EditScan -> editCaptureUseCase(
                 state.image!!
             ).onSuccess { url ->
                 Log.d("image url: $url")
@@ -64,7 +67,7 @@ class ScanEnvironment(
                 ), options = Replace
             )
 
-            is ImageSaved -> saveThingImageUseCase(mapper.prove(state))
+            is ImageSaved -> saveCaptureUseCase(mapper.prove(state))
                 .onFailure {
                     Log.e("unable to save scan", it)
                     dispatch(SaveError)
@@ -73,7 +76,7 @@ class ScanEnvironment(
                     navigateBack()
                 }
 
-            is SaveScan -> cameraCaptureUseCase(
+            is SaveScan -> editCaptureUseCase(
                 state.image!!
             ).onSuccess { url ->
                 dispatch(ImageSaved(url))
@@ -81,33 +84,36 @@ class ScanEnvironment(
                 dispatch(SaveError)
             }
 
-            is ImageCaptured -> analyzeCameraImageUseCase(action.image)
+            is ScannedImage -> analyzeCaptureUseCase(action.image)
+                .onEach { res -> res.onSuccess(::dispatch) }
+                .launchIn(scope)
         }
     }
 
     override fun reduce(state: ScanState, action: Action) = when (action) {
-        is ImageCaptured -> state.copy(
+        is ScannedImage -> state.copy(
             image = action.image,
         )
 
-        is ScannedLabels -> state.copy(
-            labels = state.labels.combine(action.labels)
+        is ScannedLabel -> state.copy(
+            labels = state.labels.combine(action.label)
         )
 
-        is ScannedColors -> state.copy(
-            colors = state.colors.combine(action.colors)
+        is ScannedColor -> state.copy(
+            colors = state.colors.combine(action.color)
         )
 
-        is ScannedObjects -> state.copy(
-            detection = action.detections.firstOrNull(),
+        is ScannedDetection -> state.copy(
+            detection = action.detection,
+            labels = state.labels.combine(action.detection.labels)
         )
 
-        is ScannedSegments -> state.copy(
-            segment = action.segments.firstOrNull()
+        is ScannedSegment -> state.copy(
+            segment = action.segment
         )
 
         is ScannedMatch -> state.copy(
-            match = action.matches.firstOrNull()
+            match = action.match.firstOrNull()
         )
 
         is ScanSavable -> state.copy(
@@ -122,7 +128,7 @@ class ScanEnvironment(
         )
 
         is SaveError -> state.copy(
-            enabled = false
+            enabled = true
         )
 
         else -> state

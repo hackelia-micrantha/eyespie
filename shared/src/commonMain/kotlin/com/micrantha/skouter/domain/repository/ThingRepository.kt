@@ -5,7 +5,7 @@ import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.model.ThingList
 import com.micrantha.skouter.domain.model.ThingMatches
-import com.micrantha.skouter.platform.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 
 interface ThingRepository {
 

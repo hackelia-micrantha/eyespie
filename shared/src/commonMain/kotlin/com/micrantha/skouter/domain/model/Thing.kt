@@ -1,6 +1,6 @@
 package com.micrantha.skouter.domain.model
 
-import com.micrantha.skouter.platform.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import kotlinx.datetime.Instant
 
 data class Thing(

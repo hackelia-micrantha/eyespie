@@ -22,13 +22,13 @@ import com.micrantha.skouter.ui.scan.edit.ScanEditAction.LoadedImage
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.NameChanged
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.SaveScanEdit
 import com.micrantha.skouter.ui.scan.edit.ScanEditAction.SaveThingError
-import com.micrantha.skouter.ui.scan.usecase.LoadCameraImageUseCase
-import com.micrantha.skouter.ui.scan.usecase.SaveThingImageUseCase
+import com.micrantha.skouter.ui.scan.usecase.GetEditCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
 
 class ScanEditEnvironment(
     private val context: ScreenContext,
-    private val saveThingImageUseCase: SaveThingImageUseCase,
-    private val loadCameraImageUseCase: LoadCameraImageUseCase,
+    private val saveCaptureUseCase: SaveCaptureUseCase,
+    private val getEditCaptureUseCase: GetEditCaptureUseCase,
 ) : ScreenEnvironment<ScanEditState>,
     Dispatcher by context.dispatcher,
     Router by context.router {
@@ -79,7 +79,7 @@ class ScanEditEnvironment(
 
     override suspend fun invoke(action: Action, state: ScanEditState) {
         when (action) {
-            is SaveScanEdit -> saveThingImageUseCase(
+            is SaveScanEdit -> saveCaptureUseCase(
                 state.asProof()
             ).onSuccess {
                 navigateBack()
@@ -88,7 +88,7 @@ class ScanEditEnvironment(
                 dispatch(SaveThingError)
             }
 
-            is Init -> loadCameraImageUseCase(action.proof.image)
+            is Init -> getEditCaptureUseCase(action.proof.image)
                 .onSuccess {
                     dispatch(LoadedImage(it))
                 }.onFailure {

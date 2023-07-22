@@ -22,34 +22,28 @@ class DashboardLoadUseCase(
             flow = things(location, player.id),
             flow2 = friends,
             flow3 = players
-        )
-        { things, friends, players ->
+        ) { things, friends, players ->
             Loaded(things, friends, players)
         }
     }
 
-
-    private fun things(location: Point?, playerID: String) =
-        flow {
-            val res = if (location != null) {
-                thingsRepository.nearby(location = location)
-            } else {
-                thingsRepository.things(playerID)
-            }
-            res.onSuccess { emit(it) }
+    private fun things(location: Point?, playerID: String) = flow {
+        val res = if (location != null) {
+            thingsRepository.nearby(location = location)
+        } else {
+            thingsRepository.things(playerID)
         }
-
-    private val friends by lazy {
-        flow {
-            playerRepository.players()
-                .onSuccess { emit(it) }
-        }
+        res.onSuccess { emit(it) }
     }
 
-    private val players by lazy {
-        flow {
-            playerRepository.players()
-                .onSuccess { emit(it) }
-        }
+    private val friends = flow {
+        playerRepository.players()
+            .onSuccess { emit(it) }
+    }
+
+
+    private val players = flow {
+        playerRepository.players()
+            .onSuccess { emit(it) }
     }
 }

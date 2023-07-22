@@ -15,12 +15,12 @@ import com.micrantha.skouter.ui.scan.guess.ScanGuessAction.Load
 import com.micrantha.skouter.ui.scan.guess.ScanGuessAction.Loaded
 import com.micrantha.skouter.ui.scan.guess.ScanGuessAction.ThingMatched
 import com.micrantha.skouter.ui.scan.guess.ScanGuessAction.ThingNotFound
-import com.micrantha.skouter.ui.scan.usecase.MatchCameraImageUseCase
+import com.micrantha.skouter.ui.scan.usecase.MatchCaptureUseCase
 
 class ScanGuessEnvironment(
     private val args: ScanGuessArgs,
     private val context: ScreenContext,
-    private val matchCameraImageUseCase: MatchCameraImageUseCase,
+    private val matchCaptureUseCase: MatchCaptureUseCase,
     private val thingRepository: ThingRepository
 ) : ScreenEnvironment<ScanGuessState>,
     Dispatcher by context.dispatcher,
@@ -42,7 +42,7 @@ class ScanGuessEnvironment(
             }
 
             is ImageCaptured -> if (state.thing != null) {
-                matchCameraImageUseCase(
+                matchCaptureUseCase(
                     action.image,
                     state.thing.embedding
                 ).onSuccess { matched ->

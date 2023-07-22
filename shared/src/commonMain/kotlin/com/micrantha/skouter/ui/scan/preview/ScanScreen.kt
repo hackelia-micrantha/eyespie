@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.scan.preview
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,13 +21,13 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.arch.StoreDispatch
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.platform.CameraScanner
+import com.micrantha.skouter.platform.scan.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.scan.components.ScannedClues
 import com.micrantha.skouter.ui.scan.components.ScannedOverlays
 import com.micrantha.skouter.ui.scan.preview.ScanAction.EditScan
-import com.micrantha.skouter.ui.scan.preview.ScanAction.ImageCaptured
 import com.micrantha.skouter.ui.scan.preview.ScanAction.SaveScan
+import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedImage
 import dev.icerock.moko.permissions.Permission.CAMERA
 import dev.icerock.moko.permissions.PermissionsController
 import org.kodein.di.compose.rememberInstance
@@ -55,22 +56,30 @@ class ScanScreen : Screen {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CameraScanner(
-                modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-            ) {
-                onScan(ImageCaptured(it))
-            }
+            if (state.enabled) {
+                CameraScanner(
+                    modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
+                ) {
+                    onScan(ScannedImage(it))
+                }
 
-            if (state.overlays.isNotEmpty()) {
-                ScannedOverlays(
-                    data = state.overlays
-                )
-            }
+                if (state.overlays.isNotEmpty()) {
+                    ScannedOverlays(
+                        data = state.overlays
+                    )
+                }
 
-            if (state.clues.isNotEmpty()) {
-                ScannedClues(
-                    clues = state.clues,
-                    modifier = Modifier.align(Alignment.TopEnd)
+                if (state.clues.isNotEmpty()) {
+                    ScannedClues(
+                        clues = state.clues,
+                        modifier = Modifier.align(Alignment.TopEnd)
+                    )
+                }
+            } else if (state.capture != null) {
+                Image(
+                    modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
+                    painter = state.capture,
+                    contentDescription = null
                 )
             }
 

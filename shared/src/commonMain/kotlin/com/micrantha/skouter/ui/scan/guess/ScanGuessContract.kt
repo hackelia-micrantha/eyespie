@@ -2,7 +2,7 @@ package com.micrantha.skouter.ui.scan.guess
 
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.Thing
-import com.micrantha.skouter.platform.CameraImage
+import com.micrantha.skouter.platform.scan.CameraImage
 import kotlinx.serialization.Serializable
 
 data class ScanGuessState(

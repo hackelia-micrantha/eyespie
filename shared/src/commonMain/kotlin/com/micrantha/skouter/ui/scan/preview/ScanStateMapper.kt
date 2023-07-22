@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.scan.preview
 
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.micrantha.bluebell.data.weightedRandomSample
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clue
@@ -13,7 +14,10 @@ class ScanStateMapper : StateMapper<ScanState, ScanUiState> {
     override fun map(state: ScanState) = ScanUiState(
         clues = clues(state),
         overlays = overlays(state),
-        enabled = state.enabled
+        enabled = state.enabled,
+        capture = state.image?.toImageBitmap()?.let {
+            BitmapPainter(it)
+        }
     )
 
     fun prove(state: ScanState) = Proof(

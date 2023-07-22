@@ -17,11 +17,11 @@ import com.micrantha.skouter.domain.model.MatchClue
 import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
-import com.micrantha.skouter.platform.ImageColor
-import com.micrantha.skouter.platform.ImageEmbedding
-import com.micrantha.skouter.platform.ImageLabel
-import com.micrantha.skouter.platform.ImageObject
-import com.micrantha.skouter.platform.ImageSegment
+import com.micrantha.skouter.platform.scan.model.ImageColor
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageLabel
+import com.micrantha.skouter.platform.scan.model.ImageObject
+import com.micrantha.skouter.platform.scan.model.ImageSegment
 
 class ClueDomainMapper {
 
@@ -31,7 +31,7 @@ class ClueDomainMapper {
 
     fun label(data: ImageLabel) = LabelClue(data.data, data.confidence)
 
-    fun label(data: List<ImageLabel>): LabelProof = data.map(::label).toSet()
+    fun labels(data: List<ImageLabel>): LabelProof = data.map(::label).toSet()
 
     fun detect(data: ImageObject) = DetectClue(
         data = data.rect,

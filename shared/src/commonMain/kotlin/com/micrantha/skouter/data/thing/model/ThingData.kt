@@ -1,7 +1,7 @@
 package com.micrantha.skouter.data.thing.model
 
 import com.micrantha.skouter.data.clue.model.ProofData
-import com.micrantha.skouter.platform.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement

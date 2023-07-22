@@ -6,8 +6,11 @@ import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.bluebell.ui.bluebellUi
 import org.kodein.di.DI
+import org.kodein.di.DIAware
 import org.kodein.di.DITrigger
+import org.kodein.di.DirectDIAware
 import org.kodein.di.delegate
+import org.kodein.di.instance
 
 fun bluebellModules(trigger: DITrigger? = null) = DI.Module(name = "Bluebell") {
 
@@ -21,3 +24,6 @@ fun bluebellModules(trigger: DITrigger? = null) = DI.Module(name = "Bluebell") {
         trigger?.trigger()
     }
 }
+
+inline fun <reified T : Any> DIAware.get() = instance<T>()
+inline fun <reified T : Any> DirectDIAware.get() = instance<T>()

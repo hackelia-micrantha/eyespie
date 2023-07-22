@@ -5,7 +5,7 @@ import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
 import com.micrantha.skouter.domain.model.Location.Point
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
-import com.micrantha.skouter.platform.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import com.micrantha.skouter.domain.repository.ThingRepository as DomainRepository
 
 class ThingDataRepository(

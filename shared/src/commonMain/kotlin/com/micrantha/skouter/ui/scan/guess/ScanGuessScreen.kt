@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.StoreDispatch
-import com.micrantha.skouter.platform.CameraScanner
+import com.micrantha.skouter.platform.scan.CameraScanner
 import com.micrantha.skouter.ui.scan.guess.ScanGuessAction.ImageCaptured
 import dev.icerock.moko.permissions.Permission.CAMERA
 import dev.icerock.moko.permissions.PermissionsController

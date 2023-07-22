@@ -2,7 +2,7 @@ package com.micrantha.skouter.domain.model
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
-import com.micrantha.skouter.platform.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import okio.Path
 
 data class Clues(
