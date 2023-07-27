@@ -4,13 +4,13 @@ import com.micrantha.skouter.data.account.mapping.AccountDomainMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.data.account.source.AccountRemoteSource
 import com.micrantha.skouter.domain.model.Session
-import com.micrantha.skouter.domain.repository.AccountRepository as DomainRepository
+import com.micrantha.skouter.domain.repository.AccountRepository
 
 class AccountDataRepository(
     private val remoteSource: AccountRemoteSource,
     private val currentSession: CurrentSession,
     private val mapper: AccountDomainMapper,
-) : DomainRepository {
+) : AccountRepository {
 
     override suspend fun session() = remoteSource.account().map { mapper.map(it) }.onSuccess {
         currentSession.update(it)

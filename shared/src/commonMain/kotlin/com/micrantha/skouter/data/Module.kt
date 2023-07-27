@@ -38,6 +38,7 @@ import com.micrantha.skouter.data.system.source.RealtimeRemoteSource
 import com.micrantha.skouter.data.thing.ThingDataRepository
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
+import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
@@ -69,6 +70,8 @@ internal fun dataModules() = DI.Module("Skouter Data") {
 
     bindProviderOf(::AccountRemoteSource)
     bindProviderOf(::AccountDataRepository)
+    delegate<AccountRepository>().to<AccountDataRepository>()
+
     bindProviderOf(::AccountDomainMapper)
 
     bindSingleton { CurrentSession }

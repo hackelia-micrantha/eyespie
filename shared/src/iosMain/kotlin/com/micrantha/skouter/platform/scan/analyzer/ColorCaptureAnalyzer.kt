@@ -1,5 +1,6 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
+import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.StreamAnalyzer
@@ -11,6 +12,8 @@ actual class ColorCaptureAnalyzer : CaptureAnalyzer<ImageColors> {
     }
 }
 
-actual class ColorStreamAnalyzer : StreamAnalyzer {
+actual class ColorStreamAnalyzer(
+    callback: AnalyzerCallback<ImageColors>
+) : StreamAnalyzer {
     actual override fun analyze(image: CameraImage) = Unit
 }

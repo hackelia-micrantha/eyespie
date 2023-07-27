@@ -5,6 +5,7 @@ interface CaptureAnalyzer<T> {
 }
 
 interface StreamAnalyzer {
+
     fun analyze(image: CameraImage)
 }
 

@@ -1,5 +1,6 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
+import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.StreamAnalyzer
@@ -13,6 +14,8 @@ actual class EmbeddingCaptureAnalyzer : CaptureAnalyzer<ImageEmbeddings> {
     }
 }
 
-actual class EmbeddingStreamAnalyzer : StreamAnalyzer {
+actual class EmbeddingStreamAnalyzer(
+    callback: AnalyzerCallback<ImageEmbeddings>
+) : StreamAnalyzer {
     actual override fun analyze(image: CameraImage) = Unit
 }

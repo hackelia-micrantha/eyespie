@@ -1,5 +1,6 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
+import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.StreamAnalyzer
@@ -12,6 +13,8 @@ actual class LabelCaptureAnalyzer : CaptureAnalyzer<ImageLabels> {
     }
 }
 
-actual class LabelStreamAnalyzer : StreamAnalyzer {
+actual class LabelStreamAnalyzer(
+    callback: AnalyzerCallback<ImageLabels>
+) : StreamAnalyzer {
     actual override fun analyze(image: CameraImage) = Unit
 }

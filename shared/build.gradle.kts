@@ -7,7 +7,6 @@ plugins {
     id("com.android.library")
     id("com.apollographql.apollo3")
     kotlin("plugin.serialization")
-    kotlin("native.cocoapods")
     id("com.micrantha.bluebell")
 }
 
@@ -23,20 +22,15 @@ kotlin {
             }
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    cocoapods {
-        summary = "Skouter Shared Module"
-        homepage = "https://github.com/hackelia-micrantha/skouter"
-        version = "1.0.0"
-        ios.deploymentTarget = "14.1"
-        podfile = project.file("../iosApp/Podfile")
-        framework {
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
             baseName = "shared"
-            binaryOption("bundleId", "com.micrantha.skouter")
             isStatic = true
+            binaryOption("bundleId", "com.micrantha.skouter")
         }
     }
 
