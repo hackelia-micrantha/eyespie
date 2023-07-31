@@ -5,7 +5,6 @@ import com.micrantha.skouter.data.account.AccountDataRepository
 import com.micrantha.skouter.data.account.mapping.AccountDomainMapper
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.data.account.source.AccountRemoteSource
-import com.micrantha.skouter.data.client.MicranthaClient
 import com.micrantha.skouter.data.client.SupaClient
 import com.micrantha.skouter.data.client.SupaRealtimeClient
 import com.micrantha.skouter.data.clue.ColorDataRepository
@@ -15,7 +14,6 @@ import com.micrantha.skouter.data.clue.ObjectDataRepository
 import com.micrantha.skouter.data.clue.SegmentDataRepository
 import com.micrantha.skouter.data.clue.mapping.ClueDomainMapper
 import com.micrantha.skouter.data.clue.source.ColorStreamLocalSource
-import com.micrantha.skouter.data.clue.source.LabelRemoteSource
 import com.micrantha.skouter.data.clue.source.LabelStreamLocalSource
 import com.micrantha.skouter.data.clue.source.MatchStreamLocalSource
 import com.micrantha.skouter.data.clue.source.ObjectStreamLocalSource
@@ -38,7 +36,6 @@ import com.micrantha.skouter.data.system.source.RealtimeRemoteSource
 import com.micrantha.skouter.data.thing.ThingDataRepository
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
-import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
@@ -58,8 +55,6 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindSingletonOf(::SupaClient)
     bindSingletonOf(::SupaRealtimeClient)
 
-    bindSingletonOf(::MicranthaClient)
-
     bindProviderOf(::GameDomainMapper)
     bindProviderOf(::GameRemoteSource)
     bindProviderOf(::GameDataRepository)
@@ -70,7 +65,6 @@ internal fun dataModules() = DI.Module("Skouter Data") {
 
     bindProviderOf(::AccountRemoteSource)
     bindProviderOf(::AccountDataRepository)
-    delegate<AccountRepository>().to<AccountDataRepository>()
 
     bindProviderOf(::AccountDomainMapper)
 
@@ -83,8 +77,6 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindProviderOf(::PlayerRemoteSource)
     bindProviderOf(::PlayerDomainMapper)
     bindProviderOf(::PlayerDataRepository)
-
-    bindProviderOf(::LabelRemoteSource)
 
     bindFactory { callback: AnalyzerCallback<ImageLabels> ->
         LabelStreamLocalSource(di, callback)

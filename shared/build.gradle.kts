@@ -65,7 +65,6 @@ kotlin {
                 implementation("cafe.adriel.voyager:voyager-transitions:1.0.0-rc06")
                 implementation("cafe.adriel.voyager:voyager-kodein:1.0.0-rc06")
 
-                implementation("io.ktor:ktor-client-cio:2.3.0")
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")
                 implementation("io.ktor:ktor-client-logging:2.3.0")
@@ -96,12 +95,13 @@ kotlin {
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.core:core-ktx:1.10.1")
 
+                implementation("io.ktor:ktor-client-android:2.3.0")
                 api("androidx.compose.foundation:foundation:1.4.3")
                 api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
                 api("androidx.activity:activity-compose:1.7.2")
-                api("androidx.fragment:fragment-ktx:1.6.0")
+                api("androidx.fragment:fragment-ktx:1.6.1")
 
                 implementation("androidx.palette:palette-ktx:1.0.0")
 
@@ -113,6 +113,13 @@ kotlin {
                 implementation("androidx.camera:camera-extensions:1.2.3")
 
                 implementation("com.google.mediapipe:tasks-vision:0.10.2")
+            }
+        }
+
+        val iosMain by getting {
+            dependencies {
+
+                implementation("io.ktor:ktor-client-darwin:2.3.1")
             }
         }
     }
