@@ -44,10 +44,15 @@ import com.micrantha.skouter.platform.scan.model.ImageSegments
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProviderOf
+import org.kodein.di.bindSingleton
 import org.kodein.di.bindSingletonOf
 import org.kodein.di.delegate
+import platform.UIKit.UIViewController
 
-fun iosModules() = DI {
+fun iosModules(viewController: UIViewController) = DI {
+
+    bindSingleton { viewController }
+
     bindSingletonOf(::Platform)
 
     bindFactory { callback: AnalyzerCallback<ImageLabels> ->
@@ -71,7 +76,7 @@ fun iosModules() = DI {
     bindFactory { callback: AnalyzerCallback<ImageEmbeddings> ->
         EmbeddingStreamAnalyzer(callback)
     }
-    
+
     delegate<AccountRepository>().to<AccountDataRepository>()
     delegate<ThingRepository>().to<ThingDataRepository>()
     delegate<LabelRepository>().to<LabelDataRepository>()

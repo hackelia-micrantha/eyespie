@@ -2,15 +2,14 @@ package com.micrantha.bluebell.platform
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import java.io.ByteArrayOutputStream
 
 
-actual fun ByteArray.toPainter(): Painter {
+actual fun ByteArray.toImageBitmap(): ImageBitmap {
     val bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)
-    return BitmapPainter(bitmap.asImageBitmap())
+    return bitmap.asImageBitmap()
 }
 
 fun Bitmap.toByteArray(): ByteArray {

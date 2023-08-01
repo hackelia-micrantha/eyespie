@@ -1,17 +1,23 @@
 package com.micrantha.skouter.platform.scan
 
 import androidx.compose.ui.graphics.ImageBitmap
-import platform.UIKit.UIImage
+import com.micrantha.bluebell.platform.toImageBitmap
 
 actual data class CameraImage(
-    val data: UIImage
+    val data: ByteArray,
+    actual val width: Int,
+    actual val height: Int
 ) {
-    actual val width: Int = 0
-    actual val height: Int = 0
 
-    actual fun toByteArray() = ByteArray(0)
+    actual fun toByteArray() = data
 
-    actual fun toImageBitmap(): ImageBitmap {
-        TODO("not implemented yet")
+    actual fun toImageBitmap(): ImageBitmap = data.toImageBitmap()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is CameraImage) return false
+        return data.contentEquals(other.data)
     }
+
+    override fun hashCode(): Int = data.contentHashCode()
 }
