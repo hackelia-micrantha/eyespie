@@ -45,15 +45,12 @@ import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProviderOf
 import org.kodein.di.bindSingleton
-import org.kodein.di.bindSingletonOf
 import org.kodein.di.delegate
 import platform.UIKit.UIViewController
 
 fun iosModules(viewController: UIViewController) = DI {
 
-    bindSingleton { viewController }
-
-    bindSingletonOf(::Platform)
+    bindSingleton { Platform(viewController) }
 
     bindFactory { callback: AnalyzerCallback<ImageLabels> ->
         LabelStreamAnalyzer(callback)

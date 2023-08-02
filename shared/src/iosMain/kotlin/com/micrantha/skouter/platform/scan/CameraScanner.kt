@@ -5,12 +5,13 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.data.Log
+import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.platform.asException
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.pin
 import kotlinx.cinterop.ptr
-import kotlinx.cinterop.readBytes
 import kotlinx.cinterop.value
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -28,15 +29,10 @@ import platform.AVFoundation.AVLayerVideoGravityResizeAspectFill
 import platform.AVFoundation.AVMediaTypeVideo
 import platform.CoreMedia.CMSampleBufferGetImageBuffer
 import platform.CoreMedia.CMSampleBufferRef
-import platform.CoreVideo.CVPixelBufferGetBaseAddress
-import platform.CoreVideo.CVPixelBufferGetBytesPerRow
-import platform.CoreVideo.CVPixelBufferGetHeight
-import platform.CoreVideo.CVPixelBufferGetWidth
-import platform.CoreVideo.CVPixelBufferLockBaseAddress
-import platform.CoreVideo.CVPixelBufferUnlockBaseAddress
+import platform.CoreVideo.kCVPixelBufferPixelFormatTypeKey
+import platform.CoreVideo.kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
 import platform.Foundation.NSError
 import platform.UIKit.UIView
-import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
@@ -48,7 +44,7 @@ actual fun CameraScanner(
     onCameraImage: CameraScannerDispatch
 ) {
 
-    val viewController by rememberInstance<UIViewController>()
+    val platform by rememberInstance<Platform>()
 
     val stream = rememberCameraStream(onCameraImage) ?: return
 
@@ -56,7 +52,7 @@ actual fun CameraScanner(
 
         stream.setup()
 
-        stream.preview(viewController.view)
+        stream.preview(platform.view)
 
     } catch (err: Throwable) {
         Log.e("camera session", err)
@@ -85,9 +81,10 @@ class CameraStream(
     private val onCameraImage: CameraScannerDispatch
 ) : NSObject(), AVCaptureVideoDataOutputSampleBufferDelegateProtocol {
 
-    private val session = AVCaptureSession()
+    private val session by lazy { AVCaptureSession() }
     private var preview: AVCaptureVideoPreviewLayer? = null
-    private val scope = MainScope()
+    private val scope by lazy { MainScope() }
+    private val dispatchQueue by lazy { dispatch_queue_create("videoDataOutputQueue", null) }
 
     override fun captureOutput(
         output: AVCaptureOutput,
@@ -104,24 +101,8 @@ class CameraStream(
     }
 
     private fun CMSampleBufferRef?.image(): CameraImage? {
-        val pixelBuffer = CMSampleBufferGetImageBuffer(this) ?: return null
-
-        try {
-            CVPixelBufferLockBaseAddress(pixelBuffer, 0)
-
-            val baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer) ?: return null
-
-            val width = CVPixelBufferGetWidth(pixelBuffer)
-            val height = CVPixelBufferGetHeight(pixelBuffer)
-            val bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer)
-            val totalBytes = height * bytesPerRow
-
-            val data = baseAddress.readBytes(totalBytes.toInt())
-
-            return CameraImage(data, width.toInt(), height.toInt())
-        } finally {
-            CVPixelBufferUnlockBaseAddress(pixelBuffer, 0)
-        }
+        val pixelBuffer = CMSampleBufferGetImageBuffer(this)?.pin() ?: return null
+        return CameraImage(pixelBuffer)
     }
 
     fun setup() {
@@ -138,10 +119,17 @@ class CameraStream(
         session.addInput(input)
 
         val output = AVCaptureVideoDataOutput().apply {
-            setSampleBufferDelegate(
-                this@CameraStream,
-                dispatch_queue_create("videoDataOutputQueue", null)
-            )
+            setSampleBufferDelegate(this@CameraStream, dispatchQueue)
+            if (availableVideoCVPixelFormatTypes.contains(
+                    kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+                )
+            ) {
+                setVideoSettings(
+                    mapOf(
+                        kCVPixelBufferPixelFormatTypeKey?.rawValue to kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
+                    )
+                )
+            }
         }
 
         if (session.canAddOutput(output)) {
@@ -150,7 +138,9 @@ class CameraStream(
     }
 
     fun start() {
-        session.startRunning()
+        dispatch_async(dispatchQueue) {
+            session.startRunning()
+        }
     }
 
     fun preview(view: UIView) {

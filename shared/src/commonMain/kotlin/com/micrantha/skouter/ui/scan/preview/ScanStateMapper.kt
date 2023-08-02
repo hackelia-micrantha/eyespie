@@ -15,9 +15,9 @@ class ScanStateMapper : StateMapper<ScanState, ScanUiState> {
         clues = clues(state),
         overlays = overlays(state),
         enabled = state.enabled,
-        capture = state.image?.toImageBitmap()?.let {
+        capture = if (state.enabled.not()) state.image?.toImageBitmap()?.let {
             BitmapPainter(it)
-        }
+        } else null
     )
 
     fun prove(state: ScanState) = Proof(
@@ -59,17 +59,19 @@ class ScanStateMapper : StateMapper<ScanState, ScanUiState> {
 
     private fun overlays(state: ScanState): List<ScanOverlay> {
         val result = mutableListOf<ScanOverlay>()
-        if (state.image == null) return result
+        if (state.enabled.not()) return result
 
-        state.detection?.let {
-            result.add(
-                ScanBox(
-                    it.data,
-                    it.labels.firstOrNull()?.display() ?: "",
-                    imageWidth = state.image.width,
-                    imageHeight = state.image.height
+        if (state.image != null) {
+            state.detection?.let {
+                result.add(
+                    ScanBox(
+                        it.data,
+                        it.labels.firstOrNull()?.display() ?: "",
+                        imageWidth = state.image.width,
+                        imageHeight = state.image.height
+                    )
                 )
-            )
+            }
         }
         state.segment?.let {
             result.add(ScanMask(it.data))
