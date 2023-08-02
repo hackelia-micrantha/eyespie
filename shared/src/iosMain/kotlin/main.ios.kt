@@ -1,14 +1,35 @@
 import androidx.compose.ui.window.ComposeUIViewController
+import com.micrantha.skouter.UIApplicationController
 import com.micrantha.skouter.UIShow
 import platform.UIKit.UIApplication
+import platform.UIKit.UIView
 import platform.UIKit.UIViewController
-import platform.UIKit.UIWindow
 
+class IOSApplication : UIApplicationController {
 
-fun MainViewController(): UIViewController = ComposeUIViewController {
-    val viewController = UIApplication.sharedApplication.windows.first().let {
-        val window = it as UIWindow
-        window.rootViewController!!
+    private val rootViewController: UIViewController by lazy {
+        UIApplication.sharedApplication.keyWindow!!.let {
+            it.rootViewController!!
+        }
     }
-    UIShow(viewController)
+
+    private var currentViewController: UIViewController? = null
+
+    override val currentView: UIView
+        get() = currentViewController?.view ?: rootViewController.view
+
+    override fun createViewController(): UIViewController {
+        val newViewController = ComposeUIViewController {
+            UIShow(this)
+        }
+        currentViewController = newViewController
+        return newViewController
+    }
+
+    override fun update(viewController: UIViewController) = Unit
+
+    override fun finish(
+        viewController: UIViewController
+    ) = Unit
+
 }

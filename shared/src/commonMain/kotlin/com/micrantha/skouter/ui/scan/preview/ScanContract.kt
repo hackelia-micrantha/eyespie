@@ -79,6 +79,8 @@ sealed interface ScanAction : Action {
     data class ScannedMatch(
         val match: MatchProof
     ) : ScanAction
+
+    data object Back : ScanAction
 }
 
 sealed interface ScanOverlay

@@ -87,6 +87,8 @@ class ScanEnvironment(
             is ScannedImage -> analyzeCaptureUseCase(action.image)
                 .onEach { res -> res.onSuccess(::dispatch) }
                 .launchIn(scope)
+
+            is ScanAction.Back -> context.router.navigateBack()
         }
     }
 

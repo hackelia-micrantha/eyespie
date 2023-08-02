@@ -1,6 +1,6 @@
 package com.micrantha.skouter.platform.scan
 
-interface CaptureAnalyzer<T> {
+interface CaptureAnalyzer<out T> {
     suspend fun analyze(image: CameraImage): Result<T>
 }
 

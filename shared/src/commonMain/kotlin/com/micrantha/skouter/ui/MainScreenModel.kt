@@ -33,8 +33,9 @@ class MainScreenModel(
             }.onSuccess {
                 dispatch(Loaded)
             }
-            is Login -> navigate<LoginScreen>()
-            is Loaded -> navigate<DashboardScreen>()
+
+            is Login -> navigate<LoginScreen>(Router.Options.Replace)
+            is Loaded -> navigate<DashboardScreen>(Router.Options.Replace)
         }
     }
 }

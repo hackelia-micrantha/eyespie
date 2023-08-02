@@ -2,6 +2,7 @@ package com.micrantha.bluebell.platform
 
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
+import com.micrantha.skouter.UIApplicationController
 import okio.FileSystem
 import okio.Path
 import okio.buffer
@@ -14,15 +15,12 @@ import platform.Foundation.NSTimeZone
 import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.Foundation.timeZoneWithName
 import platform.UIKit.UIDevice
-import platform.UIKit.UIViewController
 import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
 actual class Platform(
-    private val viewController: UIViewController
+    val application: UIApplicationController
 ) : LocalizedRepository, BluebellFileSystem {
 
-    val view = viewController.view
-    
     actual val name: String =
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 
