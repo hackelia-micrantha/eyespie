@@ -1,30 +1,61 @@
 package com.micrantha.skouter.platform.scan
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.Image
 import androidx.compose.ui.graphics.asImageBitmap
+import com.google.mediapipe.framework.image.BitmapImageBuilder
+import com.google.mediapipe.framework.image.MPImage
+import com.google.mediapipe.framework.image.MediaImageBuilder
 import com.micrantha.bluebell.platform.toByteArray
-import kotlin.math.max
 
 actual class CameraImage(
-    val bitmap: Bitmap,
-    val timestamp: Long,
+    private val data: Image? = null,
+    actual val width: Int,
+    actual val height: Int,
+    val rotation: Int,
+    val timestamp: Long
 ) {
-    actual val width = bitmap.width
-    actual val height = bitmap.height
 
-    actual fun toImageBitmap() = bitmap.asImageBitmap()
-
-    actual fun toByteArray() = bitmap.toByteArray()
-
-    fun scale(width: Int, height: Int): CameraImage {
-        val scaleFactor =
-            max(this.width * 1f / width, this.height * 1f / height)
-        val scaleWidth = (this.width * scaleFactor).toInt()
-        val scaleHeight = (this.height * scaleFactor).toInt()
-
-        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaleWidth, scaleHeight, false)
-
-        return CameraImage(scaledBitmap, timestamp)
+    constructor(bitmap: Bitmap, timestamp: Long) : this(
+        data = null,
+        width = bitmap.width,
+        height = bitmap.height,
+        rotation = 0,
+        timestamp = timestamp
+    ) {
+        bitmapBuffer = bitmap
     }
 
+    private lateinit var bitmapBuffer: Bitmap
+
+    actual fun toImageBitmap() = toBitmap().asImageBitmap()
+
+    actual fun toByteArray() = toBitmap().toByteArray()
+
+    fun asMPImage(): MPImage =
+        data?.let { MediaImageBuilder(it).build() } ?: BitmapImageBuilder(toBitmap()).build()
+
+    fun toBitmap(): Bitmap {
+        if (::bitmapBuffer.isInitialized) return bitmapBuffer
+
+        val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).apply {
+            copyPixelsFromBuffer(data!!.planes[0].buffer)
+        }
+
+        val matrix = Matrix()
+        matrix.postRotate(rotation.toFloat())
+
+        bitmapBuffer = Bitmap.createBitmap(
+            result,
+            0,
+            0,
+            width,
+            height,
+            matrix,
+            false
+        )
+        
+        return bitmapBuffer
+    }
 }

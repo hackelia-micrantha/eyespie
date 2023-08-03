@@ -23,7 +23,7 @@ actual class ColorCaptureAnalyzer(
     actual override suspend fun analyze(image: CameraImage): Result<ImageColors> =
         suspendCoroutine { continuation ->
             try {
-                val colors = candidateColors(image.bitmap)
+                val colors = candidateColors(image.toBitmap())
                 continuation.resume(Result.success(colors))
             } catch (err: Throwable) {
                 continuation.resume(Result.failure(err))
@@ -36,7 +36,7 @@ actual class ColorStreamAnalyzer(
     private val callback: AnalyzerCallback<ImageColors>
 ) : ColorAnalyzer(context), StreamAnalyzer {
     actual override fun analyze(image: CameraImage) = try {
-        callback.onAnalyzerResult(candidateColors(image.bitmap))
+        callback.onAnalyzerResult(candidateColors(image.toBitmap()))
     } catch (err: Throwable) {
         callback.onAnalyzerError(err)
     }

@@ -1,61 +1,92 @@
 package com.micrantha.skouter.platform.scan
 
+import com.micrantha.skouter.platform.asException
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.ptr
+import kotlinx.cinterop.value
 import platform.Foundation.NSError
 import platform.Vision.VNImageRequestHandler
+import platform.Vision.VNObservation
 import platform.Vision.VNRequest
 import platform.darwin.dispatch_async
-import platform.darwin.dispatch_get_global_queue
+import platform.darwin.dispatch_queue_create
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-abstract class CameraAnalyzer<out T, R : VNRequest> : CaptureAnalyzer<T> {
-    abstract suspend fun map(response: List<*>): T
+interface CameraAnalyzer<out T, out R : VNRequest, O : VNObservation> {
+    fun request(): R
+    fun map(response: List<O>): T
 
-    abstract fun request(): R
+    val filter: (List<*>?) -> List<O>
+}
+
+abstract class CameraCaptureAnalyzer<out T, R : VNRequest, O : VNObservation>(
+    private val config: CameraAnalyzer<T, R, O>
+) : CaptureAnalyzer<T>, CameraAnalyzer<T, R, O> by config {
 
     override suspend fun analyze(image: CameraImage): Result<T> = try {
-        val cgImage = image.asCGImage()
-
         val imageRequestHandler =
-            VNImageRequestHandler(cgImage, image.orientation, emptyMap<Any?, String>())
+            VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
 
         val result = suspendCoroutine { continuation ->
-            execute(imageRequestHandler, onError = {
+            imageRequestHandler.execute(request(), onError = {
                 continuation.resumeWithException(it)
             }) {
                 continuation.resume(it)
             }
         }
 
-        Result.success(map(result.results!!))
+        Result.success(map(filter(result.results)))
     } catch (err: Throwable) {
         Result.failure(err)
     }
 
-    private fun execute(
-        handler: VNImageRequestHandler,
-        onError: (Throwable) -> Unit,
-        onSuccess: (R) -> Unit
-    ) {
+}
 
-        dispatch_async(dispatch_get_global_queue(0, 0)) {
-            try {
-                val err = memScoped {
-                    alloc<ObjCObjectVar<NSError?>>()
-                }
-                val req = request()
+private val executeQueue by lazy {
+    dispatch_queue_create(label = "executeImageRequest", null)
+}
 
-                handler.performRequests(listOf(req), err.ptr)
+private fun <T : VNRequest> VNImageRequestHandler.execute(
+    request: T,
+    onError: (Throwable) -> Unit,
+    onSuccess: (T) -> Unit
+) {
 
-                onSuccess(req)
-            } catch (err: Throwable) {
-                onError(err)
+    dispatch_async(executeQueue) {
+        try {
+            val err = memScoped {
+                alloc<ObjCObjectVar<NSError?>>()
             }
+            performRequests(listOf(request), err.ptr)
+
+            err.value?.let {
+                throw it.asException()
+            }
+
+            onSuccess(request)
+        } catch (err: Throwable) {
+            onError(err)
+        }
+    }
+}
+
+abstract class CameraStreamAnalyzer<out T, out R : VNRequest, O : VNObservation>(
+    private val config: CameraAnalyzer<T, R, O>,
+    private val callback: AnalyzerCallback<T>
+) : CameraAnalyzer<T, R, O> by config, StreamAnalyzer {
+
+    override fun analyze(image: CameraImage) {
+        val imageRequestHandler =
+            VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
+
+        imageRequestHandler.execute(request(), onError = {
+            callback.onAnalyzerError(it)
+        }) {
+            callback.onAnalyzerResult(map(filter(it.results)))
         }
     }
 }
