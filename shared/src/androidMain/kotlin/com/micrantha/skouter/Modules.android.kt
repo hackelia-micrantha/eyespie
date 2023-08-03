@@ -2,9 +2,7 @@ package com.micrantha.skouter
 
 import android.content.Context
 import com.micrantha.bluebell.platform.Platform
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraAnalyzer
-import com.micrantha.skouter.platform.scan.CameraAnalyzerOptions
 import com.micrantha.skouter.platform.scan.analyzer.ColorCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ColorStreamAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.EmbeddingCaptureAnalyzer
@@ -15,6 +13,8 @@ import com.micrantha.skouter.platform.scan.analyzer.ObjectCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ObjectStreamAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentStreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
 import com.micrantha.skouter.platform.scan.model.ImageLabels
@@ -55,7 +55,7 @@ fun androidDependencies(
         EmbeddingStreamAnalyzer(context, callback)
     }
 
-    bindFactory<CameraAnalyzerOptions, CameraAnalyzer> { options ->
-        CameraAnalyzer(options)
+    bindFactory<CameraScannerDispatch, CameraAnalyzer> { dispatch ->
+        CameraAnalyzer(dispatch)
     }
 }

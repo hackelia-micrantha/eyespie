@@ -1,17 +1,17 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
-import com.micrantha.skouter.platform.scan.CameraAnalyzer
+import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
-import com.micrantha.skouter.platform.scan.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.StreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageLabel
 import com.micrantha.skouter.platform.scan.model.ImageLabels
 import platform.Vision.VNClassificationObservation
 import platform.Vision.VNClassifyImageRequest
 
-typealias LabelAnalyzerConfig = CameraAnalyzer<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>
+typealias LabelAnalyzerConfig = CameraAnalyzerConfig<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>
 
 private fun config(): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
 

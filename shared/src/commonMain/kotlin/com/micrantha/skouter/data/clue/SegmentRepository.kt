@@ -7,8 +7,8 @@ import com.micrantha.skouter.data.clue.source.SegmentStreamLocalSource
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.domain.repository.SegmentRepository
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageSegments
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

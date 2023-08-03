@@ -36,7 +36,7 @@ import com.micrantha.skouter.data.system.source.RealtimeRemoteSource
 import com.micrantha.skouter.data.thing.ThingDataRepository
 import com.micrantha.skouter.data.thing.mapping.ThingsDomainMapper
 import com.micrantha.skouter.data.thing.source.ThingsRemoteSource
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
 import com.micrantha.skouter.platform.scan.model.ImageLabels

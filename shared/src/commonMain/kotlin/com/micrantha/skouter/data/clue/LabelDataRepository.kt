@@ -6,8 +6,8 @@ import com.micrantha.skouter.data.clue.source.LabelCaptureLocalSource
 import com.micrantha.skouter.data.clue.source.LabelStreamLocalSource
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.repository.LabelRepository
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageLabels
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.asFlow

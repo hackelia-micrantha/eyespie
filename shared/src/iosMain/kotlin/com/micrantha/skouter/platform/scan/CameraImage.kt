@@ -98,7 +98,7 @@ actual data class CameraImage(
         val yPlaneBytesPerRow = width
         val yPlaneHeight = height
         val uvPlaneBytesPerRow = (CVPixelBufferGetWidth(yuvBuffer) / 2u).toInt()
-        val uvPlaneHeight = (CVPixelBufferGetHeight(yuvBuffer) / 2u).toInt()
+        //val uvPlaneHeight = (CVPixelBufferGetHeight(yuvBuffer) / 2u).toInt()
 
         // Calculate the size of the resulting BGRA buffer
         val bgraBufferSize = yPlaneBytesPerRow * yPlaneHeight * 4
@@ -130,7 +130,7 @@ actual data class CameraImage(
         return bgraBuffer.readBytes(bgraBufferSize)
     }
 
-    fun yuvToBgra(y: UByte, u: UByte, v: UByte): UInt {
+    private fun yuvToBgra(y: UByte, u: UByte, v: UByte): UInt {
         val c = y - 16u
         val d = u - 128u
         val e = v - 128u

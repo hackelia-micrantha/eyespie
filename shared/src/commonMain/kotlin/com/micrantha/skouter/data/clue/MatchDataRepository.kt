@@ -5,8 +5,8 @@ import com.micrantha.skouter.data.clue.model.RepositoryStore
 import com.micrantha.skouter.data.clue.source.MatchCaptureLocalSource
 import com.micrantha.skouter.data.clue.source.MatchStreamLocalSource
 import com.micrantha.skouter.domain.repository.MatchRepository
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.asFlow

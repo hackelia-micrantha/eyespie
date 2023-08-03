@@ -11,12 +11,12 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter.ImageSegmenterOptions
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenterResult
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.baseOptions
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageSegment
 import com.micrantha.skouter.platform.scan.model.ImageSegments
 import java.nio.ByteBuffer

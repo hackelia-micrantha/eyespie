@@ -25,7 +25,6 @@ import com.micrantha.skouter.domain.repository.RealtimeRepository
 import com.micrantha.skouter.domain.repository.SegmentRepository
 import com.micrantha.skouter.domain.repository.StorageRepository
 import com.micrantha.skouter.domain.repository.ThingRepository
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.analyzer.ColorCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ColorStreamAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.EmbeddingCaptureAnalyzer
@@ -36,6 +35,7 @@ import com.micrantha.skouter.platform.scan.analyzer.ObjectCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ObjectStreamAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentStreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
 import com.micrantha.skouter.platform.scan.model.ImageLabels

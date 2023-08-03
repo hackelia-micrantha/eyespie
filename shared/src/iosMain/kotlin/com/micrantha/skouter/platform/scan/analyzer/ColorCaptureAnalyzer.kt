@@ -1,9 +1,9 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.StreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageColors
 
 actual class ColorCaptureAnalyzer : CaptureAnalyzer<ImageColors> {

@@ -10,12 +10,12 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector.ObjectDetectorOptions
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetectorResult
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.baseOptions
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageLabel
 import com.micrantha.skouter.platform.scan.model.ImageObject
 import com.micrantha.skouter.platform.scan.model.ImageObjects
@@ -23,27 +23,6 @@ import com.micrantha.skouter.platform.scan.model.ImageObjects
 private const val MODEL_ASSET = "models/detection/image.tflite"
 
 typealias DetectionAnalyzerConfig = CameraAnalyzerConfig<ImageObjects, ObjectDetectorOptions.Builder, ObjectDetector, ObjectDetectorResult>
-
-private fun config(context: Context): DetectionAnalyzerConfig = object : DetectionAnalyzerConfig {
-    override fun map(result: ObjectDetectorResult): ImageObjects {
-        return result.detections().map(::detect)
-    }
-
-    private fun detect(obj: Detection) = ImageObject(
-        labels = obj.categories().map { ImageLabel(it.categoryName(), it.score()) },
-        rect = obj.boundingBox().toRect().toComposeRect(),
-    )
-
-    override fun client(block: ObjectDetectorOptions.Builder.() -> Unit): ObjectDetector {
-        val options = ObjectDetectorOptions.builder()
-            .setBaseOptions(baseOptions(MODEL_ASSET))
-            .setScoreThreshold(0.7f)
-            .apply(block)
-            .build()
-        return ObjectDetector.createFromOptions(context, options)
-    }
-
-}
 
 actual class ObjectCaptureAnalyzer(
     context: Context,
@@ -84,5 +63,25 @@ actual class ObjectStreamAnalyzer(
 
     private fun onResult(result: ObjectDetectorResult, input: MPImage) {
         callback.onAnalyzerResult(config.map(result))
+    }
+}
+
+private fun config(context: Context): DetectionAnalyzerConfig = object : DetectionAnalyzerConfig {
+    override fun map(result: ObjectDetectorResult): ImageObjects {
+        return result.detections().map(::detect)
+    }
+
+    private fun detect(obj: Detection) = ImageObject(
+        labels = obj.categories().map { ImageLabel(it.categoryName(), it.score()) },
+        rect = obj.boundingBox().toRect().toComposeRect(),
+    )
+
+    override fun client(block: ObjectDetectorOptions.Builder.() -> Unit): ObjectDetector {
+        val options = ObjectDetectorOptions.builder()
+            .setBaseOptions(baseOptions(MODEL_ASSET))
+            .setScoreThreshold(0.7f)
+            .apply(block)
+            .build()
+        return ObjectDetector.createFromOptions(context, options)
     }
 }

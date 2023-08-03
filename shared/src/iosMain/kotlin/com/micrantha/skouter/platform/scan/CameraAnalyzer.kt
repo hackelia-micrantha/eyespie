@@ -1,6 +1,9 @@
 package com.micrantha.skouter.platform.scan
 
 import com.micrantha.skouter.platform.asException
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
@@ -16,7 +19,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-interface CameraAnalyzer<out T, out R : VNRequest, O : VNObservation> {
+interface CameraAnalyzerConfig<out T, out R : VNRequest, O : VNObservation> {
     fun request(): R
     fun map(response: List<O>): T
 
@@ -24,8 +27,8 @@ interface CameraAnalyzer<out T, out R : VNRequest, O : VNObservation> {
 }
 
 abstract class CameraCaptureAnalyzer<out T, R : VNRequest, O : VNObservation>(
-    private val config: CameraAnalyzer<T, R, O>
-) : CaptureAnalyzer<T>, CameraAnalyzer<T, R, O> by config {
+    private val config: CameraAnalyzerConfig<T, R, O>
+) : CaptureAnalyzer<T>, CameraAnalyzerConfig<T, R, O> by config {
 
     override suspend fun analyze(image: CameraImage): Result<T> = try {
         val imageRequestHandler =
@@ -44,6 +47,23 @@ abstract class CameraCaptureAnalyzer<out T, R : VNRequest, O : VNObservation>(
         Result.failure(err)
     }
 
+}
+
+abstract class CameraStreamAnalyzer<out T, out R : VNRequest, O : VNObservation>(
+    private val config: CameraAnalyzerConfig<T, R, O>,
+    private val callback: AnalyzerCallback<T>
+) : CameraAnalyzerConfig<T, R, O> by config, StreamAnalyzer {
+
+    override fun analyze(image: CameraImage) {
+        val imageRequestHandler =
+            VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
+
+        imageRequestHandler.execute(request(), onError = {
+            callback.onAnalyzerError(it)
+        }) {
+            callback.onAnalyzerResult(map(filter(it.results)))
+        }
+    }
 }
 
 private val executeQueue by lazy {
@@ -70,23 +90,6 @@ private fun <T : VNRequest> VNImageRequestHandler.execute(
             onSuccess(request)
         } catch (err: Throwable) {
             onError(err)
-        }
-    }
-}
-
-abstract class CameraStreamAnalyzer<out T, out R : VNRequest, O : VNObservation>(
-    private val config: CameraAnalyzer<T, R, O>,
-    private val callback: AnalyzerCallback<T>
-) : CameraAnalyzer<T, R, O> by config, StreamAnalyzer {
-
-    override fun analyze(image: CameraImage) {
-        val imageRequestHandler =
-            VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
-
-        imageRequestHandler.execute(request(), onError = {
-            callback.onAnalyzerError(it)
-        }) {
-            callback.onAnalyzerResult(map(filter(it.results)))
         }
     }
 }

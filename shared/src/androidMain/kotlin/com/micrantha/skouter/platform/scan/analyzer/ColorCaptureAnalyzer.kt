@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.palette.graphics.Palette
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.StreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageColor
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import kotlin.coroutines.resume

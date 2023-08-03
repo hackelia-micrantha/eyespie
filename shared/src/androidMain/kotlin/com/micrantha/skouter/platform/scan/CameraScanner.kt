@@ -21,9 +21,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import org.kodein.di.compose.rememberFactory
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.math.ceil
 
 
 private fun PreviewView.enableZoom(camera: Camera) {
@@ -60,11 +62,11 @@ actual fun CameraScanner(
     val context = LocalContext.current
 
     val config = context.resources.displayMetrics
-    val statusBarHeight = Math.ceil((24 * config.density).toDouble()).toInt()
+    val statusBarHeight = ceil((24 * config.density).toDouble()).toInt()
 
     val screenSize = Size(config.widthPixels, config.heightPixels + statusBarHeight)
 
-    val analyzer by rememberFactory<CameraAnalyzerOptions, CameraAnalyzer>()
+    val analyzer by rememberFactory<CameraScannerDispatch, CameraAnalyzer>()
     val imageCapture = remember {
         ImageCapture.Builder()
             .setTargetResolution(screenSize)
@@ -97,17 +99,13 @@ actual fun CameraScanner(
 
         useCases.addUseCase(previewUseCase)
 
-        val cameraAnalyzerOptions = CameraAnalyzerOptions(
-            callback = onCameraImage
-        )
-
         val imageAnalysis = ImageAnalysis.Builder()
             .setTargetResolution(screenSize)
             .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()
             .apply {
-                setAnalyzer(executor, analyzer(cameraAnalyzerOptions))
+                setAnalyzer(executor, analyzer(onCameraImage))
             }
         useCases.addUseCase(imageAnalysis)
 

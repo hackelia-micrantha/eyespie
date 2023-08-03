@@ -9,39 +9,17 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier.ImageClassifierOptions
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.StreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
+import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
+import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageLabel
 import com.micrantha.skouter.platform.scan.model.ImageLabels
 
 private const val MODEL_ASSET = "models/classification/image.tflite"
 
 typealias LabelAnalyzerConfig = CameraAnalyzerConfig<ImageLabels, ImageClassifierOptions.Builder, ImageClassifier, ImageClassifierResult>
-
-private fun config(context: Context): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
-    override fun map(result: ImageClassifierResult) = result.classificationResult()
-        .classifications().flatMap { it.categories() }.map(::label)
-
-    private fun label(label: Category) = ImageLabel(
-        confidence = label.score(),
-        data = label.categoryName()
-    )
-
-    override fun client(block: ImageClassifierOptions.Builder.() -> Unit): ImageClassifier {
-        val options = ImageClassifierOptions.builder()
-            .setBaseOptions(
-                BaseOptions.builder()
-                    .setModelAssetPath(MODEL_ASSET)
-                    .build()
-            )
-            .setScoreThreshold(0.6f)
-            .apply(block).build()
-        return ImageClassifier.createFromOptions(context, options)
-    }
-}
 
 actual class LabelCaptureAnalyzer(
     context: Context,
@@ -81,5 +59,27 @@ actual class LabelStreamAnalyzer(
 
     private fun onResult(result: ImageClassifierResult, input: MPImage) {
         callback.onAnalyzerResult(config.map(result))
+    }
+}
+
+private fun config(context: Context): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
+    override fun map(result: ImageClassifierResult) = result.classificationResult()
+        .classifications().flatMap { it.categories() }.map(::label)
+
+    private fun label(label: Category) = ImageLabel(
+        confidence = label.score(),
+        data = label.categoryName()
+    )
+
+    override fun client(block: ImageClassifierOptions.Builder.() -> Unit): ImageClassifier {
+        val options = ImageClassifierOptions.builder()
+            .setBaseOptions(
+                BaseOptions.builder()
+                    .setModelAssetPath(MODEL_ASSET)
+                    .build()
+            )
+            .setScoreThreshold(0.6f)
+            .apply(block).build()
+        return ImageClassifier.createFromOptions(context, options)
     }
 }

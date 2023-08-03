@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.interop.UIKitView
 import co.touchlab.stately.freeze
 import com.micrantha.skouter.platform.asException
+import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc

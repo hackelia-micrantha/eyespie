@@ -7,8 +7,8 @@ import com.micrantha.skouter.data.clue.source.ObjectStreamLocalSource
 import com.micrantha.skouter.domain.model.DetectClue
 import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.repository.DetectionRepository
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageObjects
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

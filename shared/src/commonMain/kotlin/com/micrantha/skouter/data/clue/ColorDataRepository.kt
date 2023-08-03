@@ -6,8 +6,8 @@ import com.micrantha.skouter.data.clue.source.ColorCaptureLocalSource
 import com.micrantha.skouter.data.clue.source.ColorStreamLocalSource
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.repository.ColorRepository
-import com.micrantha.skouter.platform.scan.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.asFlow
