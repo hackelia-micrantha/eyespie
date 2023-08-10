@@ -29,10 +29,10 @@ import com.micrantha.skouter.ui.scan.preview.ScanScreen
 import com.micrantha.skouter.ui.scan.preview.ScanScreenModel
 import com.micrantha.skouter.ui.scan.preview.ScanStateMapper
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
-import com.micrantha.skouter.ui.scan.usecase.EditCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.GetEditCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.MatchCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
 import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
@@ -84,7 +84,7 @@ internal fun uiModules() = DI.Module("Skouter UI") {
         ScanGuessEnvironment(args, get(), get(), get())
     }
 
-    bindProviderOf(::EditCaptureUseCase)
+    bindProviderOf(::TakeCaptureUseCase)
     bindProviderOf(::SaveCaptureUseCase)
     bindProviderOf(::MatchCaptureUseCase)
     bindProviderOf(::AnalyzeCaptureUseCase)

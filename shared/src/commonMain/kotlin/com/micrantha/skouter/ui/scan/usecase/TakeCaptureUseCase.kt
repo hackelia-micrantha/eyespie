@@ -12,7 +12,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import okio.FileSystem
 
-class EditCaptureUseCase(
+class TakeCaptureUseCase(
     private val platform: Platform,
     private val matchRepository: MatchRepository,
     private val dispatcher: Dispatcher,

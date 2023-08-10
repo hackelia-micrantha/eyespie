@@ -27,8 +27,8 @@ import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedLabel
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedMatch
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedSegment
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
-import com.micrantha.skouter.ui.scan.usecase.EditCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 class ScanEnvironment(
     private val scope: CoroutineScope,
     private val context: ScreenContext,
-    private val editCaptureUseCase: EditCaptureUseCase,
+    private val takeCaptureUseCase: TakeCaptureUseCase,
     private val saveCaptureUseCase: SaveCaptureUseCase,
     private val analyzeCaptureUseCase: AnalyzeCaptureUseCase,
     private val currentSession: CurrentSession,
@@ -50,7 +50,7 @@ class ScanEnvironment(
 
     override suspend fun invoke(action: Action, state: ScanState) {
         when (action) {
-            is EditScan -> editCaptureUseCase(
+            is EditScan -> takeCaptureUseCase(
                 state.image!!
             ).onSuccess { url ->
                 Log.d("image url: $url")
@@ -76,7 +76,7 @@ class ScanEnvironment(
                     navigateBack()
                 }
 
-            is SaveScan -> editCaptureUseCase(
+            is SaveScan -> takeCaptureUseCase(
                 state.image!!
             ).onSuccess { url ->
                 dispatch(ImageSaved(url))
