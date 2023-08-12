@@ -1,5 +1,6 @@
 package com.micrantha.skouter.platform.scan
 
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.platform.toImageBitmap
@@ -143,4 +144,8 @@ actual data class CameraImage(
     }
 
     actual fun toImageBitmap(): ImageBitmap = toByteArray().toImageBitmap()
+
+    actual fun crop(rect: Rect): CameraImage {
+        return this
+    }
 }
