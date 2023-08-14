@@ -34,7 +34,7 @@ import platform.CoreVideo.kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
 import platform.ImageIO.CGImagePropertyOrientation
 
 actual data class CameraImage(
-    private val data: CVImageBufferRef,
+    internal val data: CVImageBufferRef,
     val orientation: CGImagePropertyOrientation
 ) {
     actual val width by lazy { CVPixelBufferGetWidth(data).toInt() }

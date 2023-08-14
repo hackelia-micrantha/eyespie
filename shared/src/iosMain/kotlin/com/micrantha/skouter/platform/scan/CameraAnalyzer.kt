@@ -21,7 +21,7 @@ import kotlin.coroutines.suspendCoroutine
 
 interface CameraAnalyzerConfig<out T, out R : VNRequest, O : VNObservation> {
     fun request(): R
-    fun map(response: List<O>): T
+    fun map(response: List<O>, image: CameraImage): T
 
     val filter: (List<*>?) -> List<O>
 }
@@ -42,7 +42,7 @@ abstract class CameraCaptureAnalyzer<out T, R : VNRequest, O : VNObservation>(
             }
         }
 
-        Result.success(map(filter(result.results)))
+        Result.success(map(filter(result.results), image))
     } catch (err: Throwable) {
         Result.failure(err)
     }
@@ -61,7 +61,7 @@ abstract class CameraStreamAnalyzer<out T, out R : VNRequest, O : VNObservation>
         imageRequestHandler.execute(request(), onError = {
             callback.onAnalyzerError(it)
         }) {
-            callback.onAnalyzerResult(map(filter(it.results)))
+            callback.onAnalyzerResult(map(filter(it.results), image))
         }
     }
 }
