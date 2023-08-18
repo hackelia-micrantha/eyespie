@@ -9,9 +9,9 @@ import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.ext.status
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
-import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
+import com.micrantha.bluebell.ui.screen.navigate
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.ui.component.Strings.LoadingGames
 import com.micrantha.skouter.ui.component.toi18n
@@ -39,9 +39,11 @@ class GameListEnvironment(
     override fun reduce(state: GameListState, action: Action) = when (action) {
         is Load ->
             state.copy(status = busy(LoadingGames))
+
         is Loaded -> state.copy(
             status = action.data.status()
         )
+
         is Failure -> state.copy(status = failure(action.error.toi18n()))
         else -> state
     }
@@ -51,8 +53,9 @@ class GameListEnvironment(
             is Load -> repository.games()
                 .onFailure { dispatch(Failure(it)) }
                 .onSuccess { dispatch(Loaded(it)) }
-            is NewGame -> navigate<GameCreateScreen>()
-            is GameClicked -> navigate<GameDetailsScreen, GameDetailScreenArg>(arg = action.arg)
+
+            is NewGame -> context.navigate<GameCreateScreen>()
+            is GameClicked -> context.navigate<GameDetailsScreen, GameDetailScreenArg>(arg = action.arg)
         }
     }
 }

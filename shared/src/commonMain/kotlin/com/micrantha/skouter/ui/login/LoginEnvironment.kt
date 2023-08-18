@@ -9,9 +9,9 @@ import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.ui.components.Router
-import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
+import com.micrantha.bluebell.ui.screen.navigate
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.component.Strings
 import com.micrantha.skouter.ui.dashboard.DashboardScreen
@@ -55,7 +55,7 @@ class LoginEnvironment(
                     dispatch(OnSuccess)
                 }
 
-            is OnSuccess -> navigate<DashboardScreen>()
+            is OnSuccess -> context.navigate<DashboardScreen>()
         }
     }
 }

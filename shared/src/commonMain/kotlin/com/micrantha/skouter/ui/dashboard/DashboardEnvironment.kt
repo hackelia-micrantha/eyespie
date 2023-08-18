@@ -9,9 +9,9 @@ import com.micrantha.bluebell.domain.ext.failure
 import com.micrantha.bluebell.domain.model.Ready
 import com.micrantha.bluebell.domain.model.isReady
 import com.micrantha.bluebell.domain.model.map
-import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.StateMapper
+import com.micrantha.bluebell.ui.screen.navigate
 import com.micrantha.skouter.ui.component.S
 import com.micrantha.skouter.ui.dashboard.DashboardAction.GuessThing
 import com.micrantha.skouter.ui.dashboard.DashboardAction.Load
@@ -83,7 +83,7 @@ class DashboardEnvironment(
 
     override suspend fun invoke(action: Action, state: DashboardState) {
         when (action) {
-            is GameAction.GameClicked -> context.router.navigate<GameDetailsScreen, GameDetailScreenArg>(
+            is GameAction.GameClicked -> context.navigate<GameDetailsScreen, GameDetailScreenArg>(
                 arg = action.arg
             )
 
@@ -93,7 +93,7 @@ class DashboardEnvironment(
                         .onFailure { dispatch(LoadError) }
                 }.launchIn(scope)
 
-            is ScanNewThing -> context.router.navigate<ScanScreen>()
+            is ScanNewThing -> context.navigate<ScanScreen>()
 
             is GuessThing -> context.router.navigate(
                 ScanGuessScreen(

@@ -16,6 +16,7 @@ import com.micrantha.bluebell.domain.i18n.longDateTime
 import com.micrantha.bluebell.domain.i18n.stringResource
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.bluebell.ui.components.LabeledText
+import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.components.TabPager
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
@@ -27,7 +28,8 @@ import com.micrantha.skouter.ui.game.detail.GameDetailsAction.Load
 import com.micrantha.skouter.ui.player.component.PlayerListContent
 import com.micrantha.skouter.ui.thing.component.ThingListContent
 
-data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScreen() {
+data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScreen(),
+    StateRenderer<GameDetailsUiState> {
 
     override fun title() = arg.title
 
@@ -45,7 +47,7 @@ data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScr
     }
 
     @Composable
-    private fun Render(state: GameDetailsUiState, dispatch: Dispatch) {
+    override fun Render(state: GameDetailsUiState, dispatch: Dispatch) {
         when (val status = state.status) {
             is UiResult.Busy -> LoadingContent(status.message)
             is UiResult.Failure -> FailureContent(status.message)

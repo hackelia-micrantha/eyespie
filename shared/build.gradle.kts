@@ -52,7 +52,7 @@ kotlin {
                 api("org.kodein.di:kodein-di-framework-compose:7.20.1")
                 implementation("org.kodein.di:kodein-di-conf:7.19.0")
 
-                implementation("com.squareup.okio:okio:3.3.0")
+                api("com.squareup.okio:okio:3.3.0")
 
                 implementation("io.github.reactivecircus.cache4k:cache4k:0.11.0")
 
@@ -63,7 +63,7 @@ kotlin {
 
                 api("cafe.adriel.voyager:voyager-navigator:1.0.0-rc06")
                 implementation("cafe.adriel.voyager:voyager-transitions:1.0.0-rc06")
-                implementation("cafe.adriel.voyager:voyager-kodein:1.0.0-rc06")
+                api("cafe.adriel.voyager:voyager-kodein:1.0.0-rc06")
 
                 implementation("io.ktor:ktor-client-content-negotiation:2.3.1")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.1")

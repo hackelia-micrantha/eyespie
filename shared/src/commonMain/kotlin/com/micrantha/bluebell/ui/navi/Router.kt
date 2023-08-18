@@ -5,10 +5,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.components.Router.Options.Reset
-import org.kodein.di.DI
 
 class BluebellRouter(
-    override val di: DI,
     private val navigator: Navigator
 ) : Router {
 

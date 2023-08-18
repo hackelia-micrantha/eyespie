@@ -13,6 +13,7 @@ import com.micrantha.bluebell.domain.model.UiResult.Default
 import com.micrantha.bluebell.domain.model.UiResult.Empty
 import com.micrantha.bluebell.domain.model.UiResult.Failure
 import com.micrantha.bluebell.domain.model.UiResult.Ready
+import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.components.status.EmptyContent
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
@@ -26,7 +27,7 @@ import com.micrantha.skouter.ui.navi.NavAction
 
 class GameListScreen(
     private val context: ScreenContext
-) : ScaffoldScreen() {
+) : ScaffoldScreen(), StateRenderer<GameListUiState> {
     @Composable
     override fun Render() {
         val viewModel = rememberScreenModel<GameListScreenModel>()
@@ -37,7 +38,7 @@ class GameListScreen(
 
         val state by viewModel.state.collectAsState()
 
-        render(state, viewModel::dispatch)
+        Render(state, viewModel::dispatch)
     }
 
     override fun actions() = listOf(NavAction(
@@ -50,7 +51,7 @@ class GameListScreen(
     override fun title() = context.i18n.string(Games)
 
     @Composable
-    private fun render(state: GameListUiState, dispatch: Dispatch) {
+    override fun Render(state: GameListUiState, dispatch: Dispatch) {
         when (val status = state.status) {
             is Busy -> LoadingContent(status.message)
             is Failure -> FailureContent(status.message)

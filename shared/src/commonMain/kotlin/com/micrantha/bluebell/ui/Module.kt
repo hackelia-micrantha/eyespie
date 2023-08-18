@@ -10,7 +10,7 @@ import org.kodein.di.bindSingleton
 
 internal fun bluebellUi() = DI.Module(name = "Bluebell UI") {
 
-    bindSingleton<Router> { BluebellRouter(di, get()) }
+    bindSingleton<Router> { BluebellRouter(get()) }
     bindSingleton<ScreenContext> { BluebellScreenContext(di, get(), get(), get()) }
 
 }
