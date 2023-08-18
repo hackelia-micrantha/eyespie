@@ -28,8 +28,9 @@ fun ThingListContent(
         ) {
             dispatch(ScanNewThing)
         }
+
         else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(things) { thing ->
+            items(things, key = { it.id }) { thing ->
                 ThingListingCard(
                     modifier = Modifier.padding(Dimensions.content),
                     thing = thing

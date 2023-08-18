@@ -8,16 +8,11 @@ import com.micrantha.bluebell.domain.model.UiResult.Ready
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.ui.PreviewContext
 import kotlinx.datetime.Clock.System
-import org.kodein.di.bind
-import org.kodein.di.compose.localDI
-import org.kodein.di.direct
-import org.kodein.di.instance
-import org.kodein.di.provider
 import kotlin.time.Duration
 
-class GameListPreviewContent : PreviewParameterProvider<GameListState> {
+class GameListPreviewContent : PreviewParameterProvider<GameListUiState> {
     override val values = sequenceOf(
-        GameListState(
+        GameListUiState(
             status = Ready(
                 listOf(
                     Game.Listing(
@@ -37,18 +32,7 @@ class GameListPreviewContent : PreviewParameterProvider<GameListState> {
 
 @Preview
 @Composable
-fun GameListPreview(@PreviewParameter(GameListPreviewContent::class) state: GameListState) =
-    PreviewContext(
-        bindings = {
-            bind(overrides = true) {
-                provider {
-                    GameListScreenModel(
-                        instance(), instance(), state
-                    )
-                }
-            }
-        }
-    ) {
-        localDI().direct.instance<GameListScreen>().Content()
-        //GameListScreen().Content()
+fun GameListPreview(@PreviewParameter(GameListPreviewContent::class) state: GameListUiState) =
+    PreviewContext(state) {
+        GameListScreen(it)
     }

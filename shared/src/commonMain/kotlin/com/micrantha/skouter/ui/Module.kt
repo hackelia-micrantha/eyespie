@@ -32,6 +32,7 @@ import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.GetEditCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.MatchCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
 import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
@@ -68,7 +69,7 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::ScanScreenModel)
     bindFactory { scope: CoroutineScope ->
         ScanEnvironment(
-            scope, get(), get(), get(), get(), get(), get(), get()
+            scope, get(), get(), get(), get(), get(), get(), get(), get()
         )
     }
 
@@ -89,4 +90,5 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindProviderOf(::MatchCaptureUseCase)
     bindProviderOf(::AnalyzeCaptureUseCase)
     bindProviderOf(::GetEditCaptureUseCase)
+    bindProviderOf(::SubAnalyzeClueUseCase)
 }

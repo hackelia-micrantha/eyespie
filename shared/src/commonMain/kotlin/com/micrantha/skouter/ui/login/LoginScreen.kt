@@ -29,11 +29,12 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.ext.enabled
 import com.micrantha.bluebell.domain.i18n.stringResource
+import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.ui.Skouter
 import com.micrantha.skouter.ui.component.Strings
 
-class LoginScreen : Screen {
+class LoginScreen : Screen, StateRenderer<LoginUiState> {
 
     @Composable
     override fun Content() {
@@ -46,7 +47,7 @@ class LoginScreen : Screen {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun Render(state: LoginUiState, dispatch: Dispatch) {
+    override fun Render(state: LoginUiState, dispatch: Dispatch) {
         Box(
             modifier = Modifier.fillMaxSize()
                 .scrollable(rememberScrollState(), Vertical), contentAlignment = Alignment.Center

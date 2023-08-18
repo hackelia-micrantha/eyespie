@@ -1,13 +1,17 @@
 package com.micrantha.bluebell.ui.screen
 
 import androidx.compose.runtime.compositionLocalOf
+import cafe.adriel.voyager.core.screen.Screen
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.bluebell.ui.components.Router
+import com.micrantha.bluebell.ui.components.Router.Options
+import com.micrantha.bluebell.ui.components.Router.Options.None
 import org.kodein.di.DI
 import org.kodein.di.DIAware
+import org.kodein.di.provider
 
 interface ScreenContext : DIAware {
     val i18n: LocalizedRepository
@@ -36,4 +40,17 @@ val LocalScreenContext = compositionLocalOf<ScreenContext> {
 
 val LocalDispatcher = compositionLocalOf<Dispatcher> {
     error("Local dispatcher not defined")
+}
+
+inline fun <reified T : Screen> ScreenContext.navigate(options: Options = None) {
+    val screen: () -> T by di.provider()
+    router.navigate(screen(), options)
+}
+
+inline fun <reified T : Screen, reified A : Any> ScreenContext.navigate(
+    options: Options = None,
+    arg: A
+) {
+    val screen: () -> T by di.provider(arg = arg)
+    router.navigate(screen(), options)
 }

@@ -5,8 +5,8 @@ import cafe.adriel.voyager.core.model.coroutineScope
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.ui.components.Router
-import com.micrantha.bluebell.ui.components.navigate
 import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.bluebell.ui.screen.navigate
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.ui.MainAction.Load
 import com.micrantha.skouter.ui.MainAction.Loaded
@@ -34,8 +34,8 @@ class MainScreenModel(
                 dispatch(Loaded)
             }
 
-            is Login -> navigate<LoginScreen>(Router.Options.Replace)
-            is Loaded -> navigate<DashboardScreen>(Router.Options.Replace)
+            is Login -> context.navigate<LoginScreen>(Router.Options.Replace)
+            is Loaded -> context.navigate<DashboardScreen>(Router.Options.Replace)
         }
     }
 }

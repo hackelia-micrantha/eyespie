@@ -18,7 +18,7 @@ fun FriendsTabContent(tab: TabContent<PlayerList>, dispatch: Dispatch) {
     when {
         tab.data.isEmpty() -> EmptyContent(stringResource(S.NoPlayersFound))
         else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(tab.data) {
+            items(tab.data, key = { it.id }) {
                 PlayerListCard(player = it)
             }
         }

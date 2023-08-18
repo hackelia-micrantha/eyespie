@@ -23,8 +23,9 @@ fun GameListContent(games: List<Game.Listing>, dispatch: Dispatch) {
         ) {
             dispatch(NewGame)
         }
+
         else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(games) { game ->
+            items(games, key = { it.id }) { game ->
                 GameListCard(game, dispatch)
             }
         }

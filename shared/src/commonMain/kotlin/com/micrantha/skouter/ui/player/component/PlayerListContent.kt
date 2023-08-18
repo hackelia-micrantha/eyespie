@@ -16,7 +16,7 @@ fun PlayerListContent(players: PlayerList, dispatch: Dispatch) {
     when {
         players.isEmpty() -> EmptyContent(stringResource(S.NoPlayersFound))
         else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(players) {
+            items(players, key = { it.id }) {
                 PlayerListCard(player = it)
             }
         }

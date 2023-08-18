@@ -31,12 +31,12 @@ fun NearbyTabContent(
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-        stickyHeader {
+        stickyHeader(key = tab.things.data) {
             ListHeader(label = stringResource(S.Things))
         }
         itemsIndexed(
             items = tab.things.data,
-            key = { index, item -> item.id }
+            key = { _, item -> item.id }
         ) { index, thing ->
             ThingListingCard(
                 modifier = Modifier.padding(horizontal = Dimensions.content).then(
@@ -65,10 +65,10 @@ fun NearbyTabContent(
                 }
             }
         }
-        stickyHeader {
+        stickyHeader(key = tab.players.data) {
             ListHeader(label = stringResource(S.Players))
         }
-        itemsIndexed(tab.players.data) { index, player ->
+        itemsIndexed(tab.players.data, key = { _, item -> item.id }) { index, player ->
             PlayerListCard(
                 modifier = Modifier.padding(horizontal = Dimensions.content).then(
                     if (index == 0) {

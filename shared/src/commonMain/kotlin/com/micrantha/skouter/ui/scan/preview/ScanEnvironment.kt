@@ -28,6 +28,7 @@ import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedMatch
 import com.micrantha.skouter.ui.scan.preview.ScanAction.ScannedSegment
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
+import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
@@ -39,6 +40,7 @@ class ScanEnvironment(
     private val takeCaptureUseCase: TakeCaptureUseCase,
     private val saveCaptureUseCase: SaveCaptureUseCase,
     private val analyzeCaptureUseCase: AnalyzeCaptureUseCase,
+    private val subAnalyzeClueUseCase: SubAnalyzeClueUseCase,
     private val currentSession: CurrentSession,
     private val locationRepository: LocationRepository,
     private val mapper: ScanStateMapper,
@@ -59,6 +61,10 @@ class ScanEnvironment(
                 Log.d("unable to save scan", it)
                 dispatch(SaveError)
             }
+
+            is ScannedDetection -> subAnalyzeClueUseCase(state.image!!.crop(action.detection.data))
+
+            is ScannedSegment -> subAnalyzeClueUseCase(state.image!!)
 
             is EditSaved -> navigate(
                 ScanEditScreen(
