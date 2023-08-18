@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
-import com.micrantha.bluebell.domain.arch.StoreDispatch
+import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.platform.scan.CameraScanner
@@ -43,7 +43,7 @@ import dev.icerock.moko.permissions.Permission.CAMERA
 import dev.icerock.moko.permissions.PermissionsController
 import org.kodein.di.compose.rememberInstance
 
-class ScanScreen : Screen {
+class ScanScreen : Screen, StateRenderer<ScanUiState> {
     @Composable
     override fun Content() {
         val permissions by rememberInstance<PermissionsController>()
@@ -54,15 +54,15 @@ class ScanScreen : Screen {
 
         LocationEnabledEffect()
 
-        val viewModel: ScanScreenModel = rememberScreenModel()
+        val screenModel: ScanScreenModel = rememberScreenModel()
 
-        val state by viewModel.state.collectAsState()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, viewModel::invoke, viewModel::dispatch)
+        Render(state, screenModel)
     }
 
     @Composable
-    private fun Render(state: ScanUiState, onScan: StoreDispatch, dispatch: Dispatch) {
+    override fun Render(state: ScanUiState, dispatch: Dispatch) {
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize().background(Color.Transparent),
             contentAlignment = Alignment.Center
@@ -70,7 +70,7 @@ class ScanScreen : Screen {
             when {
                 state.capture != null -> renderCapture(state.capture)
                 state.enabled.not() -> LoadingContent()
-                else -> renderCamera(state, dispatch, onScan)
+                else -> renderCamera(state, dispatch)
             }
         }
     }
@@ -79,8 +79,7 @@ class ScanScreen : Screen {
 @Composable
 private fun BoxWithConstraintsScope.renderCamera(
     state: ScanUiState,
-    dispatch: Dispatch,
-    onScan: StoreDispatch
+    dispatch: Dispatch
 ) {
     TextButton(
         modifier = Modifier.align(Alignment.TopStart).size(Dimensions.touchable)
@@ -97,7 +96,7 @@ private fun BoxWithConstraintsScope.renderCamera(
     CameraScanner(
         modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
     ) {
-        onScan(ScannedImage(it))
+        dispatch.send(ScannedImage(it))
     }
 
     if (state.overlays.isNotEmpty()) {

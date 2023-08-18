@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
-import com.micrantha.bluebell.domain.arch.StoreDispatch
+import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.skouter.platform.scan.CameraScanner
 import com.micrantha.skouter.ui.scan.guess.ScanGuessAction.ImageCaptured
 import dev.icerock.moko.permissions.Permission.CAMERA
@@ -29,19 +29,19 @@ class ScanGuessScreen constructor(
     override fun Content() {
         val permissions by rememberInstance<PermissionsController>()
 
-        val model: ScanGuessScreenModel = rememberScreenModel(arg = args)
+        val screenModel: ScanGuessScreenModel = rememberScreenModel(arg = args)
 
         LaunchedEffect(Unit) {
             permissions.providePermission(CAMERA)
         }
 
-        val state by model.state.collectAsState()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, model::invoke)
+        Render(state, screenModel)
     }
 
     @Composable
-    private fun Render(state: ScanGuessUiState, onScan: StoreDispatch) {
+    private fun Render(state: ScanGuessUiState, dispatch: Dispatch) {
 
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -50,7 +50,7 @@ class ScanGuessScreen constructor(
             CameraScanner(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
             ) {
-                onScan(ImageCaptured(it))
+                dispatch.send(ImageCaptured(it))
             }
         }
     }

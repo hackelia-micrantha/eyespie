@@ -22,11 +22,11 @@ class MainScreenModel(
 
     override fun dispatch(action: Action) {
         coroutineScope.launch {
-            invoke(action)
+            send(action)
         }
     }
 
-    suspend fun invoke(action: Action) {
+    override suspend fun send(action: Action) {
         when (action) {
             is Load -> accountRepository.session().onFailure {
                 dispatch(Login)

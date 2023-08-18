@@ -30,15 +30,15 @@ class GameListScreen(
 ) : ScaffoldScreen(), StateRenderer<GameListUiState> {
     @Composable
     override fun Render() {
-        val viewModel = rememberScreenModel<GameListScreenModel>()
+        val screenModel = rememberScreenModel<GameListScreenModel>()
 
         LaunchedEffect(Unit) {
-            viewModel.dispatch(Load)
+            screenModel.dispatch(Load)
         }
 
-        val state by viewModel.state.collectAsState()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, screenModel)
     }
 
     override fun actions() = listOf(NavAction(

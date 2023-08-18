@@ -2,7 +2,6 @@ package com.micrantha.bluebell.domain.flux
 
 import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +18,8 @@ class FluxDispatcher internal constructor(
 ) : Dispatcher, Dispatcher.Registry {
     private val actions = MutableSharedFlow<Action>()
 
-    override fun register(dispatch: Dispatch) {
-        actions.onEach(dispatch)
+    override fun register(dispatcher: Dispatcher) {
+        actions.onEach(dispatcher::send)
             .catch { Log.e(message = "registered dispatch", tag = "dispatcher", throwable = it) }
             .launchIn(scope)
     }
@@ -28,8 +27,12 @@ class FluxDispatcher internal constructor(
     override fun dispatch(action: Action) {
         Log.d(action)
         scope.launch {
-            actions.emit(action)
+            send(action)
         }
+    }
+
+    override suspend fun send(action: Action) {
+        actions.emit(action)
     }
 
     private fun Log.d(action: Action) = d("action: $action", tag = "dispatcher")

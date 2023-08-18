@@ -22,21 +22,20 @@ class FluxStore<State> internal constructor(
     private val effects = mutableListOf<Effect<State>>()
     private val current = MutableStateFlow(initialState)
 
+    private fun update(action: Action) = current.updateAndGet { state ->
+        reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
+    }
+
     override fun dispatch(action: Action) {
-        val value = current.updateAndGet { state ->
-            reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
-        }
+        val value = update(action)
 
         effectScope.launch {
             effects.forEach { effect -> effect(action, value) }
         }
     }
 
-    override suspend fun invoke(action: Action) {
-        val value = current.updateAndGet { state ->
-            reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
-        }
-
+    override suspend fun send(action: Action) {
+        val value = update(action)
         effects.forEach { effect -> effect(action, value) }
     }
 

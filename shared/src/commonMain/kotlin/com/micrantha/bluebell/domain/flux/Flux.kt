@@ -10,5 +10,5 @@ class Flux(
 ) : StoreFactory, Dispatcher by dispatcher {
 
     override fun <T> createStore(initialState: T, scope: CoroutineScope): Store<T> =
-        FluxStore(initialState, scope).apply { dispatcher.register(this::dispatch) }
+        FluxStore(initialState, scope).apply { dispatcher.register(this) }
 }

@@ -38,11 +38,11 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
 
     @Composable
     override fun Content() {
-        val viewModel = rememberScreenModel<LoginScreenModel>()
+        val screenModel = rememberScreenModel<LoginScreenModel>()
 
-        val state by viewModel.state.collectAsState()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, screenModel)
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

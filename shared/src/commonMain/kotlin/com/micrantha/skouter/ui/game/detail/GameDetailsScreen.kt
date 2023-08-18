@@ -35,15 +35,15 @@ data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScr
 
     @Composable
     override fun Render() {
-        val viewModel: GameDetailsScreenModel = rememberScreenModel()
+        val screenModel: GameDetailsScreenModel = rememberScreenModel()
 
         LaunchedEffect(Unit) {
-            viewModel.dispatch(Load(arg.id))
+            screenModel.dispatch(Load(arg.id))
         }
 
-        val state by viewModel.state.collectAsState()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, screenModel)
     }
 
     @Composable

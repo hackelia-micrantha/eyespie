@@ -27,10 +27,10 @@ class GameCreateScreen : Screen {
 
     @Composable
     override fun Content() {
-        val viewModel = rememberScreenModel<GameCreateScreenModel>()
-        val state by viewModel.state.collectAsState()
+        val screenModel = rememberScreenModel<GameCreateScreenModel>()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, screenModel)
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

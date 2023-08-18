@@ -2,11 +2,10 @@ package com.micrantha.bluebell.ui.screen
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.coroutineScope
-import com.micrantha.bluebell.domain.arch.Action
+import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Stateful
 import com.micrantha.bluebell.domain.arch.Store
-import com.micrantha.bluebell.domain.arch.StoreDispatch
 import com.micrantha.bluebell.domain.flux.Flux
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.ui.components.Router
@@ -21,7 +20,7 @@ import org.kodein.di.instance
  */
 abstract class ContextualScreenModel(
     protected val context: ScreenContext
-) : Dispatcher by context.dispatcher, ScreenModel {
+) : ScreenModel, Dispatcher by context.dispatcher, Dispatch {
 
     protected val router: Router = context.router
 
@@ -34,10 +33,8 @@ abstract class ContextualScreenModel(
 abstract class FluxScreenModel<State>(
     context: ScreenContext,
     initialState: State
-) : ContextualScreenModel(context), DIAware by context, StoreDispatch {
+) : ContextualScreenModel(context), DIAware by context {
     protected val store: Store<State> by screenModelStore(initialState, coroutineScope)
-
-    override suspend fun invoke(action: Action) = store(action)
 }
 
 private fun <State> FluxScreenModel<State>.screenModelStore(

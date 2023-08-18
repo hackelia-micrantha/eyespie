@@ -45,7 +45,7 @@ class DashboardScreen : Screen {
 
         val state by screenModel.state.collectAsState()
 
-        Render(state, screenModel::dispatch)
+        Render(state, screenModel)
     }
 
     @Composable

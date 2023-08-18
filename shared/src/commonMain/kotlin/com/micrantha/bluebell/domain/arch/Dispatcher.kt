@@ -1,12 +1,17 @@
 package com.micrantha.bluebell.domain.arch
 
-typealias Dispatch = (Action) -> Unit
+interface Dispatch : Dispatcher {
+    operator fun invoke(action: Action) = dispatch(action)
+}
 
-fun interface Dispatcher {
+interface Dispatcher {
+
     fun dispatch(action: Action)
 
+    suspend fun send(action: Action)
+
     fun interface Registry {
-        fun register(dispatch: Dispatch)
+        fun register(dispatcher: Dispatcher)
     }
 
     interface Observer {

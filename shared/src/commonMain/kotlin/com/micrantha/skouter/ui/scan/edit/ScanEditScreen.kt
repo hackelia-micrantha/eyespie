@@ -60,17 +60,17 @@ class ScanEditScreen(
 
     @Composable
     override fun Render() {
-        val viewModel: ScanEditScreenModel = rememberScreenModel()
+        val screenModel: ScanEditScreenModel = rememberScreenModel()
 
         LaunchedEffect(Unit) {
-            viewModel.dispatch(Init(proof))
+            screenModel.dispatch(Init(proof))
         }
 
         LocationEnabledEffect()
 
-        val state by viewModel.state.collectAsState()
+        val state by screenModel.state.collectAsState()
 
-        Render(state, viewModel::dispatch)
+        Render(state, screenModel)
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
