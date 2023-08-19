@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Edit
@@ -25,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
@@ -68,10 +68,11 @@ class ScanScreen : Screen, StateRenderer<ScanUiState> {
             contentAlignment = Alignment.Center
         ) {
             when {
-                state.capture != null -> renderCapture(state.capture)
                 state.enabled.not() -> LoadingContent()
+                state.capture != null -> renderCapture(state, dispatch)
                 else -> renderCamera(state, dispatch)
             }
+
         }
     }
 }
@@ -99,6 +100,22 @@ private fun BoxWithConstraintsScope.renderCamera(
         dispatch.send(ScannedImage(it))
     }
 
+    renderClues(state, dispatch)
+}
+
+@Composable
+private fun BoxWithConstraintsScope.renderCapture(state: ScanUiState, dispatch: Dispatch) {
+    Image(
+        modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
+        painter = state.capture!!,
+        contentDescription = null
+    )
+    renderClues(state, dispatch)
+}
+
+@Composable
+private fun BoxWithConstraintsScope.renderClues(state: ScanUiState, dispatch: Dispatch) {
+
     if (state.overlays.isNotEmpty()) {
         ScannedOverlays(
             data = state.overlays
@@ -118,32 +135,33 @@ private fun BoxWithConstraintsScope.renderCamera(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
+            modifier = Modifier.background(
+                MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                RoundedCornerShape(Dimensions.content)
+            ),
             enabled = state.enabled,
             onClick = { dispatch(EditScan) }
         ) {
             Icon(
                 imageVector = Icons.Default.Edit,
+                tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )
         }
 
         IconButton(
+            modifier = Modifier.background(
+                MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+                RoundedCornerShape(Dimensions.content)
+            ),
             enabled = state.enabled,
             onClick = { dispatch(SaveScan) }
         ) {
             Icon(
                 imageVector = Icons.Default.Save,
+                tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )
         }
     }
-}
-
-@Composable
-private fun BoxWithConstraintsScope.renderCapture(capture: Painter) {
-    Image(
-        modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
-        painter = capture,
-        contentDescription = null
-    )
 }

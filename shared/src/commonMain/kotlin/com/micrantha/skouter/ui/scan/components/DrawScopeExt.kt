@@ -1,5 +1,8 @@
 package com.micrantha.skouter.ui.scan.components
 
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.drawOutline
@@ -7,7 +10,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import com.micrantha.skouter.ui.scan.preview.ScanBox
 import com.micrantha.skouter.ui.scan.preview.ScanMask
@@ -16,21 +18,30 @@ import com.micrantha.skouter.ui.scan.preview.ScanMask
 @OptIn(ExperimentalTextApi::class)
 fun DrawScope.drawScanBox(
     data: ScanBox,
-    textStyle: TextStyle,
     measurer: TextMeasurer
 ) {
     val bounds = data.scale(size.width, size.height)
 
+    val textSize = measurer.measure(data.label).size
+
+    val textPos = bounds.topLeft
+
     drawOutline(
         outline = Outline.Rectangle(bounds),
-        color = Color.Red,
+        color = Color.Red.copy(alpha = 0.5f),
         style = Stroke(2f)
+    )
+    drawRoundRect(
+        color = Color.Red,
+        alpha = 0.5f,
+        size = Size(textSize.width + 10f, textSize.height + 5f),
+        cornerRadius = CornerRadius(1f),
+        topLeft = textPos,
     )
     drawText(
         textMeasurer = measurer,
         text = data.label,
-        topLeft = bounds.topLeft,
-        style = textStyle
+        topLeft = textPos.plus(Offset(3f, 0f)),
     )
 }
 
