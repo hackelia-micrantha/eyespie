@@ -1,6 +1,7 @@
 package com.micrantha.skouter
 
 import android.content.Context
+import com.micrantha.bluebell.get
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.platform.scan.CameraAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ColorCaptureAnalyzer
@@ -23,6 +24,7 @@ import com.micrantha.skouter.platform.scan.model.ImageSegments
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindInstance
+import org.kodein.di.bindProvider
 import org.kodein.di.bindProviderOf
 import org.kodein.di.bindSingletonOf
 
@@ -36,9 +38,13 @@ fun androidDependencies(
     bindFactory { callback: AnalyzerCallback<ImageLabels> ->
         LabelStreamAnalyzer(context, callback)
     }
-    bindProviderOf(::LabelCaptureAnalyzer)
+    bindProvider {
+        LabelCaptureAnalyzer(get())
+    }
 
-    bindProviderOf(::ColorCaptureAnalyzer)
+    bindProvider {
+        ColorCaptureAnalyzer(get())
+    }
     bindFactory { callback: AnalyzerCallback<ImageColors> ->
         ColorStreamAnalyzer(context, callback)
     }
