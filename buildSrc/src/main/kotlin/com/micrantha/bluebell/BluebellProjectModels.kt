@@ -15,12 +15,14 @@ fun Project.downloadModels(models: BluebellModels) {
 
         execute("git", "lfs", "install")
 
-        for (id in models.ids) {
-            println("Fetching model: $id")
-            System.out.flush()
-            execute(arrayOf("git", "clone", "https://huggingface.co/$id"), outputDirectory)
+        if (outputDirectory.exists().not()) {
+            for (id in models.ids) {
+                println("Fetching model: $id")
+                System.out.flush()
+                execute(arrayOf("git", "clone", "https://huggingface.co/$id"), outputDirectory)
+            }
+            println("${models.ids.size} machine learning models retrieved.")
         }
-        println("${models.ids.size} machine learning models retrieved.")
 
         for (entry in models.files) {
             println("Creating ${entry.value}")

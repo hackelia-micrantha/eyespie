@@ -10,15 +10,10 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:8.0.2")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20")
+    //implementation("com.android.tools.build:gradle:8.1.4")
+    //implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
     implementation("com.github.gmazzo:gradle-buildconfig-plugin:3.1.0")
 
     implementation(gradleApi())
     implementation(localGroovy())
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
