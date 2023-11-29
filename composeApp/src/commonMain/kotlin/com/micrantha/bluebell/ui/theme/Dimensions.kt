@@ -18,6 +18,7 @@ object Dimensions {
     object Image {
         val placeholder = 200.dp
         val border = 1.dp
+        val button = 20.dp
     }
 
     object List {

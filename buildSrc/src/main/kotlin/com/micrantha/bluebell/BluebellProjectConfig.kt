@@ -29,7 +29,7 @@ fun Project.configureBuilds(config: BluebellConfig) {
 
             if (properties.isEmpty) {
                 println("please configure a properties file (${config.fileName}) containing configuration for:")
-                println("  supaBaseDomain, supaBaseKey, apiKey, userLoginEmail, userLoginPassword")
+                println("  supaBaseDomain, supaBaseKey, userLoginEmail, userLoginPassword")
                 error("no build configuration")
             }
 
