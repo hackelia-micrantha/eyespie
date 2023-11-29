@@ -15,6 +15,7 @@ import platform.Foundation.NSTimeZone
 import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.Foundation.timeZoneWithName
 import platform.UIKit.UIDevice
+import kotlin.experimental.ExperimentalNativeApi
 import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
 actual class Platform(
@@ -63,9 +64,10 @@ actual class Platform(
         }
     }
 }
-
+@OptIn(ExperimentalNativeApi::class)
 actual class WeakReference<out T : Any> actual constructor(target: T) {
     private val underlying: kotlin.native.ref.WeakReference<T> =
         kotlin.native.ref.WeakReference(target)
+
     actual val targetOrNull: T? get() = underlying.get()
 }

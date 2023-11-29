@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.platform.toImageBitmap
 import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.allocArray
 import kotlinx.cinterop.get
 import kotlinx.cinterop.nativeHeap
@@ -34,7 +35,8 @@ import platform.CoreVideo.CVPixelBufferUnlockBaseAddress
 import platform.CoreVideo.kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
 import platform.ImageIO.CGImagePropertyOrientation
 
-actual data class CameraImage(
+@OptIn(ExperimentalForeignApi::class)
+actual data class CameraImage constructor(
     internal val data: CVImageBufferRef,
     val orientation: CGImagePropertyOrientation
 ) {
@@ -46,7 +48,7 @@ actual data class CameraImage(
     actual fun toByteArray(): ByteArray {
         if (bytes == null) {
             try {
-                CVPixelBufferLockBaseAddress(data, 0)
+                CVPixelBufferLockBaseAddress(data, 0u)
 
                 bytes = when (CVPixelBufferGetPixelFormatType(data)) {
                     kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange -> yuvToBitmap(data)
@@ -56,7 +58,7 @@ actual data class CameraImage(
                 Log.e("converting camera image", err)
                 throw err
             } finally {
-                CVPixelBufferUnlockBaseAddress(data, 0)
+                CVPixelBufferUnlockBaseAddress(data, 0u)
             }
         }
         return bytes!!
@@ -66,7 +68,7 @@ actual data class CameraImage(
         var colorSpace: CGColorSpaceRef? = null
         var context: CGContextRef? = null
         return try {
-            CVPixelBufferLockBaseAddress(data, 0)
+            CVPixelBufferLockBaseAddress(data, 0u)
 
             val bytesPerRow = CVPixelBufferGetBytesPerRow(data)
             val baseAddress = CVPixelBufferGetBaseAddress(data)
@@ -76,7 +78,7 @@ actual data class CameraImage(
                 baseAddress,
                 width.toULong(),
                 height.toULong(),
-                8,
+                8u,
                 bytesPerRow,
                 colorSpace,
                 kCGBitmapByteOrder32Little or CGImageAlphaInfo.kCGImageAlphaPremultipliedFirst.value
@@ -86,14 +88,14 @@ actual data class CameraImage(
         } finally {
             CGColorSpaceRelease(colorSpace)
             CGContextRelease(context)
-            CVPixelBufferUnlockBaseAddress(data, 0)
+            CVPixelBufferUnlockBaseAddress(data, 0u)
         }
     }
 
     private fun yuvToBitmap(yuvBuffer: CVPixelBufferRef): ByteArray {
         // Get Y and UV planes
-        val yPlane = CVPixelBufferGetBaseAddressOfPlane(yuvBuffer, 0)!!.reinterpret<ByteVar>()
-        val uvPlane = CVPixelBufferGetBaseAddressOfPlane(yuvBuffer, 1)!!.reinterpret<ByteVar>()
+        val yPlane = CVPixelBufferGetBaseAddressOfPlane(yuvBuffer, 0u)!!.reinterpret<ByteVar>()
+        val uvPlane = CVPixelBufferGetBaseAddressOfPlane(yuvBuffer, 1u)!!.reinterpret<ByteVar>()
 
         // Get Y, U, and V plane sizes
         val yPlaneBytesPerRow = width

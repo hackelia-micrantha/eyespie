@@ -11,6 +11,7 @@ import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageLabel
 import com.micrantha.skouter.platform.scan.model.ImageObject
 import com.micrantha.skouter.platform.scan.model.ImageObjects
+import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreGraphics.CGRectGetHeight
 import platform.CoreGraphics.CGRectGetMinX
 import platform.CoreGraphics.CGRectGetMinY
@@ -26,13 +27,14 @@ actual class ObjectCaptureAnalyzer(config: ObjectCaptureConfig = config()) :
     CaptureAnalyzer<ImageObjects>
 
 actual class ObjectStreamAnalyzer(
+    callback: AnalyzerCallback<ImageObjects>,
     config: ObjectCaptureConfig = config(),
-    callback: AnalyzerCallback<ImageObjects>
 ) : CameraStreamAnalyzer<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>(
     config,
     callback
 ), StreamAnalyzer
 
+@OptIn(ExperimentalForeignApi::class)
 private fun config(): ObjectCaptureConfig = object : ObjectCaptureConfig {
     override fun request() = VNCoreMLRequest()
 

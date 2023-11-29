@@ -4,6 +4,7 @@ import com.micrantha.skouter.platform.asException
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
@@ -30,6 +31,7 @@ abstract class CameraCaptureAnalyzer<out T, R : VNRequest, O : VNObservation>(
     private val config: CameraAnalyzerConfig<T, R, O>
 ) : CaptureAnalyzer<T>, CameraAnalyzerConfig<T, R, O> by config {
 
+    @OptIn(ExperimentalForeignApi::class)
     override suspend fun analyze(image: CameraImage): Result<T> = try {
         val imageRequestHandler =
             VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
@@ -54,6 +56,7 @@ abstract class CameraStreamAnalyzer<out T, out R : VNRequest, O : VNObservation>
     private val callback: AnalyzerCallback<T>
 ) : CameraAnalyzerConfig<T, R, O> by config, StreamAnalyzer {
 
+    @OptIn(ExperimentalForeignApi::class)
     override fun analyze(image: CameraImage) {
         val imageRequestHandler =
             VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
@@ -70,6 +73,7 @@ private val executeQueue by lazy {
     dispatch_queue_create(label = "executeImageRequest", null)
 }
 
+@OptIn(ExperimentalForeignApi::class)
 private fun <T : VNRequest> VNImageRequestHandler.execute(
     request: T,
     onError: (Throwable) -> Unit,

@@ -1,5 +1,5 @@
 import SwiftUI
-import shared
+import composeApp
 
 struct ComposeView: UIViewControllerRepresentable {
     var application = IOSApplication()

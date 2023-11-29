@@ -9,6 +9,7 @@ import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageSegment
 import com.micrantha.skouter.platform.scan.model.ImageSegments
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
 import platform.CoreGraphics.CGBitmapContextCreate
 import platform.CoreGraphics.CGColorSpaceCreateDeviceRGB
@@ -39,14 +40,15 @@ actual class SegmentCaptureAnalyzer(
     CaptureAnalyzer<ImageSegments>
 
 actual class SegmentStreamAnalyzer(
+    callback: AnalyzerCallback<ImageSegments>,
     config: SegmentAnalyzerConfig = config(),
-    callback: AnalyzerCallback<ImageSegments>
 ) : CameraStreamAnalyzer<ImageSegments, VNDetectContoursRequest, VNContoursObservation>(
     config,
     callback
 ), StreamAnalyzer
 
 
+@OptIn(ExperimentalForeignApi::class)
 private fun config(): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
 
     override val filter = { results: List<*>? ->
@@ -64,7 +66,7 @@ private fun config(): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
 
     private fun mask(imageBuffer: CVImageBufferRef, path: CGPathRef?): CVImageBufferRef {
         return memScoped {
-            CVPixelBufferLockBaseAddress(imageBuffer, 0)
+            CVPixelBufferLockBaseAddress(imageBuffer, 0u)
 
             val baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
             val bytesPerRow = CVPixelBufferGetBytesPerRow(imageBuffer)
@@ -77,7 +79,7 @@ private fun config(): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
                 baseAddress,
                 width,
                 height,
-                8,
+                8u,
                 bytesPerRow,
                 colorSpace,
                 CGImageAlphaInfo.kCGImageAlphaPremultipliedLast.value
@@ -93,7 +95,7 @@ private fun config(): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
             )
 
             // Unlock the pixel buffer
-            CVPixelBufferUnlockBaseAddress(imageBuffer, 0)
+            CVPixelBufferUnlockBaseAddress(imageBuffer, 0u)
 
             imageBuffer
         }

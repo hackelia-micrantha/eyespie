@@ -9,6 +9,7 @@ import co.touchlab.stately.freeze
 import com.micrantha.skouter.platform.asException
 import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import kotlinx.cinterop.CValue
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc
 import kotlinx.cinterop.memScoped
@@ -52,6 +53,7 @@ import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
 import platform.darwin.dispatch_queue_create
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun CameraScanner(
     modifier: Modifier,
@@ -86,6 +88,7 @@ private fun rememberCameraStream(
     }
 }
 
+@OptIn(ExperimentalForeignApi::class)
 class CameraStream(
     private val device: AVCaptureDevice,
     private val onCameraImage: CameraScannerDispatch
@@ -109,6 +112,7 @@ class CameraStream(
             }
         }
     }
+
 
     private fun CMSampleBufferRef?.image(orientation: AVCaptureVideoOrientation): CameraImage? {
         val pixelBuffer = CMSampleBufferGetImageBuffer(this) ?: return null

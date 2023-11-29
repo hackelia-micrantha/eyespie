@@ -21,8 +21,8 @@ actual class EmbeddingCaptureAnalyzer(
 ), CaptureAnalyzer<ImageEmbeddings>
 
 actual class EmbeddingStreamAnalyzer(
+    callback: AnalyzerCallback<ImageEmbeddings>,
     config: EmbeddingAnalyzerConfig = config(),
-    callback: AnalyzerCallback<ImageEmbeddings>
 ) : CameraStreamAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
     config,
     callback
