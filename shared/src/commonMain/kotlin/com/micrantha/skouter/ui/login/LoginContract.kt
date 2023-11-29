@@ -28,4 +28,6 @@ sealed interface LoginAction : Action {
     data class ChangedPassword(val password: String) : LoginAction
 
     data class ChangedEmail(val email: String) : LoginAction
+
+    data object ResetStatus: LoginAction
 }

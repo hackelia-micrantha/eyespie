@@ -20,6 +20,7 @@ import com.micrantha.skouter.ui.login.LoginAction.ChangedPassword
 import com.micrantha.skouter.ui.login.LoginAction.OnError
 import com.micrantha.skouter.ui.login.LoginAction.OnLogin
 import com.micrantha.skouter.ui.login.LoginAction.OnSuccess
+import com.micrantha.skouter.ui.login.LoginAction.ResetStatus
 
 class LoginEnvironment(
     private val context: ScreenContext,
@@ -42,6 +43,7 @@ class LoginEnvironment(
         is OnSuccess -> state.copy(status = Default)
         is OnLogin -> state.copy(status = busy(Strings.LoggingIn))
         is OnError -> state.copy(status = failure(Strings.LoginFailed))
+        is ResetStatus -> state.copy(status = Default)
         else -> state
     }
 
