@@ -1,3 +1,5 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -36,7 +38,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.ui)
             implementation(compose.foundation)
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(compose.animation)
             implementation(compose.animationGraphics)
@@ -162,8 +164,5 @@ bluebell {
         packageName = "com.micrantha.skouter"
         className = "SkouterConfig"
         fileName = "skouter.properties"
-    }
-    models {
-        ids = listOf("microsoft/resnet-50")
     }
 }
