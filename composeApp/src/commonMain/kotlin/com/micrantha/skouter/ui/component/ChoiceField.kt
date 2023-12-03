@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
@@ -27,7 +26,6 @@ data class Choice(
     val key: String,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChoiceField(
     modifier: Modifier = Modifier,

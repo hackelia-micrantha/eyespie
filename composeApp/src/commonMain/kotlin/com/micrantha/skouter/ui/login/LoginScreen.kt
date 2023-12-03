@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,7 +54,6 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
         Render(state, screenModel)
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Render(state: LoginUiState, dispatch: Dispatch) {
         Box(
