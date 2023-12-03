@@ -10,7 +10,7 @@ SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
+SELECT pg_catalog.set_config('search_path', 'tiger', false);
 SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
@@ -49,6 +49,8 @@ CREATE EXTENSION IF NOT EXISTS "cube" WITH SCHEMA "extensions";
 --
 
 CREATE EXTENSION IF NOT EXISTS "earthdistance" WITH SCHEMA "extensions";
+
+CREATE SCHEMA IF NOT EXISTS "tiger";
 
 
 --

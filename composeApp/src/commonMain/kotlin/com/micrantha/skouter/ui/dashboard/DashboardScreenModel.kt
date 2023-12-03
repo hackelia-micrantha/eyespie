@@ -1,6 +1,6 @@
 package com.micrantha.skouter.ui.dashboard
 
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.micrantha.bluebell.ui.screen.MappedScreenModel
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import org.kodein.di.instance
@@ -13,7 +13,7 @@ class DashboardScreenModel(
     context, initialState, DashboardEnvironment::map
 ) {
 
-    private val environment: DashboardEnvironment by di.on(this).instance(arg = coroutineScope)
+    private val environment: DashboardEnvironment by di.on(this).instance(arg = screenModelScope)
 
     init {
         store.addReducer(environment::reduce)

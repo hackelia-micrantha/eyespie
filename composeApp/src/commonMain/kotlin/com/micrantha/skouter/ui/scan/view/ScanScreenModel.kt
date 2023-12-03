@@ -1,6 +1,6 @@
 package com.micrantha.skouter.ui.scan.view
 
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.micrantha.bluebell.ui.screen.MappedScreenModel
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import kotlinx.coroutines.CoroutineScope
@@ -16,7 +16,7 @@ class ScanScreenModel(
     mapper::map
 ) {
     private val environment by di.on(this)
-        .instance<CoroutineScope, ScanEnvironment>(arg = coroutineScope)
+        .instance<CoroutineScope, ScanEnvironment>(arg = screenModelScope)
 
     init {
         store.addReducer(environment::reduce).applyEffect(environment::invoke)

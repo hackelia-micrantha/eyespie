@@ -1,7 +1,7 @@
 package com.micrantha.bluebell.ui.screen
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Stateful
@@ -21,9 +21,7 @@ import org.kodein.di.instance
 abstract class ContextualScreenModel(
     protected val context: ScreenContext
 ) : ScreenModel, Dispatcher by context.dispatcher, Dispatch {
-
     protected val router: Router = context.router
-
     protected val i18n: LocalizedRepository = context.i18n
 }
 
@@ -34,7 +32,7 @@ abstract class FluxScreenModel<State>(
     context: ScreenContext,
     initialState: State
 ) : ContextualScreenModel(context), DIAware by context {
-    protected val store: Store<State> by screenModelStore(initialState, coroutineScope)
+    protected val store: Store<State> by screenModelStore(initialState, screenModelScope)
 }
 
 private fun <State> FluxScreenModel<State>.screenModelStore(
@@ -67,6 +65,5 @@ abstract class MappedScreenModel<State, UiState>(
     initialState: State,
     private val mapper: StateMapper<State, UiState>
 ) : FluxScreenModel<State>(context, initialState), Stateful<UiState> {
-
-    override val state: StateFlow<UiState> = store.state.mapIn(coroutineScope, mapper::map)
+    override val state: StateFlow<UiState> = store.state.mapIn(screenModelScope, mapper::map)
 }
