@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan.view
+package com.micrantha.skouter.ui.scan.capture
 
 import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.arch.Action
@@ -13,28 +13,28 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.repository.LocationRepository
 import com.micrantha.skouter.ui.component.combine
+import com.micrantha.skouter.ui.scan.capture.ScanAction.EditSaved
+import com.micrantha.skouter.ui.scan.capture.ScanAction.EditScan
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ImageSaved
+import com.micrantha.skouter.ui.scan.capture.ScanAction.SaveError
+import com.micrantha.skouter.ui.scan.capture.ScanAction.SaveScan
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScanSavable
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedColor
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedDetection
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedImage
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedLabel
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedMatch
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedSegment
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
-import com.micrantha.skouter.ui.scan.view.ScanAction.EditSaved
-import com.micrantha.skouter.ui.scan.view.ScanAction.EditScan
-import com.micrantha.skouter.ui.scan.view.ScanAction.ImageSaved
-import com.micrantha.skouter.ui.scan.view.ScanAction.SaveError
-import com.micrantha.skouter.ui.scan.view.ScanAction.SaveScan
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScanSavable
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedColor
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedDetection
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedImage
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedLabel
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedMatch
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedSegment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class ScanEnvironment(
+class ScanCaptureEnvironment(
     private val scope: CoroutineScope,
     private val context: ScreenContext,
     private val takeCaptureUseCase: TakeCaptureUseCase,
@@ -43,7 +43,7 @@ class ScanEnvironment(
     private val subAnalyzeClueUseCase: SubAnalyzeClueUseCase,
     private val currentSession: CurrentSession,
     private val locationRepository: LocationRepository,
-    private val mapper: ScanStateMapper,
+    private val mapper: ScanCaptureStateMapper,
 ) : Reducer<ScanState>, Effect<ScanState>,
     Router by context.router,
     FileSystem by context.fileSystem,

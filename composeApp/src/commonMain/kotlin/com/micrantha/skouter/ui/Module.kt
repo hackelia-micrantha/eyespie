@@ -17,6 +17,10 @@ import com.micrantha.skouter.ui.game.list.GameListScreenModel
 import com.micrantha.skouter.ui.login.LoginEnvironment
 import com.micrantha.skouter.ui.login.LoginScreen
 import com.micrantha.skouter.ui.login.LoginScreenModel
+import com.micrantha.skouter.ui.scan.capture.ScanCaptureEnvironment
+import com.micrantha.skouter.ui.scan.capture.ScanCaptureScreen
+import com.micrantha.skouter.ui.scan.capture.ScanCaptureScreenModel
+import com.micrantha.skouter.ui.scan.capture.ScanCaptureStateMapper
 import com.micrantha.skouter.ui.scan.edit.ScanEditEnvironment
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreenModel
 import com.micrantha.skouter.ui.scan.guess.ScanGuessArgs
@@ -30,10 +34,6 @@ import com.micrantha.skouter.ui.scan.usecase.MatchCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
-import com.micrantha.skouter.ui.scan.view.ScanEnvironment
-import com.micrantha.skouter.ui.scan.view.ScanScreen
-import com.micrantha.skouter.ui.scan.view.ScanScreenModel
-import com.micrantha.skouter.ui.scan.view.ScanStateMapper
 import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
@@ -64,11 +64,11 @@ internal fun uiModules() = DI.Module("Skouter UI") {
     bindFactory { scope: CoroutineScope -> DashboardEnvironment(scope, get(), get()) }
     bindProvider { DashboardScreenModel(get()) }
 
-    bindProviderOf(::ScanScreen)
-    bindProviderOf(::ScanStateMapper)
-    bindProviderOf(::ScanScreenModel)
+    bindProviderOf(::ScanCaptureScreen)
+    bindProviderOf(::ScanCaptureStateMapper)
+    bindProviderOf(::ScanCaptureScreenModel)
     bindFactory { scope: CoroutineScope ->
-        ScanEnvironment(
+        ScanCaptureEnvironment(
             scope, get(), get(), get(), get(), get(), get(), get(), get()
         )
     }

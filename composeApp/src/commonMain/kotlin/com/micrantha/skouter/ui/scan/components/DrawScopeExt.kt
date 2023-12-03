@@ -11,8 +11,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.drawText
-import com.micrantha.skouter.ui.scan.view.ScanBox
-import com.micrantha.skouter.ui.scan.view.ScanMask
+import com.micrantha.skouter.ui.scan.capture.ScanBox
+import com.micrantha.skouter.ui.scan.capture.ScanMask
 
 
 @OptIn(ExperimentalTextApi::class)

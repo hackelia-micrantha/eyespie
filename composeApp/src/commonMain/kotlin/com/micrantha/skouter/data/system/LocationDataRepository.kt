@@ -26,7 +26,7 @@ class LocationDataRepository(
         localSource.startTracking()
 
         exponentialBackoffToRemote()
-        
+
         flowToCurrentSession()
     }
 

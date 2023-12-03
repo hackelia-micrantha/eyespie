@@ -64,6 +64,7 @@ actual class Platform(
         }
     }
 }
+
 @OptIn(ExperimentalNativeApi::class)
 actual class WeakReference<out T : Any> actual constructor(target: T) {
     private val underlying: kotlin.native.ref.WeakReference<T> =

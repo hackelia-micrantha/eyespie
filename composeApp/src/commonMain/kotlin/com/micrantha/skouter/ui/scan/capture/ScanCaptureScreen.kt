@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan.view
+package com.micrantha.skouter.ui.scan.capture
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,16 +34,16 @@ import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.skouter.platform.scan.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
+import com.micrantha.skouter.ui.scan.capture.ScanAction.EditScan
+import com.micrantha.skouter.ui.scan.capture.ScanAction.SaveScan
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedImage
 import com.micrantha.skouter.ui.scan.components.ScannedClues
 import com.micrantha.skouter.ui.scan.components.ScannedOverlays
-import com.micrantha.skouter.ui.scan.view.ScanAction.EditScan
-import com.micrantha.skouter.ui.scan.view.ScanAction.SaveScan
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedImage
 import dev.icerock.moko.permissions.Permission.CAMERA
 import dev.icerock.moko.permissions.PermissionsController
 import org.kodein.di.compose.rememberInstance
 
-class ScanScreen : Screen, StateRenderer<ScanUiState> {
+class ScanCaptureScreen : Screen, StateRenderer<ScanUiState> {
     @Composable
     override fun Content() {
         val permissions by rememberInstance<PermissionsController>()
@@ -54,7 +54,7 @@ class ScanScreen : Screen, StateRenderer<ScanUiState> {
 
         LocationEnabledEffect()
 
-        val screenModel: ScanScreenModel = rememberScreenModel()
+        val screenModel: ScanCaptureScreenModel = rememberScreenModel()
 
         val state by screenModel.state.collectAsState()
 

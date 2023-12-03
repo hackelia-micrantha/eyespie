@@ -35,13 +35,13 @@ val <T> UiResult<T>.isFailure: Boolean
     get() = this is Failure
 
 val <T> UiResult<T>.error: String?
-    get() = when(this) {
+    get() = when (this) {
         is Failure -> message
         else -> null
     }
 
 val <T> UiResult<T>.message: String?
-    get() = when(this) {
+    get() = when (this) {
         is Busy -> message
         is Failure -> message
         is Empty -> message

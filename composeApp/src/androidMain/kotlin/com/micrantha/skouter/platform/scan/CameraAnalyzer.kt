@@ -38,7 +38,7 @@ class CameraAnalyzer(
         if (image.imageInfo.timestamp - lastJob < 500) {
             return
         }
-        
+
         lastJob = image.imageInfo.timestamp
 
         val uiImage = CameraImage(

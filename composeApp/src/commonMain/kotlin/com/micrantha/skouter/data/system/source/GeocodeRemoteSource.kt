@@ -1,8 +1,8 @@
 package com.micrantha.skouter.data.system.source
 
 import com.micrantha.skouter.data.client.createHttpClient
-import io.ktor.client.request.*
-import io.ktor.http.*
+import io.ktor.client.request.get
+import io.ktor.http.URLProtocol
 
 class GeocodeRemoteSource {
     private val client by lazy {

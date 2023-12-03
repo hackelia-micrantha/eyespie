@@ -11,11 +11,11 @@ import com.micrantha.skouter.domain.repository.DetectionRepository
 import com.micrantha.skouter.domain.repository.LabelRepository
 import com.micrantha.skouter.domain.repository.SegmentRepository
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScanError
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedColor
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedDetection
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedLabel
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedSegment
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScanError
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedColor
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedDetection
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedLabel
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedSegment
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 

@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan.view
+package com.micrantha.skouter.ui.scan.capture
 
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.micrantha.bluebell.data.weightedRandomSample
@@ -9,7 +9,7 @@ import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.model.Proof
 
-class ScanStateMapper : StateMapper<ScanState, ScanUiState> {
+class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
 
     override fun map(state: ScanState) = ScanUiState(
         clues = clues(state),

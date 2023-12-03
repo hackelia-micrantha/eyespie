@@ -36,6 +36,7 @@ class GameDetailsEnvironment(
             status = Ready(),
             game = action.game,
         )
+
         is Failure -> state.copy(status = failure(action.error.toi18n()))
         else -> state
     }

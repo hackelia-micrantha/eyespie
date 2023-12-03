@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan.view
+package com.micrantha.skouter.ui.scan.capture
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap

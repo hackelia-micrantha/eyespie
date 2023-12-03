@@ -8,9 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.rememberTextMeasurer
-import com.micrantha.skouter.ui.scan.view.ScanBox
-import com.micrantha.skouter.ui.scan.view.ScanMask
-import com.micrantha.skouter.ui.scan.view.ScanOverlay
+import com.micrantha.skouter.ui.scan.capture.ScanBox
+import com.micrantha.skouter.ui.scan.capture.ScanMask
+import com.micrantha.skouter.ui.scan.capture.ScanOverlay
 
 @OptIn(ExperimentalTextApi::class)
 @Composable

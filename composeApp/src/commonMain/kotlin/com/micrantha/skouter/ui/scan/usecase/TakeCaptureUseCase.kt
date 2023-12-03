@@ -6,7 +6,7 @@ import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.domain.repository.MatchRepository
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.ui.scan.view.ScanAction.ScannedMatch
+import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedMatch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext

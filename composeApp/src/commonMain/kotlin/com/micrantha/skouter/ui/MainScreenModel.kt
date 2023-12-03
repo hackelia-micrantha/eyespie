@@ -1,7 +1,7 @@
 package com.micrantha.skouter.ui
 
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.coroutineScope
+import cafe.adriel.voyager.core.model.screenModelScope
 import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.ui.components.Router
@@ -21,7 +21,7 @@ class MainScreenModel(
 ) : ScreenModel, Dispatcher, Router by context.router {
 
     override fun dispatch(action: Action) {
-        coroutineScope.launch {
+        screenModelScope.launch {
             send(action)
         }
     }
