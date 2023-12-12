@@ -33,7 +33,6 @@ lifecycleRuntimeKtx = "2.6.2"
 okio = "3.6.0"
 paletteKtx = "1.0.0"
 permissionsCompose = "0.16.0"
-tasksVision = "0.20230731"
 voyagerNavigator = "1.0.0-rc10"
 tensorflowLiteSupport = "0.4.4"
 tensorflowLite = "2.14.0"
@@ -88,7 +87,6 @@ supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supaBaseKt" }
 supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supaBaseKt" }
 supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supaBaseKt" }
-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "tasksVision" }
 voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyagerNavigator" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerNavigator" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerNavigator" }

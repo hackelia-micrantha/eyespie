@@ -119,8 +119,6 @@ kotlin {
             implementation(libs.androidx.camera.view)
             implementation(libs.androidx.camera.extensions)
 
-            implementation(libs.tasks.vision)
-
             implementation(libs.tensorflow.lite)
             implementation(libs.tensorflow.lite.support)
             implementation(libs.tensorflow.lite.metadata)
