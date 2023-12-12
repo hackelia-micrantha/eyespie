@@ -1,6 +1,7 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 
 plugins {
+    alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
@@ -11,6 +12,17 @@ plugins {
 }
 
 kotlin {
+    cocoapods {
+        version = "1.0"
+        summary = "Native dependencies for ${project.name}"
+
+        framework {
+            baseName = "bluebell"
+        }
+
+        pod("Reachability")
+    }
+
     applyDefaultHierarchyTemplate()
 
     androidTarget {

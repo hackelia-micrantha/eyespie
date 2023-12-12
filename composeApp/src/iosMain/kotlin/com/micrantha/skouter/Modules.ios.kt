@@ -1,5 +1,6 @@
 package com.micrantha.skouter
 
+import com.micrantha.bluebell.platform.ConnectivityStatus
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.data.account.AccountDataRepository
 import com.micrantha.skouter.data.clue.ColorDataRepository
@@ -48,6 +49,8 @@ import org.kodein.di.bindSingleton
 import org.kodein.di.delegate
 
 fun iosModules(app: UIApplicationController) = DI {
+
+    bindProviderOf(::ConnectivityStatus)
 
     bindSingleton { Platform(app) }
 
