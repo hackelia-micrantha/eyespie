@@ -2,6 +2,7 @@ package com.micrantha.skouter
 
 import android.content.Context
 import com.micrantha.bluebell.get
+import com.micrantha.bluebell.platform.ConnectivityStatus
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.skouter.platform.scan.CameraAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ColorCaptureAnalyzer
@@ -32,6 +33,8 @@ fun androidDependencies(
     context: Context,
 ) = DI {
     bindInstance { context }
+
+    bindProviderOf(::ConnectivityStatus)
 
     bindSingletonOf(::Platform)
 
