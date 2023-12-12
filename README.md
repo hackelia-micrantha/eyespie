@@ -5,11 +5,29 @@
 
 > A game of "eye spy" with machine vision for clues and proof.
 
-See the [ROADMAP](https://github.com/orgs/hackelia-micrantha/projects/3/views/2) for project phases.
+See the [project phases and sprints](https://github.com/orgs/hackelia-micrantha/projects/3/views/2).
+
+## Use Case
+
+Alice has a photo of something, the app generates clues and a fake image (color, labels)
+
+Bob is walking nearby (or is playing with alice) and is notified.
+
+Bob takes a picture of the thing, the app generates proof and makes a guess (embeddings).
+
+Bob guesses the photo and gets points, or has to guess again.
+
+Alice gets participation points.
 
 ## History
 
-[Ongoing prototype since 2016](https://ryanjennin.gs/posts/scouter-demo/), doing the redo in spare time.
+Originally a school project for native android, an [Ongoing prototype since 2016](https://ryanjennin.gs/posts/scouter-demo/).
+
+Briefly attempted a rewrite in react-native in "spare time", until Kotlin multiplatform became available.
+
+## Notes
+
+Apologies for the lack of testing and continuous integration - resource constrained and am a perfect programmer.
 
 ## Author
 
@@ -29,5 +47,4 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2023 [Ryan Jennings](https://github.com/ryjen).
 
-This project is [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licensed.
-
+This project is [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) licensed. Please send me any changes you make.
