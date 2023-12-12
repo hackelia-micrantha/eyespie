@@ -1,12 +1,14 @@
 package com.micrantha.bluebell.platform
 
-import cocoapods.Reachability.*
+import cocoapods.Reachability.Reachability
 import com.micrantha.bluebell.data.Log
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
 
+@OptIn(ExperimentalForeignApi::class)
 actual class ConnectivityStatus {
     private val networkStatus = MutableStateFlow(false)
 
