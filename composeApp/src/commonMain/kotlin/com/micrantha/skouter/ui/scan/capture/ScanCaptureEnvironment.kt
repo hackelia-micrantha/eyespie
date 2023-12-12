@@ -12,6 +12,7 @@ import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.data.account.model.CurrentSession
 import com.micrantha.skouter.domain.repository.LocationRepository
+import com.micrantha.skouter.platform.scan.crop
 import com.micrantha.skouter.ui.component.combine
 import com.micrantha.skouter.ui.scan.capture.ScanAction.EditSaved
 import com.micrantha.skouter.ui.scan.capture.ScanAction.EditScan
@@ -91,8 +92,10 @@ class ScanCaptureEnvironment(
             }
 
             is ScannedImage -> analyzeCaptureUseCase(action.image)
-                .onEach { res -> res.onSuccess(::dispatch) }
-                .launchIn(scope)
+                .onSuccess {
+                    it.onEach(::dispatch)
+                        .launchIn(scope)
+                }
 
             is ScanAction.Back -> context.router.navigateBack()
         }
@@ -121,7 +124,7 @@ class ScanCaptureEnvironment(
         )
 
         is ScannedMatch -> state.copy(
-            match = action.match.firstOrNull()
+            match = action.match
         )
 
         is ScanSavable -> state.copy(

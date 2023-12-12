@@ -3,14 +3,13 @@ package com.micrantha.skouter.platform.scan
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 
-expect class CameraImage {
+expect class CameraImage
 
-    val width: Int
-    val height: Int
+expect val CameraImage.width: Int
+expect val CameraImage.height: Int
 
-    fun toByteArray(): ByteArray
+expect fun CameraImage.toByteArray(): ByteArray
 
-    fun toImageBitmap(): ImageBitmap
+expect fun CameraImage.toImageBitmap(): ImageBitmap
 
-    fun crop(rect: Rect): CameraImage
-}
+expect fun CameraImage.crop(rect: Rect): CameraImage

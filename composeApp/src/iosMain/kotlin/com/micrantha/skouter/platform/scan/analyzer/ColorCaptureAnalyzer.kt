@@ -4,16 +4,13 @@ import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageColors
+import com.micrantha.skouter.platform.scan.model.ScanColors
 
-actual class ColorCaptureAnalyzer : CaptureAnalyzer<ImageColors> {
-    actual override suspend fun analyze(image: CameraImage): Result<ImageColors> {
+actual class ColorCaptureAnalyzer : CaptureAnalyzer<ScanColors>, StreamAnalyzer<ScanColors> {
+    actual override suspend fun analyzeCapture(image: CameraImage): Result<ScanColors> {
         return Result.failure(NotImplementedError())
     }
-}
 
-actual class ColorStreamAnalyzer(
-    callback: AnalyzerCallback<ImageColors>
-) : StreamAnalyzer {
-    actual override fun analyze(image: CameraImage) = Unit
+    actual override fun analyzeStream(image: CameraImage, callback: AnalyzerCallback<ScanColors>) =
+        Unit
 }

@@ -1,6 +1,6 @@
 package com.micrantha.skouter.domain.model
 
-import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ScanEmbedding
 import kotlinx.datetime.Instant
 
 data class Thing(
@@ -13,7 +13,7 @@ data class Thing(
     val imageUrl: ImagePath,
     val clues: Clues,
     val location: Location.Point,
-    val embedding: ImageEmbedding
+    val embedding: ScanEmbedding
 ) : Entity, Creatable {
 
     data class Guess(
@@ -33,7 +33,7 @@ data class Thing(
 
     data class Match(
         override val id: String,
-        val image: ImageEmbedding,
+        val image: ScanEmbedding,
         val similarity: Float
     ) : Entity
 }

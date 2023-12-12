@@ -1,8 +1,8 @@
 package com.micrantha.skouter.platform.scan.model
 
-data class ImageColor(
+data class ScanColor(
     val name: String,
     val rgb: Int,
 )
 
-typealias ImageColors = List<ImageColor>
+typealias ScanColors = List<ScanColor>

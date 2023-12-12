@@ -2,8 +2,6 @@ package com.micrantha.skouter.platform.scan.model
 
 import com.micrantha.skouter.platform.scan.CameraImage
 
-data class ImageSegment(
-    val mask: CameraImage
-)
+typealias ScanSegment = CameraImage
 
-typealias ImageSegments = List<ImageSegment>
+typealias ScanSegments = List<ScanSegment>

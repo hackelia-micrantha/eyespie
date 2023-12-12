@@ -37,11 +37,11 @@ import com.micrantha.skouter.platform.scan.analyzer.ObjectStreamAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentStreamAnalyzer
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
-import com.micrantha.skouter.platform.scan.model.ImageColors
 import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
-import com.micrantha.skouter.platform.scan.model.ImageLabels
-import com.micrantha.skouter.platform.scan.model.ImageObjects
-import com.micrantha.skouter.platform.scan.model.ImageSegments
+import com.micrantha.skouter.platform.scan.model.ScanColors
+import com.micrantha.skouter.platform.scan.model.ScanLabels
+import com.micrantha.skouter.platform.scan.model.ScanObjects
+import com.micrantha.skouter.platform.scan.model.ScanSegments
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProviderOf
@@ -54,21 +54,21 @@ fun iosModules(app: UIApplicationController) = DI {
 
     bindSingleton { Platform(app) }
 
-    bindFactory { callback: AnalyzerCallback<ImageLabels> ->
+    bindFactory { callback: AnalyzerCallback<ScanLabels> ->
         LabelStreamAnalyzer(callback)
     }
     bindProviderOf(::LabelCaptureAnalyzer)
 
     bindProviderOf(::ColorCaptureAnalyzer)
-    bindFactory { callback: AnalyzerCallback<ImageColors> ->
+    bindFactory { callback: AnalyzerCallback<ScanColors> ->
         ColorStreamAnalyzer(callback)
     }
     bindProviderOf(::ObjectCaptureAnalyzer)
-    bindFactory { callback: AnalyzerCallback<ImageObjects> ->
+    bindFactory { callback: AnalyzerCallback<ScanObjects> ->
         ObjectStreamAnalyzer(callback)
     }
     bindProviderOf(::SegmentCaptureAnalyzer)
-    bindFactory { callback: AnalyzerCallback<ImageSegments> ->
+    bindFactory { callback: AnalyzerCallback<ScanSegments> ->
         SegmentStreamAnalyzer(callback)
     }
     bindProviderOf(::EmbeddingCaptureAnalyzer)

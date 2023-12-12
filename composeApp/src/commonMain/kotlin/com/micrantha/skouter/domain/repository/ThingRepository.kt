@@ -5,7 +5,7 @@ import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
 import com.micrantha.skouter.domain.model.ThingList
 import com.micrantha.skouter.domain.model.ThingMatches
-import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ScanEmbedding
 
 interface ThingRepository {
 
@@ -13,7 +13,7 @@ interface ThingRepository {
 
     suspend fun thing(thingID: String): Result<Thing>
 
-    suspend fun match(embedding: ImageEmbedding): Result<ThingMatches>
+    suspend fun match(embedding: ScanEmbedding): Result<ThingMatches>
 
     suspend fun create(
         proof: Proof
