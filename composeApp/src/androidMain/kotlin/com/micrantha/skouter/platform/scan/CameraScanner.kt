@@ -16,13 +16,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
-import org.kodein.di.compose.rememberFactory
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.ceil
@@ -66,7 +66,10 @@ actual fun CameraScanner(
 
     val screenSize = Size(config.widthPixels, config.heightPixels + statusBarHeight)
 
-    val analyzer by rememberFactory<CameraScannerDispatch, CameraAnalyzer>()
+    val scope = rememberCoroutineScope()
+
+    val analyzer = remember { CameraAnalyzer(onCameraImage, scope) }
+
     val imageCapture = remember {
         ImageCapture.Builder()
             .setTargetResolution(screenSize)
@@ -105,7 +108,7 @@ actual fun CameraScanner(
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build()
             .apply {
-                setAnalyzer(executor, analyzer(onCameraImage))
+                setAnalyzer(executor, analyzer)
             }
         useCases.addUseCase(imageAnalysis)
 

@@ -20,7 +20,7 @@ actual class LabelCaptureAnalyzer(
     CaptureAnalyzer<ImageLabels>
 
 
-actual class LabelStreamAnalyzer(
+class LabelStreamAnalyzer(
     callback: AnalyzerCallback<ImageLabels>,
     config: LabelAnalyzerConfig = config(),
 ) : CameraStreamAnalyzer<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>(

@@ -11,14 +11,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import okio.FileSystem
+import kotlin.coroutines.coroutineContext
 
 class TakeCaptureUseCase(
     private val platform: Platform,
     private val matchRepository: MatchRepository,
     private val dispatcher: Dispatcher,
 ) : Dispatcher by dispatcher {
-    suspend operator fun invoke(image: CameraImage) = dispatchUseCase {
-        matchRepository.match(image).onSuccess {
+    suspend operator fun invoke(image: CameraImage) = dispatchUseCase(coroutineContext) {
+        matchRepository.analyze(image).onSuccess {
             dispatch(ScannedMatch(it))
         }.onFailure {
             throw it

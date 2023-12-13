@@ -2,6 +2,7 @@ package com.micrantha.bluebell.ui.screen
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
+import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.arch.Stateful
@@ -23,6 +24,7 @@ abstract class ContextualScreenModel(
 ) : ScreenModel, Dispatcher by context.dispatcher, Dispatch {
     protected val router: Router = context.router
     protected val i18n: LocalizedRepository = context.i18n
+    override val dispatchScope: CoroutineScope = screenModelScope
 }
 
 /**
@@ -33,6 +35,9 @@ abstract class FluxScreenModel<State>(
     initialState: State
 ) : ContextualScreenModel(context), DIAware by context {
     protected val store: Store<State> by screenModelStore(initialState, screenModelScope)
+
+    // do not use global dispatch by default
+    override fun dispatch(action: Action) = store.dispatch(action)
 }
 
 private fun <State> FluxScreenModel<State>.screenModelStore(

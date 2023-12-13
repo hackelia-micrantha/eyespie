@@ -14,20 +14,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 
 class FluxDispatcher internal constructor(
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default) + Job()
+    override val dispatchScope: CoroutineScope = CoroutineScope(Dispatchers.Default) + Job()
 ) : Dispatcher, Dispatcher.Registry {
     private val actions = MutableSharedFlow<Action>()
 
     override fun register(dispatcher: Dispatcher) {
         actions.onEach(dispatcher::send)
             .catch { log.e { "registered dispatch failed: ${it.message}" } }
-            .launchIn(scope)
+            .launchIn(dispatchScope)
     }
 
     override fun dispatch(action: Action) {
         log.d { "action: $action" }
-        scope.launch {
-            send(action)
+        dispatchScope.launch {
+            actions.emit(action)
         }
     }
 

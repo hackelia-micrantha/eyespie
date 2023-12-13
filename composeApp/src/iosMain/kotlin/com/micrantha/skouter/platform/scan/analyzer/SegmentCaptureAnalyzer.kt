@@ -39,7 +39,7 @@ actual class SegmentCaptureAnalyzer(
 ) : CameraCaptureAnalyzer<ImageSegments, VNDetectContoursRequest, VNContoursObservation>(config),
     CaptureAnalyzer<ImageSegments>
 
-actual class SegmentStreamAnalyzer(
+class SegmentStreamAnalyzer(
     callback: AnalyzerCallback<ImageSegments>,
     config: SegmentAnalyzerConfig = config(),
 ) : CameraStreamAnalyzer<ImageSegments, VNDetectContoursRequest, VNContoursObservation>(

@@ -50,6 +50,10 @@ class ScanCaptureEnvironment(
     Dispatcher by context.dispatcher,
     LocalizedRepository by context.i18n {
 
+    init {
+        analyzeCaptureUseCase.clues.onEach(::dispatch).launchIn(scope)
+    }
+
     override suspend fun invoke(action: Action, state: ScanState) {
         when (action) {
             is EditScan -> takeCaptureUseCase(
@@ -91,8 +95,7 @@ class ScanCaptureEnvironment(
             }
 
             is ScannedImage -> analyzeCaptureUseCase(action.image)
-                .onEach { res -> res.onSuccess(::dispatch) }
-                .launchIn(scope)
+                .onFailure { dispatch(ScanAction.ScanError) }
 
             is ScanAction.Back -> context.router.navigateBack()
         }

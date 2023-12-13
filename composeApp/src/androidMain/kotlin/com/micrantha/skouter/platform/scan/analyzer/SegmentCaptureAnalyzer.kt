@@ -41,7 +41,7 @@ actual class SegmentCaptureAnalyzer(
     }
 }
 
-actual class SegmentStreamAnalyzer(
+class SegmentStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<ImageSegments>,
     private val config: SegmentAnalyzerConfig = config(context)
@@ -55,7 +55,7 @@ actual class SegmentStreamAnalyzer(
         }
     }
 
-    actual override fun analyze(image: CameraImage) {
+    override fun analyze(image: CameraImage) {
         client.segmentAsync(
             image.asMPImage(),
             ImageProcessingOptions.builder().setRotationDegrees(-image.rotation).build(),

@@ -6,11 +6,7 @@ import androidx.camera.core.ImageProxy
 import com.google.mediapipe.tasks.core.BaseOptions
 import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
-import kotlin.coroutines.CoroutineContext
 
 internal fun baseOptions(model: String, block: BaseOptions.Builder.() -> Unit = {}) =
     BaseOptions.builder()
@@ -26,8 +22,7 @@ interface CameraAnalyzerConfig<Value, Options, Client, Result> {
 
 class CameraAnalyzer(
     private val callback: CameraScannerDispatch,
-    private val coroutineContext: CoroutineContext = Dispatchers.Default,
-    private val scope: CoroutineScope = CoroutineScope(coroutineContext) + Job()
+    private val scope: CoroutineScope
 ) : ImageAnalysis.Analyzer {
 
     private var lastJob: Long = 0

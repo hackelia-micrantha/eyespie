@@ -16,15 +16,15 @@ import com.micrantha.skouter.platform.scan.baseOptions
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
+import com.micrantha.skouter.platform.scan.model.ImageDetection
 import com.micrantha.skouter.platform.scan.model.ImageLabel
-import com.micrantha.skouter.platform.scan.model.ImageObject
 import com.micrantha.skouter.platform.scan.model.ImageObjects
 
 private const val MODEL_ASSET = "models/detection/image.tflite"
 
 typealias DetectionAnalyzerConfig = CameraAnalyzerConfig<ImageObjects, ObjectDetectorOptions.Builder, ObjectDetector, ObjectDetectorResult>
 
-actual class ObjectCaptureAnalyzer(
+actual class DetectCaptureAnalyzer(
     context: Context,
     private val config: DetectionAnalyzerConfig = config(context)
 ) : CaptureAnalyzer<ImageObjects> {
@@ -43,7 +43,7 @@ actual class ObjectCaptureAnalyzer(
     }
 }
 
-actual class ObjectStreamAnalyzer(
+class DetectStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<ImageObjects>,
     private val config: DetectionAnalyzerConfig = config(context)
@@ -57,7 +57,7 @@ actual class ObjectStreamAnalyzer(
         }
     }
 
-    actual override fun analyze(image: CameraImage) {
+    override fun analyze(image: CameraImage) {
         client.detectAsync(image.asMPImage(), image.timestamp)
     }
 
@@ -71,7 +71,7 @@ private fun config(context: Context): DetectionAnalyzerConfig = object : Detecti
         return result.detections().map(::detect)
     }
 
-    private fun detect(obj: Detection) = ImageObject(
+    private fun detect(obj: Detection) = ImageDetection(
         labels = obj.categories().map { ImageLabel(it.categoryName(), it.score()) },
         rect = obj.boundingBox().toRect().toComposeRect(),
     )

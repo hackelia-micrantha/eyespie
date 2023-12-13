@@ -5,22 +5,18 @@ import com.micrantha.bluebell.domain.arch.Effect
 import com.micrantha.bluebell.domain.arch.Reducer
 import com.micrantha.bluebell.domain.arch.Store
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 
 class FluxStore<State> internal constructor(
     initialState: State,
-    private val effectScope: CoroutineScope = CoroutineScope(Dispatchers.Unconfined) + Job()
+    override val dispatchScope: CoroutineScope
 ) : Store<State> {
     private val reducers = mutableListOf<Reducer<State>>()
-    private val effects = mutableListOf<Effect<State>>()
     private val current = MutableStateFlow(initialState)
+    private val effects = FluxEffects<State>(dispatchScope)
 
     private fun update(action: Action) = current.updateAndGet { state ->
         reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
@@ -28,15 +24,12 @@ class FluxStore<State> internal constructor(
 
     override fun dispatch(action: Action) {
         val value = update(action)
-
-        effectScope.launch {
-            effects.forEach { effect -> effect(action, value) }
-        }
+        effects.dispatch(action, value)
     }
 
     override suspend fun send(action: Action) {
         val value = update(action)
-        effects.forEach { effect -> effect(action, value) }
+        effects.send(action, value)
     }
 
     override fun addReducer(reducer: Reducer<State>): FluxStore<State> {
@@ -45,7 +38,7 @@ class FluxStore<State> internal constructor(
     }
 
     override fun applyEffect(effect: Effect<State>): FluxStore<State> {
-        effects.add(effect)
+        effects.apply(effect)
         return this
     }
 

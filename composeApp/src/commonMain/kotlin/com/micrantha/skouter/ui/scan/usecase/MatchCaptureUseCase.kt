@@ -5,6 +5,8 @@ import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.skouter.domain.repository.MatchRepository
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import kotlin.coroutines.coroutineContext
+
 import kotlin.math.sqrt
 
 class MatchCaptureUseCase(
@@ -14,14 +16,10 @@ class MatchCaptureUseCase(
         image: CameraImage,
         embedding: ImageEmbedding
     ): Result<Boolean> =
-        dispatchUseCase {
-            val proof = matchRepository.match(image).getOrNull()
-            if (proof.isNullOrEmpty()) {
-                return@dispatchUseCase false
-            }
-            val clue = proof.first()
+        dispatchUseCase(coroutineContext) {
+            val clue = matchRepository.analyze(image).getOrNull() ?: return@dispatchUseCase false
 
-            val result = similarity(clue.data.toByteArray(), embedding.toByteArray())
+            val result = similarity(clue.first().data.toByteArray(), embedding.toByteArray())
 
             Log.i("image match similarity: $result")
 
