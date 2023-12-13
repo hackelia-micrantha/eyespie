@@ -5,10 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.palette.graphics.Palette
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ScanColor
-import com.micrantha.skouter.platform.scan.model.ScanColors
+import com.micrantha.skouter.platform.scan.model.ImageColor
+import com.micrantha.skouter.platform.scan.model.ImageColors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.sqrt
@@ -17,22 +18,35 @@ private const val MODEL_ASSET = "colors.csv"
 
 actual class ColorCaptureAnalyzer(
     context: Context,
-) : AndroidCaptureAnalyzer<ScanColors>(), CaptureAnalyzer<ScanColors>,
-    StreamAnalyzer<ScanColors> {
+) : ColorAnalyzer(context), CaptureAnalyzer<ImageColors> {
 
-    actual override suspend fun analyzeCapture(image: CameraImage): Result<ScanColors> =
+    actual override suspend fun analyze(image: CameraImage): Result<ImageColors> =
         suspendCoroutine { continuation ->
             try {
-                val colors = candidateColors(image.bitmap)
+                val colors = candidateColors(image.toBitmap())
                 continuation.resume(Result.success(colors))
             } catch (err: Throwable) {
                 continuation.resume(Result.failure(err))
             }
         }
+}
+
+actual class ColorStreamAnalyzer(
+    context: Context,
+    private val callback: AnalyzerCallback<ImageColors>
+) : ColorAnalyzer(context), StreamAnalyzer {
+    actual override fun analyze(image: CameraImage) = try {
+        callback.onAnalyzerResult(candidateColors(image.toBitmap()))
+    } catch (err: Throwable) {
+        callback.onAnalyzerError(err)
+    }
+}
+
+abstract class ColorAnalyzer(context: Context) {
 
     private val colorNames by lazy { context.readColorNames() }
 
-    private fun candidateColors(bitmap: Bitmap): ScanColors {
+    protected fun candidateColors(bitmap: Bitmap): ImageColors {
         val palette = Palette.from(bitmap).generate()
 
         val rgb = palette.dominantSwatch!!.rgb
@@ -42,7 +56,7 @@ actual class ColorCaptureAnalyzer(
         val colors = colorNames.map {
             it.key to colorDistance(c1, it.value)
         }.sortedBy { it.second }.take(1).map { (key, _) ->
-            ScanColor(
+            ImageColor(
                 key,
                 colorNames[key]!!.let { Color.rgb(it[0], it[1], it[2]) },
             )

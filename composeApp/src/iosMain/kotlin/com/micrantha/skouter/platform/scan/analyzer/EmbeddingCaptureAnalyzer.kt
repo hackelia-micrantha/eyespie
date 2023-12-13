@@ -3,24 +3,32 @@ package com.micrantha.skouter.platform.scan.analyzer
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ScanEmbedding
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.readBytes
+import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
+import okio.ByteString.Companion.toByteString
 import platform.Vision.VNFeaturePrintObservation
 import platform.Vision.VNGenerateImageFeaturePrintRequest
 
-typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<ScanEmbedding, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>
+typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>
 
 actual class EmbeddingCaptureAnalyzer(
     config: EmbeddingAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<ScanEmbedding, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
+) : CameraCaptureAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
     config
-), CaptureAnalyzer<ScanEmbedding>, StreamAnalyzer<ScanEmbedding>
+), CaptureAnalyzer<ImageEmbeddings>
+
+actual class EmbeddingStreamAnalyzer(
+    callback: AnalyzerCallback<ImageEmbeddings>,
+    config: EmbeddingAnalyzerConfig = config(),
+) : CameraStreamAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
+    config,
+    callback
+), StreamAnalyzer
 
 
-@OptIn(ExperimentalForeignApi::class)
 private fun config(): EmbeddingAnalyzerConfig = object : EmbeddingAnalyzerConfig {
 
     override val filter = { results: List<*>? ->
@@ -32,10 +40,7 @@ private fun config(): EmbeddingAnalyzerConfig = object : EmbeddingAnalyzerConfig
     override fun map(
         response: List<VNFeaturePrintObservation>,
         image: CameraImage
-    ): ScanEmbedding {
-        val observation = response.minBy { it.confidence }
-        return observation.data.bytes()!!.readBytes(observation.data.length.toInt()).map {
-            it.toFloat()
-        }.toFloatArray()
+    ): ImageEmbeddings = response.map {
+        it.data.toByteString()
     }
 }

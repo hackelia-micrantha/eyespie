@@ -8,9 +8,6 @@ import com.micrantha.skouter.domain.model.Clues
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.LocationClue
 import com.micrantha.skouter.domain.model.Proof
-import com.micrantha.skouter.platform.scan.height
-import com.micrantha.skouter.platform.scan.toImageBitmap
-import com.micrantha.skouter.platform.scan.width
 
 class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
 

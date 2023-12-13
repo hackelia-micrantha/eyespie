@@ -1,14 +1,14 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ScanLabels
+import com.micrantha.skouter.platform.scan.model.ImageLabels
 
+expect class LabelCaptureAnalyzer : CaptureAnalyzer<ImageLabels> {
+    override suspend fun analyze(image: CameraImage): Result<ImageLabels>
+}
 
-expect class LabelCaptureAnalyzer : CaptureAnalyzer<ScanLabels>, StreamAnalyzer<ScanLabels> {
-    override suspend fun analyzeCapture(image: CameraImage): Result<ScanLabels>
-
-    override fun analyzeStream(image: CameraImage, callback: AnalyzerCallback<ScanLabels>)
+expect class LabelStreamAnalyzer : StreamAnalyzer {
+    override fun analyze(image: CameraImage)
 }

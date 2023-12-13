@@ -13,20 +13,15 @@ import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.LocationClue
+import com.micrantha.skouter.domain.model.MatchClue
 import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
-import com.micrantha.skouter.platform.scan.model.ScanColor
-import com.micrantha.skouter.platform.scan.model.ScanEmbedding
-import com.micrantha.skouter.platform.scan.model.ScanLabel
-import com.micrantha.skouter.platform.scan.model.ScanLabels
-import com.micrantha.skouter.platform.scan.model.ScanObject
-import com.micrantha.skouter.platform.scan.model.ScanSegment
-import com.micrantha.skouter.platform.scan.model.label
-import com.micrantha.skouter.platform.scan.model.labels
-import com.micrantha.skouter.platform.scan.model.rect
-import com.micrantha.skouter.platform.scan.model.score
-import com.micrantha.skouter.platform.scan.toImageBitmap
+import com.micrantha.skouter.platform.scan.model.ImageColor
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageLabel
+import com.micrantha.skouter.platform.scan.model.ImageObject
+import com.micrantha.skouter.platform.scan.model.ImageSegment
 
 class ClueDomainMapper {
 
@@ -34,32 +29,34 @@ class ClueDomainMapper {
     fun recognition(data: RecognitionResponse): LabelProof =
         data.labels.map { LabelClue(it.label, it.probability) }.toSet()
 
-    fun label(data: ScanLabel) = LabelClue(data.label, data.score)
+    fun label(data: ImageLabel) = LabelClue(data.data, data.confidence)
 
-    fun labels(data: ScanLabels): LabelProof = data.map(::label).toSet()
+    fun labels(data: List<ImageLabel>): LabelProof = data.map(::label).toSet()
 
-    fun detect(data: ScanObject) = DetectClue(
+    fun detect(data: ImageObject) = DetectClue(
         data = data.rect,
-        labels = data.labels.map { LabelClue(it.label, it.score) }.toSet(),
+        labels = data.labels.map { LabelClue(it.data, it.confidence) }.toSet(),
     )
 
-    fun detect(data: List<ScanObject>): DetectProof = data.map(::detect).toSet()
+    fun detect(data: List<ImageObject>): DetectProof = data.map(::detect).toSet()
 
-    fun segment(data: ScanSegment) = SegmentClue(
-        data = data.toImageBitmap()
+    fun segment(data: ImageSegment) = SegmentClue(
+        data = data.mask.toImageBitmap()
     )
 
-    fun segment(data: List<ScanSegment>): SegmentProof = data.map(::segment)
+    fun segment(data: List<ImageSegment>): SegmentProof = data.map(::segment)
 
-    fun match(data: ScanEmbedding) = MatchProof(
+    fun match(data: ImageEmbedding) = MatchClue(
         data = data
     )
 
-    fun color(data: ScanColor) = ColorClue(
+    fun match(data: List<ImageEmbedding>): MatchProof = data.map(::match)
+
+    fun color(data: ImageColor) = ColorClue(
         data = data.name,
     )
 
-    fun color(data: List<ScanColor>): ColorProof = data.map(::color).toSet()
+    fun color(data: List<ImageColor>): ColorProof = data.map(::color).toSet()
 
     fun clue(data: Location.Data) = LocationClue(
         data = data,

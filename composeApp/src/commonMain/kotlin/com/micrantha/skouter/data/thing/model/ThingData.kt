@@ -1,12 +1,13 @@
 package com.micrantha.skouter.data.thing.model
 
 import com.micrantha.skouter.data.clue.model.ProofData
-import com.micrantha.skouter.platform.scan.model.ScanEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonPrimitive
+import okio.ByteString
 
 @Serializable
 data class ThingData(
@@ -33,8 +34,8 @@ typealias ThingRequest = ThingData
 typealias ThingResponse = ThingData
 typealias ThingListing = ThingData
 
-fun ScanEmbedding.toJsonElement() =
-    Json.encodeToJsonElement(this)
+fun ImageEmbedding.toJsonElement() =
+    Json.encodeToJsonElement(this.toByteArray())
 
 fun JsonElement.toImageEmbedding() =
-    floatArrayOf(*Json.decodeFromString(this.jsonPrimitive.content))
+    ByteString.of(*Json.decodeFromString(this.jsonPrimitive.content))

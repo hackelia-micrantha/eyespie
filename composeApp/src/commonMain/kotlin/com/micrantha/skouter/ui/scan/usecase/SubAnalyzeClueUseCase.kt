@@ -15,10 +15,10 @@ class SubAnalyzeClueUseCase(
 ) : Dispatcher by dispatcher {
 
     suspend operator fun invoke(image: CameraImage) = dispatchUseCase {
-        labelRepository.capture(image).onSuccess { proof ->
+        labelRepository.label(image).onSuccess { proof ->
             proof.forEach { dispatch(ScannedLabel(it)) }
         }
-        colorRepository.capture(image).onSuccess { proof ->
+        colorRepository.color(image).onSuccess { proof ->
             proof.forEach { dispatch(ScannedColor(it)) }
         }
     }

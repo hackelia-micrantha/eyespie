@@ -3,9 +3,12 @@ package com.micrantha.skouter.platform.scan.analyzer
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
+import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ScanSegments
+import com.micrantha.skouter.platform.scan.model.ImageSegment
+import com.micrantha.skouter.platform.scan.model.ImageSegments
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped
 import platform.CoreGraphics.CGBitmapContextCreate
@@ -29,12 +32,21 @@ import platform.Vision.VNContoursObservation
 import platform.Vision.VNDetectContoursRequest
 
 
-typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<ScanSegments, VNDetectContoursRequest, VNContoursObservation>
+typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<ImageSegments, VNDetectContoursRequest, VNContoursObservation>
 
 actual class SegmentCaptureAnalyzer(
     config: SegmentAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<ScanSegments, VNDetectContoursRequest, VNContoursObservation>(config),
-    CaptureAnalyzer<ScanSegments>, StreamAnalyzer<ScanSegments>
+) : CameraCaptureAnalyzer<ImageSegments, VNDetectContoursRequest, VNContoursObservation>(config),
+    CaptureAnalyzer<ImageSegments>
+
+actual class SegmentStreamAnalyzer(
+    callback: AnalyzerCallback<ImageSegments>,
+    config: SegmentAnalyzerConfig = config(),
+) : CameraStreamAnalyzer<ImageSegments, VNDetectContoursRequest, VNContoursObservation>(
+    config,
+    callback
+), StreamAnalyzer
+
 
 @OptIn(ExperimentalForeignApi::class)
 private fun config(): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
@@ -45,9 +57,11 @@ private fun config(): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
 
     override fun request() = VNDetectContoursRequest()
 
-    override fun map(response: List<VNContoursObservation>, image: CameraImage): ScanSegments =
+    override fun map(response: List<VNContoursObservation>, image: CameraImage): ImageSegments =
         response.map {
-            CameraImage(mask(image.data, it.normalizedPath), image.orientation)
+            ImageSegment(
+                CameraImage(mask(image.data, it.normalizedPath), image.orientation)
+            )
         }
 
     private fun mask(imageBuffer: CVImageBufferRef, path: CGPathRef?): CVImageBufferRef {

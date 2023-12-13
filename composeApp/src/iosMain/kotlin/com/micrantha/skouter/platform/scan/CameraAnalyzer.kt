@@ -27,12 +27,12 @@ interface CameraAnalyzerConfig<out T, out R : VNRequest, O : VNObservation> {
     val filter: (List<*>?) -> List<O>
 }
 
-abstract class CameraCaptureAnalyzer<T, R : VNRequest, O : VNObservation>(
+abstract class CameraCaptureAnalyzer<out T, R : VNRequest, O : VNObservation>(
     private val config: CameraAnalyzerConfig<T, R, O>
-) : CaptureAnalyzer<T>, StreamAnalyzer<T>, CameraAnalyzerConfig<T, R, O> by config {
+) : CaptureAnalyzer<T>, CameraAnalyzerConfig<T, R, O> by config {
 
     @OptIn(ExperimentalForeignApi::class)
-    override suspend fun analyzeCapture(image: CameraImage): Result<T> = try {
+    override suspend fun analyze(image: CameraImage): Result<T> = try {
         val imageRequestHandler =
             VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
 
@@ -49,8 +49,15 @@ abstract class CameraCaptureAnalyzer<T, R : VNRequest, O : VNObservation>(
         Result.failure(err)
     }
 
+}
+
+abstract class CameraStreamAnalyzer<out T, out R : VNRequest, O : VNObservation>(
+    private val config: CameraAnalyzerConfig<T, R, O>,
+    private val callback: AnalyzerCallback<T>
+) : CameraAnalyzerConfig<T, R, O> by config, StreamAnalyzer {
+
     @OptIn(ExperimentalForeignApi::class)
-    override fun analyzeStream(image: CameraImage, callback: AnalyzerCallback<T>) {
+    override fun analyze(image: CameraImage) {
         val imageRequestHandler =
             VNImageRequestHandler(image.asCGImage(), image.orientation, emptyMap<Any?, String>())
 

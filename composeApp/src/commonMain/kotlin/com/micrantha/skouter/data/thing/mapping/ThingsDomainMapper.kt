@@ -19,7 +19,7 @@ import com.micrantha.skouter.domain.model.Location.Point
 import com.micrantha.skouter.domain.model.Player
 import com.micrantha.skouter.domain.model.Proof
 import com.micrantha.skouter.domain.model.Thing
-import com.micrantha.skouter.platform.scan.model.ScanEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
@@ -86,7 +86,7 @@ class ThingsDomainMapper(
         distance = distance
     )
 
-    fun match(embedding: ScanEmbedding) = MatchRequest(
+    fun match(embedding: ImageEmbedding) = MatchRequest(
         embedding = embedding.toJsonElement(),
         threshold = 0.5f,
         count = 5,

@@ -1,12 +1,14 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ScanColors
+import com.micrantha.skouter.platform.scan.model.ImageColors
 
-expect class ColorCaptureAnalyzer : CaptureAnalyzer<ScanColors>, StreamAnalyzer<ScanColors> {
-    override suspend fun analyzeCapture(image: CameraImage): Result<ScanColors>
-    override fun analyzeStream(image: CameraImage, callback: AnalyzerCallback<ScanColors>)
+expect class ColorCaptureAnalyzer : CaptureAnalyzer<ImageColors> {
+    override suspend fun analyze(image: CameraImage): Result<ImageColors>
+}
+
+expect class ColorStreamAnalyzer : StreamAnalyzer {
+    override fun analyze(image: CameraImage)
 }

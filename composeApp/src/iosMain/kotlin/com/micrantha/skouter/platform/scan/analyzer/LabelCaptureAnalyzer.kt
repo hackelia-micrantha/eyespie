@@ -3,26 +3,29 @@ package com.micrantha.skouter.platform.scan.analyzer
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraImage
+import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ScanLabels
+import com.micrantha.skouter.platform.scan.model.ImageLabel
+import com.micrantha.skouter.platform.scan.model.ImageLabels
 import platform.Vision.VNClassificationObservation
 import platform.Vision.VNClassifyImageRequest
 
-typealias LabelAnalyzerConfig = CameraAnalyzerConfig<ScanLabels, VNClassifyImageRequest, VNClassificationObservation>
+typealias LabelAnalyzerConfig = CameraAnalyzerConfig<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>
 
 actual class LabelCaptureAnalyzer(
     config: LabelAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<ScanLabels, VNClassifyImageRequest, VNClassificationObservation>(config),
-    CaptureAnalyzer<ScanLabels>, StreamAnalyzer<ScanLabels> {
+) : CameraCaptureAnalyzer<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>(config),
+    CaptureAnalyzer<ImageLabels>
 
-    actual override suspend fun analyzeCapture(image: CameraImage): Result<ScanLabels> =
-        super.analyzeCapture(image)
 
-    actual override fun analyzeStream(image: CameraImage, callback: AnalyzerCallback<ScanLabels>) =
-        super.analyzeStream(image, callback)
-}
+actual class LabelStreamAnalyzer(
+    callback: AnalyzerCallback<ImageLabels>,
+    config: LabelAnalyzerConfig = config(),
+) : CameraStreamAnalyzer<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>(
+    config, callback
+), StreamAnalyzer
 
 private fun config(): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
 
@@ -32,6 +35,8 @@ private fun config(): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
 
     override fun request() = VNClassifyImageRequest()
 
-    override fun map(response: List<VNClassificationObservation>, image: CameraImage): ScanLabels =
-        response
+    override fun map(response: List<VNClassificationObservation>, image: CameraImage): ImageLabels =
+        response.map {
+            ImageLabel(it.identifier, it.confidence)
+        }
 }

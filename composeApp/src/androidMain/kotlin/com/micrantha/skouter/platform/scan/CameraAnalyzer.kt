@@ -1,9 +1,9 @@
 package com.micrantha.skouter.platform.scan
 
-import android.graphics.Bitmap
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
+import com.google.mediapipe.tasks.core.BaseOptions
 import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +11,18 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlin.coroutines.CoroutineContext
+
+internal fun baseOptions(model: String, block: BaseOptions.Builder.() -> Unit = {}) =
+    BaseOptions.builder()
+        .setModelAssetPath(model)
+        .apply(block)
+        .build()
+
+interface CameraAnalyzerConfig<Value, Options, Client, Result> {
+    fun map(result: Result): Value
+
+    fun client(block: Options.() -> Unit): Client
+}
 
 class CameraAnalyzer(
     private val callback: CameraScannerDispatch,
@@ -20,24 +32,24 @@ class CameraAnalyzer(
 
     private var lastJob: Long = 0
 
-    private lateinit var bitmapBuffer: Bitmap
-
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
 
-        if (image.imageInfo.timestamp - lastJob < 100) {
+        if (image.imageInfo.timestamp - lastJob < 500) {
             return
         }
 
         lastJob = image.imageInfo.timestamp
 
-        scope.launch {
+        val uiImage = CameraImage(
+            data = image.image,
+            width = image.width,
+            height = image.height,
+            rotation = image.imageInfo.rotationDegrees,
+            lastJob
+        )
 
-            val uiImage = CameraImage(
-                processImage(image),
-                rotation = image.imageInfo.rotationDegrees,
-                lastJob
-            )
+        scope.launch {
 
             callback(uiImage)
 
@@ -45,16 +57,4 @@ class CameraAnalyzer(
         }
     }
 
-    private fun processImage(image: ImageProxy): Bitmap {
-        if (!::bitmapBuffer.isInitialized) {
-            bitmapBuffer = Bitmap.createBitmap(image.width, image.height, Bitmap.Config.ARGB_8888)
-        }
-
-        image.planes[0].buffer.apply {
-            rewind()
-            bitmapBuffer.copyPixelsFromBuffer(this)
-        }
-
-        return bitmapBuffer
-    }
 }

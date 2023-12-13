@@ -2,7 +2,7 @@ package com.micrantha.skouter.domain.model
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
-import com.micrantha.skouter.platform.scan.model.ScanEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import okio.Path
 
 data class Clues(
@@ -14,7 +14,7 @@ data class Clues(
 data class Proof(
     val clues: Clues?,
     val location: Location.Point?,
-    val match: ScanEmbedding,
+    val match: ImageEmbedding,
     val image: Path,
     val name: String?,
     val playerID: String
@@ -30,7 +30,7 @@ typealias DetectProof = Set<DetectClue>
 
 typealias SegmentProof = List<SegmentClue>
 
-typealias MatchProof = MatchClue
+typealias MatchProof = List<MatchClue>
 
 sealed interface Clue<T> {
     val data: T
@@ -96,14 +96,5 @@ data class SegmentClue(
 ) : Clue<ImageBitmap>
 
 data class MatchClue(
-    override val data: ScanEmbedding
-) : Clue<ScanEmbedding> {
-    override fun equals(other: Any?): Boolean {
-        if (other !is MatchClue) return false
-        return data.contentEquals(other.data)
-    }
-
-    override fun hashCode(): Int {
-        return data.contentHashCode()
-    }
-}
+    override val data: ImageEmbedding
+) : Clue<ImageEmbedding>

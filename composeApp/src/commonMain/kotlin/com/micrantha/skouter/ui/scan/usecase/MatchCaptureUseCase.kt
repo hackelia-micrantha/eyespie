@@ -4,7 +4,7 @@ import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.skouter.domain.repository.MatchRepository
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.model.ScanEmbedding
+import com.micrantha.skouter.platform.scan.model.ImageEmbedding
 import kotlin.math.sqrt
 
 class MatchCaptureUseCase(
@@ -12,22 +12,26 @@ class MatchCaptureUseCase(
 ) {
     suspend operator fun invoke(
         image: CameraImage,
-        embedding: ScanEmbedding
+        embedding: ImageEmbedding
     ): Result<Boolean> =
         dispatchUseCase {
-            val clue = matchRepository.capture(image).getOrNull() ?: return@dispatchUseCase false
+            val proof = matchRepository.match(image).getOrNull()
+            if (proof.isNullOrEmpty()) {
+                return@dispatchUseCase false
+            }
+            val clue = proof.first()
 
-            val result = similarity(clue.data, embedding)
+            val result = similarity(clue.data.toByteArray(), embedding.toByteArray())
 
             Log.i("image match similarity: $result")
 
             result.compareTo(0.70000000) >= 0
         }
 
-    private fun similarity(vectorA: FloatArray, vectorB: FloatArray): Double {
+    private fun similarity(vectorA: ByteArray, vectorB: ByteArray): Double {
         require(vectorA.size == vectorB.size) { "Vector dimensions must be the same" }
 
-        var dotProduct = 0F
+        var dotProduct = 0L
         var normA = 0L
         var normB = 0L
 
