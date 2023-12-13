@@ -8,8 +8,8 @@ import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
+import com.micrantha.skouter.platform.scan.model.ImageDetection
 import com.micrantha.skouter.platform.scan.model.ImageLabel
-import com.micrantha.skouter.platform.scan.model.ImageObject
 import com.micrantha.skouter.platform.scan.model.ImageObjects
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreGraphics.CGRectGetHeight
@@ -22,11 +22,11 @@ import platform.Vision.VNRecognizedObjectObservation
 
 typealias ObjectCaptureConfig = CameraAnalyzerConfig<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>
 
-actual class ObjectCaptureAnalyzer(config: ObjectCaptureConfig = config()) :
+actual class DetectCaptureAnalyzer(config: ObjectCaptureConfig = config()) :
     CameraCaptureAnalyzer<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>(config),
     CaptureAnalyzer<ImageObjects>
 
-actual class ObjectStreamAnalyzer(
+class DetectStreamAnalyzer(
     callback: AnalyzerCallback<ImageObjects>,
     config: ObjectCaptureConfig = config(),
 ) : CameraStreamAnalyzer<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>(
@@ -47,7 +47,7 @@ private fun config(): ObjectCaptureConfig = object : ObjectCaptureConfig {
         image: CameraImage
     ): ImageObjects {
         return response.map { obj ->
-            ImageObject(
+            ImageDetection(
                 Rect(
                     CGRectGetMinX(obj.boundingBox).toFloat(),
                     CGRectGetMinY(obj.boundingBox).toFloat(),

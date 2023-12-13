@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import okio.Path.Companion.toPath
+import kotlin.coroutines.coroutineContext
 
 class SaveCaptureUseCase(
     private val storageRepository: StorageRepository,
@@ -18,7 +19,7 @@ class SaveCaptureUseCase(
 
     suspend operator fun invoke(
         proof: Proof
-    ) = dispatchUseCase {
+    ) = dispatchUseCase(coroutineContext) {
         val image = withContext(Dispatchers.IO) {
             fileSystem.read(proof.image)
         }

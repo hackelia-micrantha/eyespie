@@ -14,13 +14,13 @@ import platform.Vision.VNGenerateImageFeaturePrintRequest
 
 typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>
 
-actual class EmbeddingCaptureAnalyzer(
+actual class MatchCaptureAnalyzer(
     config: EmbeddingAnalyzerConfig = config()
 ) : CameraCaptureAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
     config
 ), CaptureAnalyzer<ImageEmbeddings>
 
-actual class EmbeddingStreamAnalyzer(
+class EmbeddingStreamAnalyzer(
     callback: AnalyzerCallback<ImageEmbeddings>,
     config: EmbeddingAnalyzerConfig = config(),
 ) : CameraStreamAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(

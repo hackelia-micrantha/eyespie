@@ -13,43 +13,30 @@ import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.scan.CameraImage
 import kotlinx.coroutines.flow.Flow
 
-interface LabelRepository {
+interface CameraRepository<out T> {
+    suspend fun analyze(image: CameraImage): Result<T>
+}
 
-    suspend fun label(image: CameraImage): Result<LabelProof>
-
-    fun labelAsync(image: CameraImage)
-
+interface LabelRepository : CameraRepository<LabelProof> {
     fun labels(): Flow<LabelClue>
 }
 
-interface ColorRepository {
-    suspend fun color(image: CameraImage): Result<ColorProof>
-
-    fun colorAsync(image: CameraImage)
+interface ColorRepository : CameraRepository<ColorProof> {
 
     fun colors(): Flow<ColorClue>
 }
 
-interface DetectionRepository {
-    suspend fun detect(image: CameraImage): Result<DetectProof>
-
-    fun detectAsync(image: CameraImage)
+interface DetectionRepository : CameraRepository<DetectProof> {
 
     fun detections(): Flow<DetectClue>
 }
 
-interface SegmentRepository {
-    suspend fun segment(image: CameraImage): Result<SegmentProof>
-
-    fun segmentAsync(image: CameraImage)
+interface SegmentRepository : CameraRepository<SegmentProof> {
 
     fun segments(): Flow<SegmentClue>
 }
 
-interface MatchRepository {
-    suspend fun match(image: CameraImage): Result<MatchProof>
-
-    fun matchAsync(image: CameraImage)
+interface MatchRepository : CameraRepository<MatchProof> {
 
     fun matches(): Flow<MatchClue>
 

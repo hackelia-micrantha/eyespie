@@ -20,8 +20,10 @@ class MainScreenModel(
     private val accountRepository: AccountRepository,
 ) : ScreenModel, Dispatcher, Router by context.router {
 
+    override val dispatchScope = screenModelScope
+
     override fun dispatch(action: Action) {
-        screenModelScope.launch {
+        dispatchScope.launch {
             send(action)
         }
     }

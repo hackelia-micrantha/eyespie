@@ -5,7 +5,7 @@ compose = "1.5.4"
 compose-plugin = "1.5.10"
 compose-compiler = "1.5.4"
 agp = "8.1.4"
-android-minSdk = "24"
+android-minSdk = "26"
 android-compileSdk = "34"
 android-targetSdk = "34"
 androidx-activityCompose = "1.8.1"
@@ -33,8 +33,10 @@ lifecycleRuntimeKtx = "2.6.2"
 okio = "3.6.0"
 paletteKtx = "1.0.0"
 permissionsCompose = "0.16.0"
-tasksVision = "0.20230731"
 voyagerNavigator = "1.0.0-rc10"
+tensorflowLiteSupport = "0.4.4"
+tensorflowLite = "2.14.0"
+mediapipe = "0.20230731"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraExtensions" }
@@ -86,10 +88,16 @@ supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supaBaseKt" }
 supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supaBaseKt" }
 supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supaBaseKt" }
-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "tasksVision" }
 voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyagerNavigator" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerNavigator" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerNavigator" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLite" }
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteSupport" }
+mediapipe-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
@@ -98,3 +106,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 apolloGraphQL = { id = "com.apollographql.apollo3", version.ref = "graphql" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+nativeCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

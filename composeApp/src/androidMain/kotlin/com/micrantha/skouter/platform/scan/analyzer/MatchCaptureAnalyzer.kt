@@ -21,7 +21,7 @@ private const val MODEL_ASSET = "models/embeddings/image.tflite"
 
 typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<ImageEmbeddings, ImageEmbedderOptions.Builder, ImageEmbedder, ImageEmbedderResult>
 
-actual class EmbeddingCaptureAnalyzer(
+actual class MatchCaptureAnalyzer(
     context: Context,
     private val config: EmbeddingAnalyzerConfig = config(context)
 ) : CaptureAnalyzer<ImageEmbeddings> {
@@ -38,7 +38,7 @@ actual class EmbeddingCaptureAnalyzer(
     }
 }
 
-actual class EmbeddingStreamAnalyzer(
+class EmbeddingStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<ImageEmbeddings>,
     private val config: EmbeddingAnalyzerConfig = config(context)
@@ -51,7 +51,7 @@ actual class EmbeddingStreamAnalyzer(
         }
     }
 
-    actual override fun analyze(image: CameraImage) {
+    override fun analyze(image: CameraImage) {
         client.embedAsync(image.asMPImage(), image.timestamp)
     }
 

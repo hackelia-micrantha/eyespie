@@ -5,9 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.palette.graphics.Palette
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import com.micrantha.skouter.platform.scan.model.ImageColor
 import com.micrantha.skouter.platform.scan.model.ImageColors
 import kotlin.coroutines.resume
@@ -18,7 +16,7 @@ private const val MODEL_ASSET = "colors.csv"
 
 actual class ColorCaptureAnalyzer(
     context: Context,
-) : ColorAnalyzer(context), CaptureAnalyzer<ImageColors> {
+) : CaptureAnalyzer<ImageColors> {
 
     actual override suspend fun analyze(image: CameraImage): Result<ImageColors> =
         suspendCoroutine { continuation ->
@@ -29,24 +27,10 @@ actual class ColorCaptureAnalyzer(
                 continuation.resume(Result.failure(err))
             }
         }
-}
-
-actual class ColorStreamAnalyzer(
-    context: Context,
-    private val callback: AnalyzerCallback<ImageColors>
-) : ColorAnalyzer(context), StreamAnalyzer {
-    actual override fun analyze(image: CameraImage) = try {
-        callback.onAnalyzerResult(candidateColors(image.toBitmap()))
-    } catch (err: Throwable) {
-        callback.onAnalyzerError(err)
-    }
-}
-
-abstract class ColorAnalyzer(context: Context) {
 
     private val colorNames by lazy { context.readColorNames() }
 
-    protected fun candidateColors(bitmap: Bitmap): ImageColors {
+    private fun candidateColors(bitmap: Bitmap): ImageColors {
         val palette = Palette.from(bitmap).generate()
 
         val rgb = palette.dominantSwatch!!.rgb

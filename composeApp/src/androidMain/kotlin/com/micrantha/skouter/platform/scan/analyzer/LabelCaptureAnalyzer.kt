@@ -39,7 +39,7 @@ actual class LabelCaptureAnalyzer(
     }
 }
 
-actual class LabelStreamAnalyzer(
+class LabelStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<ImageLabels>,
     private val config: LabelAnalyzerConfig = config(context)
@@ -53,7 +53,7 @@ actual class LabelStreamAnalyzer(
         }
     }
 
-    actual override fun analyze(image: CameraImage) {
+    override fun analyze(image: CameraImage) {
         client.classifyAsync(image.asMPImage(), image.timestamp)
     }
 

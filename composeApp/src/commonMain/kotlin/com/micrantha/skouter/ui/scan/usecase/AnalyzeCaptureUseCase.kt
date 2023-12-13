@@ -1,7 +1,7 @@
 package com.micrantha.skouter.ui.scan.usecase
 
 import com.micrantha.bluebell.domain.arch.Dispatcher
-import com.micrantha.bluebell.domain.usecase.flowUseCase
+import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.DetectClue
 import com.micrantha.skouter.domain.model.LabelClue
@@ -18,6 +18,7 @@ import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedLabel
 import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedSegment
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
+import kotlin.coroutines.coroutineContext
 
 class AnalyzeCaptureUseCase(
     private val labelRepository: LabelRepository,
@@ -27,25 +28,26 @@ class AnalyzeCaptureUseCase(
     private val dispatcher: Dispatcher
 ) : Dispatcher by dispatcher {
 
-    operator fun invoke(image: CameraImage) = flowUseCase {
-        labelRepository.labelAsync(image)
-        detectionRepository.detectAsync(image)
-        segmentRepository.segmentAsync(image)
-        colorRepository.colorAsync(image)
-
-        merge(
-            labelRepository.labels(),
-            detectionRepository.detections(),
-            segmentRepository.segments(),
-            colorRepository.colors()
-        ).map {
-            when (it) {
-                is LabelClue -> ScannedLabel(it)
-                is ColorClue -> ScannedColor(it)
-                is DetectClue -> ScannedDetection(it)
-                is SegmentClue -> ScannedSegment(it)
-                else -> ScanError
-            }
+    val clues = merge(
+        labelRepository.labels(),
+        detectionRepository.detections(),
+        segmentRepository.segments(),
+        colorRepository.colors()
+    ).map {
+        when (it) {
+            is LabelClue -> ScannedLabel(it)
+            is ColorClue -> ScannedColor(it)
+            is DetectClue -> ScannedDetection(it)
+            is SegmentClue -> ScannedSegment(it)
+            else -> ScanError
         }
     }
+
+    suspend operator fun invoke(image: CameraImage): Result<Unit> =
+        dispatchUseCase(coroutineContext) {
+            labelRepository.analyze(image).onFailure { throw it }
+            detectionRepository.analyze(image).onFailure { throw it }
+            segmentRepository.analyze(image).onFailure { throw it }
+            colorRepository.analyze(image).onFailure { throw it }
+        }
 }

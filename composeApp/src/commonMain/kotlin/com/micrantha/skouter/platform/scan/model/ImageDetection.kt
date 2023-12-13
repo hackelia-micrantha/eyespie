@@ -2,9 +2,9 @@ package com.micrantha.skouter.platform.scan.model
 
 import androidx.compose.ui.geometry.Rect
 
-data class ImageObject(
+data class ImageDetection(
     val rect: Rect,
     val labels: ImageLabels
 )
 
-typealias ImageObjects = List<ImageObject>
+typealias ImageObjects = List<ImageDetection>
