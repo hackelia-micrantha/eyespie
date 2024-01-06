@@ -21,6 +21,7 @@ kotlin {
         }
 
         pod("Reachability")
+        //pod("MediaPipeTasksVision")
     }
 
     applyDefaultHierarchyTemplate()

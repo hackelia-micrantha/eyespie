@@ -4,7 +4,7 @@ import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.skouter.domain.repository.MatchRepository
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import okio.ByteString
 import kotlin.coroutines.coroutineContext
 
 import kotlin.math.sqrt
@@ -14,7 +14,7 @@ class MatchCaptureUseCase(
 ) {
     suspend operator fun invoke(
         image: CameraImage,
-        embedding: ImageEmbedding
+        embedding: ByteString
     ): Result<Boolean> =
         dispatchUseCase(coroutineContext) {
             val clue = matchRepository.analyze(image).getOrNull() ?: return@dispatchUseCase false

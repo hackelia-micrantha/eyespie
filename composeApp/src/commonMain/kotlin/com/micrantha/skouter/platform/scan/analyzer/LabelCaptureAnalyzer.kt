@@ -1,9 +1,9 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
+import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageLabels
 
-expect class LabelCaptureAnalyzer : CaptureAnalyzer<ImageLabels> {
-    override suspend fun analyze(image: CameraImage): Result<ImageLabels>
+expect class LabelCaptureAnalyzer : CaptureAnalyzer<LabelProof> {
+    override suspend fun analyze(image: CameraImage): Result<LabelProof>
 }

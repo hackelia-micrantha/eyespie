@@ -16,7 +16,7 @@ import com.micrantha.skouter.data.system.RealtimeDataRepository
 import com.micrantha.skouter.data.thing.ThingDataRepository
 import com.micrantha.skouter.domain.repository.AccountRepository
 import com.micrantha.skouter.domain.repository.ColorRepository
-import com.micrantha.skouter.domain.repository.DetectionRepository
+import com.micrantha.skouter.domain.repository.DetectRepository
 import com.micrantha.skouter.domain.repository.GameRepository
 import com.micrantha.skouter.domain.repository.LabelRepository
 import com.micrantha.skouter.domain.repository.LocationRepository
@@ -57,7 +57,7 @@ fun iosModules(app: UIApplicationController) = DI {
     delegate<LabelRepository>().to<LabelDataRepository>()
     delegate<ColorRepository>().to<ColorDataRepository>()
     delegate<MatchRepository>().to<MatchDataRepository>()
-    delegate<DetectionRepository>().to<DetectDataRepository>()
+    delegate<DetectRepository>().to<DetectDataRepository>()
     delegate<SegmentRepository>().to<SegmentDataRepository>()
     delegate<GameRepository>().to<GameDataRepository>()
     delegate<LocationRepository>().to<LocationDataRepository>()

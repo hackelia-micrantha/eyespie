@@ -3,6 +3,7 @@ package com.micrantha.skouter.platform.scan.analyzer
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import com.google.mediapipe.framework.image.ByteBufferExtractor
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions
@@ -11,31 +12,31 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter.ImageSegmenterOptions
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenterResult
+import com.micrantha.skouter.domain.model.SegmentClue
+import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.baseOptions
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageSegment
-import com.micrantha.skouter.platform.scan.model.ImageSegments
 import java.nio.ByteBuffer
 
 private const val MODEL_ASSET = "models/segmentation/image.tflite"
-typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<ImageSegment, ImageSegmenterOptions.Builder, ImageSegmenter, ImageSegmenterResult>
+typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<SegmentProof, ImageSegmenterOptions.Builder, ImageSegmenter, ImageSegmenterResult>
 
 actual class SegmentCaptureAnalyzer(
     context: Context,
     private val config: SegmentAnalyzerConfig = config(context)
-) : CaptureAnalyzer<ImageSegments> {
+) : CaptureAnalyzer<SegmentProof> {
 
     private val client by lazy {
         config.client { setRunningMode(IMAGE) }
     }
 
-    actual override suspend fun analyze(image: CameraImage): Result<ImageSegments> = try {
+    actual override suspend fun analyze(image: CameraImage): Result<SegmentProof> = try {
         val result = client.segment(image.asMPImage())
-        Result.success(listOf(config.map(result)))
+        Result.success(config.map(result))
     } catch (err: Throwable) {
         Result.failure(err)
     }
@@ -43,7 +44,7 @@ actual class SegmentCaptureAnalyzer(
 
 class SegmentStreamAnalyzer(
     context: Context,
-    private val callback: AnalyzerCallback<ImageSegments>,
+    private val callback: AnalyzerCallback<SegmentProof>,
     private val config: SegmentAnalyzerConfig = config(context)
 ) : StreamAnalyzer {
 
@@ -64,14 +65,14 @@ class SegmentStreamAnalyzer(
     }
 
     private fun onResult(result: ImageSegmenterResult, input: MPImage) {
-        callback.onAnalyzerResult(listOf(config.map(result)))
+        callback.onAnalyzerResult(config.map(result))
     }
 }
 
 private fun config(context: Context): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
-    override fun map(result: ImageSegmenterResult): ImageSegment {
+    override fun map(result: ImageSegmenterResult): SegmentProof {
         val categoryMask = result.categoryMask().get()
-        return mask(categoryMask, result.timestampMs())
+        return listOf(mask(categoryMask))
     }
 
     override fun client(block: ImageSegmenterOptions.Builder.() -> Unit): ImageSegmenter {
@@ -83,7 +84,7 @@ private fun config(context: Context): SegmentAnalyzerConfig = object : SegmentAn
         return ImageSegmenter.createFromOptions(context, options)
     }
 
-    private fun mask(maskImage: MPImage, timestamp: Long): ImageSegment {
+    private fun mask(maskImage: MPImage): SegmentClue {
         val byteBuffer = ByteBufferExtractor.extract(maskImage)
 
         val pixels = colorizePixels(byteBuffer)
@@ -95,7 +96,7 @@ private fun config(context: Context): SegmentAnalyzerConfig = object : SegmentAn
             Bitmap.Config.ARGB_8888
         )
 
-        return ImageSegment(CameraImage(coloredMaskImage, timestamp))
+        return SegmentClue(coloredMaskImage.asImageBitmap())
     }
 
 }

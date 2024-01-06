@@ -9,29 +9,29 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier.ImageClassifierOptions
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
+import com.micrantha.skouter.domain.model.LabelClue
+import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageLabel
-import com.micrantha.skouter.platform.scan.model.ImageLabels
 
 private const val MODEL_ASSET = "models/classification/image.tflite"
 
-typealias LabelAnalyzerConfig = CameraAnalyzerConfig<ImageLabels, ImageClassifierOptions.Builder, ImageClassifier, ImageClassifierResult>
+typealias LabelAnalyzerConfig = CameraAnalyzerConfig<LabelProof, ImageClassifierOptions.Builder, ImageClassifier, ImageClassifierResult>
 
 actual class LabelCaptureAnalyzer(
     context: Context,
     private val config: LabelAnalyzerConfig = config(context)
-) : CaptureAnalyzer<ImageLabels> {
+) : CaptureAnalyzer<LabelProof> {
     private val client by lazy {
         config.client {
             setRunningMode(IMAGE)
         }
     }
 
-    actual override suspend fun analyze(image: CameraImage): Result<ImageLabels> = try {
+    actual override suspend fun analyze(image: CameraImage): Result<LabelProof> = try {
         val result = client.classify(image.asMPImage())
         Result.success(config.map(result))
     } catch (err: Throwable) {
@@ -41,7 +41,7 @@ actual class LabelCaptureAnalyzer(
 
 class LabelStreamAnalyzer(
     context: Context,
-    private val callback: AnalyzerCallback<ImageLabels>,
+    private val callback: AnalyzerCallback<LabelProof>,
     private val config: LabelAnalyzerConfig = config(context)
 ) : StreamAnalyzer {
 
@@ -64,9 +64,9 @@ class LabelStreamAnalyzer(
 
 private fun config(context: Context): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
     override fun map(result: ImageClassifierResult) = result.classificationResult()
-        .classifications().flatMap { it.categories() }.map(::label)
+        .classifications().flatMap { it.categories() }.map(::label).toSet()
 
-    private fun label(label: Category) = ImageLabel(
+    private fun label(label: Category) = LabelClue(
         confidence = label.score(),
         data = label.categoryName()
     )

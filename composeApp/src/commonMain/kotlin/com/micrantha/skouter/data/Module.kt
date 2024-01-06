@@ -70,10 +70,10 @@ internal fun dataModules() = DI.Module("Skouter Data") {
     bindProviderOf(::LabelRemoteSource)
 
     bindProvider { LabelDataRepository(di, get(), get(), get()) }
-    bindProvider { SegmentDataRepository(di, get(), get()) }
-    bindProvider { ColorDataRepository(di, get(), get()) }
-    bindProvider { DetectDataRepository(di, get(), get()) }
-    bindProvider { MatchDataRepository(di, get(), get()) }
+    bindProvider { SegmentDataRepository(di, get()) }
+    bindProvider { ColorDataRepository(di, get()) }
+    bindProvider { DetectDataRepository(di, get()) }
+    bindProvider { MatchDataRepository(di, get()) }
     bindProviderOf(::ClueDomainMapper)
 
     bindProviderOf(::LocationDomainMapper)

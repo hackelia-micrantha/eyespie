@@ -1,7 +1,7 @@
 package com.micrantha.skouter.data.clue
 
+import com.micrantha.bluebell.data.SimpleStore
 import com.micrantha.skouter.data.clue.mapping.ClueDomainMapper
-import com.micrantha.skouter.data.clue.model.RepositoryStore
 import com.micrantha.skouter.data.clue.source.LabelCaptureLocalSource
 import com.micrantha.skouter.data.clue.source.LabelRemoteSource
 import com.micrantha.skouter.domain.model.LabelProof
@@ -19,11 +19,10 @@ class LabelDataRepository(
     private val remoteSource: LabelRemoteSource,
     private val mapper: ClueDomainMapper
 ) : LabelRepository, DIAware {
-    private val store = RepositoryStore<LabelProof>()
+    private val store = SimpleStore<LabelProof>()
 
     override suspend fun analyze(image: CameraImage): Result<LabelProof> {
         return captureSource.analyze(image)
-            .map(mapper::labels)
             .onSuccess(store::update)
     }
 
@@ -34,7 +33,5 @@ class LabelDataRepository(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun labels() = store.value.flatMapConcat {
-        it.asFlow()
-    }
+    override fun results() = store.value.flatMapConcat { it.asFlow() }
 }

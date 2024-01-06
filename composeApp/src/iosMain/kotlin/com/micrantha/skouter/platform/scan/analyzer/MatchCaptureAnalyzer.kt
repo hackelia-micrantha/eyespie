@@ -1,5 +1,7 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
+import com.micrantha.skouter.domain.model.MatchClue
+import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraImage
@@ -7,23 +9,22 @@ import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageEmbeddings
 import okio.ByteString.Companion.toByteString
 import platform.Vision.VNFeaturePrintObservation
 import platform.Vision.VNGenerateImageFeaturePrintRequest
 
-typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>
+typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>
 
 actual class MatchCaptureAnalyzer(
     config: EmbeddingAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
+) : CameraCaptureAnalyzer<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
     config
-), CaptureAnalyzer<ImageEmbeddings>
+), CaptureAnalyzer<MatchProof>
 
 class EmbeddingStreamAnalyzer(
-    callback: AnalyzerCallback<ImageEmbeddings>,
+    callback: AnalyzerCallback<MatchProof>,
     config: EmbeddingAnalyzerConfig = config(),
-) : CameraStreamAnalyzer<ImageEmbeddings, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
+) : CameraStreamAnalyzer<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
     config,
     callback
 ), StreamAnalyzer
@@ -40,7 +41,7 @@ private fun config(): EmbeddingAnalyzerConfig = object : EmbeddingAnalyzerConfig
     override fun map(
         response: List<VNFeaturePrintObservation>,
         image: CameraImage
-    ): ImageEmbeddings = response.map {
-        it.data.toByteString()
+    ): MatchProof = response.map {
+        MatchClue(it.data.toByteString())
     }
 }

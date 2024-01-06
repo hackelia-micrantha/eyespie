@@ -2,7 +2,7 @@ package com.micrantha.skouter.domain.model
 
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
-import com.micrantha.skouter.platform.scan.model.ImageEmbedding
+import okio.ByteString
 import okio.Path
 
 data class Clues(
@@ -14,7 +14,7 @@ data class Clues(
 data class Proof(
     val clues: Clues?,
     val location: Location.Point?,
-    val match: ImageEmbedding,
+    val match: Embedding,
     val image: Path,
     val name: String?,
     val playerID: String
@@ -92,9 +92,11 @@ data class DetectClue(
 ) : Clue<Rect>
 
 data class SegmentClue(
-    override val data: ImageBitmap,
+    override val data: ImageBitmap
 ) : Clue<ImageBitmap>
 
+typealias Embedding = ByteString
+
 data class MatchClue(
-    override val data: ImageEmbedding
-) : Clue<ImageEmbedding>
+    override val data: Embedding
+) : Clue<Embedding>

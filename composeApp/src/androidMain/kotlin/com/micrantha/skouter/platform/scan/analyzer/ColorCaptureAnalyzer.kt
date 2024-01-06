@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.palette.graphics.Palette
+import com.micrantha.skouter.domain.model.ColorClue
+import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageColor
-import com.micrantha.skouter.platform.scan.model.ImageColors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.sqrt
@@ -16,9 +16,9 @@ private const val MODEL_ASSET = "colors.csv"
 
 actual class ColorCaptureAnalyzer(
     context: Context,
-) : CaptureAnalyzer<ImageColors> {
+) : CaptureAnalyzer<ColorProof> {
 
-    actual override suspend fun analyze(image: CameraImage): Result<ImageColors> =
+    actual override suspend fun analyze(image: CameraImage): Result<ColorProof> =
         suspendCoroutine { continuation ->
             try {
                 val colors = candidateColors(image.toBitmap())
@@ -30,7 +30,7 @@ actual class ColorCaptureAnalyzer(
 
     private val colorNames by lazy { context.readColorNames() }
 
-    private fun candidateColors(bitmap: Bitmap): ImageColors {
+    private fun candidateColors(bitmap: Bitmap): ColorProof {
         val palette = Palette.from(bitmap).generate()
 
         val rgb = palette.dominantSwatch!!.rgb
@@ -40,11 +40,11 @@ actual class ColorCaptureAnalyzer(
         val colors = colorNames.map {
             it.key to colorDistance(c1, it.value)
         }.sortedBy { it.second }.take(1).map { (key, _) ->
-            ImageColor(
+            ColorClue(
                 key,
-                colorNames[key]!!.let { Color.rgb(it[0], it[1], it[2]) },
+                //colorNames[key]!!.let { Color.rgb(it[0], it[1], it[2]) },
             )
-        }.toList()
+        }.toSet()
 
         return colors
     }

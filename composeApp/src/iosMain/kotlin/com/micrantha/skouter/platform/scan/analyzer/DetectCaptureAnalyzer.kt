@@ -1,6 +1,9 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
 import androidx.compose.ui.geometry.Rect
+import com.micrantha.skouter.domain.model.DetectClue
+import com.micrantha.skouter.domain.model.DetectProof
+import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraImage
@@ -8,9 +11,6 @@ import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageDetection
-import com.micrantha.skouter.platform.scan.model.ImageLabel
-import com.micrantha.skouter.platform.scan.model.ImageObjects
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreGraphics.CGRectGetHeight
 import platform.CoreGraphics.CGRectGetMinX
@@ -20,16 +20,16 @@ import platform.Vision.VNClassificationObservation
 import platform.Vision.VNCoreMLRequest
 import platform.Vision.VNRecognizedObjectObservation
 
-typealias ObjectCaptureConfig = CameraAnalyzerConfig<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>
+typealias ObjectCaptureConfig = CameraAnalyzerConfig<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>
 
 actual class DetectCaptureAnalyzer(config: ObjectCaptureConfig = config()) :
-    CameraCaptureAnalyzer<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>(config),
-    CaptureAnalyzer<ImageObjects>
+    CameraCaptureAnalyzer<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>(config),
+    CaptureAnalyzer<DetectProof>
 
 class DetectStreamAnalyzer(
-    callback: AnalyzerCallback<ImageObjects>,
+    callback: AnalyzerCallback<DetectProof>,
     config: ObjectCaptureConfig = config(),
-) : CameraStreamAnalyzer<ImageObjects, VNCoreMLRequest, VNRecognizedObjectObservation>(
+) : CameraStreamAnalyzer<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>(
     config,
     callback
 ), StreamAnalyzer
@@ -45,20 +45,20 @@ private fun config(): ObjectCaptureConfig = object : ObjectCaptureConfig {
     override fun map(
         response: List<VNRecognizedObjectObservation>,
         image: CameraImage
-    ): ImageObjects {
+    ): DetectProof {
         return response.map { obj ->
-            ImageDetection(
-                Rect(
+            DetectClue(
+                data = Rect(
                     CGRectGetMinX(obj.boundingBox).toFloat(),
                     CGRectGetMinY(obj.boundingBox).toFloat(),
                     CGRectGetWidth(obj.boundingBox).toFloat(),
                     CGRectGetHeight(obj.boundingBox).toFloat()
                 ),
-                obj.labels.filterIsInstance<VNClassificationObservation>().map {
-                    ImageLabel(it.identifier, it.confidence)
-                }
+                labels = obj.labels.filterIsInstance<VNClassificationObservation>().map {
+                    LabelClue(it.identifier, it.confidence)
+                }.toSet()
             )
-        }
+        }.toSet()
     }
 
 }

@@ -7,7 +7,7 @@ import com.micrantha.skouter.domain.model.DetectClue
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.repository.ColorRepository
-import com.micrantha.skouter.domain.repository.DetectionRepository
+import com.micrantha.skouter.domain.repository.DetectRepository
 import com.micrantha.skouter.domain.repository.LabelRepository
 import com.micrantha.skouter.domain.repository.SegmentRepository
 import com.micrantha.skouter.platform.scan.CameraImage
@@ -22,17 +22,17 @@ import kotlin.coroutines.coroutineContext
 
 class AnalyzeCaptureUseCase(
     private val labelRepository: LabelRepository,
-    private val detectionRepository: DetectionRepository,
+    private val detectionRepository: DetectRepository,
     private val segmentRepository: SegmentRepository,
     private val colorRepository: ColorRepository,
     private val dispatcher: Dispatcher
 ) : Dispatcher by dispatcher {
 
     val clues = merge(
-        labelRepository.labels(),
-        detectionRepository.detections(),
-        segmentRepository.segments(),
-        colorRepository.colors()
+        labelRepository.results(),
+        detectionRepository.results(),
+        segmentRepository.results(),
+        colorRepository.results()
     ).map {
         when (it) {
             is LabelClue -> ScannedLabel(it)

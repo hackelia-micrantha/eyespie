@@ -1,5 +1,7 @@
 package com.micrantha.skouter.platform.scan.analyzer
 
+import com.micrantha.skouter.domain.model.LabelClue
+import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
 import com.micrantha.skouter.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.CameraImage
@@ -7,23 +9,21 @@ import com.micrantha.skouter.platform.scan.CameraStreamAnalyzer
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
-import com.micrantha.skouter.platform.scan.model.ImageLabel
-import com.micrantha.skouter.platform.scan.model.ImageLabels
 import platform.Vision.VNClassificationObservation
 import platform.Vision.VNClassifyImageRequest
 
-typealias LabelAnalyzerConfig = CameraAnalyzerConfig<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>
+typealias LabelAnalyzerConfig = CameraAnalyzerConfig<LabelProof, VNClassifyImageRequest, VNClassificationObservation>
 
 actual class LabelCaptureAnalyzer(
     config: LabelAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>(config),
-    CaptureAnalyzer<ImageLabels>
+) : CameraCaptureAnalyzer<LabelProof, VNClassifyImageRequest, VNClassificationObservation>(config),
+    CaptureAnalyzer<LabelProof>
 
 
 class LabelStreamAnalyzer(
-    callback: AnalyzerCallback<ImageLabels>,
+    callback: AnalyzerCallback<LabelProof>,
     config: LabelAnalyzerConfig = config(),
-) : CameraStreamAnalyzer<ImageLabels, VNClassifyImageRequest, VNClassificationObservation>(
+) : CameraStreamAnalyzer<LabelProof, VNClassifyImageRequest, VNClassificationObservation>(
     config, callback
 ), StreamAnalyzer
 
@@ -35,8 +35,8 @@ private fun config(): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
 
     override fun request() = VNClassifyImageRequest()
 
-    override fun map(response: List<VNClassificationObservation>, image: CameraImage): ImageLabels =
+    override fun map(response: List<VNClassificationObservation>, image: CameraImage): LabelProof =
         response.map {
-            ImageLabel(it.identifier, it.confidence)
-        }
+            LabelClue(it.identifier, it.confidence)
+        }.toSet()
 }

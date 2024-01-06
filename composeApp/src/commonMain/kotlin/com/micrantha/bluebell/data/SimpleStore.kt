@@ -1,11 +1,11 @@
-package com.micrantha.skouter.data.clue.model
+package com.micrantha.bluebell.data
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 
 
-class RepositoryStore<T> {
+class SimpleStore<T> {
     private val data = MutableStateFlow<T?>(null)
 
     val value: Flow<T> = data.filterNotNull()
