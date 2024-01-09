@@ -1,7 +1,7 @@
 package com.micrantha.skouter.data.clue
 
-import com.micrantha.bluebell.data.SimpleStore
-import com.micrantha.skouter.data.clue.source.ObjectCaptureLocalSource
+import com.micrantha.bluebell.data.MemoryStore
+import com.micrantha.skouter.data.clue.source.DetectCaptureLocalSource
 import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.repository.DetectRepository
 import com.micrantha.skouter.platform.scan.CameraImage
@@ -13,13 +13,13 @@ import org.kodein.di.DIAware
 
 class DetectDataRepository(
     override val di: DI,
-    private val captureSource: ObjectCaptureLocalSource,
+    private val localSource: DetectCaptureLocalSource,
 ) : DetectRepository, DIAware {
 
-    private val store = SimpleStore<DetectProof>()
+    private val store = MemoryStore<DetectProof>()
 
     override suspend fun analyze(image: CameraImage): Result<DetectProof> {
-        return captureSource.analyze(image).onSuccess(store::update)
+        return localSource.analyze(image).onSuccess(store::update)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

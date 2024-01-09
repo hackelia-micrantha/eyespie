@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 
 
-class SimpleStore<T> {
+class MemoryStore<T> {
     private val data = MutableStateFlow<T?>(null)
 
     val value: Flow<T> = data.filterNotNull()

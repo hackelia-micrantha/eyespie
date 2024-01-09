@@ -50,7 +50,7 @@ fun ThingListingCard(
 private fun GameThingImage(imageUrl: ImagePath) {
     val painter = asyncPainterResource(
         key = imageUrl,
-        data = "https://${SkouterConfig.supaBaseDomain}/storage/v1/${imageUrl}"
+        data = "${SkouterConfig.supaBaseUrl}/storage/v1/${imageUrl}"
     )
 
     Box(

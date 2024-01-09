@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.toComposeRect
 import androidx.core.graphics.toRect
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.tasks.components.containers.Detection
+import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode.IMAGE
 import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector
@@ -58,7 +59,11 @@ class DetectStreamAnalyzer(
     }
 
     override fun analyze(image: CameraImage) {
-        client.detectAsync(image.asMPImage(), image.timestamp)
+        client.detectAsync(
+            image.asMPImage(), ImageProcessingOptions.builder()
+                .setRotationDegrees(image.rotation)
+                .build(), image.timestamp
+        )
     }
 
     private fun onResult(result: ObjectDetectorResult, input: MPImage) {

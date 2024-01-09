@@ -43,6 +43,11 @@ kotlin {
             isStatic = true
             binaryOption("bundleId", "com.micrantha.skouter")
         }
+        iosTarget.compilations.configureEach {
+            compilerOptions.configure {
+                freeCompilerArgs.add("-Xallocator=custom")
+            }
+        }
     }
 
     sourceSets {

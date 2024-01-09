@@ -1,6 +1,6 @@
 package com.micrantha.skouter.data.clue
 
-import com.micrantha.bluebell.data.SimpleStore
+import com.micrantha.bluebell.data.MemoryStore
 import com.micrantha.skouter.data.clue.source.SegmentCaptureLocalSource
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.domain.repository.SegmentRepository
@@ -13,13 +13,13 @@ import org.kodein.di.DIAware
 
 class SegmentDataRepository(
     override val di: DI,
-    private val captureSource: SegmentCaptureLocalSource,
+    private val localSource: SegmentCaptureLocalSource,
 ) : DIAware, SegmentRepository {
 
-    private val store = SimpleStore<SegmentProof>()
+    private val store = MemoryStore<SegmentProof>()
 
     override suspend fun analyze(image: CameraImage): Result<SegmentProof> {
-        return captureSource.analyze(image).onSuccess(store::update)
+        return localSource.analyze(image).onSuccess(store::update)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

@@ -1,6 +1,6 @@
 package com.micrantha.skouter.data.clue
 
-import com.micrantha.bluebell.data.SimpleStore
+import com.micrantha.bluebell.data.MemoryStore
 import com.micrantha.skouter.data.clue.source.MatchCaptureLocalSource
 import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.repository.MatchRepository
@@ -13,13 +13,13 @@ import org.kodein.di.DIAware
 
 class MatchDataRepository(
     override val di: DI,
-    private val captureSource: MatchCaptureLocalSource,
+    private val localSource: MatchCaptureLocalSource,
 ) : DIAware, MatchRepository {
 
-    private val store = SimpleStore<MatchProof>()
+    private val store = MemoryStore<MatchProof>()
 
     override suspend fun analyze(image: CameraImage) =
-        captureSource.analyze(image).onSuccess(store::update)
+        localSource.analyze(image).onSuccess(store::update)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun results() = store.value.flatMapConcat { it.asFlow() }
