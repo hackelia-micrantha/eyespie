@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.onStart
 
 class SupaRealtimeClient {
     private val realtime by lazy {
-        createSupabaseClient("https://${SkouterConfig.supaBaseDomain}", SkouterConfig.supaBaseKey) {
+        createSupabaseClient(SkouterConfig.supaBaseUrl, SkouterConfig.supaBaseKey) {
             install(RealtimeClient)
         }.realtime
     }

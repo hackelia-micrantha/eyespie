@@ -33,7 +33,7 @@ typealias AuthCall = GoTrue
 
 class SupaClient {
     private val supabase by lazy {
-        createSupabaseClient("https://${SkouterConfig.supaBaseDomain}", SkouterConfig.supaBaseKey) {
+        createSupabaseClient(SkouterConfig.supaBaseUrl, SkouterConfig.supaBaseKey) {
             install(GraphClient)
 
             install(DatabaseClient)

@@ -15,17 +15,15 @@ import platform.Vision.VNGenerateImageFeaturePrintRequest
 
 typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>
 
-actual class MatchCaptureAnalyzer(
-    config: EmbeddingAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
-    config
-), CaptureAnalyzer<MatchProof>
+actual class MatchCaptureAnalyzer :
+    CameraCaptureAnalyzer<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
+        config()
+    ), CaptureAnalyzer<MatchProof>
 
 class EmbeddingStreamAnalyzer(
-    callback: AnalyzerCallback<MatchProof>,
-    config: EmbeddingAnalyzerConfig = config(),
+    callback: AnalyzerCallback<MatchProof>
 ) : CameraStreamAnalyzer<MatchProof, VNGenerateImageFeaturePrintRequest, VNFeaturePrintObservation>(
-    config,
+    config(),
     callback
 ), StreamAnalyzer
 

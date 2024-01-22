@@ -18,6 +18,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.toAndroidRectF
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
@@ -55,6 +57,7 @@ private fun CameraSelector.toggle() = when (this) {
 @Composable
 actual fun CameraScanner(
     modifier: Modifier,
+    regionOfInterest: Rect?,
     onCameraImage: CameraScannerDispatch
 ) {
 
@@ -68,7 +71,8 @@ actual fun CameraScanner(
 
     val scope = rememberCoroutineScope()
 
-    val analyzer = remember { CameraAnalyzer(onCameraImage, scope) }
+    val analyzer =
+        remember { CameraAnalyzer(regionOfInterest?.toAndroidRectF(), onCameraImage, scope) }
 
     val imageCapture = remember {
         ImageCapture.Builder()

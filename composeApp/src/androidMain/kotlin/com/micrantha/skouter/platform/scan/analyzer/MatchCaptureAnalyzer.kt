@@ -18,34 +18,35 @@ import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
 import okio.ByteString.Companion.toByteString
 
-private const val MODEL_ASSET = "models/embeddings/image.tflite"
+private const val MODEL_ASSET = "models/embedding/image.tflite"
 
 typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<MatchProof, ImageEmbedderOptions.Builder, ImageEmbedder, ImageEmbedderResult>
 
 actual class MatchCaptureAnalyzer(
     context: Context,
-    private val config: EmbeddingAnalyzerConfig = config(context)
-) : CaptureAnalyzer<MatchProof> {
+) : MatchAnalyzer(context), CaptureAnalyzer<MatchProof> {
 
     private val client by lazy {
-        config.client { setRunningMode(IMAGE) }
+        super.client { setRunningMode(IMAGE) }
     }
 
     actual override suspend fun analyze(image: CameraImage): Result<MatchProof> = try {
-        val result = client.embed(image.asMPImage())
-        Result.success(config.map(result))
+        val result = client.embed(
+            image.asMPImage(), image.processingOptions
+        )
+        Result.success(super.map(result))
     } catch (err: Throwable) {
         Result.failure(err)
     }
 }
 
-class EmbeddingStreamAnalyzer(
+class MatchStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<MatchProof>,
-    private val config: EmbeddingAnalyzerConfig = config(context)
-) : StreamAnalyzer {
+) : MatchAnalyzer(context), StreamAnalyzer {
+
     private val client by lazy {
-        config.client {
+        super.client {
             setResultListener(::onResult)
             setErrorListener(callback::onAnalyzerError)
             setRunningMode(LIVE_STREAM)
@@ -53,17 +54,19 @@ class EmbeddingStreamAnalyzer(
     }
 
     override fun analyze(image: CameraImage) {
-        client.embedAsync(image.asMPImage(), image.timestamp)
+        client.embedAsync(
+            image.asMPImage(), image.processingOptions, image.timestamp
+        )
     }
 
     private fun onResult(result: ImageEmbedderResult, input: MPImage) {
-        callback.onAnalyzerResult(config.map(result))
+        callback.onAnalyzerResult(super.map(result))
     }
 }
 
-private fun config(context: Context): EmbeddingAnalyzerConfig = object : EmbeddingAnalyzerConfig {
+abstract class MatchAnalyzer(private val context: Context) : EmbeddingAnalyzerConfig {
     override fun map(result: ImageEmbedderResult): MatchProof {
-        return result.embeddingResult().embeddings().map(::embedding)
+        return result.embeddingResult().embeddings().map(::embedding).toList()
     }
 
     private fun embedding(data: Embedding) = MatchClue(data.quantizedEmbedding().toByteString())

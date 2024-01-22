@@ -26,18 +26,20 @@ typealias DetectionAnalyzerConfig = CameraAnalyzerConfig<DetectProof, ObjectDete
 
 actual class DetectCaptureAnalyzer(
     context: Context,
-    private val config: DetectionAnalyzerConfig = config(context)
-) : CaptureAnalyzer<DetectProof> {
+) : DetectAnalyzer(context), CaptureAnalyzer<DetectProof> {
 
     private val client by lazy {
-        config.client {
+        super.client {
             setRunningMode(IMAGE)
         }
     }
 
     actual override suspend fun analyze(image: CameraImage): Result<DetectProof> = try {
-        val result = client.detect(image.asMPImage())
-        Result.success(config.map(result))
+        val result = client.detect(
+            image.asMPImage(),
+            image.processingOptions
+        )
+        Result.success(super.map(result))
     } catch (err: Throwable) {
         Result.failure(err)
     }
@@ -46,11 +48,10 @@ actual class DetectCaptureAnalyzer(
 class DetectStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<DetectProof>,
-    private val config: DetectionAnalyzerConfig = config(context)
-) : StreamAnalyzer {
+) : DetectAnalyzer(context), StreamAnalyzer {
 
     private val client by lazy {
-        config.client {
+        super.client {
             setRunningMode(LIVE_STREAM)
             setResultListener(::onResult)
             setErrorListener(callback::onAnalyzerError)
@@ -58,15 +59,17 @@ class DetectStreamAnalyzer(
     }
 
     override fun analyze(image: CameraImage) {
-        client.detectAsync(image.asMPImage(), image.timestamp)
+        client.detectAsync(
+            image.asMPImage(), image.processingOptions, image.timestamp
+        )
     }
 
     private fun onResult(result: ObjectDetectorResult, input: MPImage) {
-        callback.onAnalyzerResult(config.map(result))
+        callback.onAnalyzerResult(super.map(result))
     }
 }
 
-private fun config(context: Context): DetectionAnalyzerConfig = object : DetectionAnalyzerConfig {
+abstract class DetectAnalyzer(private val context: Context) : DetectionAnalyzerConfig {
     override fun map(result: ObjectDetectorResult): DetectProof {
         return result.detections().map(::detect).toSet()
     }

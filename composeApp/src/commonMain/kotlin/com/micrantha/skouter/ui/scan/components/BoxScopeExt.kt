@@ -16,7 +16,7 @@ import com.micrantha.skouter.ui.scan.capture.ScanOverlay
 @Composable
 fun BoxWithConstraintsScope.ScannedOverlays(
     modifier: Modifier = Modifier,
-    data: List<ScanOverlay>
+    data: Collection<ScanOverlay>
 ) {
     val measurer = rememberTextMeasurer()
 

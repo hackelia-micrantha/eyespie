@@ -4,6 +4,7 @@ import com.micrantha.skouter.platform.asException
 import com.micrantha.skouter.platform.scan.components.AnalyzerCallback
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
 import com.micrantha.skouter.platform.scan.components.StreamAnalyzer
+import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCObjectVar
 import kotlinx.cinterop.alloc
@@ -73,7 +74,7 @@ private val executeQueue by lazy {
     dispatch_queue_create(label = "executeImageRequest", null)
 }
 
-@OptIn(ExperimentalForeignApi::class)
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 private fun <T : VNRequest> VNImageRequestHandler.execute(
     request: T,
     onError: (Throwable) -> Unit,

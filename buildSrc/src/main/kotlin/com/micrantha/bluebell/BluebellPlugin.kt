@@ -11,7 +11,7 @@ open class BluebellPlugin : Plugin<Project> {
 
         afterEvaluate {
             configureBuilds(bluebell.config)
-            downloadModels(bluebell.models)
+            configureModels(bluebell.models)
         }
     }
 }

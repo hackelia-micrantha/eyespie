@@ -14,17 +14,15 @@ import platform.Vision.VNClassifyImageRequest
 
 typealias LabelAnalyzerConfig = CameraAnalyzerConfig<LabelProof, VNClassifyImageRequest, VNClassificationObservation>
 
-actual class LabelCaptureAnalyzer(
-    config: LabelAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<LabelProof, VNClassifyImageRequest, VNClassificationObservation>(config),
+actual class LabelCaptureAnalyzer :
+    CameraCaptureAnalyzer<LabelProof, VNClassifyImageRequest, VNClassificationObservation>(config()),
     CaptureAnalyzer<LabelProof>
 
 
 class LabelStreamAnalyzer(
     callback: AnalyzerCallback<LabelProof>,
-    config: LabelAnalyzerConfig = config(),
 ) : CameraStreamAnalyzer<LabelProof, VNClassifyImageRequest, VNClassificationObservation>(
-    config, callback
+    config(), callback
 ), StreamAnalyzer
 
 private fun config(): LabelAnalyzerConfig = object : LabelAnalyzerConfig {

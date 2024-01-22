@@ -10,12 +10,13 @@ import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.LocationClue
+import kotlinx.collections.immutable.toPersistentSet
 
 class ClueDomainMapper {
 
     fun label(data: RemoteImageLabel) = LabelClue(data.text, data.confidence)
 
-    fun response(data: ImageResponse): LabelProof = data.map(::label).toSet()
+    fun response(data: ImageResponse): LabelProof = data.map(::label).toPersistentSet()
 
     fun clue(data: Location.Data) = LocationClue(
         data = data,

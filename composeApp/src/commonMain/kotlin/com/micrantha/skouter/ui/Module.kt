@@ -34,7 +34,6 @@ import com.micrantha.skouter.ui.scan.usecase.MatchCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
-import kotlinx.coroutines.CoroutineScope
 import org.kodein.di.DI
 import org.kodein.di.bindFactory
 import org.kodein.di.bindProvider
@@ -61,17 +60,13 @@ internal fun uiModules() = DI.Module("Skouter UI") {
 
     bindProviderOf(::DashboardScreen)
     bindProviderOf(::DashboardLoadUseCase)
-    bindFactory { scope: CoroutineScope -> DashboardEnvironment(scope, get(), get()) }
+    bindProviderOf(::DashboardEnvironment)
     bindProvider { DashboardScreenModel(get()) }
 
     bindProviderOf(::ScanCaptureScreen)
     bindProviderOf(::ScanCaptureStateMapper)
     bindProviderOf(::ScanCaptureScreenModel)
-    bindFactory { scope: CoroutineScope ->
-        ScanCaptureEnvironment(
-            scope, get(), get(), get(), get(), get(), get(), get(), get()
-        )
-    }
+    bindProviderOf(::ScanCaptureEnvironment)
 
     bindProviderOf(::ScanEditEnvironment)
     bindProviderOf(::ScanEditScreenModel)

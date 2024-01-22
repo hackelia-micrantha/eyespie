@@ -19,12 +19,6 @@ Bob guesses the photo and gets points, or has to guess again.
 
 Alice gets participation points.
 
-## History
-
-Originally a school project for native android, an [Ongoing prototype since 2016](https://ryanjennin.gs/posts/scouter-demo/).
-
-Briefly attempted a rewrite in react-native in "spare time", until Kotlin multiplatform became available.
-
 ## Notes
 
 Apologies for the lack of testing and continuous integration - resource constrained and am a perfect programmer.

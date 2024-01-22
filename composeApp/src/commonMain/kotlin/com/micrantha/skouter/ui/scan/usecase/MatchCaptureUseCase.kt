@@ -23,6 +23,7 @@ class MatchCaptureUseCase(
 
             Log.i("image match similarity: $result")
 
+            // TODO: Game configurable
             result.compareTo(0.70000000) >= 0
         }
 

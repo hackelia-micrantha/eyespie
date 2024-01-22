@@ -12,7 +12,7 @@ import com.micrantha.bluebell.ui.theme.Dimensions
 
 
 @Composable
-fun ScannedClues(modifier: Modifier, clues: List<String>) {
+fun ScannedClues(modifier: Modifier, clues: Collection<String>) {
     Column(
         modifier = modifier
             .padding(Dimensions.screen)

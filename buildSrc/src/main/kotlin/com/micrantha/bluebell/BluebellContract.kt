@@ -9,7 +9,12 @@ open class BluebellConfig {
 }
 
 open class BluebellModels {
-    var outputPath: String = "models"
-    var ids: List<String> = emptyList()
-    val files: Map<String, String> = emptyMap()
+    var outputPaths: Array<String> = arrayOf(
+        "composeApp/src/androidMain/assets/models",
+        "iosApp/iosApp/Models"
+    )
+    var downloadPath: String = "models"
+
+    //var ids: List<String> = emptyList()
+    var files: Map<String, String> = emptyMap()
 }
