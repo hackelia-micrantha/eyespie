@@ -11,6 +11,7 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter.ImageSegmenterOptions
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenterResult
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
@@ -38,6 +39,7 @@ actual class SegmentCaptureAnalyzer(
         )
         Result.success(super.map(result))
     } catch (err: Throwable) {
+        Log.e("analyzer", err) { "unable to segment image" }
         Result.failure(err)
     }
 }

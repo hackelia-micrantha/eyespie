@@ -5,6 +5,7 @@ import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mediapipe.tasks.core.BaseOptions
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -26,32 +27,24 @@ class CameraAnalyzer(
     private val callback: CameraScannerDispatch,
     private val scope: CoroutineScope
 ) : ImageAnalysis.Analyzer {
-
-    private var lastJob: Long = 0
-
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
-
-        if (image.imageInfo.timestamp - lastJob < 500) {
-            return
-        }
-
-        lastJob = image.imageInfo.timestamp
-
-        scope.launch {
-
+        try {
             val uiImage = CameraImage(
                 data = image.image,
                 width = image.width,
                 height = image.height,
                 rotation = image.imageInfo.rotationDegrees,
-                timestamp = lastJob,
+                timestamp = image.imageInfo.timestamp,
                 regionOfInterest = regionOfInterest
             )
 
-            callback(uiImage)
-
-            //image.close()
+            scope.launch {
+                callback(uiImage)
+                //image.close()
+            }
+        } catch (err: Throwable) {
+            Log.e("analyzer", err) { "unable to analyze camera image" }
         }
     }
 

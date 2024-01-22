@@ -10,6 +10,7 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector.ObjectDetectorOptions
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetectorResult
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.domain.model.DetectClue
 import com.micrantha.skouter.domain.model.DetectProof
 import com.micrantha.skouter.domain.model.LabelClue
@@ -41,6 +42,7 @@ actual class DetectCaptureAnalyzer(
         )
         Result.success(super.map(result))
     } catch (err: Throwable) {
+        Log.e("analyzer", err) { "unable to detect image" }
         Result.failure(err)
     }
 }

@@ -9,6 +9,7 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier.ImageClassifierOptions
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
@@ -37,6 +38,7 @@ actual class LabelCaptureAnalyzer(
         )
         Result.success(super.map(result))
     } catch (err: Throwable) {
+        Log.e("analyzer", err) { "unable to label image" }
         Result.failure(err)
     }
 }

@@ -8,6 +8,7 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedder
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedder.ImageEmbedderOptions
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedderResult
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.domain.model.MatchClue
 import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.platform.scan.CameraAnalyzerConfig
@@ -36,6 +37,7 @@ actual class MatchCaptureAnalyzer(
         )
         Result.success(super.map(result))
     } catch (err: Throwable) {
+        Log.e("analyzer", err) { "unable to match image" }
         Result.failure(err)
     }
 }

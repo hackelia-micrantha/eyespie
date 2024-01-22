@@ -20,8 +20,9 @@ kotlin {
             baseName = "bluebell"
         }
 
-        pod("Reachability")
+        //pod("Reachability")
         //pod("MediaPipeTasksVision")
+        //podfile = project.file("../iosApp/Podfile")
     }
 
     applyDefaultHierarchyTemplate()
@@ -94,6 +95,7 @@ kotlin {
             implementation(libs.permissions.compose)
             implementation(libs.geo.compose)
             implementation(libs.kamel.image)
+            implementation(libs.moko.media)
 
             //implementation("ca.rmen:rhymer:1.2.0")
 

@@ -4,12 +4,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.palette.graphics.Palette
+import com.micrantha.bluebell.data.Log
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.platform.scan.components.CaptureAnalyzer
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 import kotlin.math.sqrt
 
 private const val MODEL_ASSET = "colors.csv"
@@ -19,14 +18,14 @@ actual class ColorCaptureAnalyzer(
 ) : CaptureAnalyzer<ColorProof> {
 
     actual override suspend fun analyze(image: CameraImage): Result<ColorProof> =
-        suspendCoroutine { continuation ->
-            try {
-                val colors = candidateColors(image.toBitmap())
-                continuation.resume(Result.success(colors))
-            } catch (err: Throwable) {
-                continuation.resume(Result.failure(err))
-            }
+        try {
+            val colors = candidateColors(image.toBitmap())
+            Result.success(colors)
+        } catch (err: Throwable) {
+            Log.e("analyzer", err) { "unable to get image color" }
+            Result.failure(err)
         }
+
 
     private val colorNames by lazy { context.readColorNames() }
 

@@ -39,6 +39,7 @@ tensorflowLiteSupport = "0.4.4"
 tensorflowLite = "2.14.0"
 mediapipe = "0.20230731"
 buildConfig = "3.1.0"
+mokoMedia = "0.11.0"
 
 [plugins]
 
@@ -111,3 +112,4 @@ tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata",
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteSupport" }
 mediapipe-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
+moko-media = { module = "dev.icerock.moko:media", version.ref = "mokoMedia" }

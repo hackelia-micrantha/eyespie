@@ -1,6 +1,7 @@
 package com.micrantha.skouter.ui.scan.capture
 
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.data.weightedRandomSample
 import com.micrantha.bluebell.ui.screen.StateMapper
 import com.micrantha.skouter.domain.model.Clue
@@ -11,14 +12,19 @@ import com.micrantha.skouter.domain.model.Proof
 
 class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
 
-    override fun map(state: ScanState) = ScanUiState(
-        clues = clues(state),
-        overlays = overlays(state),
-        enabled = state.enabled,
-        capture = if (state.enabled.not()) state.image?.toImageBitmap()?.let {
-            BitmapPainter(it)
-        } else null
-    )
+    override fun map(state: ScanState): ScanUiState = try {
+        ScanUiState(
+            clues = clues(state),
+            overlays = overlays(state),
+            enabled = state.enabled,
+            capture = if (state.enabled.not()) state.image?.toImageBitmap()?.let {
+                BitmapPainter(it)
+            } else null
+        )
+    } catch (err: Throwable) {
+        Log.e("mapping", err) { "unable to map scan state" }
+        throw err
+    }
 
     fun prove(state: ScanState) = Proof(
         clues = Clues(

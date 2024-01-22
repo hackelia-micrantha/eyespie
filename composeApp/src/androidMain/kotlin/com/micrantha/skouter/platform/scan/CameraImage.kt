@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.RectF
 import android.media.Image
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.asImageBitmap
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
@@ -20,17 +19,6 @@ actual class CameraImage(
     val timestamp: Long,
     val regionOfInterest: RectF? = null,
 ) {
-
-    constructor(bitmap: Bitmap, timestamp: Long) : this(
-        data = null,
-        width = bitmap.width,
-        height = bitmap.height,
-        rotation = 0,
-        timestamp = timestamp,
-        regionOfInterest = null,
-    ) {
-        bitmapBuffer = bitmap
-    }
 
     private lateinit var bitmapBuffer: Bitmap
     private lateinit var mediaImage: MPImage
@@ -77,16 +65,5 @@ actual class CameraImage(
         )
 
         return bitmapBuffer
-    }
-
-    actual fun crop(rect: Rect): CameraImage {
-        val cropped = Bitmap.createBitmap(
-            toBitmap(),
-            rect.left.toInt(),
-            rect.top.toInt(),
-            rect.width.toInt(),
-            rect.height.toInt()
-        )
-        return CameraImage(cropped, timestamp)
     }
 }
