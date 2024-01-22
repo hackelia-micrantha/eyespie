@@ -1,5 +1,6 @@
 package com.micrantha.skouter.platform.scan
 
+import android.graphics.RectF
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
@@ -21,6 +22,7 @@ interface CameraAnalyzerConfig<Value, Options, Client, Result> {
 }
 
 class CameraAnalyzer(
+    private val regionOfInterest: RectF? = null,
     private val callback: CameraScannerDispatch,
     private val scope: CoroutineScope
 ) : ImageAnalysis.Analyzer {
@@ -36,19 +38,20 @@ class CameraAnalyzer(
 
         lastJob = image.imageInfo.timestamp
 
-        val uiImage = CameraImage(
-            data = image.image,
-            width = image.width,
-            height = image.height,
-            rotation = image.imageInfo.rotationDegrees,
-            lastJob
-        )
-
         scope.launch {
+
+            val uiImage = CameraImage(
+                data = image.image,
+                width = image.width,
+                height = image.height,
+                rotation = image.imageInfo.rotationDegrees,
+                timestamp = lastJob,
+                regionOfInterest = regionOfInterest
+            )
 
             callback(uiImage)
 
-            image.close()
+            //image.close()
         }
     }
 

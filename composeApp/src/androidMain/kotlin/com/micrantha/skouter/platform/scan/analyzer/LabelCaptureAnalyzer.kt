@@ -23,17 +23,19 @@ typealias LabelAnalyzerConfig = CameraAnalyzerConfig<LabelProof, ImageClassifier
 
 actual class LabelCaptureAnalyzer(
     context: Context,
-    private val config: LabelAnalyzerConfig = config(context)
-) : CaptureAnalyzer<LabelProof> {
+) : LabelAnalyzer(context), CaptureAnalyzer<LabelProof> {
+
     private val client by lazy {
-        config.client {
+        super.client {
             setRunningMode(IMAGE)
         }
     }
 
     actual override suspend fun analyze(image: CameraImage): Result<LabelProof> = try {
-        val result = client.classify(image.asMPImage())
-        Result.success(config.map(result))
+        val result = client.classify(
+            image.asMPImage(), image.processingOptions
+        )
+        Result.success(super.map(result))
     } catch (err: Throwable) {
         Result.failure(err)
     }
@@ -42,11 +44,10 @@ actual class LabelCaptureAnalyzer(
 class LabelStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<LabelProof>,
-    private val config: LabelAnalyzerConfig = config(context)
-) : StreamAnalyzer {
+) : LabelAnalyzer(context), StreamAnalyzer {
 
     private val client by lazy {
-        config.client {
+        super.client {
             setRunningMode(LIVE_STREAM)
             setResultListener(::onResult)
             setErrorListener(callback::onAnalyzerError)
@@ -54,15 +55,19 @@ class LabelStreamAnalyzer(
     }
 
     override fun analyze(image: CameraImage) {
-        client.classifyAsync(image.asMPImage(), image.timestamp)
+        client.classifyAsync(
+            image.asMPImage(),
+            image.processingOptions,
+            image.timestamp
+        )
     }
 
     private fun onResult(result: ImageClassifierResult, input: MPImage) {
-        callback.onAnalyzerResult(config.map(result))
+        callback.onAnalyzerResult(super.map(result))
     }
 }
 
-private fun config(context: Context): LabelAnalyzerConfig = object : LabelAnalyzerConfig {
+abstract class LabelAnalyzer(private val context: Context) : LabelAnalyzerConfig {
     override fun map(result: ImageClassifierResult) = result.classificationResult()
         .classifications().flatMap { it.categories() }.map(::label).toSet()
 

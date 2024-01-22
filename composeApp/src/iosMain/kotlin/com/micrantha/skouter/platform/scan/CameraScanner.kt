@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.toSkiaRect
 import androidx.compose.ui.interop.UIKitView
 import co.touchlab.stately.freeze
 import com.micrantha.skouter.platform.asException
@@ -52,14 +54,16 @@ import platform.darwin.NSObject
 import platform.darwin.dispatch_async
 import platform.darwin.dispatch_get_main_queue
 import platform.darwin.dispatch_queue_create
+import org.jetbrains.skia.Rect as RectF
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun CameraScanner(
     modifier: Modifier,
+    regionOfInterest: Rect,
     onCameraImage: CameraScannerDispatch
 ) {
-    val stream = rememberCameraStream(onCameraImage) ?: return
+    val stream = rememberCameraStream(regionOfInterest.toSkiaRect(), onCameraImage) ?: return
 
     DisposableEffect(stream) {
 
@@ -81,16 +85,18 @@ actual fun CameraScanner(
 
 @Composable
 private fun rememberCameraStream(
+    regionOfInterest: RectF? = null,
     onCameraImage: CameraScannerDispatch
 ): CameraStream? = remember {
     AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)?.let {
-        CameraStream(it, onCameraImage)
+        CameraStream(it, regionOfInterest, onCameraImage)
     }
 }
 
 @OptIn(ExperimentalForeignApi::class)
 class CameraStream(
     private val device: AVCaptureDevice,
+    private val regionOfInterest: RectF? = null,
     private val onCameraImage: CameraScannerDispatch
 ) : NSObject(), AVCaptureVideoDataOutputSampleBufferDelegateProtocol {
 

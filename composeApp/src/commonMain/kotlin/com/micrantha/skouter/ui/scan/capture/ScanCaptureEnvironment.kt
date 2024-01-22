@@ -30,12 +30,10 @@ import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ScanCaptureEnvironment(
-    private val scope: CoroutineScope,
     private val context: ScreenContext,
     private val takeCaptureUseCase: TakeCaptureUseCase,
     private val saveCaptureUseCase: SaveCaptureUseCase,
@@ -51,7 +49,7 @@ class ScanCaptureEnvironment(
     LocalizedRepository by context.i18n {
 
     init {
-        analyzeCaptureUseCase.clues.onEach(::dispatch).launchIn(scope)
+        analyzeCaptureUseCase.clues.onEach(::dispatch).launchIn(dispatchScope)
     }
 
     override suspend fun invoke(action: Action, state: ScanState) {
@@ -66,9 +64,9 @@ class ScanCaptureEnvironment(
                 dispatch(SaveError)
             }
 
-            is ScannedDetection -> subAnalyzeClueUseCase(state.image!!.crop(action.detection.data))
+            //is ScannedDetection -> subAnalyzeClueUseCase(state.image!!.crop(action.detection.data))
 
-            is ScannedSegment -> subAnalyzeClueUseCase(state.image!!)
+            //is ScannedSegment -> subAnalyzeClueUseCase(state.image!!)
 
             is EditSaved -> navigate(
                 ScanEditScreen(
@@ -94,8 +92,7 @@ class ScanCaptureEnvironment(
                 dispatch(SaveError)
             }
 
-            is ScannedImage -> analyzeCaptureUseCase(action.image)
-                .onFailure { dispatch(ScanAction.ScanError) }
+            is ScannedImage -> analyzeCaptureUseCase(action.image).launchIn(dispatchScope)
 
             is ScanAction.Back -> context.router.navigateBack()
         }

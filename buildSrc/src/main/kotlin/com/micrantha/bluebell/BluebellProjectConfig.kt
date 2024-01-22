@@ -2,15 +2,17 @@ package com.micrantha.bluebell
 
 import com.github.gmazzo.gradle.plugins.BuildConfigExtension
 import org.gradle.api.Project
+import java.io.File
 import java.util.Properties
 
 private fun Project.loadProperties(config: BluebellConfig): Properties {
     val properties = Properties()
     try {
         properties.load(this.rootProject.file(config.fileName).reader())
-        println("${properties.size} properties loaded from ${config.fileName}")
+        println("> ${properties.size} properties loaded from ${config.fileName}")
     } catch (err: Throwable) {
-        error("Could not load $config")
+        File(config.fileName).createNewFile()
+        println("> Created properties file ${config.fileName}")
     }
     return properties
 }
@@ -28,8 +30,8 @@ fun Project.configureBuilds(config: BluebellConfig) {
             val properties by lazy { loadProperties(config) }
 
             if (properties.isEmpty) {
-                println("please configure a properties file (${config.fileName}) containing configuration for:")
-                println("  supaBaseDomain, supaBaseKey, userLoginEmail, userLoginPassword")
+                println("e: please configure a properties file (${config.fileName}) containing configuration for:")
+                println("  supaBaseUrl, supaBaseKey, huggingFaceApiToken, userLoginEmail, userLoginPassword")
                 error("no build configuration")
             }
 

@@ -6,7 +6,6 @@ import android.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import com.google.mediapipe.framework.image.ByteBufferExtractor
 import com.google.mediapipe.framework.image.MPImage
-import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions
 import com.google.mediapipe.tasks.vision.core.RunningMode.IMAGE
 import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter
@@ -27,16 +26,17 @@ typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<SegmentProof, ImageSegmen
 
 actual class SegmentCaptureAnalyzer(
     context: Context,
-    private val config: SegmentAnalyzerConfig = config(context)
-) : CaptureAnalyzer<SegmentProof> {
+) : SegmentAnalyzer(context), CaptureAnalyzer<SegmentProof> {
 
     private val client by lazy {
-        config.client { setRunningMode(IMAGE) }
+        super.client { setRunningMode(IMAGE) }
     }
 
     actual override suspend fun analyze(image: CameraImage): Result<SegmentProof> = try {
-        val result = client.segment(image.asMPImage())
-        Result.success(config.map(result))
+        val result = client.segment(
+            image.asMPImage(), image.processingOptions
+        )
+        Result.success(super.map(result))
     } catch (err: Throwable) {
         Result.failure(err)
     }
@@ -45,11 +45,10 @@ actual class SegmentCaptureAnalyzer(
 class SegmentStreamAnalyzer(
     context: Context,
     private val callback: AnalyzerCallback<SegmentProof>,
-    private val config: SegmentAnalyzerConfig = config(context)
-) : StreamAnalyzer {
+) : SegmentAnalyzer(context), StreamAnalyzer {
 
     private val client by lazy {
-        config.client {
+        super.client {
             setRunningMode(LIVE_STREAM)
             setResultListener(::onResult)
             setErrorListener(callback::onAnalyzerError)
@@ -59,17 +58,17 @@ class SegmentStreamAnalyzer(
     override fun analyze(image: CameraImage) {
         client.segmentAsync(
             image.asMPImage(),
-            ImageProcessingOptions.builder().setRotationDegrees(-image.rotation).build(),
+            image.processingOptions,
             image.timestamp
         )
     }
 
     private fun onResult(result: ImageSegmenterResult, input: MPImage) {
-        callback.onAnalyzerResult(config.map(result))
+        callback.onAnalyzerResult(super.map(result))
     }
 }
 
-private fun config(context: Context): SegmentAnalyzerConfig = object : SegmentAnalyzerConfig {
+abstract class SegmentAnalyzer(private val context: Context) : SegmentAnalyzerConfig {
     override fun map(result: ImageSegmenterResult): SegmentProof {
         val categoryMask = result.categoryMask().get()
         return listOf(mask(categoryMask))

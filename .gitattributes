@@ -1,0 +1,2 @@
+composeApp/src/androidMain/assets/models filter=lfs diff=lfs merge=lfs -text
+iosApp/iosApp/Models filter=lfs diff=lfs merge=lfs -text

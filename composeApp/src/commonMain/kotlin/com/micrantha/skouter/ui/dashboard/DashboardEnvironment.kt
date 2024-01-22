@@ -27,12 +27,10 @@ import com.micrantha.skouter.ui.game.detail.GameDetailScreenArg
 import com.micrantha.skouter.ui.game.detail.GameDetailsScreen
 import com.micrantha.skouter.ui.scan.capture.ScanCaptureScreen
 import com.micrantha.skouter.ui.scan.guess.ScanGuessScreen
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class DashboardEnvironment(
-    private val scope: CoroutineScope,
     private val context: ScreenContext,
     private val dashboardLoadUseCase: DashboardLoadUseCase
 ) : Reducer<DashboardState>, Effect<DashboardState>, Dispatcher by context.dispatcher {
@@ -91,7 +89,7 @@ class DashboardEnvironment(
                 dashboardLoadUseCase().onEach { res ->
                     res.onSuccess { dispatch(it) }
                         .onFailure { dispatch(LoadError) }
-                }.launchIn(scope)
+                }.launchIn(dispatchScope)
 
             is ScanNewThing -> context.navigate<ScanCaptureScreen>()
 

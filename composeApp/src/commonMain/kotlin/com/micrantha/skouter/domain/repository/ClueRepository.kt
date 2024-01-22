@@ -12,12 +12,9 @@ import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.model.SegmentProof
 import com.micrantha.skouter.platform.scan.CameraImage
-import kotlinx.coroutines.flow.Flow
 
 interface ClueRepository<T : Clue<*>, Proof : Collection<T>> {
     suspend fun analyze(image: CameraImage): Result<Proof>
-
-    fun results(): Flow<T>
 }
 
 typealias LabelRepository = ClueRepository<LabelClue, LabelProof>

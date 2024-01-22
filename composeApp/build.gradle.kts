@@ -189,4 +189,12 @@ bluebell {
         className = "SkouterConfig"
         fileName = "skouter.properties"
     }
+    models {
+        files = mapOf(
+            "classification/image/efficientnet_lite0.tflite" to "classification/image.tflite",
+            "detection/image/efficientdet_lite0.tflite" to "detection/image.tflite",
+            "embedding/image/mobilenet_v3_small.tflite" to "embedding/image.tflite",
+            "segmentation/deeplab_v3.tflite" to "segmentation/image.tflite"
+        )
+    }
 }

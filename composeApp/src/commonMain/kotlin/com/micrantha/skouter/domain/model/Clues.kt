@@ -6,9 +6,9 @@ import okio.ByteString
 import okio.Path
 
 data class Clues(
-    val labels: Set<LabelClue>? = null,
+    val labels: LabelProof? = null,
     val location: LocationClue? = null, // TODO: Geofence
-    val colors: Set<ColorClue>? = null
+    val colors: ColorProof? = null
 )
 
 data class Proof(

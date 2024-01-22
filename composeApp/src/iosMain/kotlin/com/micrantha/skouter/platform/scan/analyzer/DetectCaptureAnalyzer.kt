@@ -22,15 +22,14 @@ import platform.Vision.VNRecognizedObjectObservation
 
 typealias ObjectCaptureConfig = CameraAnalyzerConfig<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>
 
-actual class DetectCaptureAnalyzer(config: ObjectCaptureConfig = config()) :
-    CameraCaptureAnalyzer<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>(config),
+actual class DetectCaptureAnalyzer :
+    CameraCaptureAnalyzer<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>(config()),
     CaptureAnalyzer<DetectProof>
 
 class DetectStreamAnalyzer(
     callback: AnalyzerCallback<DetectProof>,
-    config: ObjectCaptureConfig = config(),
 ) : CameraStreamAnalyzer<DetectProof, VNCoreMLRequest, VNRecognizedObjectObservation>(
-    config,
+    config(),
     callback
 ), StreamAnalyzer
 

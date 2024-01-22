@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.scan.capture
 
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.Flow
 import okio.Path
 import kotlin.math.min
 
+@Stable
 data class ScanState(
     val labels: LabelProof? = null,
     val location: Location? = null,
@@ -31,6 +33,7 @@ data class ScanState(
     val playerID: String? = null,
 )
 
+@Stable
 data class ScanUiState(
     val clues: List<String>,
     val overlays: List<ScanOverlay>,

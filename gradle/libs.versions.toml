@@ -1,44 +1,57 @@
 [versions]
+
 cache4k = "0.12.0"
-cameraExtensions = "1.3.0"
+cameraExtensions = "1.3.1"
 compose = "1.5.4"
-compose-plugin = "1.5.10"
+compose-plugin = "1.5.11"
 compose-compiler = "1.5.4"
 agp = "8.1.4"
 android-minSdk = "26"
 android-compileSdk = "34"
 android-targetSdk = "34"
-androidx-activityCompose = "1.8.1"
+androidx-activityCompose = "1.8.2"
 androidx-core-ktx = "1.12.0"
 androidx-appcompat = "1.6.1"
-androidx-material = "1.10.0"
+androidx-material = "1.11.0"
 androidx-constraintlayout = "2.1.4"
 androidx-test-junit = "1.1.5"
 androidx-espresso-core = "3.5.1"
 fragmentKtx = "1.6.2"
 geoCompose = "0.6.0"
 supaBaseKt = "1.4.7"
-kamelImage = "0.9.0"
-kodeinDi = "7.20.2"
-kodeinDiConf = "7.19.0"
+kamelImage = "0.9.1"
+kodeinDi = "7.21.1"
+kodeinDiConf = "7.21.1"
 kotlin = "1.9.20"
 junit = "4.13.2"
 graphql = "3.8.2"
-kotlinxCollectionsImmutable = "0.3.5"
+kotlinxCollectionsImmutable = "0.3.7"
 kotlinxCoroutinesAndroid = "1.7.3"
-kotlinxDatetime = "0.4.0"
-kotlinxSerializationJson = "1.6.0"
-ktorClientDarwin = "2.3.6"
+kotlinxDatetime = "0.5.0"
+kotlinxSerializationJson = "1.6.2"
+ktorClientDarwin = "2.3.7"
 lifecycleRuntimeKtx = "2.6.2"
-okio = "3.6.0"
+okio = "3.7.0"
 paletteKtx = "1.0.0"
-permissionsCompose = "0.16.0"
-voyagerNavigator = "1.0.0-rc10"
+permissionsCompose = "0.17.0"
+voyagerNavigator = "1.0.0"
 tensorflowLiteSupport = "0.4.4"
 tensorflowLite = "2.14.0"
 mediapipe = "0.20230731"
+buildConfig = "3.1.0"
+
+[plugins]
+
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+apolloGraphQL = { id = "com.apollographql.apollo3", version.ref = "graphql" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+nativeCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 
 [libraries]
+
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraExtensions" }
 androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraExtensions" }
 androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraExtensions" }
@@ -98,12 +111,3 @@ tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata",
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteSupport" }
 mediapipe-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
-
-[plugins]
-jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-apolloGraphQL = { id = "com.apollographql.apollo3", version.ref = "graphql" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-nativeCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

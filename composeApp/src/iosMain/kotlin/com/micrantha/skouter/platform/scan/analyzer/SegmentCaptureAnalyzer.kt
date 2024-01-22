@@ -34,16 +34,14 @@ import platform.Vision.VNDetectContoursRequest
 
 typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<SegmentProof, VNDetectContoursRequest, VNContoursObservation>
 
-actual class SegmentCaptureAnalyzer(
-    config: SegmentAnalyzerConfig = config()
-) : CameraCaptureAnalyzer<SegmentProof, VNDetectContoursRequest, VNContoursObservation>(config),
+actual class SegmentCaptureAnalyzer :
+    CameraCaptureAnalyzer<SegmentProof, VNDetectContoursRequest, VNContoursObservation>(config()),
     CaptureAnalyzer<SegmentProof>
 
 class SegmentStreamAnalyzer(
     callback: AnalyzerCallback<SegmentProof>,
-    config: SegmentAnalyzerConfig = config(),
 ) : CameraStreamAnalyzer<SegmentProof, VNDetectContoursRequest, VNContoursObservation>(
-    config,
+    config(),
     callback
 ), StreamAnalyzer
 
