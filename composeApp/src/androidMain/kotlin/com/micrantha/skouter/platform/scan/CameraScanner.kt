@@ -156,3 +156,4 @@ private fun CameraSelector.toggle() = when (this) {
     CameraSelector.DEFAULT_BACK_CAMERA -> CameraSelector.DEFAULT_FRONT_CAMERA
     else -> CameraSelector.DEFAULT_BACK_CAMERA
 }
+
