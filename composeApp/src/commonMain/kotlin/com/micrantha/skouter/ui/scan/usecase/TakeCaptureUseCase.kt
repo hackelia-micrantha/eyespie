@@ -4,6 +4,7 @@ import com.benasher44.uuid.uuid4
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.bluebell.platform.Platform
+import com.micrantha.skouter.domain.repository.GenerateRepository
 import com.micrantha.skouter.domain.repository.MatchRepository
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedMatch
@@ -16,6 +17,7 @@ import kotlin.coroutines.coroutineContext
 class TakeCaptureUseCase(
     private val platform: Platform,
     private val matchRepository: MatchRepository,
+    private val generateRepository: GenerateRepository,
     private val dispatcher: Dispatcher,
 ) : Dispatcher by dispatcher {
     suspend operator fun invoke(image: CameraImage) = dispatchUseCase(coroutineContext) {
@@ -24,7 +26,7 @@ class TakeCaptureUseCase(
         }.onFailure {
             throw it
         }
-
+        
         withContext(Dispatchers.IO) {
             FileSystem.SYSTEM_TEMPORARY_DIRECTORY.div(uuid4().toString()).apply {
                 platform.write(this, image.toByteArray())
