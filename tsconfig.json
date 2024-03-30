@@ -1,0 +1,14 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "include": ["src/**/*.ts*", "App.tsx"],
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@application/*": ["./src/application/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@presentation/*": ["./src/presentation/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@feature/*": ["./src/feature/*"]
+    }
+  }
+}
