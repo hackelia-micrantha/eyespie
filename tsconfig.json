@@ -1,6 +1,6 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
-  "include": ["src/**/*.ts*", "App.tsx"],
+  "include": ["src/**/*.ts*", "App.tsx", "index.js", "__tests__/**/*.ts*"],
   "compilerOptions": {
     "strict": true,
     "paths": {

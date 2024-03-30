@@ -1,1 +1,1 @@
-export type * from "./State";
+export type * from './State';
