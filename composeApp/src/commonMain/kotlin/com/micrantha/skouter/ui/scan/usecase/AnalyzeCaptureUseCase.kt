@@ -1,5 +1,6 @@
 package com.micrantha.skouter.ui.scan.usecase
 
+import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.Dispatcher
 import com.micrantha.skouter.domain.model.Clue
 import com.micrantha.skouter.domain.model.ColorClue
@@ -13,10 +14,6 @@ import com.micrantha.skouter.domain.repository.SegmentRepository
 import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.ui.scan.capture.ScanAction
 import com.micrantha.skouter.ui.scan.capture.ScanAction.ScanError
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedColor
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedDetection
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedLabel
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedSegment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asFlow
@@ -35,7 +32,7 @@ class AnalyzeCaptureUseCase(
     private val dispatcher: Dispatcher
 ) : Dispatcher by dispatcher {
 
-    private val _clues = MutableSharedFlow<ScanAction>(replay = 4)
+    private val _clues = MutableSharedFlow<Action>(replay = 4)
 
     val clues = _clues.asSharedFlow()
 
@@ -53,14 +50,6 @@ class AnalyzeCaptureUseCase(
         launch {
             send(colorRepository.analyze(image).getOrThrow())
         }
-    }.flatMapConcat { it.asFlow() }.map(::asScanState)
+    }.flatMapConcat { it.asFlow() }
         .onEach(_clues::tryEmit)
-
-    private fun asScanState(clue: Clue<*>) = when (clue) {
-        is LabelClue -> ScannedLabel(clue)
-        is ColorClue -> ScannedColor(clue)
-        is DetectClue -> ScannedDetection(clue)
-        is SegmentClue -> ScannedSegment(clue)
-        else -> ScanError
-    }
 }

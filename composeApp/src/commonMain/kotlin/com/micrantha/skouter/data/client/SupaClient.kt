@@ -7,29 +7,29 @@ import com.micrantha.skouter.data.thing.model.NearbyRequest
 import com.micrantha.skouter.graphql.GameListQuery
 import com.micrantha.skouter.graphql.GameNodeQuery
 import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.gotrue.GoTrue
-import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.gotrue.Auth
+import io.github.jan.supabase.gotrue.auth
 import io.github.jan.supabase.graphql.GraphQL
 import io.github.jan.supabase.graphql.graphql
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.PostgrestBuilder
+import io.github.jan.supabase.postgrest.query.PostgrestQueryBuilder
 import io.github.jan.supabase.postgrest.rpc
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.BucketApi
 import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
 
-typealias AuthClient = GoTrue
+typealias AuthClient = Auth
 typealias DatabaseClient = Postgrest
 typealias StorageClient = Storage
 typealias GraphClient = GraphQL
 typealias RealtimeClient = Realtime
 
-typealias DatabaseCall = PostgrestBuilder
+typealias DatabaseCall = PostgrestQueryBuilder
 typealias GraphCall<T> = ApolloCall<T>
 typealias StorageCall = BucketApi
-typealias AuthCall = GoTrue
+typealias AuthCall = Auth
 
 class SupaClient {
     private val supabase by lazy {
@@ -44,7 +44,7 @@ class SupaClient {
         }
     }
 
-    fun auth(): AuthCall = supabase.gotrue
+    fun auth(): AuthCall = supabase.auth
 
     fun players(): DatabaseCall = supabase.postgrest["Player"]
 

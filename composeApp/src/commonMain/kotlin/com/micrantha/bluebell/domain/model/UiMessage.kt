@@ -11,13 +11,13 @@ data class UiMessage(
     val message: String,
     val category: Category = Default,
     val type: Type = Timed()
-) : Action {
+) {
     enum class Category {
         Default, Success, Info, Warning, Danger
     }
 
     sealed interface Type {
-        object Inline : Type
+        data object Inline : Type
 
         data class Timed(val time: Int = LONG, val action: Action? = null) : Type {
             companion object {

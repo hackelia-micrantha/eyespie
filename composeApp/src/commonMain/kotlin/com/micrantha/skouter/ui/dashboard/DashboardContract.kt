@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui.dashboard
 
-import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.PlayerList
@@ -35,7 +34,7 @@ data class DashboardUiState(
     }
 }
 
-sealed interface DashboardAction : Action {
+sealed interface DashboardAction {
 
     data object ScanNewThing : DashboardAction
 

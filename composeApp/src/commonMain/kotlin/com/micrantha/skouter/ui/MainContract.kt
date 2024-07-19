@@ -1,13 +1,11 @@
 package com.micrantha.skouter.ui
 
-import com.micrantha.bluebell.domain.arch.Action
+sealed interface MainAction {
 
-sealed interface MainAction : Action {
+    data object Loaded : MainAction
 
-    object Loaded : MainAction
+    data object Login : MainAction
 
-    object Login : MainAction
-
-    object Load : MainAction
+    data object Load : MainAction
 
 }

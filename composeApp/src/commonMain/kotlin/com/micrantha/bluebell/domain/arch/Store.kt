@@ -2,7 +2,7 @@ package com.micrantha.bluebell.domain.arch
 
 import kotlinx.coroutines.CoroutineScope
 
-interface Action
+typealias Action = Any
 
 fun interface ReducerStore<State> {
     fun addReducer(reducer: Reducer<State>): Store<State>

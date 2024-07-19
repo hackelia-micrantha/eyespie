@@ -1,7 +1,6 @@
 package com.micrantha.skouter.ui.scan.edit
 
 import androidx.compose.ui.graphics.painter.Painter
-import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.Proof
@@ -28,7 +27,7 @@ data class ScanEditUiState(
     val enabled: Boolean
 )
 
-sealed interface ScanEditAction : Action {
+sealed interface ScanEditAction {
     data class Init(val proof: Proof) : ScanEditAction
 
     data class LabelChanged(val data: Choice) : ScanEditAction

@@ -36,7 +36,6 @@ import com.micrantha.skouter.platform.scan.CameraScanner
 import com.micrantha.skouter.ui.component.LocationEnabledEffect
 import com.micrantha.skouter.ui.scan.capture.ScanAction.EditScan
 import com.micrantha.skouter.ui.scan.capture.ScanAction.SaveScan
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedImage
 import com.micrantha.skouter.ui.scan.components.ScannedClues
 import com.micrantha.skouter.ui.scan.components.ScannedOverlays
 import dev.icerock.moko.permissions.Permission.CAMERA
@@ -97,7 +96,7 @@ private fun BoxWithConstraintsScope.renderCamera(
     CameraScanner(
         modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
     ) {
-        dispatch.send(ScannedImage(it))
+        dispatch.send(it)
     }
 
     renderClues(state, dispatch)

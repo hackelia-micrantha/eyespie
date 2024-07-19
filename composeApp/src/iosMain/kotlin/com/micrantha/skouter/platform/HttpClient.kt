@@ -1,8 +1,8 @@
 package com.micrantha.skouter.platform
 
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.darwin.Darwin
+import io.ktor.client.engine.cio.CIO
 
-actual fun httpClientEngine(): HttpClientEngine = Darwin.create {
+actual fun httpClientEngine(): HttpClientEngine = CIO.create {
 
 }

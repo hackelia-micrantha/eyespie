@@ -57,7 +57,6 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.ui)
             implementation(compose.foundation)
-            @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
             implementation(compose.animation)
             implementation(compose.animationGraphics)
@@ -85,6 +84,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.cio)
 
             implementation(libs.supabase.gotrue)
             implementation(libs.supabase.postgrest)
@@ -111,7 +111,6 @@ kotlin {
 
             implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-            implementation(libs.ktor.client.android)
             implementation(libs.androidx.lifecycle.runtime.ktx)
 
             implementation(libs.kotlinx.coroutines.android)
@@ -138,9 +137,9 @@ kotlin {
         }
 
         iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
     }
+    task("testClasses")
 }
 
 android {
