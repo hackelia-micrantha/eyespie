@@ -62,10 +62,6 @@ class ScanCaptureEnvironment(
                 dispatch(SaveError)
             }
 
-            //is ScannedDetection -> subAnalyzeClueUseCase(state.image!!.crop(action.detection.data))
-
-            //is ScannedSegment -> subAnalyzeClueUseCase(state.image!!)
-
             is EditSaved -> navigate(
                 ScanEditScreen(
                     context = context,
@@ -97,9 +93,7 @@ class ScanCaptureEnvironment(
     }
 
     override fun reduce(state: ScanState, action: Action) = when (action) {
-        is CameraImage -> state.copy(
-            image = action,
-        )
+        is CameraImage -> state.copy(image = action)
 
         is LabelClue -> state.copy(
             labels = state.labels.combine(action)
