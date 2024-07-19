@@ -30,11 +30,14 @@ class LoginEnvironment(
     LocalizedRepository by context.i18n, Router by context.router {
 
     companion object : StateMapper<LoginState, LoginUiState> {
-        override fun map(state: LoginState) = LoginUiState(
+
+        private lateinit var uiState: LoginUiState
+
+        override fun map(state: LoginState) = if (!::uiState.isInitialized) LoginUiState(
             email = state.email,
             password = state.hash,
             status = state.status
-        )
+        ) else uiState.copy(email = state.email, password = state.hash, status = state.status)
     }
 
     override fun reduce(state: LoginState, action: Action) = when (action) {

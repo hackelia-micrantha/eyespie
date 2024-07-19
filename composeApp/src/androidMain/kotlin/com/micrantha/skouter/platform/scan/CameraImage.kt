@@ -23,8 +23,8 @@ actual class CameraImage(
     private var regionOfInterest: RectF? = null,
 ) {
 
-    private lateinit var bitmapBuffer: Bitmap
-    private lateinit var mediaImage: MPImage
+    private var bitmapBuffer: Bitmap? = null
+    private var mediaImage: MPImage? = null
 
     actual val width get() = _width
     actual val height get() = _height
@@ -39,6 +39,8 @@ actual class CameraImage(
         _timestamp = image.imageInfo.timestamp
         regionOfInterest = region ?: regionOfInterest
         data = image.image
+        bitmapBuffer = null
+        mediaImage = null
     }
 
     actual fun toImageBitmap() = toBitmap().asImageBitmap()
@@ -53,17 +55,17 @@ actual class CameraImage(
     }
 
     fun asMPImage(): MPImage {
-        if (::mediaImage.isInitialized) return mediaImage
+        if (mediaImage != null) return mediaImage!!
 
         mediaImage = data?.let {
             MediaImageBuilder(it).build()
         } ?: BitmapImageBuilder(toBitmap()).build()
 
-        return mediaImage
+        return mediaImage!!
     }
 
     fun toBitmap(): Bitmap {
-        if (::bitmapBuffer.isInitialized) return bitmapBuffer
+        if (bitmapBuffer != null) return bitmapBuffer!!
 
         val result = Bitmap.createBitmap(_width, _height, Bitmap.Config.ARGB_8888).apply {
             copyPixelsFromBuffer(data!!.planes[0].buffer)
@@ -82,6 +84,6 @@ actual class CameraImage(
             false
         )
 
-        return bitmapBuffer
+        return bitmapBuffer!!
     }
 }

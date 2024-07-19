@@ -72,8 +72,8 @@ class SegmentStreamAnalyzer(
 
 abstract class SegmentAnalyzer(private val context: Context) : SegmentAnalyzerConfig {
     override fun map(result: ImageSegmenterResult): SegmentProof {
-        val categoryMask = result.categoryMask().get()
-        return listOf(mask(categoryMask))
+        val categoryMask = result.categoryMask()
+        return if (categoryMask.isPresent) emptyList() else listOf(mask(categoryMask.get()))
     }
 
     override fun client(block: ImageSegmenterOptions.Builder.() -> Unit): ImageSegmenter {
