@@ -4,7 +4,7 @@ import com.benasher44.uuid.uuid4
 import com.micrantha.skouter.SkouterConfig
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.realtime.PostgresAction
-import io.github.jan.supabase.realtime.createChannel
+import io.github.jan.supabase.realtime.channel
 import io.github.jan.supabase.realtime.postgresChangeFlow
 import io.github.jan.supabase.realtime.realtime
 import kotlinx.coroutines.flow.Flow
@@ -25,13 +25,13 @@ class SupaRealtimeClient {
     suspend fun block() = realtime.block()
 
     fun subscribe(table: String, key: String = uuid4().toString()): Flow<PostgresAction> {
-        val channel = realtime.subscriptions[key] ?: realtime.createChannel(key)
+        val channel = realtime.subscriptions[key] ?: realtime.channel(key)
         return channel.postgresChangeFlow<PostgresAction>("public") {
             this.table = table
         }.onCompletion {
-            channel.leave()
+            channel.unsubscribe()
         }.onStart {
-            channel.join()
+            channel.subscribe()
         }
     }
 }

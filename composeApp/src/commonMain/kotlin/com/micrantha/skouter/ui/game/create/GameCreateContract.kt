@@ -1,7 +1,5 @@
 package com.micrantha.skouter.ui.game.create
 
-import com.micrantha.bluebell.domain.arch.Action
-
 data class GameCreateState(
     val name: String = "",
     val expires: String? = null,
@@ -10,7 +8,7 @@ data class GameCreateState(
     val thingLimits: IntRange? = null
 )
 
-sealed interface GameCreateAction : Action {
+sealed interface GameCreateAction {
     data object Save : GameCreateAction
 
     data class NameChanged(val name: String) : GameCreateAction

@@ -4,15 +4,12 @@ import android.content.Context
 import com.micrantha.bluebell.get
 import com.micrantha.bluebell.platform.ConnectivityStatus
 import com.micrantha.bluebell.platform.Platform
-import com.micrantha.skouter.platform.scan.CameraAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.ColorCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.DetectCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.LabelCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.MatchCaptureAnalyzer
 import com.micrantha.skouter.platform.scan.analyzer.SegmentCaptureAnalyzer
-import com.micrantha.skouter.platform.scan.components.CameraScannerDispatch
 import org.kodein.di.DI
-import org.kodein.di.bindFactory
 import org.kodein.di.bindInstance
 import org.kodein.di.bindProvider
 import org.kodein.di.bindProviderOf

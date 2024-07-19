@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui.login
 
-import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.SkouterConfig
 
@@ -17,7 +16,7 @@ data class LoginUiState(
 )
 
 
-sealed interface LoginAction : Action {
+sealed interface LoginAction {
 
     data object OnLogin : LoginAction
 

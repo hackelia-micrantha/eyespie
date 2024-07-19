@@ -23,7 +23,9 @@ class ThingsRemoteSource(
 
     suspend fun things(playerID: String) = try {
         val result = supaClient.things().select {
-            eq("created_by", playerID)
+            filter {
+                eq("created_by", playerID)
+            }
         }.decodeList<ThingListing>()
         Result.success(result)
     } catch (err: Throwable) {
@@ -32,7 +34,9 @@ class ThingsRemoteSource(
 
     suspend fun thing(thingID: String) = try {
         val result = supaClient.things().select {
-            eq("id", thingID)
+            filter {
+                eq("id", thingID)
+            }
         }.decodeSingle<ThingResponse>()
         Result.success(result)
     } catch (err: Throwable) {

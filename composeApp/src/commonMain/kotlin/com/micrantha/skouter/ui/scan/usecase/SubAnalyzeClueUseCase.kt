@@ -5,8 +5,6 @@ import com.micrantha.bluebell.domain.usecase.dispatchUseCase
 import com.micrantha.skouter.domain.repository.ColorRepository
 import com.micrantha.skouter.domain.repository.LabelRepository
 import com.micrantha.skouter.platform.scan.CameraImage
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedColor
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedLabel
 import kotlin.coroutines.coroutineContext
 
 class SubAnalyzeClueUseCase(
@@ -17,10 +15,10 @@ class SubAnalyzeClueUseCase(
 
     suspend operator fun invoke(image: CameraImage) = dispatchUseCase(coroutineContext) {
         labelRepository.analyze(image).onSuccess { proof ->
-            proof.forEach { dispatch(ScannedLabel(it)) }
+            proof.forEach { dispatch(it) }
         }
         colorRepository.analyze(image).onSuccess { proof ->
-            proof.forEach { dispatch(ScannedColor(it)) }
+            proof.forEach { dispatch(it) }
         }
     }
 }
