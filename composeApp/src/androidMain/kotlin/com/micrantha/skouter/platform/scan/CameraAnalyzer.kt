@@ -27,20 +27,26 @@ class CameraAnalyzer(
     private val callback: CameraScannerDispatch,
     private val scope: CoroutineScope
 ) : ImageAnalysis.Analyzer {
+    private lateinit var current: CameraImage
+
     @androidx.annotation.OptIn(ExperimentalGetImage::class)
     override fun analyze(image: ImageProxy) {
         try {
-            val uiImage = CameraImage(
-                data = image.image,
-                width = image.width,
-                height = image.height,
-                rotation = image.imageInfo.rotationDegrees,
-                timestamp = image.imageInfo.timestamp,
-                regionOfInterest = regionOfInterest
-            )
+            if (!::current.isInitialized) {
+                current = CameraImage(
+                    data = image.image,
+                    _width = image.width,
+                    _height = image.height,
+                    rotation = image.imageInfo.rotationDegrees,
+                    _timestamp = image.imageInfo.timestamp,
+                    regionOfInterest = regionOfInterest
+                )
+            } else {
+                current.copy(image, regionOfInterest)
+            }
 
             scope.launch {
-                callback(uiImage)
+                callback(current)
                 //image.close()
             }
         } catch (err: Throwable) {

@@ -1,6 +1,5 @@
 package com.micrantha.skouter.ui.game.detail
 
-import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.skouter.domain.model.Game
 
@@ -18,7 +17,7 @@ data class GameDetailsUiState(
     val status: UiResult<Game>
 )
 
-sealed interface GameDetailsAction : Action {
+sealed interface GameDetailsAction {
     data class Load(val id: String) : GameDetailsAction
     data class Loaded(val game: Game) : GameDetailsAction
 }

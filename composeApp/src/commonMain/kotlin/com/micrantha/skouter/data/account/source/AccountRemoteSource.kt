@@ -16,7 +16,9 @@ class AccountRemoteSource(
         val session = client.auth().apply { loadFromStorage() }.currentSessionOrNull()!!
         val user = session.user!!
         val player = client.players().select {
-            eq("user_id", user.id)
+            filter {
+                eq("user_id", user.id)
+            }
             limit(1)
         }.decodeAs<List<PlayerResponse>>().first()
         Result.success(AccountResponse(session.accessToken, session.refreshToken, player))
@@ -35,7 +37,7 @@ class AccountRemoteSource(
     }
 
     suspend fun login(email: String, password: String) = try {
-        client.auth().loginWith(Email) {
+        client.auth().signInWith(Email) {
             this.email = email
             this.password = password
         }

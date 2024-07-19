@@ -21,7 +21,8 @@ import okio.ByteString.Companion.toByteString
 
 private const val MODEL_ASSET = "models/embedding/image.tflite"
 
-typealias EmbeddingAnalyzerConfig = CameraAnalyzerConfig<MatchProof, ImageEmbedderOptions.Builder, ImageEmbedder, ImageEmbedderResult>
+typealias EmbeddingAnalyzerConfig =
+        CameraAnalyzerConfig<MatchProof, ImageEmbedderOptions.Builder, ImageEmbedder, ImageEmbedderResult>
 
 actual class MatchCaptureAnalyzer(
     context: Context,

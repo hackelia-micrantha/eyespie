@@ -11,7 +11,13 @@ import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.Router.Options.Replace
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.skouter.data.account.model.CurrentSession
+import com.micrantha.skouter.domain.model.ColorClue
+import com.micrantha.skouter.domain.model.DetectClue
+import com.micrantha.skouter.domain.model.LabelClue
+import com.micrantha.skouter.domain.model.MatchClue
+import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.domain.repository.LocationRepository
+import com.micrantha.skouter.platform.scan.CameraImage
 import com.micrantha.skouter.ui.component.combine
 import com.micrantha.skouter.ui.scan.capture.ScanAction.EditSaved
 import com.micrantha.skouter.ui.scan.capture.ScanAction.EditScan
@@ -19,16 +25,9 @@ import com.micrantha.skouter.ui.scan.capture.ScanAction.ImageSaved
 import com.micrantha.skouter.ui.scan.capture.ScanAction.SaveError
 import com.micrantha.skouter.ui.scan.capture.ScanAction.SaveScan
 import com.micrantha.skouter.ui.scan.capture.ScanAction.ScanSavable
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedColor
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedDetection
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedImage
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedLabel
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedMatch
-import com.micrantha.skouter.ui.scan.capture.ScanAction.ScannedSegment
 import com.micrantha.skouter.ui.scan.edit.ScanEditScreen
 import com.micrantha.skouter.ui.scan.usecase.AnalyzeCaptureUseCase
 import com.micrantha.skouter.ui.scan.usecase.SaveCaptureUseCase
-import com.micrantha.skouter.ui.scan.usecase.SubAnalyzeClueUseCase
 import com.micrantha.skouter.ui.scan.usecase.TakeCaptureUseCase
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,7 +37,6 @@ class ScanCaptureEnvironment(
     private val takeCaptureUseCase: TakeCaptureUseCase,
     private val saveCaptureUseCase: SaveCaptureUseCase,
     private val analyzeCaptureUseCase: AnalyzeCaptureUseCase,
-    private val subAnalyzeClueUseCase: SubAnalyzeClueUseCase,
     private val currentSession: CurrentSession,
     private val locationRepository: LocationRepository,
     private val mapper: ScanCaptureStateMapper,
@@ -92,36 +90,36 @@ class ScanCaptureEnvironment(
                 dispatch(SaveError)
             }
 
-            is ScannedImage -> analyzeCaptureUseCase(action.image).launchIn(dispatchScope)
+            is CameraImage -> analyzeCaptureUseCase(action).launchIn(dispatchScope)
 
             is ScanAction.Back -> context.router.navigateBack()
         }
     }
 
     override fun reduce(state: ScanState, action: Action) = when (action) {
-        is ScannedImage -> state.copy(
-            image = action.image,
+        is CameraImage -> state.copy(
+            image = action,
         )
 
-        is ScannedLabel -> state.copy(
-            labels = state.labels.combine(action.label)
+        is LabelClue -> state.copy(
+            labels = state.labels.combine(action)
         )
 
-        is ScannedColor -> state.copy(
-            colors = state.colors.combine(action.color)
+        is ColorClue -> state.copy(
+            colors = state.colors.combine(action)
         )
 
-        is ScannedDetection -> state.copy(
-            detection = action.detection,
-            labels = state.labels.combine(action.detection.labels)
+        is DetectClue -> state.copy(
+            detection = action,
+            labels = state.labels.combine(action.labels)
         )
 
-        is ScannedSegment -> state.copy(
-            segment = action.segment
+        is SegmentClue -> state.copy(
+            segment = action
         )
 
-        is ScannedMatch -> state.copy(
-            match = action.match.firstOrNull()
+        is MatchClue -> state.copy(
+            match = action
         )
 
         is ScanSavable -> state.copy(

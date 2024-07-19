@@ -4,15 +4,11 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
-import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.skouter.domain.model.ColorClue
 import com.micrantha.skouter.domain.model.ColorProof
 import com.micrantha.skouter.domain.model.DetectClue
-import com.micrantha.skouter.domain.model.LabelClue
 import com.micrantha.skouter.domain.model.LabelProof
 import com.micrantha.skouter.domain.model.Location
 import com.micrantha.skouter.domain.model.MatchClue
-import com.micrantha.skouter.domain.model.MatchProof
 import com.micrantha.skouter.domain.model.SegmentClue
 import com.micrantha.skouter.platform.scan.CameraImage
 import kotlinx.coroutines.flow.Flow
@@ -41,7 +37,7 @@ data class ScanUiState(
     val capture: Painter?
 )
 
-sealed interface ScanAction : Action {
+sealed interface ScanAction {
     interface ScanSavable {
         val path: Path
     }
@@ -60,28 +56,6 @@ sealed interface ScanAction : Action {
 
     data class EditSaved(override val path: Path) : ScanAction, ScanSavable
     data class ImageSaved(override val path: Path) : ScanAction, ScanSavable
-
-    data class ScannedImage(val image: CameraImage) : ScanAction
-
-    data class ScannedLabel(
-        val label: LabelClue
-    ) : ScanAction
-
-    data class ScannedColor(
-        val color: ColorClue
-    ) : ScanAction
-
-    data class ScannedDetection(
-        val detection: DetectClue
-    ) : ScanAction
-
-    data class ScannedSegment(
-        val segment: SegmentClue
-    ) : ScanAction
-
-    data class ScannedMatch(
-        val match: MatchProof
-    ) : ScanAction
 
     data object Back : ScanAction
 }

@@ -4,9 +4,9 @@ import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.skouter.domain.model.Game
 import com.micrantha.skouter.ui.game.detail.GameDetailScreenArg
 
-sealed class GameAction : Action {
+sealed class GameAction {
 
-    object Load : GameAction()
+    data object Load : GameAction()
 
     data class Failure(val error: Throwable) : GameAction()
 
