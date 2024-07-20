@@ -6,8 +6,10 @@ import com.micrantha.bluebell.data.weightedRandomSample
 import com.micrantha.bluebell.domain.arch.StateMapper
 import com.micrantha.eyespie.domain.model.Clue
 import com.micrantha.eyespie.domain.model.Clues
+import com.micrantha.eyespie.domain.model.Embedding
 import com.micrantha.eyespie.domain.model.LabelProof
 import com.micrantha.eyespie.domain.model.LocationClue
+import com.micrantha.eyespie.domain.model.MatchClue
 import com.micrantha.eyespie.domain.model.Proof
 
 class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
@@ -17,6 +19,7 @@ class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
             clues = clues(state),
             overlays = overlays(state),
             enabled = state.enabled,
+            busy = state.busy,
             capture = if (state.enabled.not()) state.image?.toImageBitmap()?.let {
                 BitmapPainter(it)
             } else null
@@ -34,7 +37,7 @@ class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
         ),
         name = "",
         image = state.path!!,
-        match = state.match!!.data,
+        match = state.match?.data ?: Embedding.EMPTY,
         location = state.location?.point,
         playerID = state.playerID!!
     )

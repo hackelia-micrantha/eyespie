@@ -22,6 +22,7 @@ data class ScanState(
     val colors: ColorProof? = null,
     val image: CameraImage? = null,
     val enabled: Boolean = true,
+    val busy: Boolean = false,
     val detection: DetectClue? = null,
     val segment: SegmentClue? = null,
     val match: MatchClue? = null,
@@ -34,6 +35,7 @@ data class ScanUiState(
     val clues: List<String>,
     val overlays: List<ScanOverlay>,
     val enabled: Boolean,
+    val busy: Boolean,
     val capture: Painter?
 )
 
