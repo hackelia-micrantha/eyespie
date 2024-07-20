@@ -2,7 +2,7 @@ package com.micrantha.bluebell.platform
 
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
-import com.micrantha.skouter.UIApplicationController
+import com.micrantha.eyespie.UIApplicationController
 import okio.FileSystem
 import okio.Path
 import okio.buffer

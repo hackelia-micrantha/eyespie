@@ -1,6 +1,6 @@
 package com.micrantha.bluebell.ui.scaffold
 
-import com.micrantha.skouter.ui.navi.NavAction
+import com.micrantha.eyespie.ui.navi.NavAction
 
 interface Scaffolding {
 

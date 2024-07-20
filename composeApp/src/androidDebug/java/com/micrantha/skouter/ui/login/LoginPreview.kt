@@ -1,9 +1,9 @@
-package com.micrantha.skouter.ui.login
+package com.micrantha.eyespie.ui.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.micrantha.bluebell.domain.model.Ready
-import com.micrantha.skouter.ui.PreviewContext
+import com.micrantha.eyespie.ui.PreviewContext
 
 @Preview
 @Composable

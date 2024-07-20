@@ -21,7 +21,7 @@ a3f8a59a-33a4-4e79-bccb-0a008df43cb4	'2023-04-21 07:58:23+00'	Ryan	Jennings	ryje
 --
 
 COPY public."GamePlayer" (created_at, player_id, game_id, score) FROM stdin;
-'2023-04-29 07:53:34.607337+00'	a3f8a59a-33a4-4e79-bccb-0a008df43cb4	'10444bc1-abd6-46d9-bac8-bb47dc38130a'	0
+'2023-04-29 07:53:34.607337+00'		a3f8a59a-33a4-4e79-bccb-0a008df43cb4	10444bc1-abd6-46d9-bac8-bb47dc38130a	0
 \.
 
 

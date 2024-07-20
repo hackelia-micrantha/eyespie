@@ -1,6 +1,6 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import com.micrantha.skouter.UIApplicationController
-import com.micrantha.skouter.UIShow
+import com.micrantha.eyespie.UIApplicationController
+import com.micrantha.eyespie.UIShow
 import platform.UIKit.UIApplication
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController

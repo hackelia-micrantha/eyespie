@@ -1,6 +1,6 @@
 # A string used to distinguish different Supabase projects on the same host. Defaults to the working
 # directory name when running `supabase init`.
-project_id = "skouter"
+project_id = "eyespie_test"
 
 [api]
 # Port to use for the API URL.
@@ -20,6 +20,13 @@ port = 54322
 # The database major version to use. This has to be the same as your remote database's. Run `SHOW
 # server_version;` on the remote database to check.
 major_version = 15
+
+[db.pooler]
+enabled = false
+port = 54329
+pool_mode = "transaction"
+default_pool_size = 15
+max_client_conn = 1000
 
 [studio]
 # Port to use for Supabase Studio.

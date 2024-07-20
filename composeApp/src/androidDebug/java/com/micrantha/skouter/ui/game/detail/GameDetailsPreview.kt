@@ -1,13 +1,13 @@
-package com.micrantha.skouter.ui.game.detail
+package com.micrantha.eyespie.ui.game.detail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.micrantha.bluebell.domain.model.UiResult
-import com.micrantha.skouter.domain.model.Game
-import com.micrantha.skouter.domain.model.Game.Limits
-import com.micrantha.skouter.ui.PreviewContext
+import com.micrantha.eyespie.domain.model.Game
+import com.micrantha.eyespie.domain.model.Game.Limits
+import com.micrantha.eyespie.ui.PreviewContext
 import kotlinx.datetime.Clock.System
 import kotlin.time.Duration
 
