@@ -32,7 +32,7 @@ actual class ColorCaptureAnalyzer(
     private fun candidateColors(bitmap: Bitmap): ColorProof {
         val palette = Palette.from(bitmap).generate()
 
-        val rgb = palette.dominantSwatch!!.rgb
+        val rgb = palette.dominantSwatch?.rgb ?: return emptySet()
 
         val c1 = arrayOf(Color.red(rgb), Color.green(rgb), Color.blue(rgb))
 

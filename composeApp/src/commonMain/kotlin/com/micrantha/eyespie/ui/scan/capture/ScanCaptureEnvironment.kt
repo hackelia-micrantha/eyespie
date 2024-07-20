@@ -121,14 +121,16 @@ class ScanCaptureEnvironment(
         )
 
         is SaveScan, is EditScan -> state.copy(
+            busy = true,
+            enabled = false,
             playerID = currentSession.requirePlayer().id,
             location = locationRepository.currentLocation()
                 ?: currentSession.requirePlayer().location,
-            enabled = false,
         )
 
         is SaveError -> state.copy(
-            enabled = true
+            enabled = true,
+            busy = false
         )
 
         else -> state

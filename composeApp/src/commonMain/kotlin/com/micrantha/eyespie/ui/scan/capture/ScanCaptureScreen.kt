@@ -67,7 +67,7 @@ class ScanCaptureScreen : Screen, StateRenderer<ScanUiState> {
             contentAlignment = Alignment.Center
         ) {
             when {
-                state.enabled.not() -> LoadingContent()
+                state.busy -> LoadingContent()
                 state.capture != null -> renderCapture(state, dispatch)
                 else -> renderCamera(state, dispatch)
             }
