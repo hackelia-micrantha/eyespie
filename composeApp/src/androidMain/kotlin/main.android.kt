@@ -1,10 +1,10 @@
 import androidx.compose.runtime.Composable
-import com.micrantha.skouter.SkouterTheme
-import com.micrantha.skouter.UIShow
+import com.micrantha.eyespie.EyesPieTheme
+import com.micrantha.eyespie.UIShow
 
 @Composable
 fun MainActivityContent() {
-    SkouterTheme {
+    EyesPieTheme {
         UIShow()
     }
 }

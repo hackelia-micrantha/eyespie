@@ -15,8 +15,8 @@ import androidx.compose.ui.draw.shadow
 import cafe.adriel.voyager.core.screen.Screen
 import com.micrantha.bluebell.ui.screen.LocalScreenContext
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.skouter.ui.navi.NavAction
-import com.micrantha.skouter.ui.navi.NavigationAction
+import com.micrantha.eyespie.ui.navi.NavAction
+import com.micrantha.eyespie.ui.navi.NavigationAction
 
 internal fun defaultBackAction() = NavAction(
     icon = Icons.Default.KeyboardArrowLeft,

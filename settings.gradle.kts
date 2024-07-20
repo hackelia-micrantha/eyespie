@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Skouter"
+rootProject.name = "EyesPie"
 include(":composeApp")

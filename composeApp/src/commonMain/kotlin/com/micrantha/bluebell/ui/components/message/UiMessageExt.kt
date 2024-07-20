@@ -17,7 +17,7 @@ import com.micrantha.bluebell.domain.model.UiMessage.Category.Success
 import com.micrantha.bluebell.domain.model.UiMessage.Category.Warning
 import com.micrantha.bluebell.domain.model.UiMessage.Type.Popup
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.skouter.ui.component.S
+import com.micrantha.eyespie.ui.component.S
 
 
 val Category.icon: ImageVector?

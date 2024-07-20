@@ -1,5 +1,5 @@
 {
-  "name": "Skouter GraphQL Schema",
+  "name": "EyesPie GraphQL Schema",
   "schemaPath": "schema.graphqls",
   "extensions": {
     "endpoints": {

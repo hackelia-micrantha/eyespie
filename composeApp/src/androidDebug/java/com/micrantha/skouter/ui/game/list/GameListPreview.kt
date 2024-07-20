@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.game.list
+package com.micrantha.eyespie.ui.game.list
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -8,8 +8,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.micrantha.bluebell.domain.model.UiResult
 import com.micrantha.bluebell.domain.model.UiResult.Ready
-import com.micrantha.skouter.domain.model.Game
-import com.micrantha.skouter.ui.PreviewContext
+import com.micrantha.eyespie.domain.model.Game
+import com.micrantha.eyespie.ui.PreviewContext
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.plus

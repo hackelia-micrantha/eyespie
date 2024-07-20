@@ -1,6 +1,5 @@
 package com.micrantha.bluebell.domain.history
 
-import com.micrantha.bluebell.domain.arch.Action
 import com.micrantha.bluebell.domain.arch.StateMapper
 
 fun <State> historyStateOf(state: State) = HistoryState(state = state)
