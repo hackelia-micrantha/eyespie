@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui.scan.view
+package com.micrantha.eyespie.ui.scan.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Rect
@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
-import com.micrantha.skouter.ui.PreviewContext
+import com.micrantha.eyespie.ui.PreviewContext
 
 @Preview(showBackground = true, backgroundColor = 0xFF, widthDp = 200, heightDp = 400)
 @Composable

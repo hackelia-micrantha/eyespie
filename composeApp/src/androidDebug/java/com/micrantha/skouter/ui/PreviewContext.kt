@@ -1,4 +1,4 @@
-package com.micrantha.skouter.ui
+package com.micrantha.eyespie.ui
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -17,7 +17,7 @@ import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.screen.LocalDispatcher
 import com.micrantha.bluebell.ui.screen.LocalScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenContext
-import com.micrantha.skouter.androidDependencies
+import com.micrantha.eyespie.androidDependencies
 import okio.Path
 import org.kodein.di.DI
 

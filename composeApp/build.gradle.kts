@@ -1,4 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
 
 plugins {
     alias(libs.plugins.nativeCocoapods)
@@ -42,7 +41,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "composeApp"
             isStatic = true
-            binaryOption("bundleId", "com.micrantha.skouter")
+            binaryOption("bundleId", "com.micrantha.eyespie")
         }
         iosTarget.compilations.configureEach {
             compilerOptions.configure {
@@ -143,7 +142,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.micrantha.skouter"
+    namespace = "com.micrantha.eyespie"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
@@ -179,16 +178,15 @@ android {
 }
 
 apollo {
-    service("skouter") {
-        packageNamesFromFilePaths("com.micrantha.skouter.graphql")
+    service("eyespie") {
+        packageNamesFromFilePaths("com.micrantha.eyespie.graphql")
     }
 }
 
 bluebell {
     config {
-        packageName = "com.micrantha.skouter"
-        className = "SkouterConfig"
-        fileName = "skouter.properties"
+        packageName = "com.micrantha.eyespie"
+        className = "AppConfig"
     }
     models {
         files = mapOf(
