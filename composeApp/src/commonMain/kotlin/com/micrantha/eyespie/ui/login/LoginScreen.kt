@@ -56,6 +56,7 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
 
     @Composable
     override fun Render(state: LoginUiState, dispatch: Dispatch) {
+
         Box(
             modifier = Modifier.fillMaxSize()
                 .scrollable(rememberScrollState(), Vertical), contentAlignment = Alignment.Center

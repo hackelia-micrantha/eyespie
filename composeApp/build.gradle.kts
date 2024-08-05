@@ -18,7 +18,6 @@ kotlin {
             baseName = "bluebell"
         }
 
-        pod("Reachability")
         //pod("MediaPipeTasksVision")
         //podfile = project.file("../iosApp/Podfile")
     }
@@ -42,9 +41,11 @@ kotlin {
             isStatic = true
             binaryOption("bundleId", "com.micrantha.eyespie")
         }
-        iosTarget.compilations.configureEach {
-            compilerOptions.configure {
-                freeCompilerArgs.add("-Xallocator=custom")
+        iosTarget.compilations.getByName("main") {
+            cinterops {
+                create("MobuildEnvuscatorInterop") {
+                    defFile = file("src/nativeInterop/cinterop/MobuildEnvuscator.def")
+                }
             }
         }
     }
@@ -173,6 +174,7 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+        implementation(files("mobuild-envuscator-debug.aar"))
     }
 }
 
@@ -186,6 +188,18 @@ bluebell {
     config {
         packageName = "com.micrantha.eyespie"
         className = "AppConfig"
+        skip = true
+
+        requiredKeys = listOf(
+            "SUPABASE_URL",
+            "SUPABASE_KEY",
+            "HUGGINGFACE_TOKEN"
+        )
+
+        nonRequiredKeys = listOf(
+            "LOGIN_EMAIL",
+            "LOGIN_PASSWORD"
+        )
     }
     models {
         files = mapOf(

@@ -4,6 +4,9 @@ open class BluebellConfig {
     var packageName: String = "com.micrantha.bluebell"
     var className: String = "AppConfig"
     var envVarName: String = "BLUEBELL"
+    var requiredKeys: List<String> = emptyList()
+    var nonRequiredKeys: List<String> = emptyList()
+    var skip: Boolean = false
 
     override fun toString() = "($packageName.$className)"
 }

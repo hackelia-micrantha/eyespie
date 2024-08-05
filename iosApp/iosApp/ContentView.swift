@@ -1,8 +1,12 @@
 import SwiftUI
 import composeApp
 
+private let app = AppComponent(
+    iOSNetworkMonitor()
+)
+
 struct ComposeView: UIViewControllerRepresentable {
-    var application = IOSApplication()
+    var application = IOSApplication(app)
     
     func makeUIViewController(context: Context) -> UIViewController {
         application.createViewController()

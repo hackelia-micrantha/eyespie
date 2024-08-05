@@ -6,7 +6,7 @@ compose = "1.5.4"
 compose-plugin = "1.6.10"
 compose-compiler = "1.5.4"
 agp = "8.1.4"
-android-minSdk = "26"
+android-minSdk = "29"
 android-compileSdk = "34"
 android-targetSdk = "34"
 androidx-activityCompose = "1.8.2"
@@ -50,7 +50,6 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 apolloGraphQL = { id = "com.apollographql.apollo3", version.ref = "graphql" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nativeCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
-
 [libraries]
 
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraExtensions" }
