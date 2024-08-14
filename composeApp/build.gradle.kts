@@ -165,10 +165,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
-        debugImplementation(files("mobuild-envuscator-debug.aar"))
-        releaseImplementation(files("mobuild-envuscator-release.aar"))
+    buildTypes {
+        debug {
+            dependencies {
+                implementation(libs.compose.ui.tooling)
+                implementation(files("mobuild-envuscator-debug.aar"))
+            }
+        }
+        release {
+            dependencies {
+                implementation(files("mobuild-envuscator-release.aar"))
+            }
+        }
     }
 }
 
