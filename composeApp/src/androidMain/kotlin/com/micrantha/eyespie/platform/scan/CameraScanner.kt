@@ -87,12 +87,12 @@ actual fun CameraScanner(
     )
 }
 
-private fun createCameraUseCases(
+internal fun createCameraUseCases(
     surfaceProvider: SurfaceProvider,
     analyzer: CameraAnalyzer
 ): UseCaseGroup {
 
-    val targetScreenSize = Size(1600, 1200)
+    val targetScreenSize = Size(600, 800)
 
     val executor = Executors.newSingleThreadExecutor()
 
