@@ -1,10 +1,10 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'composeApp'
     spec.version                  = '1.0'
-    spec.homepage                 = ''
+    spec.homepage                 = 'https://github.com/hackelia-micrantha/eyespie'
     spec.source                   = { :http=> ''}
     spec.authors                  = ''
-    spec.license                  = ''
+    spec.license                  = 'GPLv3'
     spec.summary                  = 'Native dependencies for composeApp'
     spec.vendored_frameworks      = 'build/cocoapods/framework/bluebell.framework'
     spec.libraries                = 'c++'

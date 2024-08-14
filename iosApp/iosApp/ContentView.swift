@@ -1,12 +1,22 @@
 import SwiftUI
 import composeApp
 
-private let app = AppComponent(
-    iOSNetworkMonitor()
+class iOSConfigDelegate : PlatformConfigDelegate {
+    private let envuscator: MobuildEnvuscator = MobuildEnvuscator()
+    
+    func getConfigValue(key: String) -> String  {
+        return try! envuscator.getConfigValue(forKey: key)
+    }
+}
+
+private let app = AppDelegate(
+    networkMonitor: iOSNetworkMonitor(),
+    appConfig: iOSConfigDelegate()
+    
 )
 
 struct ComposeView: UIViewControllerRepresentable {
-    var application = IOSApplication(app)
+    var application = IOSApplication(component: app)
     
     func makeUIViewController(context: Context) -> UIViewController {
         application.createViewController()

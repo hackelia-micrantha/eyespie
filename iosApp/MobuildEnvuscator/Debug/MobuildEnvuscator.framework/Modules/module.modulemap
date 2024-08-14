@@ -1,0 +1,6 @@
+framework module MobuildEnvuscator {
+    umbrella header "MobuildEnvuscator.h"
+
+    export *
+    module * { export * }
+}

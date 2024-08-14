@@ -13,13 +13,14 @@ kotlin {
     cocoapods {
         version = "1.0"
         summary = "Native dependencies for ${project.name}"
+        homepage = "https://github.com/hackelia-micrantha/eyespie"
+        license = "GPLv3"
 
         framework {
             baseName = "bluebell"
         }
 
-        //pod("MediaPipeTasksVision")
-        //podfile = project.file("../iosApp/Podfile")
+        podfile = project.file("../iosApp/Podfile")
     }
 
     applyDefaultHierarchyTemplate()
@@ -40,13 +41,6 @@ kotlin {
             baseName = "composeApp"
             isStatic = true
             binaryOption("bundleId", "com.micrantha.eyespie")
-        }
-        iosTarget.compilations.getByName("main") {
-            cinterops {
-                create("MobuildEnvuscatorInterop") {
-                    defFile = file("src/nativeInterop/cinterop/MobuildEnvuscator.def")
-                }
-            }
         }
     }
 
@@ -99,7 +93,6 @@ kotlin {
             //implementation("ca.rmen:rhymer:1.2.0")
 
             //implementation("org.hashids:hashids:1.0.3")
-
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
@@ -174,7 +167,8 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
-        implementation(files("mobuild-envuscator-debug.aar"))
+        debugImplementation(files("mobuild-envuscator-debug.aar"))
+        releaseImplementation(files("mobuild-envuscator-release.aar"))
     }
 }
 

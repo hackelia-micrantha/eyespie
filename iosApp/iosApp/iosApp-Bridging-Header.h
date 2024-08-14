@@ -9,6 +9,7 @@
 #ifndef iosApp_Bridging_Header_h
 #define iosApp_Bridging_Header_h
 
-#import "NetworkMonitor-Swift.h"
+//#import "iosApp-Swift.h"
+#import <MobuildEnvuscator/MobuildEnvuscator.h>
 
 #endif /* iosApp_Bridging_Header_h */
