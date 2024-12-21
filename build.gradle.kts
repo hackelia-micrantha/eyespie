@@ -6,8 +6,5 @@ plugins {
     alias(libs.plugins.apolloGraphQL) apply false
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.nativeCocoapods) apply false
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+    alias(libs.plugins.compose.compiler) apply false
 }
