@@ -8,6 +8,7 @@ import com.micrantha.eyespie.graphql.GameListQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node2
+import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant
 import kotlin.time.Duration
 
@@ -17,8 +18,8 @@ class GameDomainMapper {
         id = data.id,
         nodeId = data.nodeId,
         name = data.name,
-        createdAt = data.created_at.toInstant(),
-        expiresAt = data.expires.toInstant(),
+        createdAt = Instant.parse(data.created_at),
+        expiresAt = Instant.parse(data.expires),
         totalPlayers = data.players?.totalCount ?: 0,
         totalThings = data.things?.totalCount ?: 0
     )
@@ -27,8 +28,8 @@ class GameDomainMapper {
         Game(
             id = data.id,
             name = data.name,
-            createdAt = data.created_at.toInstant(),
-            expires = data.expires.toInstant(),
+            createdAt = Instant.parse(data.created_at),
+            expires = Instant.parse(data.expires),
             turnDuration = Duration.parse(data.turn_duration),
             players = data.players?.edges?.filterNotNull()?.map { it.node }?.map(::player)
                 ?: emptyList(),
@@ -47,7 +48,7 @@ class GameDomainMapper {
             Player.Listing(
                 id = data.id,
                 nodeId = data.nodeId,
-                createdAt = data.created_at.toInstant(),
+                createdAt = Instant.parse(data.created_at),
                 name = "${data.first_name} ${data.last_name}",
                 score = score
             )
@@ -58,7 +59,7 @@ class GameDomainMapper {
         Thing.Listing(
             id = data.id,
             nodeId = data.nodeId,
-            createdAt = data.created_at.toInstant(),
+            createdAt = Instant.parse(data.created_at),
             name = data.name,
             guessed = data.guessed ?: false,
             imageUrl = data.imageUrl
