@@ -10,8 +10,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.gmazzo:gradle-buildconfig-plugin:3.1.0")
-    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
+    implementation(libs.build.config)
+    implementation(libs.dotenv.kotlin)
 
     implementation(gradleApi())
     implementation(localGroovy())
