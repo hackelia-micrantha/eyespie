@@ -96,6 +96,9 @@ out/
 # Gradle files
 .gradle
 
+# Kotlin files
+.kotlin
+
 # Signing files
 .signing/
 
