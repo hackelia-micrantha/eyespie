@@ -1,17 +1,23 @@
 name: Mobuild Envuscator
 description: Build obfuscated mobile libraries from environment configuration
+inputs:
+  env:
+    description: "Base64 encoded environment config"
+    required: true
+    type: string
 runs:
   using: "composite"
   steps:
-    # TODO: when ready, build obfuscated library of environment vars
-    #- uses: hackelia-micrantha/mobuild-envuscator@v1
-    #  with:
-    #    keys:
-    #      BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_DEV_URL }}
-    #      BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_DEV_ACCESS_TOKEN }}
-    #      BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.DEV_HUGGINGFACE_TOKEN }}
-    #    output_dir: composeApp
-
-    - uses: skiddph/actions-env@v1.0.3
+    - name: Build libraries
+      id: envuscator
+      uses: hackelia-micrantha/mobuild-envuscator/.github/actions/envuscator-build-all@main
       with:
-        prefix: "BLUEBELL_"
+        env: ${{ inputs.env }}
+
+    - name: Update dependencies in project
+      run: |
+        cp -rf ${{ steps.envuscator.outputs.bin }}/Debug/android/mobuild-envuscator.aar composeApp/mobuild-envuscator-debug.aar
+        cp -rf ${{ steps.envuscator.outputs.bin }}/Release/android/mobuild-envuscator.aar composeApp/mobuild-envuscator-release.aar
+        cp -rf ${{ steps.envuscator.outputs.bin }}/Debug/ios/MobuildEnvuscator.xcframework iosApp/MobuildEnvuscator/Debug/
+        cp -rf ${{ steps.envuscator.outputs.bin }}/Release/ios/MobuildEnvuscator.xcframework iosApp/MobuildEnvuscator/Release/
+      shell: "bash"

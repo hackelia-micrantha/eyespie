@@ -27,10 +27,7 @@ jobs:
 
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
-        env:
-          BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
+        env: ${{ secrets.APP_CONFIG }}
 
       - name: Run Gradle Tests
         run: ./gradlew test
