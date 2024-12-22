@@ -1,27 +1,59 @@
-name: Deploy Migrations to Production
+name: Production
 
 on:
   push:
     branches:
       - main
   workflow_dispatch:
+  workflow_call:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-22.04
-
-    env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_DB_PASSWORD: ${{ secrets.PRODUCTION_DB_PASSWORD }}
-      PRODUCTION_PROJECT_ID: ipvxwipixdtyemipfogb
+  supabase:
+    runs-on: ubuntu-latest
+    environment: production
 
     steps:
       - uses: actions/checkout@v3
 
-      - uses: supabase/setup-cli@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          version: latest
+          ruby-version: "3.2"
+          bundler-cache: true
 
-      - run: |
-          supabase link --project-ref $PRODUCTION_PROJECT_ID
-          supabase db push
+      - uses: supabase/setup-cli@v1
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "supabase"
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+
+  mobile:
+    runs-on: macos-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+
+      - name: Build environment configuration
+        uses: ./.github/actions/mobuild-envuscator
+        env:
+          BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "build_release"
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "deploy_release"
+        env:
+          APPLE_ID: "abc"

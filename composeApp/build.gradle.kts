@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -5,11 +6,13 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.apolloGraphQL)
     alias(libs.plugins.kotlinSerialization)
-
+    alias(libs.plugins.compose.compiler)
     id("com.micrantha.bluebell")
 }
 
 kotlin {
+    jvmToolchain(21)
+
     cocoapods {
         version = "1.0"
         summary = "Native dependencies for ${project.name}"
@@ -25,13 +28,8 @@ kotlin {
 
     applyDefaultHierarchyTemplate()
 
-    androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
-        }
-    }
+    androidTarget()
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -148,12 +146,21 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
         }
     }
     buildTypes {
@@ -162,8 +169,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildTypes {
         debug {

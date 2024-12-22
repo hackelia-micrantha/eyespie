@@ -1,0 +1,44 @@
+
+platform :android do
+
+  desc "Build Android Debug APK"
+  lane :build_debug do
+    gradle(
+      task: "assemble",
+      build_type: "Debug",
+      print_command: false,
+      properties: {
+	"android.injected.signing.store.file" => ENV["ANDROID_STORE_FILE"],
+	"android.injected.signing.store.password" => ENV["ANDROID_STORE_PASSWORD"],
+	"android.injected.signing.key.alias" => ENV["ANDROID_KEY_ALIAS"],
+	"android.injected.signing.key.password" => ENV["ANDROID_KEY_PASSWORD"],
+      }
+    )
+  end
+
+  desc "Build Android Release APK"
+  lane :build_release do
+    gradle(
+      task: "assemble",
+      build_type: "Release",
+      print_command: false,
+      properties: {
+	"android.injected.signing.store.file" => ENV["ANDROID_STORE_FILE"],
+	"android.injected.signing.store.password" => ENV["ANDROID_STORE_PASSWORD"],
+	"android.injected.signing.key.alias" => ENV["ANDROID_KEY_ALIAS"],
+	"android.injected.signing.key.password" => ENV["ANDROID_KEY_PASSWORD"],
+      }
+    )
+  end
+
+  desc "Distribute Android APK "
+  lane :distribute do
+    build_android_release
+
+    # Upload APK to Firebase App Distribution or Play Store
+    firebase_app_distribution(
+      app: "1:1234567890:android:abcdef123456",
+      groups: "testers"
+    )
+  end
+end

@@ -1,0 +1,48 @@
+
+desc "Set up Supabase project"
+private_lane :setup_supabase do
+  # Login to Supabase using an access token
+  token = ENV['SUPABASE_ACCESS_TOKEN'] || raise("SUPABASE_ACCESS_TOKEN is missing")
+  sh "supabase login --token #{token}"
+
+  # Link the Supabase project
+  project_id = ENV['SUPABASE_PROJECT_ID'] || raise("SUPABASE_PROJECT_ID is missing")
+  sh "supabase link --project-ref #{project_id}"
+
+  puts "Supabase project linked successfully."
+end
+
+desc "Start Supabase locally"
+private_lane :start_supabase do
+  sh "supabase start"
+end
+
+desc "Push database migrations to Supabase"
+private_lane :push_migrations do
+  sh "supabase db push"
+  puts "Database migrations pushed successfully."
+end
+
+desc "Deploy Supabase Edge Functions"
+private_lane :deploy_edge_functions do
+  functions_dir = "./supabase/functions"
+  Dir.glob("#{functions_dir}/*").each do |function|
+    sh "supabase functions deploy #{function}"
+  end
+  puts "Supabase Edge Functions deployed successfully."
+end
+
+desc "Sync Supabase remote schema"
+private_lane :sync_schema do
+  schema_file = "./supabase/schema.sql"
+  sh "supabase db dump > #{schema_file}"
+  puts "Remote schema synced and saved to #{schema_file}"
+end
+
+desc "Run all Supabase setup and deployment tasks"
+lane :supabase do
+  setup_supabase
+  push_migrations
+  deploy_edge_functions
+  sync_schema
+end

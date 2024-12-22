@@ -1,24 +1,19 @@
-name: Staging
+name: Development
 
 on:
   push:
     branches:
-      - integration/**
+      - develop
+  pull_request:
+    branches:
+      - develop
   workflow_call:
-    inputs:
-      build_type:
-        description: "Type of build"
-        required: true
-        type: choice
-        options:
-          - debug
-          - release
   workflow_dispatch:
 
 jobs:
   supabase:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: development
 
     steps:
       - uses: actions/checkout@v3
@@ -39,7 +34,7 @@ jobs:
 
   mobile:
     runs-on: macos-latest
-    environment: staging
+    environment: development
 
     steps:
       - uses: actions/checkout@v3
@@ -58,4 +53,4 @@ jobs:
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "build_${{ inputs.build_type }}"
+          lane: "build_debug"

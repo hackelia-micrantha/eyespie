@@ -99,6 +99,9 @@ out/
 # Gradle files
 .gradle
 
+# Kotlin files
+.kotlin
+
 # Signing files
 .signing/
 
@@ -197,3 +200,12 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,androidstudio,android/Pods/*
+
+## Bundler
+
+vendor/bundle
+
+## Fastlane
+
+fastlane/README.md
+fastlane/report.xml

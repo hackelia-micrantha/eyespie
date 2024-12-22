@@ -21,6 +21,7 @@ import com.micrantha.eyespie.domain.model.Player
 import com.micrantha.eyespie.domain.model.Proof
 import com.micrantha.eyespie.domain.model.Thing
 import kotlinx.datetime.Clock.System
+import kotlinx.datetime.Instant
 import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
@@ -56,7 +57,7 @@ class ThingsDomainMapper(
 
         return Thing(
             id = data.id!!,
-            createdAt = data.created_at?.toInstant() ?: System.now(),
+            createdAt = data.created_at?.let { Instant.parse(it) } ?: System.now(),
             name = data.name,
             imageUrl = data.imageUrl,
             guessed = data.guessed ?: false,
@@ -74,7 +75,7 @@ class ThingsDomainMapper(
     fun list(data: ThingListing) = Thing.Listing(
         id = data.id!!,
         name = data.name,
-        createdAt = data.created_at?.toInstant() ?: System.now(),
+        createdAt = data.created_at?.let { Instant.parse(it) } ?: System.now(),
         nodeId = data.id,
         guessed = data.guessed ?: false,
         imageUrl = data.imageUrl

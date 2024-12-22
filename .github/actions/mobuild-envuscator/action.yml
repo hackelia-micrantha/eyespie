@@ -1,0 +1,17 @@
+name: Mobuild Envuscator
+description: Build obfuscated mobile libraries from environment configuration
+runs:
+  using: "composite"
+  steps:
+    # TODO: when ready, build obfuscated library of environment vars
+    #- uses: hackelia-micrantha/mobuild-envuscator@v1
+    #  with:
+    #    keys:
+    #      BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_DEV_URL }}
+    #      BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_DEV_ACCESS_TOKEN }}
+    #      BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.DEV_HUGGINGFACE_TOKEN }}
+    #    output_dir: composeApp
+
+    - uses: skiddph/actions-env@v1.0.3
+      with:
+        prefix: "BLUEBELL_"
