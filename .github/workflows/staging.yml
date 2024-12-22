@@ -18,6 +18,7 @@ on:
 jobs:
   supabase:
     runs-on: ubuntu-latest
+    environment: staging
 
     steps:
       - uses: actions/checkout@v3
@@ -33,11 +34,12 @@ jobs:
         with:
           lane: "supabase"
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_STAGING_ACCESS_TOKEN }}
-          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_STAGING_PROJECT_ID }}
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
 
   mobile:
     runs-on: macos-latest
+    environment: staging
 
     steps:
       - uses: actions/checkout@v3
@@ -50,9 +52,9 @@ jobs:
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
         env:
-          BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_DEV_URL }}
-          BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_DEV_ACCESS_TOKEN }}
-          BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.DEV_HUGGINGFACE_TOKEN }}
+          BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
