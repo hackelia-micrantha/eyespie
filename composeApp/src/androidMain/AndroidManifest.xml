@@ -15,7 +15,7 @@
 
     <application
         android:name=".android.MainApplication"
-        android:allowBackup="false"
+	android:allowBackup="false"
         android:foregroundServiceType="location"
         android:label="@string/app_title"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -34,4 +34,4 @@
             </intent-filter>
         </activity>
     </application>
-</manifest> 
+</manifest>

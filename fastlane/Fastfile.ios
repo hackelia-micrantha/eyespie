@@ -1,0 +1,24 @@
+
+platform :ios do
+  desc "Build iOS Release"
+  lane :build_release do
+    gradle(
+      tasks: ["iosArm64BinariesRelease", "iosX64BinariesRelease", "iosSimulatorArm64BinariesRelease"]
+    )
+  end
+
+  desc "Build iOS Debug"
+  lane :build_debug do
+    gradle(
+      tasks: ["iosArm64BinariesDebug", "iosX64BinariesDebug", "iosSimulatorArm64BinariesDebug"]
+    )
+  end
+
+  desc "Distribute iOS via TestFlight"
+  lane :distribute do
+    build_ios
+
+    # Upload to TestFlight
+    pilot
+  end
+end

@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
 
 plugins {
     alias(libs.plugins.nativeCocoapods)
@@ -13,7 +12,7 @@ plugins {
 
 kotlin {
     jvmToolchain(21)
-    
+
     cocoapods {
         version = "1.0"
         summary = "Native dependencies for ${project.name}"
@@ -152,6 +151,17 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
         }
     }
     buildTypes {
