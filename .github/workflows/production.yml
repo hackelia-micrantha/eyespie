@@ -41,6 +41,10 @@ jobs:
 
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
+        env:
+          BLUEBELL_SUPABASE_URL: ${{ secrets.SUPABASE_DEV_URL }}
+          BLUEBELL_SUPABASE_KEY: ${{ secrets.SUPABASE_DEV_ACCESS_TOKEN }}
+          BLUEBELL_HUGGING_FACE_TOKEN: ${{ secrets.DEV_HUGGINGFACE_TOKEN }}
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
