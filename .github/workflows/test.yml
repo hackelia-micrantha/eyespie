@@ -25,7 +25,7 @@ jobs:
           java-version: "21"
 
       - name: Build environment configuration
-        uses: ./github/actions/mobuild-envuscator
+        uses: ./.github/actions/mobuild-envuscator
 
       - name: Run Gradle Tests
         run: ./gradlew test

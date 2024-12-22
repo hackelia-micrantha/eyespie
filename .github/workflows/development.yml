@@ -43,7 +43,7 @@ jobs:
           bundler-cache: true
 
       - name: Build environment configuration
-        uses: ./github/actions/mobuild-envuscator
+        uses: ./.github/actions/mobuild-envuscator
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
