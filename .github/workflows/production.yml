@@ -43,7 +43,8 @@ jobs:
 
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
-        env: ${{ secrets.APP_CONFIG }}
+        with:
+          config: ${{ secrets.APP_CONFIG }}
 
       - uses: maierj/fastlane-action@v3.1.0
         with:

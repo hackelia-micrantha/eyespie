@@ -27,7 +27,8 @@ jobs:
 
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
-        env: ${{ secrets.APP_CONFIG }}
+        with:
+          config: ${{ secrets.APP_CONFIG }}
 
       - name: Run Gradle Tests
         run: ./gradlew test

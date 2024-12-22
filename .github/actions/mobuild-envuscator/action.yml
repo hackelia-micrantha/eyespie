@@ -1,7 +1,7 @@
 name: Mobuild Envuscator
 description: Build obfuscated mobile libraries from environment configuration
 inputs:
-  env:
+  config:
     description: "Base64 encoded environment config"
     required: true
     type: string
@@ -12,7 +12,7 @@ runs:
       id: envuscator
       uses: hackelia-micrantha/mobuild-envuscator/.github/actions/envuscator-build-all@main
       with:
-        env: ${{ inputs.env }}
+        config: ${{ inputs.config }}
 
     - name: Update dependencies in project
       run: |
