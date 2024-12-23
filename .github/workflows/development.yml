@@ -48,6 +48,7 @@ jobs:
         uses: ./.github/actions/mobuild-envuscator
         with:
           config: ${{ secrets.app_config }}
+          token: ${{ secrets.ENVUSCATOR_PAT }}
 
       - uses: maierj/fastlane-action@v3.1.0
         with:

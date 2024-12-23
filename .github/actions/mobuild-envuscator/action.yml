@@ -5,6 +5,10 @@ inputs:
     description: "Base64 encoded environment config"
     required: true
     type: string
+  token:
+    description: "Access token for the envuscator repository"
+    required: true
+    type: string
 runs:
   using: "composite"
   steps:
@@ -13,11 +17,12 @@ runs:
       uses: hackelia-micrantha/actions/envuscator-build-all@v1
       with:
         config: ${{ inputs.config }}
+        token: ${{ inputs.token }}
 
     - name: Update dependencies in project
       run: |
-        cp -rf ${{ steps.envuscator.outputs.bin }}/Debug/android/mobuild-envuscator.aar composeApp/mobuild-envuscator-debug.aar
-        cp -rf ${{ steps.envuscator.outputs.bin }}/Release/android/mobuild-envuscator.aar composeApp/mobuild-envuscator-release.aar
-        cp -rf ${{ steps.envuscator.outputs.bin }}/Debug/ios/MobuildEnvuscator.xcframework iosApp/MobuildEnvuscator/Debug/
-        cp -rf ${{ steps.envuscator.outputs.bin }}/Release/ios/MobuildEnvuscator.xcframework iosApp/MobuildEnvuscator/Release/
+        cp -f ${{ steps.envuscator.outputs.android_debug }} composeApp/libs/debug/
+        cp -f ${{ steps.envuscator.outputs.android_release }} composeApp/libs/release/
+        cp -rf ${{ steps.envuscator.outputs.ios_debug }} iosApp/MobuildEnvuscator/Debug/
+        cp -rf ${{ steps.envuscator.outputs.ios_release }} iosApp/MobuildEnvuscator/Release/
       shell: "bash"

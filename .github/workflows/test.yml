@@ -29,6 +29,7 @@ jobs:
         uses: ./.github/actions/mobuild-envuscator
         with:
           config: ${{ secrets.APP_CONFIG }}
+          token: ${{ secrets.ENVUSCATOR_PAT }}
 
       - name: Run Gradle Tests
         run: ./gradlew test
