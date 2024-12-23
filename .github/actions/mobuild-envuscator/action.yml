@@ -21,7 +21,7 @@ runs:
 
     - name: Build libraries
       id: envuscator
-      uses: envuscator/.github/actions/envuscator-build-all@v1
+      uses: ./envuscator/.github/actions/envuscator-build-all@v1
       with:
         config: ${{ inputs.config }}
         token: ${{ inputs.token }}
