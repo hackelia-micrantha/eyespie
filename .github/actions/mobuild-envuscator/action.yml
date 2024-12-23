@@ -12,9 +12,16 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Checkout actions"
+      uses: actions/checkout@v3
+      with:
+        repository: hackelia-micrantha/actions
+        token: ${{ inputs.token }}
+        path: envuscator
+
     - name: Build libraries
       id: envuscator
-      uses: hackelia-micrantha/actions/envuscator-build-all@v1
+      uses: envuscator/.github/actions/envuscator-build-all
       with:
         config: ${{ inputs.config }}
         token: ${{ inputs.token }}
