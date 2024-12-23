@@ -3,7 +3,6 @@ desc "Set up Supabase project"
 private_lane :setup_supabase do
   # Login to Supabase using an access token
   token = ENV['SUPABASE_ACCESS_TOKEN'] || raise("SUPABASE_ACCESS_TOKEN is missing")
-  sh "supabase login --token #{token}"
 
   # Link the Supabase project
   project_id = ENV['SUPABASE_PROJECT_ID'] || raise("SUPABASE_PROJECT_ID is missing")
