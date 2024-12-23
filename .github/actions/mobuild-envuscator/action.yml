@@ -18,11 +18,11 @@ runs:
         repository: hackelia-micrantha/actions
         token: ${{ inputs.token }}
         ref: v1
-        path: envuscator
+        path: micrantha-actions
 
     - name: Build libraries
       id: envuscator
-      uses: ./envuscator/.github/actions/envuscator-build-all
+      uses: ./micrantha-actions/.github/actions/envuscator-build-all
       with:
         config: ${{ inputs.config }}
         token: ${{ inputs.token }}
