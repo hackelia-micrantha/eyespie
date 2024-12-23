@@ -9,7 +9,6 @@ import com.micrantha.eyespie.graphql.GameNodeQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node2
 import kotlinx.datetime.Instant
-import kotlinx.datetime.toInstant
 import kotlin.time.Duration
 
 class GameDomainMapper {

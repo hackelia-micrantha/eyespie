@@ -6,7 +6,6 @@ import com.micrantha.eyespie.domain.model.Player
 import com.micrantha.eyespie.domain.model.Player.Name
 import com.micrantha.eyespie.domain.model.Player.Score
 import kotlinx.datetime.Instant
-import kotlinx.datetime.toInstant
 
 class PlayerDomainMapper(
     private val locationMapper: LocationDomainMapper

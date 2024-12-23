@@ -1,12 +1,11 @@
 package com.micrantha.eyespie
 
-import com.micrantha.bluebell.platform.AppConfigDelegate
-import com.micrantha.bluebell.platform.AppConfigDelegateWithDefault
+import com.micrantha.bluebell.platform.DefaultAppConfigDelegate
 
 object AppConfig {
-    val LOGIN_EMAIL by AppConfigDelegateWithDefault
-    val LOGIN_PASSWORD by AppConfigDelegateWithDefault
-    val SUPABASE_URL by AppConfigDelegate
-    val SUPABASE_KEY by AppConfigDelegate
-    val HUGGING_FACE_TOKEN by AppConfigDelegate
+    val LOGIN_EMAIL by DefaultAppConfigDelegate
+    val LOGIN_PASSWORD by DefaultAppConfigDelegate
+    val SUPABASE_URL by DefaultAppConfigDelegate
+    val SUPABASE_KEY by DefaultAppConfigDelegate
+    val HUGGING_FACE_TOKEN by DefaultAppConfigDelegate
 }

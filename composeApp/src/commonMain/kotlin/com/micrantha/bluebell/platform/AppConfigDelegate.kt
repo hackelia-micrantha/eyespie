@@ -1,17 +1,23 @@
 package com.micrantha.bluebell.platform
 
-import kotlin.reflect.KProperty
 import com.micrantha.eyespie.config.DefaultConfig
 import com.micrantha.eyespie.config.get
+import kotlin.reflect.KProperty
 
-expect object AppConfigDelegate : AppConfigPropertyDelegate {
+expect object AppConfigDelegate : PlatformConfigDelegate, AppConfigRequireDelegate {
     override fun getConfigValue(key: String, defaultValue: String): String
     override fun requireConfigValue(key: String): String
 }
 
-object AppConfigDelegateWithDefault {
+object DefaultAppConfigDelegate {
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
-        AppConfigDelegate.getConfigValue(property.name, DefaultConfig.get(property.name) ?: "")
+        DefaultConfig.get(property.name)
+            ?: AppConfigDelegate.requireConfigValue(property.name)
+}
+
+class UserAppConfigDelegate(private val userValue: String?) {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
+        userValue ?: AppConfigDelegate.getConfigValue(property.name)
 }
 
 interface PlatformConfigDelegate {
@@ -19,7 +25,7 @@ interface PlatformConfigDelegate {
     fun requireConfigValue(key: String): String
 }
 
-interface AppConfigPropertyDelegate : PlatformConfigDelegate {
+interface AppConfigRequireDelegate : PlatformConfigDelegate {
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
         requireConfigValue(property.name)
 }

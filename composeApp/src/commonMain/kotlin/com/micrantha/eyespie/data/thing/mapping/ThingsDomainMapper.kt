@@ -22,7 +22,6 @@ import com.micrantha.eyespie.domain.model.Proof
 import com.micrantha.eyespie.domain.model.Thing
 import kotlinx.datetime.Clock.System
 import kotlinx.datetime.Instant
-import kotlinx.datetime.toInstant
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
 

@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -198,14 +197,11 @@ bluebell {
         packageName = "com.micrantha.eyespie.config"
         className = "DefaultConfig"
         envFile = ".env.local"
-        debugValuesOnly = true
 
-        keys = listOf(
+        // Guaranteed to exist, set to null on missing file
+        defaultKeys = listOf(
             "LOGIN_EMAIL",
-            "LOGIN_PASSWORD",
-            "SUPABASE_URL",
-            "SUPABASE_KEY",
-            "HUGGING_FACE_TOKEN"
+            "LOGIN_PASSWORD"
         )
     }
     models {

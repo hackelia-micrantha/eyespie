@@ -8,6 +8,15 @@ on:
     branches:
       - develop
   workflow_call:
+    inputs:
+      login_email:
+        description: The default user to populate login with
+        required: false
+        type: string
+      login_password:
+        description: The default password to populate login with
+        required: false
+        type: string
   workflow_dispatch:
 
 jobs:
@@ -50,6 +59,12 @@ jobs:
         with:
           config: ${{ secrets.app_config }}
           token: ${{ secrets.ENVUSCATOR_PAT }}
+
+      - name: Create build config
+        run: |
+          echo "LOGIN_EMAIL=${{ inputs.login_email }}" > .env.local
+          echo "LOGIN_PASSWORD=${{ inputs.login_password }}" >> .env.local
+        shell: bash
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
