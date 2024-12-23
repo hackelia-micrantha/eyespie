@@ -2,11 +2,12 @@ package com.micrantha.bluebell
 
 open class BluebellConfig {
     var packageName: String = "com.micrantha.bluebell.config"
+    var className: String = "BuildConfig"
     var envFile: String = ".env.local"
     var keys: List<String> = emptyList()
     var requiredKeys: List<String> = emptyList()
     var skip: Boolean = false
-    var debugOnly: Boolean = true
+    var debugValuesOnly: Boolean = true
 
     override fun toString() = "($packageName)"
 }

@@ -196,12 +196,16 @@ apollo {
 bluebell {
     config {
         packageName = "com.micrantha.eyespie.config"
+        className = "DefaultConfig"
         envFile = ".env.local"
-        debugOnly = true
+        debugValuesOnly = true
 
         keys = listOf(
             "LOGIN_EMAIL",
-            "LOGIN_PASSWORD"
+            "LOGIN_PASSWORD",
+            "SUPABASE_URL",
+            "SUPABASE_KEY",
+            "HUGGING_FACE_TOKEN"
         )
     }
     models {
