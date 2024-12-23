@@ -14,7 +14,7 @@ runs:
   steps:
     - name: Build libraries
       id: envuscator
-      uses: hackelia-micrantha/actions/.github/actions/envuscator-build-all@v1
+      uses: hackelia-micrantha/actions/envuscator-build-all@v1
       with:
         config: ${{ inputs.config }}
         token: ${{ inputs.token }}
