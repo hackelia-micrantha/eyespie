@@ -8,5 +8,7 @@ actual object AppConfigDelegate : AppConfigPropertyDelegate {
         this.delegate = delegate
     }
 
-    actual override fun getConfigValue(key: String): String = this.delegate.getConfigValue(key)
+    actual override fun getConfigValue(key: String): String? = this.delegate.getConfigValue(key)
+
+    actual override fun requireConfigValue(key: String): String = this.delegate.requireConfigValue(key)
 }

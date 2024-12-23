@@ -17,7 +17,7 @@ class LabelRemoteSource {
                 protocol = URLProtocol.HTTPS
                 host = "api-inference.huggingface.co/models/google/vit-base-patch16-224"
             }
-            bearerAuth(AppConfig.HUGGINGFACE_TOKEN)
+            bearerAuth(AppConfig.HUGGING_FACE_TOKEN)
         }
     }
 

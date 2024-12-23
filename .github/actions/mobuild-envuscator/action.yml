@@ -10,7 +10,7 @@ runs:
   steps:
     - name: Build libraries
       id: envuscator
-      uses: hackelia-micrantha/mobuild-envuscator/.github/actions/envuscator-build-all@main
+      uses: hackelia-micrantha/actions/envuscator-build-all@v1
       with:
         config: ${{ inputs.config }}
 

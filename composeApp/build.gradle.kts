@@ -176,12 +176,12 @@ android {
         debug {
             dependencies {
                 implementation(libs.compose.ui.tooling)
-                implementation(files("mobuild-envuscator-debug.aar"))
+                implementation(files("libs/debug/mobuild-envuscator.aar"))
             }
         }
         release {
             dependencies {
-                implementation(files("mobuild-envuscator-release.aar"))
+                //implementation(files("libs/release/mobuild-envuscator.aar"))
             }
         }
     }
@@ -195,17 +195,11 @@ apollo {
 
 bluebell {
     config {
-        packageName = "com.micrantha.eyespie"
-        className = "AppConfig"
-        skip = true
+        packageName = "com.micrantha.eyespie.config"
+        envFile = ".env.local"
+        debugOnly = true
 
-        requiredKeys = listOf(
-            "SUPABASE_URL",
-            "SUPABASE_KEY",
-            "HUGGINGFACE_TOKEN"
-        )
-
-        nonRequiredKeys = listOf(
+        keys = listOf(
             "LOGIN_EMAIL",
             "LOGIN_PASSWORD"
         )
