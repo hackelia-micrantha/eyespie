@@ -18,7 +18,7 @@ fun LocationEnabledEffect(key: Any? = Unit) {
     val scope = rememberCoroutineScope()
     val repository by rememberInstance<LocationRepository>()
 
-    DisposableEffect(key) {
+    DisposableEffect(key, repository) {
         scope.launch {
             repository.start()
         }

@@ -1,11 +1,7 @@
 package com.micrantha.bluebell
 
-import com.github.gmazzo.gradle.plugins.BuildConfigExtension
 import org.gradle.api.Action
-import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
-import java.io.File
-import java.util.Properties
 import javax.inject.Inject
 
 open class BluebellExtension @Inject constructor(

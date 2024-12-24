@@ -31,13 +31,16 @@ import com.micrantha.eyespie.platform.scan.analyzer.LabelCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.analyzer.MatchCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.analyzer.SegmentCaptureAnalyzer
 import org.kodein.di.DI
+import org.kodein.di.bindProvider
 import org.kodein.di.bindProviderOf
 import org.kodein.di.bindSingleton
 import org.kodein.di.delegate
 
-fun iosModules(app: UIApplicationController) = DI {
+fun iosModules(app: AppDelegate) = DI {
 
     bindSingleton { Platform(app) }
+
+    bindProvider { app.networkMonitor }
 
     bindProviderOf(::LabelCaptureAnalyzer)
 

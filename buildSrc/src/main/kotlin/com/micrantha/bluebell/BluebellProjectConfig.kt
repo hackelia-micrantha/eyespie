@@ -1,61 +1,108 @@
 package com.micrantha.bluebell
 
 import com.github.gmazzo.gradle.plugins.BuildConfigExtension
+import com.github.gmazzo.gradle.plugins.BuildConfigTask
 import org.gradle.api.Project
-import java.io.File
+import java.io.FileInputStream
 import java.util.Properties
-import io.github.cdimascio.dotenv.dotenv
-
-private fun loadConfigFromEnvironment(config: BluebellConfig): Properties {
-    val properties = Properties()
-    val prefix = "${config.envVarName}_"
-
-    dotenv {
-        ignoreIfMissing = true
-    }.entries().filter { it.key.startsWith(prefix) }.forEach { e ->
-        properties[e.key.removePrefix(prefix)] = e.value
-    }
-    return properties
-}
 
 fun Project.configureBuilds(config: BluebellConfig) {
+
+    fun loadConfigFromEnvironment(config: BluebellConfig): Properties {
+        val properties = Properties()
+        try {
+            FileInputStream(config.envFile).use { fileInputStream ->
+                properties.load(fileInputStream)
+            }
+            logger.info("Loaded ${properties.keys.size} variables from ${config.envFile}")
+        } catch (e: Exception) {
+            logger.warn("No ${config.envFile} file found.")
+        }
+        return properties
+    }
+
+    val envConfig by lazy {
+        loadConfigFromEnvironment(config).entries.associate { (key, value) -> key.toString() to "\"$value\"" }
+            .toMutableMap().apply {
+                config.defaultKeys.filterNot { containsKey(it) }.forEach {
+                    this[it] = "null"
+                }
+            }
+    }
+
+    val requiredConfigError = { ->
+        logger.error("${config.envFile} must contain the following variables:")
+        config.requiredKeys.forEach { logger.error("  - $it") }
+        error("missing configuration")
+    }
+
+    fun generateSource(task: BuildConfigTask) {
+        val entries =
+            envConfig.entries.map { "\"${it.key}\" to ${config.className}.${it.key}" }
+
+        val outputDir =
+            task.outputDir.dir(config.packageName.replace(".", "/")).get().also {
+                it.asFile.mkdirs()
+            }
+
+        val sourceFile = outputDir.file("${config.className}Ext.kt").asFile
+
+        // Example code generation logic
+        sourceFile.writeText(generatedExtensionSourceCode(config, entries))
+        logger.info("Generated config extensions")
+    }
 
     extensions.configure(BuildConfigExtension::class.java) {
         packageName(config.packageName)
         className(config.className)
+        useKotlinOutput { topLevelConstants = false }
 
-        val task = tasks.register("generateBluebellConfig") {
-            group = "Bluebell"
-            description = "Generates the variables for build config"
-
-            val properties by lazy {
-                loadConfigFromEnvironment(config)
+        fun configureBuild() {
+            if (envConfig.count { config.requiredKeys.contains(it.key) } != config.requiredKeys.size) {
+                requiredConfigError()
             }
 
-            val requiredProperties = listOf(
-                "SUPABASE_URL",
-                "SUPABASE_KEY",
-                "HUGGINGFACE_TOKEN"
-            )
-
-            val optionalProperties = listOf(
-                "LOGIN_EMAIL",
-                "LOGIN_PASSWORD"
-            )
-
-            if (properties.count { requiredProperties.contains(it.key) } != requiredProperties.size) {
-                println("e: a .env file must contain the following variables:")
-                requiredProperties.forEach { println("  - ${config.envVarName}_$it") }
-                error("missing configuration")
+            envConfig.forEach { (key, value) ->
+                buildConfigField("String?", key, value)
             }
 
-            optionalProperties.forEach { if (!properties.containsKey(it)) properties[it] = "" }
-
-            properties.stringPropertyNames().forEach { key ->
-                buildConfigField("String", key, "\"${properties[key] ?: ""}\"")
-            }
+            logger.info("Generated ${config.packageName}.${config.className}")
         }
 
-        generateTask.get().dependsOn(task)
+        tasks.register("generateBluebellConfig") {
+            group = "Bluebell"
+            description = "Generates the local build config"
+
+            configureBuild()
+        }
+
+        tasks.register("generateBluebellConfigExtensions") {
+            group = "Bluebell"
+            description = "Generates the local build config extensions"
+
+            generateSource(generateTask.get())
+        }
+
+        generateTask.configure {
+            doFirst {
+                configureBuild()
+            }
+            doLast {
+                generateSource(this as BuildConfigTask)
+            }
+        }
     }
+
 }
+
+private fun generatedExtensionSourceCode(config: BluebellConfig, entries: List<String>) = """
+package ${config.packageName}
+
+private val map = mapOf(
+    ${entries.joinToString(",\n    ")}
+)
+
+fun ${config.className}.get(key: String): String? {
+    return map[key]
+}    
+""".trimIndent()

@@ -1,6 +1,6 @@
 package com.micrantha.eyespie.data.clue.source
 
-import com.micrantha.eyespie.AppConfig.HUGGINGFACE_TOKEN
+import com.micrantha.eyespie.AppConfig
 import com.micrantha.eyespie.data.client.createHttpClient
 import com.micrantha.eyespie.data.clue.model.ImageResponse
 import com.micrantha.eyespie.platform.scan.CameraImage
@@ -17,7 +17,7 @@ class LabelRemoteSource {
                 protocol = URLProtocol.HTTPS
                 host = "api-inference.huggingface.co/models/google/vit-base-patch16-224"
             }
-            bearerAuth(HUGGINGFACE_TOKEN)
+            bearerAuth(AppConfig.HUGGING_FACE_TOKEN)
         }
     }
 

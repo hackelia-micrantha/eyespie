@@ -9,7 +9,7 @@ fun UIShow() {
 
     EyesPieApp(
         androidDependencies(
-            LocalContext.current,
+            LocalContext.current
         )
     )
 }

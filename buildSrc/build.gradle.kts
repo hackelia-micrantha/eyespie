@@ -11,7 +11,6 @@ repositories {
 
 dependencies {
     implementation(libs.build.config)
-    implementation(libs.dotenv.kotlin)
 
     implementation(gradleApi())
     implementation(localGroovy())

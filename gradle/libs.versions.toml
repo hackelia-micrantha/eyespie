@@ -39,7 +39,6 @@ tensorflowLite = "2.14.0"
 mediapipe = "0.20230731"
 buildConfig = "3.1.0"
 mokoMedia = "0.11.0"
-dotenv-kotlin = "6.4.1"
 
 [plugins]
 
@@ -114,4 +113,3 @@ tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite
 mediapipe-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
 moko-media = { module = "dev.icerock.moko:media", version.ref = "mokoMedia" }
 build-config = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildConfig" }
-dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenv-kotlin" }

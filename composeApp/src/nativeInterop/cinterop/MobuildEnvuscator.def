@@ -1,0 +1,3 @@
+compilerOpts = -Isrc/nativeInterop/cinterop
+headers = api.h
+linkerOpts = -Lsrc/nativeInterop/cinterop -lmobuild-envuscator

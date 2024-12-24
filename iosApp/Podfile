@@ -1,0 +1,8 @@
+platform :ios, '11.0'
+
+target 'iosApp' do
+  use_frameworks!
+
+  pod 'composeApp', :path => '../composeApp'
+  pod 'MobuildEnvuscator', :path => 'MobuildEnvuscator/MobuildEnvuscator.podspec'
+end

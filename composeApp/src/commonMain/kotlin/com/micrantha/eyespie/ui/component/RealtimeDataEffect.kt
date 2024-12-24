@@ -12,7 +12,7 @@ fun RealtimeDataEnabledEffect(key: Any? = Unit) {
     val repository by rememberInstance<RealtimeRepository>()
     val scope = rememberCoroutineScope()
 
-    DisposableEffect(key) {
+    DisposableEffect(key, repository) {
 
         scope.launch {
             repository.start()

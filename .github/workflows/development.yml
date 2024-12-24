@@ -1,0 +1,60 @@
+name: Development
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  workflow_call:
+    inputs:
+      login_email:
+        description: The default user to populate login with
+        required: false
+        type: string
+      login_password:
+        description: The default password to populate login with
+        required: false
+        type: string
+  workflow_dispatch:
+
+jobs:
+  supabase:
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/supabase
+        with:
+          access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          project_id: ${{ secrets.SUPABASE_PROJECT_ID }}
+          db_password: ${{ secrets.SUPABASE_DB_PASSWORD }}
+
+  mobile:
+    runs-on: macos-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Create build config
+        uses: ./.github/actions/configure-build
+        with:
+          android_keystore: ${{ secrets.ANDROID_STORE_FILE }}
+          login_email: ${{ inputs.login_email }}
+          login_password: ${{ inputs.login_password }}
+
+      - name: Build environment configuration
+        uses: ./.github/actions/mobuild-envuscator
+        with:
+          config: ${{ secrets.app_config }}
+          token: ${{ secrets.ENVUSCATOR_PAT }}
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "distribute_development"
+        env:
+          APPLE_ID: "abc"

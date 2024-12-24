@@ -1,6 +1,5 @@
 package com.micrantha.eyespie
 
-import IOSApplication
 import androidx.compose.runtime.Composable
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
@@ -16,4 +15,4 @@ interface UIApplicationController {
 }
 
 @Composable
-fun UIShow(app: IOSApplication) = EyesPieApp(iosModules(app))
+fun UIShow(app: AppDelegate) = EyesPieApp(iosModules(app))

@@ -1,0 +1,36 @@
+name: Mobuild Envuscator
+description: Build obfuscated mobile libraries from environment configuration
+inputs:
+  config:
+    description: "Base64 encoded environment config"
+    required: true
+    type: string
+  token:
+    description: "Access token for the envuscator repository"
+    required: true
+    type: string
+runs:
+  using: "composite"
+  steps:
+    - name: "Checkout actions"
+      uses: actions/checkout@v3
+      with:
+        repository: hackelia-micrantha/actions
+        token: ${{ inputs.token }}
+        ref: v1
+        path: micrantha-actions
+
+    - name: Build libraries
+      id: envuscator
+      uses: ./micrantha-actions/.github/actions/envuscator-build-all
+      with:
+        config: ${{ inputs.config }}
+        token: ${{ inputs.token }}
+
+    - name: Update dependencies in project
+      run: |
+        cp -f ${{ steps.envuscator.outputs.android_debug }} composeApp/libs/debug/
+        cp -f ${{ steps.envuscator.outputs.android_release }} composeApp/libs/release/
+        cp -rf ${{ steps.envuscator.outputs.ios_debug }} iosApp/MobuildEnvuscator/Debug/
+        cp -rf ${{ steps.envuscator.outputs.ios_release }} iosApp/MobuildEnvuscator/Release/
+      shell: "bash"

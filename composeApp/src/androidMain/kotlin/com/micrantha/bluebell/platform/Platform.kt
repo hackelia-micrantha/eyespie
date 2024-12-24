@@ -13,7 +13,11 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
-actual class Platform(private val context: Context) : LocalizedRepository, BluebellFileSystem {
+
+actual class Platform(
+    private val context: Context,
+    actual val networkMonitor: NetworkMonitor
+) : LocalizedRepository, BluebellFileSystem {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
     actual override fun resource(str: LocalizedString, vararg args: Any?): String {
@@ -52,9 +56,3 @@ actual class Platform(private val context: Context) : LocalizedRepository, Blueb
         }
     }
 }
-
-actual class WeakReference<out T : Any> actual constructor(target: T) {
-    private val underlying: java.lang.ref.WeakReference<T> = java.lang.ref.WeakReference(target)
-    actual val targetOrNull: T? get() = underlying.get()
-}
-

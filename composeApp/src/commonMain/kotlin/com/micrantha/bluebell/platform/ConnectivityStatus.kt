@@ -1,23 +1,19 @@
 package com.micrantha.bluebell.platform
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.MutableStateFlow
 
-expect class ConnectivityStatus {
-    val isNetworkConnected: Flow<Boolean>
-    fun start()
-    fun stop()
-}
+class ConnectivityStatus(private val monitor: NetworkMonitor) {
 
-fun ConnectivityStatus.getStatus(success: (Boolean) -> Unit) {
-    CoroutineScope(Dispatchers.Default).launch {
-        isNetworkConnected.collect { status ->
-            withContext(Dispatchers.Main) {
-                success(status)
-            }
-        }
+    private val connectedState = MutableStateFlow(false)
+
+    val connected: Flow<Boolean> = connectedState
+
+    val isConnected: Boolean = connectedState.value
+
+    fun start() {
+        monitor.startMonitoring { connectedState.value = it }
     }
+
+    fun stop() = monitor.stopMonitoring()
 }

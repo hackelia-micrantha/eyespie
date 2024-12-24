@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
-
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -13,18 +11,18 @@ plugins {
 
 kotlin {
     jvmToolchain(21)
-    
+
     cocoapods {
         version = "1.0"
         summary = "Native dependencies for ${project.name}"
+        homepage = "https://github.com/hackelia-micrantha/eyespie"
+        license = "GPLv3"
 
         framework {
             baseName = "bluebell"
         }
 
-        pod("Reachability")
-        //pod("MediaPipeTasksVision")
-        //podfile = project.file("../iosApp/Podfile")
+        podfile = project.file("../iosApp/Podfile")
     }
 
     applyDefaultHierarchyTemplate()
@@ -92,7 +90,6 @@ kotlin {
             //implementation("ca.rmen:rhymer:1.2.0")
 
             //implementation("org.hashids:hashids:1.0.3")
-
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
@@ -141,6 +138,9 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
+
+	versionCode = 1
+	versionName = "1.0.0-alpha"
     }
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -154,6 +154,17 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
@@ -163,9 +174,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
-
-    dependencies {
-        debugImplementation(libs.compose.ui.tooling)
+    buildTypes {
+        debug {
+            dependencies {
+                implementation(libs.compose.ui.tooling)
+                implementation(files("libs/debug/mobuild-envuscator.aar"))
+            }
+        }
+        release {
+            dependencies {
+                //implementation(files("libs/release/mobuild-envuscator.aar"))
+            }
+        }
     }
 }
 
@@ -177,8 +197,15 @@ apollo {
 
 bluebell {
     config {
-        packageName = "com.micrantha.eyespie"
-        className = "AppConfig"
+        packageName = "com.micrantha.eyespie.config"
+        className = "DefaultConfig"
+        envFile = ".env.local"
+
+        // Guaranteed to exist, set to null on missing file
+        defaultKeys = listOf(
+            "LOGIN_EMAIL",
+            "LOGIN_PASSWORD"
+        )
     }
     models {
         files = mapOf(

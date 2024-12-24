@@ -1,0 +1,21 @@
+PODS:
+  - composeApp (1.0)
+  - MobuildEnvuscator (1.0.0)
+
+DEPENDENCIES:
+  - composeApp (from `../composeApp`)
+  - MobuildEnvuscator (from `MobuildEnvuscator/MobuildEnvuscator.podspec`)
+
+EXTERNAL SOURCES:
+  composeApp:
+    :path: "../composeApp"
+  MobuildEnvuscator:
+    :path: MobuildEnvuscator/MobuildEnvuscator.podspec
+
+SPEC CHECKSUMS:
+  composeApp: ca0ab7c4b1ca990e13d971805a70c7aba5b63bd4
+  MobuildEnvuscator: b3143367f25b646ff7295156f4bc1af5e2e4db69
+
+PODFILE CHECKSUM: f21d091f14ff15e866690be7a97bb82a07d7ef39
+
+COCOAPODS: 1.15.2

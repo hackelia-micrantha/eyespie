@@ -2,7 +2,7 @@ package com.micrantha.eyespie
 
 import android.content.Context
 import com.micrantha.bluebell.get
-import com.micrantha.bluebell.platform.ConnectivityStatus
+import com.micrantha.bluebell.platform.AndroidNetworkMonitor
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.eyespie.platform.scan.analyzer.ColorCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.analyzer.DetectCaptureAnalyzer
@@ -20,9 +20,9 @@ fun androidDependencies(
 ) = DI {
     bindInstance { context }
 
-    bindProviderOf(::ConnectivityStatus)
-
     bindSingletonOf(::Platform)
+
+    bindProviderOf(::AndroidNetworkMonitor)
 
     bindProvider {
         LabelCaptureAnalyzer(get())

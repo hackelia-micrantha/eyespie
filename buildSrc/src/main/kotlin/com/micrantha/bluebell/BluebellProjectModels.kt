@@ -17,12 +17,12 @@ fun Project.configureModels(models: BluebellModels) {
     tasks.findByName("generateBluebellConfig")?.dependsOn(task)
 }
 
-internal fun copyModels(models: BluebellModels) {
+internal fun Project.copyModels(models: BluebellModels) {
 
-    println("> Model output paths:")
+    logger.debug("Model output paths:")
 
     for (outputPath in models.outputPaths) {
-        println("  - $outputPath")
+        logger.debug("  - $outputPath")
         File(outputPath).mkdirs()
     }
 
@@ -30,10 +30,10 @@ internal fun copyModels(models: BluebellModels) {
         val from = File(models.downloadPath, entry.key)
 
         if (from.exists().not()) {
-            println("> Model ${from.path} does not exist, skipping")
+            logger.warn("Model ${from.path} does not exist, skipping")
             continue
         }
-        println("> Copying ${entry.key} to ${entry.value}")
+        logger.info("Copying ${entry.key} to ${entry.value}")
 
         for (outputPath in models.outputPaths) {
             val to = File(outputPath, entry.value)

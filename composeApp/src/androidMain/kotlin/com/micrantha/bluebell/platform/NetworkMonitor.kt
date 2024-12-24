@@ -6,25 +6,29 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import com.micrantha.bluebell.data.Log
 import com.micrantha.bluebell.data.d
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 
-actual class ConnectivityStatus(private val context: Context) {
-    private val networkStatus = MutableStateFlow(false)
+class AndroidNetworkMonitor(context: Context) : NetworkMonitor {
+    private var connectivityManager: ConnectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    actual val isNetworkConnected: Flow<Boolean> = networkStatus
+    private var networkCallback: Callback? = null
 
-    private var connectivityManager: ConnectivityManager? = null
+    inner class Callback(private var onUpdate: (Boolean) -> Unit) :
+        ConnectivityManager.NetworkCallback() {
 
-    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        fun update(onUpdate: (Boolean) -> Unit): Callback {
+            this.onUpdate = onUpdate
+            return this
+        }
+
         override fun onAvailable(network: Network) {
             Log.d("Connectivity status", "Network available")
-            networkStatus.value = true
+            onUpdate(true)
         }
 
         override fun onLost(network: Network) {
             Log.d("Connectivity status", "Network lost")
-            networkStatus.value = false
+            onUpdate(false)
         }
 
         override fun onCapabilitiesChanged(
@@ -48,24 +52,24 @@ actual class ConnectivityStatus(private val context: Context) {
                 }"
             )
 
-            networkStatus.value = isConnected
+            onUpdate(isConnected)
         }
     }
 
-    actual fun start() {
+    override fun startMonitoring(onUpdate: (Boolean) -> Unit) {
         try {
-            if (connectivityManager == null) {
-                connectivityManager =
-                    context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+            if (networkCallback == null) {
+                Callback(onUpdate).apply {
+                    networkCallback = this
+                    connectivityManager.registerDefaultNetworkCallback(this)
+                }
+            } else {
+                networkCallback?.update(onUpdate)
             }
 
-            connectivityManager?.registerDefaultNetworkCallback(networkCallback)
-
-            val currentNetwork = connectivityManager?.activeNetwork
-
-            if (currentNetwork == null) {
-                networkStatus.value = false
-
+            if (connectivityManager.activeNetwork == null) {
+                onUpdate(false)
                 Log.d("Connectivity status", "Disconnected")
             }
 
@@ -76,12 +80,13 @@ actual class ConnectivityStatus(private val context: Context) {
                 throwable = e,
                 messageString = "Failed to start: ${e.message.toString()}"
             )
-            networkStatus.value = false
+            onUpdate(false)
         }
     }
 
-    actual fun stop() {
-        connectivityManager?.unregisterNetworkCallback(networkCallback)
+    override fun stopMonitoring() {
+        networkCallback?.let { connectivityManager.unregisterNetworkCallback(it) }
+        networkCallback = null
         Log.d("Connectivity status", "Stopped")
     }
 }

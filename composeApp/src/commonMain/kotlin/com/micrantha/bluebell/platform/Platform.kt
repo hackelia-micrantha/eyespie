@@ -7,6 +7,8 @@ import okio.Path
 expect class Platform : LocalizedRepository, FileSystem {
     val name: String
 
+    val networkMonitor: NetworkMonitor
+
     override fun resource(str: LocalizedString, vararg args: Any?): String
 
     override fun format(
