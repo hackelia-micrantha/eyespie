@@ -19,7 +19,7 @@ jobs:
         with:
           access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           project_id: ${{ secrets.SUPABASE_PROJECT_ID }}
-          db_password: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          db_password: ${{ secrets.SUPABASE_DB_URL }}
 
   mobile:
     runs-on: macos-latest
@@ -30,6 +30,7 @@ jobs:
 
       - name: Create build config
         uses: ./.github/actions/configure-build
+        id: build-config
         with:
           android_keystore: ${{ secrets.ANDROID_STORE_FILE }}
           login_email: ${{ inputs.login_email }}
@@ -45,4 +46,10 @@ jobs:
         with:
           lane: "distribute_production"
         env:
-          APPLE_ID: "abc"
+          APPLE_CONNECT_ID: "${{ secrets.APPLE_CONNECT_ID }}"
+          APPLE_TEAM_ID: "${{ secrets.APPLE_TEAM_ID }}"
+          APPLE_USERNAME: "${{ secrets.APPLE_USERNAME }}"
+          ANDROID_STORE_FILE: "${{ steps.build-config.outputs.android_keystore }}"
+          ANDROID_STORE_PASSWORD: "${{ secrets.ANDROID_STORE_PASSWORD }}"
+          ANDROID_KEY_ALIAS: "${{ secrets.ANDROID_KEY_ALIAS }}"
+          ANDROID_KEY_PASSWORD: "${{ secrets.ANDROID_KEY_PASSWORD }}"

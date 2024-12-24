@@ -1,9 +1,11 @@
+fastlane_require 'semantic'
+fastlane_require 'semantic/core_ext'
 
 platform :ios do
 
   before_all do
     # Ensure git status is clean
-    ensure_git_status_clean
+    #ensure_git_status_clean
     # Verify Xcode version
     xcversion(version: "~> 15.0")
   end
@@ -22,29 +24,24 @@ platform :ios do
     )
   end
 
-  descr "Distribute iOS via AppStore"
+  desc "Distribute iOS via AppStore"
   lane :distribute_production do |options|
-    if options[:version_number].nil?
-      UI.user_error!("Please provide a version_number parameter")
-    end
 
-    # Update version number
-    increment_version_number(
-      version_number: options[:version_number],
-      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    version_number = options[:version_number] || ios_get_version(
+      xcodeproj: "iosApp/iosApp.xcodeproj"
     )
 
     # Build and upload to TestFlight first
     testflight(
-      apple_id: options[:apple_id],
-      changelog: options[:changelog]
+      apple_id: ENV["APPLE_CONNECT_ID"],
+      changelog: options[:changelog] || ENV["APPLE_CHANGELOG"]
     )
 
     # Submit for App Store Review
     upload_to_app_store(
-      app_version: options[:version_number],
+      app_version: version_number,
       submit_for_review: true,
-      automatic_release: options[:automatic_release] || false,
+      automatic_release: options[:automatic_release] || ENV["APPLE_AUTOMATIC_RELEASE"] || false,
       force: true,
       skip_metadata: false,
       skip_screenshots: false,
@@ -59,17 +56,31 @@ platform :ios do
 
     # Add a git tag
     add_git_tag(
-      tag: "ios-appstore-#{options[:version_number]}"
+      tag: "ios-appstore-#{version_number}"
     )
 
     # Push the tag
     push_git_tags
   end
 
-  desc "Distribute iOS via TestFlight"
-  lane :distribute_development do |options|
-    increment_build_number(
-      build_number: latest_testflight_build_number + 1,
+  desc "Distribute iOS to Staging"
+  lane :distribute_staging do |options|
+    build_number = ios_get_build_number(
+      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    )
+
+    ios_set_build_number(
+      build_number: build_number + 1,
+      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    )
+
+    version_number = options[:version_number] || ios_get_version(
+      xcodeproj: "iosApp/iosApp.xcodeproj"
+    ).to_version.increment!(:patch)
+
+    # Update version number
+    ios_set_version(
+      version_number: version_number,
       xcodeproj: "./iosApp/iosApp.xcodeproj"
     )
 
@@ -99,13 +110,60 @@ platform :ios do
     # Upload to TestFlight
     upload_to_testflight(
       skip_waiting_for_build_processing: true,
-      apple_id: options[:apple_id],
-      username: ENV["APPLE_ID"],
-      team_id: ENV["TEAM_ID"],
-      changelog: options[:changelog],
-      distribute_external: options[:external] || false,
-      notify_external_testers: options[:notify] || false,
-      groups: options[:groups]
+      apple_id: ENV["APPLE_CONNECT_ID"],
+      username: ENV["APPLE_USERNAME"],
+      team_id: ENV["APPLE_TEAM_ID"],
+      changelog: options[:changelog] || ENV["APPLE_CHANGELOG"],
+      distribute_external: options[:external] || ENV["APPLE_EXTERNAL"] || false,
+      notify_external_testers: options[:notify] || ENV["APPLE_NOTIFY"] || false,
+      groups: options[:groups] || ENV["APPLE_GROUPS"]
+    )
+  end
+
+  desc "Distribute iOS via TestFlight"
+  lane :distribute_development do |options|
+    build_number = ios_get_build_number(
+      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    )
+
+    ios_set_build_number(
+      build_number: build_number + 1,
+      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    )
+
+    # Update provisioning profiles
+    match(
+      type: "enterprise",
+      readonly: true,
+      app_identifier: [
+        "com.micrantha.eyespie"
+      ]
+    )
+
+    # Build the app
+    build_ios_app(
+      scheme: "Eyespie",
+      export_method: "enterprise",
+      configuration: "Release",
+      clean: true,
+      output_directory: "build",
+      export_options: {
+        provisioningProfiles: {
+          "com.micrantha.eyespie" => "match AppStore com.micrantha.eyespie"
+        }
+      }
+    )
+
+    # Upload to TestFlight
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      apple_id: ENV["APPLE_CONNECT_ID"],
+      username: ENV["APPLE_USERNAME"],
+      team_id: ENV["APPLE_TEAM_ID"],
+      changelog: options[:changelog] || ENV["APPLE_CHANGELOG"],
+      distribute_external: options[:external] || ENV["APPLE_EXTERNAL"] || false,
+      notify_external_testers: options[:notify] || ENV["APPLE_NOTIFY"] || false,
+      groups: options[:groups] || ENV["APPLE_GROUPS"]
     )
   end
 
@@ -146,7 +204,7 @@ platform :ios do
   after_all do |lane|
     # Clean up build artifacts
     clean_build_artifacts
-    
+
     # Notify on success
     #slack(
     #  message: "Successfully deployed new iOS version!",

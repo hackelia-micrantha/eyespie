@@ -29,8 +29,8 @@ runs:
 
     - name: Update dependencies in project
       run: |
-        cp -f ${{ steps.envuscator.outputs.android_debug }} composeApp/libs/debug/
-        cp -f ${{ steps.envuscator.outputs.android_release }} composeApp/libs/release/
-        cp -rf ${{ steps.envuscator.outputs.ios_debug }} iosApp/MobuildEnvuscator/Debug/
-        cp -rf ${{ steps.envuscator.outputs.ios_release }} iosApp/MobuildEnvuscator/Release/
+        cp -f ${{ steps.envuscator.outputs.android_debug }} "${{ github.workspace }}/composeApp/libs/debug/"
+        cp -f ${{ steps.envuscator.outputs.android_release }} "${{ github.workspace }}/composeApp/libs/release/"
+        cp -rf ${{ steps.envuscator.outputs.ios_debug }} "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/"
+        cp -rf ${{ steps.envuscator.outputs.ios_release }} "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/"
       shell: "bash"

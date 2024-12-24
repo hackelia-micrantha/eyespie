@@ -16,10 +16,10 @@ inputs:
 outputs:
   android_keystore:
     description: "The decoded keystore as a file"
-    value: ${{ steps.decode.outputs.file }}
+    value: ${{ steps.decode.outputs.android_keystore }}
   env_file:
     description: "The local environment file"
-    value: ${{ steps.env.outputs.file }}
+    value: ${{ steps.env.outputs.env_file }}
 runs:
   using: "composite"
   steps:
@@ -28,16 +28,18 @@ runs:
         ruby-version: "3.2"
         bundler-cache: true
 
+    - uses: burrunan/gradle-cache-action@v1
+
     - name: Create android keystore
       id: decode
       run: |
-        base64 -d ${{ inputs.android_keystore }} > android.keystore
-        echo "file=android.keystore" >> $GITHUB_OUTPUT
+        echo -n "${{ inputs.android_keystore }}" | base64 -d > "${{ github.workspace }}/android.keystore"
+        echo "android_keystore=${{ github.workspace }}/android.keystore" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Create build config
       run: |
-        echo "LOGIN_EMAIL=${{ inputs.login_email }}" > .env.local
-        echo "LOGIN_PASSWORD=${{ inputs.login_password }}" >> .env.local
-        echo "file=.env.local" >> $GITHUB_OUTPUT
+        echo "LOGIN_EMAIL=${{ inputs.login_email }}" > "${{ github.workspace }}/.env.local"
+        echo "LOGIN_PASSWORD=${{ inputs.login_password }}" >> "${{ github.workspace }}/.env.local"
+        echo "env_file=${{ github.workspace }}/.env.local" >> $GITHUB_OUTPUT
       shell: bash

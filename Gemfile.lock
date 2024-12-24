@@ -110,6 +110,8 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.4.0)
       xcpretty-travis-formatter (>= 0.0.3, < 2.0.0)
+    fastlane-plugin-versioning_android (0.1.1)
+    fastlane-plugin-versioning_ios (0.1.0)
     fastlane-sirp (1.0.0)
       sysrandom (~> 1.0)
     gh_inspector (1.1.3)
@@ -179,6 +181,7 @@ GEM
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     security (0.1.5)
+    semantic (1.6.1)
     signet (0.19.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -217,6 +220,9 @@ PLATFORMS
 
 DEPENDENCIES
   fastlane
+  fastlane-plugin-versioning_android
+  fastlane-plugin-versioning_ios
+  semantic
 
 BUNDLED WITH
    2.5.16

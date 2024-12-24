@@ -9,8 +9,8 @@ inputs:
     description: "Access token for the project"
     required: true
     type: string
-  db_password:
-    description: "Database password for the project"
+  database_url:
+    description: "Database url for the project"
     required: true
     type: string
 runs:
@@ -27,6 +27,6 @@ runs:
       with:
         lane: "supabase"
       env:
+        DATABASE_URL: ${{ inputs.database_url }}
         SUPABASE_ACCESS_TOKEN: ${{ inputs.access_token }}
         SUPABASE_PROJECT_ID: ${{ inputs.project_id }}
-        SUPABASE_DB_PASSWORD: ${{ inputs.db_password }}
