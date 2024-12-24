@@ -1,5 +1,13 @@
 
 platform :ios do
+
+  before_all do
+    # Ensure git status is clean
+    ensure_git_status_clean
+    # Verify Xcode version
+    xcversion(version: "~> 15.0")
+  end
+
   desc "Build iOS Release"
   lane :build_release do
     gradle(
@@ -14,11 +22,144 @@ platform :ios do
     )
   end
 
+  descr "Distribute iOS via AppStore"
+  lane :distribute_production do |options|
+    if options[:version_number].nil?
+      UI.user_error!("Please provide a version_number parameter")
+    end
+
+    # Update version number
+    increment_version_number(
+      version_number: options[:version_number],
+      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    )
+
+    # Build and upload to TestFlight first
+    testflight(
+      apple_id: options[:apple_id],
+      changelog: options[:changelog]
+    )
+
+    # Submit for App Store Review
+    upload_to_app_store(
+      app_version: options[:version_number],
+      submit_for_review: true,
+      automatic_release: options[:automatic_release] || false,
+      force: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      skip_binary_upload: true,  # Already uploaded via TestFlight
+      submission_information: {
+        add_id_info_uses_idfa: false,
+        export_compliance_uses_encryption: false,
+        content_rights_contains_third_party_content: false
+      },
+      precheck_include_in_app_purchases: true
+    )
+
+    # Add a git tag
+    add_git_tag(
+      tag: "ios-appstore-#{options[:version_number]}"
+    )
+
+    # Push the tag
+    push_git_tags
+  end
+
   desc "Distribute iOS via TestFlight"
-  lane :distribute do
-    build_ios
+  lane :distribute_development do |options|
+    increment_build_number(
+      build_number: latest_testflight_build_number + 1,
+      xcodeproj: "./iosApp/iosApp.xcodeproj"
+    )
+
+    # Update provisioning profiles
+    match(
+      type: "appstore",
+      readonly: true,
+      app_identifier: [
+        "com.micrantha.eyespie"
+      ]
+    )
+
+    # Build the app
+    build_ios_app(
+      scheme: "Eyespie",
+      export_method: "app-store",
+      configuration: "Release",
+      clean: true,
+      output_directory: "build",
+      export_options: {
+        provisioningProfiles: {
+          "com.micrantha.eyespie" => "match AppStore com.micrantha.eyespie"
+        }
+      }
+    )
 
     # Upload to TestFlight
-    pilot
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      apple_id: options[:apple_id],
+      username: ENV["APPLE_ID"],
+      team_id: ENV["TEAM_ID"],
+      changelog: options[:changelog],
+      distribute_external: options[:external] || false,
+      notify_external_testers: options[:notify] || false,
+      groups: options[:groups]
+    )
+  end
+
+  desc "Update App Store metadata"
+  lane :metadata do
+    # Fetch latest metadata and screenshots from App Store
+    deliver(
+      skip_binary_upload: true,
+      skip_app_version_update: true,
+      skip_metadata: false,
+      skip_screenshots: false,
+      force: true
+    )
+  end
+
+  desc "Sync certificates and profiles"
+  lane :sync_certificates do
+    # Sync development certificates
+    match(
+      type: "development",
+      force_for_new_devices: true,
+      app_identifier: [
+        "com.micrantha.eyespie"
+      ]
+    )
+
+    # Sync AppStore certificates
+    match(
+      type: "appstore",
+      force_for_new_devices: true,
+      app_identifier: [
+        "com.micrantha.eyespie"
+      ]
+    )
+  end
+
+  # Runs after every lane
+  after_all do |lane|
+    # Clean up build artifacts
+    clean_build_artifacts
+    
+    # Notify on success
+    #slack(
+    #  message: "Successfully deployed new iOS version!",
+    #  success: true
+    #) if ENV['SLACK_URL']
+  end
+
+  # Runs if there was an error
+  error do |lane, exception|
+    # Notify on failure
+    #slack(
+    #  message: "Error deploying iOS version: #{exception.message}",
+    #  success: false
+    #) if ENV['SLACK_URL']
   end
 end

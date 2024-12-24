@@ -21,10 +21,22 @@ lane :build_release do |options|
   Fastlane::LaneManager.cruise_lane("ios", "build_release", options)
 end
 
-desc "Distribute iOS and Android to stores for testing"
-lane :distribute do |options|
-  Fastlane::LaneManager.cruise_lane("android", "distribute", options)
-  Fastlane::LaneManager.cruise_lane("ios", "distribute", options)
+desc "Distribute iOS and Android to stores for production"
+lane :distribute_production do |options|
+  Fastlane::LaneManager.cruise_lane("android", "distribute_production", options)
+  Fastlane::LaneManager.cruise_lane("ios", "distribute_production", options)
+end
+
+desc "Distribute iOS and Android to stores for staging"
+lane :distribute_staging do |options|
+  Fastlane::LaneManager.cruise_lane("android", "distribute_staging", options)
+  Fastlane::LaneManager.cruise_lane("ios", "distribute_staging", options)
+end
+
+desc "Distribute iOS and Android to stores for development"
+lane :distribute_development do |options|
+  Fastlane::LaneManager.cruise_lane("android", "distribute_development", options)
+  Fastlane::LaneManager.cruise_lane("ios", "distribute_development", options)
 end
 
 desc "Run all unit tests"

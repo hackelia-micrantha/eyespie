@@ -15,20 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ./.github/actions/supabase
         with:
-          ruby-version: "3.2"
-          bundler-cache: true
-
-      - uses: supabase/setup-cli@v1
-
-      - uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: "supabase"
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
-          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          project_id: ${{ secrets.SUPABASE_PROJECT_ID }}
+          db_password: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
   mobile:
     runs-on: macos-latest
@@ -37,10 +28,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: ruby/setup-ruby@v1
+      - name: Create build config
+        uses: ./.github/actions/configure-build
         with:
-          ruby-version: "3.2"
-          bundler-cache: true
+          android_keystore: ${{ secrets.ANDROID_STORE_FILE }}
+          login_email: ${{ inputs.login_email }}
+          login_password: ${{ inputs.login_password }}
 
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
@@ -50,10 +43,6 @@ jobs:
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "build_release"
-
-      - uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: "deploy_release"
+          lane: "distribute_production"
         env:
           APPLE_ID: "abc"
