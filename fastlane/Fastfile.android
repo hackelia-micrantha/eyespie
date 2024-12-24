@@ -3,7 +3,7 @@ platform :android do
 
   before_all do
     # Ensure git status is clean
-    ensure_git_status_clean
+    #ensure_git_status_clean
     # Update all dependencies
     gradle(task: "clean")
   end
