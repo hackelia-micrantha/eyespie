@@ -31,7 +31,7 @@ runs:
     - name: Create android keystore
       id: decode
       run: |
-        base64 -d ${{ inputs.android_keystore }} > android.keystore
+        echo "${{ inputs.android_keystore }}" | base64 -d > android.keystore
         echo "file=android.keystore" >> $GITHUB_OUTPUT
       shell: bash
 

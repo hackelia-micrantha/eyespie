@@ -22,7 +22,7 @@ platform :ios do
     )
   end
 
-  descr "Distribute iOS via AppStore"
+  desc "Distribute iOS via AppStore"
   lane :distribute_production do |options|
     if options[:version_number].nil?
       UI.user_error!("Please provide a version_number parameter")
