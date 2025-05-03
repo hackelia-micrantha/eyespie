@@ -20,11 +20,7 @@ runs:
       uses: actions/cache/restore@v4
       id: build-cache
       with:
-        path: |
-            "${{ github.workspace }}/composeApp/libs/debug/mobuild-envuscator.aar"
-            "${{ github.workspace }}/composeApp/libs/release/mobuild-envuscator.aar"
-            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/MobuildEnvuscator.xcframework"
-            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/MobuildEnvuscator.xcframework"
+        path: ${{ github.workspace }}/.envuscator
         key: build-cache-${{ runner.os }}-${{ steps.config-hash.outputs.key }}
 
     - name: "Checkout actions"
@@ -44,23 +40,18 @@ runs:
         config: ${{ inputs.config }}
         token: ${{ inputs.token }}
 
-    - name: Update dependencies in project
-      if: steps.build-cache.outputs.cache-hit != 'true'
-      run: |
-        cp -f ${{ steps.envuscator.outputs.android_debug }} "${{ github.workspace }}/composeApp/libs/debug/"
-        cp -f ${{ steps.envuscator.outputs.android_release }} "${{ github.workspace }}/composeApp/libs/release/"
-        cp -rf ${{ steps.envuscator.outputs.ios_debug }} "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/"
-        cp -rf ${{ steps.envuscator.outputs.ios_release }} "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/"
-      shell: "bash"
-
     - name: Cache files
       if: steps.build-cache.outputs.cache-hit != 'true'
       uses: actions/cache/save@v4
       with:
-        path: |
-            "${{ github.workspace }}/composeApp/libs/debug/mobuild-envuscator.aar"
-            "${{ github.workspace }}/composeApp/libs/release/mobuild-envuscator.aar"
-            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/MobuildEnvuscator.xcframework"
-            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/MobuildEnvuscator.xcframework"
+        path: ${{ github.workspace }}/.envuscator
         key: build-cache-${{ runner.os }}-${{ steps.config-hash.outputs.key }}
 
+    - name: Update project libraries
+      run: |
+        cp -rf "${{ github.workspace }}/.envuscator/Debug/android/mobuild-envuscator.aar" "composeApp/libs/debug/"
+        cp -rf "${{ github.workspace }}/.envuscator/Release/android/mobuild-envuscator.aar" "composeApp/libs/release/"
+        cp -rf "${{ github.workspace }}/.envuscator/Debug/ios/MobuildEnvuscator.xcframework" "iosApp/MobuildEnvuscator/debug/"
+        cp -rf "${{ github.workspace }}/.envuscator/Release/ios/MobuildEnvuscator.xcframework" "iosApp/MobuildEnvuscator/release/"
+      shell: bash
+        
