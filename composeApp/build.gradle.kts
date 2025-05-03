@@ -84,6 +84,8 @@ kotlin {
             implementation(libs.supabase.realtime)
 
             implementation(libs.permissions.compose)
+            implementation(libs.permissions.camera)
+
             implementation(libs.geo.compose)
             implementation(libs.kamel.image)
             implementation(libs.moko.media)
@@ -94,6 +96,8 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
+
+            implementation(libs.permissions.test)
         }
         androidMain.dependencies {
             implementation(libs.androidx.appcompat)
@@ -116,12 +120,13 @@ kotlin {
             implementation(libs.androidx.camera.view)
             implementation(libs.androidx.camera.extensions)
 
-            implementation(libs.tensorflow.lite)
-            implementation(libs.tensorflow.lite.gpu)
-            implementation(libs.tensorflow.lite.support)
-            implementation(libs.tensorflow.lite.metadata)
-            implementation(libs.tensorflow.lite.task.vision)
-            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+//            Might need for embeddings or customization
+//            implementation(libs.tensorflow.lite)
+//            implementation(libs.tensorflow.lite.gpu)
+//            implementation(libs.tensorflow.lite.support)
+//            implementation(libs.tensorflow.lite.metadata)
+//            implementation(libs.tensorflow.lite.task.vision)
+//            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
 
             implementation(libs.mediapipe.tasks.vision)
         }
@@ -147,11 +152,6 @@ android {
         compose = true
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
     bundle {
         language {
             enableSplit = false
@@ -165,7 +165,7 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
         }
     }
     compileOptions {

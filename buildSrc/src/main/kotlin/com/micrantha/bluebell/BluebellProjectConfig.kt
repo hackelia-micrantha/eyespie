@@ -7,8 +7,12 @@ import java.io.FileInputStream
 
 private fun loadConfigFromEnvironment(config: BluebellConfig): Properties {
     val properties = Properties()
-    FileInputStream(config.envFile).use { fileInputStream ->
-        properties.load(fileInputStream)
+    try {
+        FileInputStream(config.envFile).use { fileInputStream ->
+            properties.load(fileInputStream)
+        }
+    } catch (e: Exception) {
+        println("e: failed to load ${config.envFile} (${e.message})")
     }
     return properties
 }

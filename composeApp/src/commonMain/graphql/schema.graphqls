@@ -21,7 +21,7 @@ type PageInfo {
     startCursor: String!
     endCursor: String!
 }
-type Game implements Entity, Creatable, Node {
+type Game implements Entity & Creatable & Node {
     id: String!
     nodeId: ID!
     created_at: String!
@@ -79,7 +79,7 @@ type GameConnection {
     pageInfo: PageInfo!
     edges: [GameEdge]
 }
-type Player implements Entity, Creatable, Node {
+type Player implements Entity & Creatable & Node {
     id: String!
     nodeId: ID!
     created_at: String!
@@ -90,7 +90,7 @@ type Player implements Entity, Creatable, Node {
     total_score: Int
 }
 
-type PlayerRef implements Entity, Node {
+type PlayerRef implements Entity & Node {
     id: String!
     nodeId: ID!
     name: String!
@@ -152,7 +152,7 @@ type Clues {
     rhyme: String
 }
 
-type Thing implements Entity, Creatable, Node {
+type Thing implements Entity & Creatable & Node {
     id: String!
     nodeId: ID!
     created_at: String!
