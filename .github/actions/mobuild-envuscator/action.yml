@@ -15,7 +15,7 @@ runs:
     - name: "Checkout actions"
       uses: actions/checkout@v4
       with:
-        repository: githackelia-micrantha/actions
+        repository: hackelia-micrantha/actions
         token: ${{ inputs.token }}
         ref: v1
         path: micrantha-actions
