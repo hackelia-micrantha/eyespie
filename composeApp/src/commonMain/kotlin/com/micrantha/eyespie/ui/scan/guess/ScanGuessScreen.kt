@@ -15,7 +15,8 @@ import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.domain.arch.Dispatch
 import com.micrantha.eyespie.platform.scan.CameraScanner
 import com.micrantha.eyespie.ui.scan.guess.ScanGuessAction.ImageCaptured
-import dev.icerock.moko.permissions.Permission.CAMERA
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.camera.CAMERA
 import dev.icerock.moko.permissions.PermissionsController
 import org.kodein.di.compose.rememberInstance
 
@@ -32,7 +33,7 @@ class ScanGuessScreen constructor(
         val screenModel: ScanGuessScreenModel = rememberScreenModel(arg = args)
 
         LaunchedEffect(Unit) {
-            permissions.providePermission(CAMERA)
+            permissions.providePermission(Permission.CAMERA)
         }
 
         val state by screenModel.state.collectAsState()

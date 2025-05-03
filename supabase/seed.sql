@@ -24,7 +24,7 @@ SET row_security = off;
 --
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") VALUES
-	('00000000-0000-0000-0000-000000000000', '8958a62d-991f-4ed4-b51a-b68a2f35a65c', 'authenticated', 'authenticated', 'ryjen@duck.com', '$2a$10$dJblugDRyH4i1RnHCo2t5utp2kzmd07iVswMtDTlAXewpviiew1DO', '2024-07-19 04:32:39.259357+00', NULL, '', NULL, '', NULL, '', '', NULL, '2024-07-20 06:01:15.522401+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-07-19 04:32:39.253271+00', '2024-07-20 06:01:15.525789+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
+	('00000000-0000-0000-0000-000000000000', '8958a62d-991f-4ed4-b51a-b68a2f35a65c', 'authenticated', 'authenticated', 'eyespie@micrantha.test', '$2a$10$dJblugDRyH4i1RnHCo2t5utp2kzmd07iVswMtDTlAXewpviiew1DO', '2024-07-19 04:32:39.259357+00', NULL, '', NULL, '', NULL, '', '', NULL, '2024-07-20 06:01:15.522401+00', '{"provider": "email", "providers": ["email"]}', '{}', NULL, '2024-07-19 04:32:39.253271+00', '2024-07-20 06:01:15.525789+00', NULL, NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
 
 
 --
@@ -32,7 +32,7 @@ INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encryp
 --
 
 INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "provider", "last_sign_in_at", "created_at", "updated_at", "id") VALUES
-	('8958a62d-991f-4ed4-b51a-b68a2f35a65c', '8958a62d-991f-4ed4-b51a-b68a2f35a65c', '{"sub": "8958a62d-991f-4ed4-b51a-b68a2f35a65c", "email": "ryjen@duck.com", "email_verified": false, "phone_verified": false}', 'email', '2024-07-19 04:32:39.256421+00', '2024-07-19 04:32:39.256473+00', '2024-07-19 04:32:39.256473+00', 'f9efa59f-e7f6-4fc8-b666-c16c03e8f7c8');
+	('8958a62d-991f-4ed4-b51a-b68a2f35a65c', '8958a62d-991f-4ed4-b51a-b68a2f35a65c', '{"sub": "8958a62d-991f-4ed4-b51a-b68a2f35a65c", "email": "eyespie@micrantha.test", "email_verified": false, "phone_verified": false}', 'email', '2024-07-19 04:32:39.256421+00', '2024-07-19 04:32:39.256473+00', '2024-07-19 04:32:39.256473+00', 'f9efa59f-e7f6-4fc8-b666-c16c03e8f7c8');
 
 
 --
@@ -48,7 +48,7 @@ INSERT INTO "public"."Game" ("id", "created_at", "name", "expires", "min_players
 --
 
 INSERT INTO "public"."Player" ("id", "created_at", "first_name", "last_name", "nick_name", "total_score", "user_id", "last_location") VALUES
-	('a3f8a59a-33a4-4e79-bccb-0a008df43cb4', '2023-04-21 07:58:23+00', 'Ryan', 'Jennings', 'ryjen', 0, '8958a62d-991f-4ed4-b51a-b68a2f35a65c', '(49.2608724,-123.113952)');
+	('a3f8a59a-33a4-4e79-bccb-0a008df43cb4', '2023-04-21 07:58:23+00', 'Test', 'Testerson', 'testicle', 0, '8958a62d-991f-4ed4-b51a-b68a2f35a65c', '(49.2608724,-123.113952)');
 
 
 --
@@ -118,13 +118,6 @@ INSERT INTO "public"."GamePlayer" ("created_at", "player_id", "game_id", "score"
 --
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
-
-
---
--- Name: key_key_id_seq; Type: SEQUENCE SET; Schema: pgsodium; Owner: supabase_admin
---
-
-
 
 --
 -- Name: hooks_id_seq; Type: SEQUENCE SET; Schema: supabase_functions; Owner: supabase_functions_admin
