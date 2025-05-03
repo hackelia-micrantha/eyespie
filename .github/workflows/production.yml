@@ -15,7 +15,7 @@ jobs:
     environment: production
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./.github/actions/supabase
         with:
@@ -28,7 +28,7 @@ jobs:
     environment: production
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create build config
         uses: ./.github/actions/configure-build

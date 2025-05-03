@@ -41,7 +41,7 @@ jobs:
     environment: development
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Create build config
         uses: ./.github/actions/configure-build
