@@ -22,14 +22,6 @@ SET row_security = off;
 
 CREATE EXTENSION IF NOT EXISTS "pg_net" WITH SCHEMA "extensions";
 
-
---
--- Name: pgsodium; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS "pgsodium" WITH SCHEMA "pgsodium";
-
-
 --
 -- Name: address_standardizer; Type: EXTENSION; Schema: -; Owner: -
 --

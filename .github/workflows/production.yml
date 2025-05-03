@@ -1,5 +1,7 @@
 name: Production
-
+permissions:
+  contents: read
+  pull-requests: write
 on:
   push:
     branches:
@@ -55,4 +57,4 @@ jobs:
         with:
           lane: "deploy_release"
         env:
-          APPLE_ID: "abc"
+          APPLE_ID: {{ secrets.APPLE_ID }}

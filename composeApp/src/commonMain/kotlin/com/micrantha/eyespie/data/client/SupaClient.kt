@@ -1,6 +1,6 @@
 package com.micrantha.eyespie.data.client
 
-import com.apollographql.apollo3.ApolloCall
+import com.apollographql.apollo.ApolloCall
 import com.micrantha.eyespie.AppConfig
 import com.micrantha.eyespie.data.thing.model.MatchRequest
 import com.micrantha.eyespie.data.thing.model.NearbyRequest

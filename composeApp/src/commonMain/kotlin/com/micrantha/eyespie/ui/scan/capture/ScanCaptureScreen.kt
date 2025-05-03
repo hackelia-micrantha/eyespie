@@ -38,8 +38,9 @@ import com.micrantha.eyespie.ui.scan.capture.ScanAction.EditScan
 import com.micrantha.eyespie.ui.scan.capture.ScanAction.SaveScan
 import com.micrantha.eyespie.ui.scan.components.ScannedClues
 import com.micrantha.eyespie.ui.scan.components.ScannedOverlays
-import dev.icerock.moko.permissions.Permission.CAMERA
+import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionsController
+import dev.icerock.moko.permissions.camera.CAMERA
 import org.kodein.di.compose.rememberInstance
 
 class ScanCaptureScreen : Screen, StateRenderer<ScanUiState> {
@@ -48,7 +49,7 @@ class ScanCaptureScreen : Screen, StateRenderer<ScanUiState> {
         val permissions by rememberInstance<PermissionsController>()
 
         LaunchedEffect(Unit) {
-            permissions.providePermission(CAMERA)
+            permissions.providePermission(Permission.CAMERA)
         }
 
         LocationEnabledEffect()
