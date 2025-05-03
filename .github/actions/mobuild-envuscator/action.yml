@@ -12,7 +12,23 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - id: config-hash
+      run: echo "::set-output name=key::$(echo -n '${{ inputs.config }}' | sha256sum | cut -d' ' -f1)"
+      shell: bash
+
+    - name: Check for cached build
+      uses: actions/cache@v3
+      id: build-cache
+      with:
+        path: |
+            "${{ github.workspace }}/composeApp/libs/debug/mobuild-envuscator.aar"
+            "${{ github.workspace }}/composeApp/libs/release/mobuild-envuscator.aar"
+            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/MobuildEnvuscator.xcframework"
+            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/MobuildEnvuscator.xcframework"
+        key: build-cache-${{ runner.os }}-${{ steps.config-hash.outputs.key }}
+
     - name: "Checkout actions"
+      if: steps.build-cache.outputs.cache-hit != 'true'
       uses: actions/checkout@v4
       with:
         repository: hackelia-micrantha/actions
@@ -21,6 +37,7 @@ runs:
         path: micrantha-actions
 
     - name: Build libraries
+      if: steps.build-cache.outputs.cache-hit != 'true'
       id: envuscator
       uses: ./micrantha-actions/.github/actions/envuscator-build-all
       with:
@@ -28,9 +45,22 @@ runs:
         token: ${{ inputs.token }}
 
     - name: Update dependencies in project
+      if: steps.build-cache.outputs.cache-hit != 'true'
       run: |
         cp -f ${{ steps.envuscator.outputs.android_debug }} "${{ github.workspace }}/composeApp/libs/debug/"
         cp -f ${{ steps.envuscator.outputs.android_release }} "${{ github.workspace }}/composeApp/libs/release/"
         cp -rf ${{ steps.envuscator.outputs.ios_debug }} "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/"
         cp -rf ${{ steps.envuscator.outputs.ios_release }} "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/"
       shell: "bash"
+
+    - name: Cache files
+      if: steps.build-cache.outputs.cache-hit != 'true'
+      uses: actions/cache@v3
+      with:
+        path: |
+            "${{ github.workspace }}/composeApp/libs/debug/mobuild-envuscator.aar"
+            "${{ github.workspace }}/composeApp/libs/release/mobuild-envuscator.aar"
+            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Debug/MobuildEnvuscator.xcframework"
+            "${{ github.workspace }}/iosApp/MobuildEnvuscator/Release/MobuildEnvuscator.xcframework"
+        key: build-cache-${{ runner.os }}-${{ steps.config-hash.outputs.key }}
+
