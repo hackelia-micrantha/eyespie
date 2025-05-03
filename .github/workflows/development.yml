@@ -59,12 +59,4 @@ jobs:
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "distribute_development"
-        env:
-          APPLE_CONNECT_ID: "${{ secrets.APPLE_CONNECT_ID }}"
-          APPLE_TEAM_ID: "${{ secrets.APPLE_TEAM_ID }}"
-          APPLE_USERNAME: "${{ secrets.APPLE_USERNAME }}"
-          ANDROID_STORE_FILE: "${{ steps.build-config.outputs.android_keystore }}"
-          ANDROID_STORE_PASSWORD: "${{ secrets.ANDROID_STORE_PASSWORD }}"
-          ANDROID_KEY_ALIAS: "${{ secrets.ANDROID_KEY_ALIAS }}"
-          ANDROID_KEY_PASSWORD: "${{ secrets.ANDROID_KEY_PASSWORD }}"
+          lane: "test"
