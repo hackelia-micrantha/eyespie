@@ -17,6 +17,8 @@ build/
 # Local configuration file (sdk path, etc)
 local.properties
 
+.xcode-env.local
+
 # Log/OS Files
 *.log
 
@@ -54,6 +56,7 @@ gen-external-apklibs
 ### Kotlin ###
 # Compiled class file
 *.class
+.kotlin
 
 # Log file
 
@@ -197,3 +200,12 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,androidstudio,android/Pods/*
+
+## Bundler
+
+vendor/bundle
+
+## Fastlane
+
+fastlane/README.md
+fastlane/report.xml

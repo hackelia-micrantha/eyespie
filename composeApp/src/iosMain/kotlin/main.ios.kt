@@ -1,11 +1,19 @@
 import androidx.compose.ui.window.ComposeUIViewController
+import com.micrantha.bluebell.platform.AppConfigDelegate
+import com.micrantha.eyespie.AppDelegate
 import com.micrantha.eyespie.UIApplicationController
 import com.micrantha.eyespie.UIShow
 import platform.UIKit.UIApplication
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
 
-class IOSApplication : UIApplicationController {
+class IOSApplication(
+    private val component: AppDelegate
+) : UIApplicationController {
+
+    init {
+        AppConfigDelegate.load(component.appConfig)
+    }
 
     private val rootViewController: UIViewController by lazy {
         UIApplication.sharedApplication.keyWindow!!.let {
@@ -20,7 +28,7 @@ class IOSApplication : UIApplicationController {
 
     override fun createViewController(): UIViewController {
         val newViewController = ComposeUIViewController {
-            UIShow(this)
+            UIShow(component)
         }
         currentViewController = newViewController
         return newViewController

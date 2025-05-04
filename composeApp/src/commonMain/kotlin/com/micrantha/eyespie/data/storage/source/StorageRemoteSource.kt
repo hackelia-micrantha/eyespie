@@ -30,7 +30,7 @@ class StorageRemoteSource(
         data: ByteArray
     ): Result<Pair<String, String>> = try {
         with(supabase.storage(bucketId)) {
-            val key = upload(path, data)
+            val key = upload(path, data).key!!
             val url = createSignedUrl(path, 365.days)
             Result.success(Pair(key, url))
         }

@@ -1,0 +1,45 @@
+name: Configure build
+description: Configure build from environment configuration
+inputs:
+  android_keystore:
+    description: "Base64 encoded keystore file"
+    required: true
+    type: string
+  login_email:
+    description: The default user to populate login with
+    required: false
+    type: string
+  login_password:
+    description: The default password to populate login with
+    required: false
+    type: string
+outputs:
+  android_keystore:
+    description: "The decoded keystore as a file"
+    value: ${{ steps.decode.outputs.android_keystore }}
+  env_file:
+    description: "The local environment file"
+    value: ${{ steps.env.outputs.env_file }}
+runs:
+  using: "composite"
+  steps:
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: "3.2"
+        bundler-cache: true
+
+    - uses: burrunan/gradle-cache-action@v1
+
+    - name: Create android keystore
+      id: decode
+      run: |
+        echo -n "${{ inputs.android_keystore }}" | base64 -d > "${{ github.workspace }}/android.keystore"
+        echo "android_keystore=${{ github.workspace }}/android.keystore" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Create build config
+      run: |
+        echo "LOGIN_EMAIL=${{ inputs.login_email }}" > "${{ github.workspace }}/.env.local"
+        echo "LOGIN_PASSWORD=${{ inputs.login_password }}" >> "${{ github.workspace }}/.env.local"
+        echo "env_file=${{ github.workspace }}/.env.local" >> $GITHUB_OUTPUT
+      shell: bash

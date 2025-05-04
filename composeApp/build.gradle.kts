@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
-
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -13,18 +11,18 @@ plugins {
 
 kotlin {
     jvmToolchain(21)
-    
+
     cocoapods {
         version = "1.0"
         summary = "Native dependencies for ${project.name}"
+        homepage = "https://github.com/hackelia-micrantha/eyespie"
+        license = "GPLv3"
 
         framework {
             baseName = "bluebell"
         }
 
-        pod("Reachability")
-        //pod("MediaPipeTasksVision")
-        //podfile = project.file("../iosApp/Podfile")
+        podfile = project.file("../iosApp/Podfile")
     }
 
     applyDefaultHierarchyTemplate()
@@ -85,6 +83,8 @@ kotlin {
             implementation(libs.supabase.realtime)
 
             implementation(libs.permissions.compose)
+            implementation(libs.permissions.camera)
+
             implementation(libs.geo.compose)
             implementation(libs.kamel.image)
             implementation(libs.moko.media)
@@ -92,10 +92,11 @@ kotlin {
             //implementation("ca.rmen:rhymer:1.2.0")
 
             //implementation("org.hashids:hashids:1.0.3")
-
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
+
+            implementation(libs.permissions.test)
         }
         androidMain.dependencies {
             implementation(libs.androidx.appcompat)
@@ -118,14 +119,16 @@ kotlin {
             implementation(libs.androidx.camera.view)
             implementation(libs.androidx.camera.extensions)
 
-            implementation(libs.tensorflow.lite)
-            implementation(libs.tensorflow.lite.gpu)
-            implementation(libs.tensorflow.lite.support)
-            implementation(libs.tensorflow.lite.metadata)
-            implementation(libs.tensorflow.lite.task.vision)
-            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
+//            Might need for embeddings or customization
+//            implementation(libs.tensorflow.lite)
+//            implementation(libs.tensorflow.lite.gpu)
+//            implementation(libs.tensorflow.lite.support)
+//            implementation(libs.tensorflow.lite.metadata)
+//            implementation(libs.tensorflow.lite.task.vision)
+//            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
 
             implementation(libs.mediapipe.tasks.vision)
+            implementation(libs.compose.ui.tooling)
         }
 
         iosMain.dependencies {
@@ -141,6 +144,9 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
+
+        versionCode = 10
+        versionName = "1.0.0"
     }
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -149,23 +155,51 @@ android {
         compose = true
     }
 
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+    bundle {
+        language {
+            enableSplit = false
         }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+    signingConfigs {
+        create("release") {
+            System.getenv("ANDROID_STORE_FILE")?.let { storeFile = file(it) }
+            storePassword = System.getenv("ANDROID_STORE_PASSWORD")
+            keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+            keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+        }
+    }
+    buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+        }
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
 
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
+            }
+        }
+    }
     dependencies {
-        debugImplementation(libs.compose.ui.tooling)
+        //releaseImplementation(files("libs/release/mobuild-envuscator.aar"))
+        //debugImplementation(files("libs/debug/mobuild-envuscator.aar"))
+        implementation(files("libs/debug/mobuild-envuscator.aar"))
     }
 }
 
@@ -177,8 +211,15 @@ apollo {
 
 bluebell {
     config {
-        packageName = "com.micrantha.eyespie"
-        className = "AppConfig"
+        packageName = "com.micrantha.eyespie.config"
+        className = "DefaultConfig"
+        envFile = ".env.local"
+
+        // Guaranteed to exist, set to null on missing file
+        defaultKeys = listOf(
+            "LOGIN_EMAIL",
+            "LOGIN_PASSWORD"
+        )
     }
     models {
         files = mapOf(

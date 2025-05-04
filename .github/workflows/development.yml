@@ -1,0 +1,62 @@
+name: Development
+permissions:
+  contents: read
+  pull-requests: write
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  workflow_call:
+    inputs:
+      login_email:
+        description: The default user to populate login with
+        required: false
+        type: string
+      login_password:
+        description: The default password to populate login with
+        required: false
+        type: string
+  workflow_dispatch:
+
+jobs:
+  supabase:
+    if: false
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/supabase
+        with:
+          access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          project_id: ${{ secrets.SUPABASE_PROJECT_ID }}
+          database_url: ${{ secrets.SUPABASE_DB_URL }}
+
+  mobile:
+    runs-on: macos-latest
+    environment: development
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create build config
+        uses: ./.github/actions/configure-build
+        id: build-config
+        with:
+          android_keystore: ${{ secrets.ANDROID_STORE_FILE }}
+          login_email: ${{ inputs.login_email }}
+          login_password: ${{ inputs.login_password }}
+
+      - name: Build environment configuration
+        uses: ./.github/actions/mobuild-envuscator
+        with:
+          config: ${{ secrets.APP_CONFIG }}
+          token: ${{ secrets.ENVUSCATOR_PAT }}
+
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "test"

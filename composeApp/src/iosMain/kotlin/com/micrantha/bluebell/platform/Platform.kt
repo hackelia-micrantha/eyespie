@@ -2,7 +2,7 @@ package com.micrantha.bluebell.platform
 
 import com.micrantha.bluebell.domain.i18n.LocalizedRepository
 import com.micrantha.bluebell.domain.i18n.LocalizedString
-import com.micrantha.eyespie.UIApplicationController
+import com.micrantha.eyespie.AppDelegate
 import okio.FileSystem
 import okio.Path
 import okio.buffer
@@ -15,12 +15,11 @@ import platform.Foundation.NSTimeZone
 import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.Foundation.timeZoneWithName
 import platform.UIKit.UIDevice
-import kotlin.experimental.ExperimentalNativeApi
 import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
-actual class Platform(
-    val application: UIApplicationController
-) : LocalizedRepository, BluebellFileSystem {
+actual class Platform(app: AppDelegate) : LocalizedRepository, BluebellFileSystem {
+
+    actual val networkMonitor = app.networkMonitor
 
     actual val name: String =
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
@@ -65,10 +64,3 @@ actual class Platform(
     }
 }
 
-@OptIn(ExperimentalNativeApi::class)
-actual class WeakReference<out T : Any> actual constructor(target: T) {
-    private val underlying: kotlin.native.ref.WeakReference<T> =
-        kotlin.native.ref.WeakReference(target)
-
-    actual val targetOrNull: T? get() = underlying.get()
-}

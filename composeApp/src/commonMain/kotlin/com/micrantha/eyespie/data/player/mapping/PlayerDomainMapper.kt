@@ -5,7 +5,7 @@ import com.micrantha.eyespie.data.system.mapping.LocationDomainMapper
 import com.micrantha.eyespie.domain.model.Player
 import com.micrantha.eyespie.domain.model.Player.Name
 import com.micrantha.eyespie.domain.model.Player.Score
-import kotlinx.datetime.toInstant
+import kotlinx.datetime.Instant
 
 class PlayerDomainMapper(
     private val locationMapper: LocationDomainMapper
@@ -16,7 +16,7 @@ class PlayerDomainMapper(
         nodeId = data.nodeId ?: data.user_id,
         name = data.nick_name ?: "${data.first_name} ${data.last_name}",
         score = data.total_score,
-        createdAt = data.created_at.toInstant()
+        createdAt = Instant.parse(data.created_at)
     )
 
     fun map(data: PlayerResponse) = Player(
@@ -33,7 +33,7 @@ class PlayerDomainMapper(
         location = data.last_location?.let { json ->
             locationMapper.map(json)
         },
-        createdAt = data.created_at.toInstant()
+        createdAt = Instant.parse(data.created_at)
     )
 
 }

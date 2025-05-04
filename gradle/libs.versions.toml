@@ -1,45 +1,44 @@
 [versions]
 
-cache4k = "0.12.0"
-cameraExtensions = "1.4.1"
-compose = "1.7.6"
+cache4k = "0.14.0"
+cameraExtensions = "1.4.2"
+compose = "1.8.0"
 compose-plugin = "1.7.3"
-agp = "8.7.3"
+agp = "8.9.2"
 android-minSdk = "29"
 android-compileSdk = "35"
 android-targetSdk = "35"
-androidx-activityCompose = "1.9.3"
-androidx-core-ktx = "1.15.0"
+androidx-activityCompose = "1.10.1"
+androidx-core-ktx = "1.16.0"
 androidx-appcompat = "1.7.0"
 androidx-material = "1.12.0"
-androidx-constraintlayout = "2.2.0"
+androidx-constraintlayout = "2.2.1"
 androidx-test-junit = "1.2.1"
 androidx-espresso-core = "3.6.1"
-fragmentKtx = "1.8.5"
-geoCompose = "0.6.0"
-supaBaseKt = "2.4.2"
-kamelImage = "0.9.1"
+fragmentKtx = "1.8.6"
+geoCompose = "0.8.0"
+supabaseKt = "latest.release"
+kamelImage = "1.0.3"
 kodeinDi = "7.21.1"
 kodeinDiConf = "7.21.1"
-kotlin = "2.1.0"
+kotlin = "2.1.20"
 junit = "4.13.2"
-graphql = "3.8.2"
+graphql = "4.1.1"
 kotlinxCollectionsImmutable = "0.3.7"
-kotlinxCoroutinesAndroid = "1.8.1"
-kotlinxDatetime = "0.6.0"
-kotlinxSerializationJson = "1.6.2"
-ktorClient = "2.3.11"
+kotlinxCoroutinesAndroid = "1.10.1"
+kotlinxDatetime = "0.6.2"
+kotlinxSerializationJson = "1.8.0"
+ktorClient = "3.1.2"
 lifecycleRuntimeKtx = "2.8.7"
-okio = "3.7.0"
+okio = "3.10.2"
 paletteKtx = "1.0.0"
-permissionsCompose = "0.17.0"
-voyagerNavigator = "1.0.0"
-tensorflowLiteSupport = "0.4.4"
-tensorflowLite = "2.14.0"
-mediapipe = "0.20230731"
+permissionsCompose = "0.19.1"
+voyagerNavigator = "1.0.1"
+tensorflowLiteSupport = "latest.release"
+tensorflowLite = "latest.release"
+mediapipe = "latest.release"
 buildConfig = "3.1.0"
 mokoMedia = "0.11.0"
-dotenv-kotlin = "6.4.1"
 
 [plugins]
 
@@ -47,7 +46,7 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-apolloGraphQL = { id = "com.apollographql.apollo3", version.ref = "graphql" }
+apolloGraphQL = { id = "com.apollographql.apollo", version.ref = "graphql" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 nativeCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -97,11 +96,13 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClient" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "permissionsCompose" }
-supabase-apollo-graphql = { module = "io.github.jan-tennert.supabase:apollo-graphql", version.ref = "supaBaseKt" }
-supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version.ref = "supaBaseKt" }
-supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supaBaseKt" }
-supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supaBaseKt" }
-supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supaBaseKt" }
+permissions-camera = { module = "dev.icerock.moko:permissions-camera", version.ref = "permissionsCompose" }
+permissions-test = { module = "dev.icerock.moko:permissions-test", version.ref = "permissionsCompose" }
+supabase-apollo-graphql = { module = "io.github.jan-tennert.supabase:apollo-graphql", version.ref = "supabaseKt" }
+supabase-gotrue = { module = "io.github.jan-tennert.supabase:gotrue-kt", version.ref = "supabaseKt" }
+supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabaseKt" }
+supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supabaseKt" }
+supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabaseKt" }
 voyager-kodein = { module = "cafe.adriel.voyager:voyager-kodein", version.ref = "voyagerNavigator" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerNavigator" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerNavigator" }
@@ -112,6 +113,9 @@ tensorflow-lite-metadata = { module = "org.tensorflow:tensorflow-lite-metadata",
 tensorflow-lite-task-vision = { module = "org.tensorflow:tensorflow-lite-task-vision", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteSupport" }
 mediapipe-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version.ref = "mediapipe" }
+mediapipe-tasks-text = { module = "com.google.mediapipe:tasks-text", version.ref = "mediapipe" }
+mediapipe-tasks-audio = { module = "com.google.mediapipe:tasks-audio", version.ref = "mediapipe" }
+mediapipe-tasks-image-generator = { module = "com.google.mediapipe:tasks-vision-image-generator", version.ref = "mediapipe" }
+mediapipe-tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "mediapipe" }
 moko-media = { module = "dev.icerock.moko:media", version.ref = "mokoMedia" }
 build-config = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildConfig" }
-dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenv-kotlin" }
