@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.platform.scan.analyzer
 
-import com.micrantha.eyespie.domain.model.MatchClue
-import com.micrantha.eyespie.domain.model.MatchProof
+import com.micrantha.eyespie.domain.entities.MatchClue
+import com.micrantha.eyespie.domain.entities.MatchProof
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.CameraImage

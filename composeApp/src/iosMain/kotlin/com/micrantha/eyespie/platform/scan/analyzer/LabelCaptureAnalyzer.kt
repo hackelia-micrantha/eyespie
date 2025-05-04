@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.platform.scan.analyzer
 
-import com.micrantha.eyespie.domain.model.LabelClue
-import com.micrantha.eyespie.domain.model.LabelProof
+import com.micrantha.eyespie.domain.entities.LabelClue
+import com.micrantha.eyespie.domain.entities.LabelProof
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.CameraImage

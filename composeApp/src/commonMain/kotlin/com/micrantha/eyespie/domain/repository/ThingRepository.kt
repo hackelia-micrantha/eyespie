@@ -1,11 +1,11 @@
 package com.micrantha.eyespie.domain.repository
 
-import com.micrantha.eyespie.domain.model.Embedding
-import com.micrantha.eyespie.domain.model.Location
-import com.micrantha.eyespie.domain.model.Proof
-import com.micrantha.eyespie.domain.model.Thing
-import com.micrantha.eyespie.domain.model.ThingList
-import com.micrantha.eyespie.domain.model.ThingMatches
+import com.micrantha.eyespie.domain.entities.Embedding
+import com.micrantha.eyespie.domain.entities.Location
+import com.micrantha.eyespie.domain.entities.Proof
+import com.micrantha.eyespie.domain.entities.Thing
+import com.micrantha.eyespie.domain.entities.ThingList
+import com.micrantha.eyespie.domain.entities.ThingMatches
 
 interface ThingRepository {
 

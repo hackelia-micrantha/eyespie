@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.platform.scan
 
 import androidx.compose.ui.graphics.ImageBitmap
-import com.micrantha.bluebell.data.Log
+import com.micrantha.bluebell.app.Log
 import com.micrantha.bluebell.platform.toImageBitmap
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.ExperimentalForeignApi

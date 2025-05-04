@@ -1,8 +1,8 @@
 package com.micrantha.bluebell.platform
 
 import android.content.Context
-import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.i18n.LocalizedString
+import com.micrantha.bluebell.domain.entities.LocalizedString
+import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import okio.FileSystem
 import okio.Path
 import okio.buffer
