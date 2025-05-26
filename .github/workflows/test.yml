@@ -21,17 +21,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v2
-        with:
-          distribution: "temurin"
-          java-version: "21"
-
-      - name: Build environment configuration
-        uses: ./.github/actions/mobuild-envuscator
+      - name: Create build config
+        uses: ./.github/actions/configure-build
         with:
           config: ${{ secrets.APP_CONFIG }}
-          token: ${{ secrets.ENVUSCATOR_PAT }}
 
-      - name: Run Gradle Tests
-        run: ./gradlew test
+      - uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: "test"

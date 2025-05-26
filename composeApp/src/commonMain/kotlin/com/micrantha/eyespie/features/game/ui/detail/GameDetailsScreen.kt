@@ -21,6 +21,7 @@ import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
 import com.micrantha.bluebell.ui.model.UiResult
 import com.micrantha.bluebell.ui.screen.ScaffoldScreen
+import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.domain.entities.Game
@@ -34,8 +35,10 @@ import eyespie.composeapp.generated.resources.next_turn
 import eyespie.composeapp.generated.resources.players
 import eyespie.composeapp.generated.resources.things
 import org.jetbrains.compose.resources.stringResource
+import org.kodein.di.DI
+import org.kodein.di.DIAware
 
-data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScreen(),
+data class GameDetailsScreen(private val context: ScreenContext, private val arg: GameDetailScreenArg) : ScaffoldScreen(context),
     StateRenderer<GameDetailsUiState> {
 
     @Composable

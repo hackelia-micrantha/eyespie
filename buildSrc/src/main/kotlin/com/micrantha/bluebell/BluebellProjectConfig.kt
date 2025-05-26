@@ -98,7 +98,7 @@ package ${config.packageName}
 
 ${if(config.properties.isEmpty()) "object DefaultConfig" else ""}
 
-private val map = mapOf<String, String>(
+private val map = mapOf<String, String?>(
     ${entries.joinToString(",\n    ")}
 )
 

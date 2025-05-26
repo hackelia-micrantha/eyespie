@@ -27,10 +27,11 @@ import com.micrantha.eyespie.features.game.ui.list.GameListAction.Load
 import com.micrantha.eyespie.features.game.ui.list.GameListAction.NewGame
 import eyespie.composeapp.generated.resources.games
 import org.jetbrains.compose.resources.stringResource
+import org.kodein.di.DIAware
 
 class GameListScreen(
-    private val context: ScreenContext
-) : ScaffoldScreen(), StateRenderer<GameListUiState> {
+    context: ScreenContext
+) : ScaffoldScreen(context), StateRenderer<GameListUiState> {
 
     @Composable
     override fun Render() {

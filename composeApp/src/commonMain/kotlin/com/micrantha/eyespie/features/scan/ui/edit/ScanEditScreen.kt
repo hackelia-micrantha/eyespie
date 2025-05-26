@@ -46,8 +46,8 @@ import org.jetbrains.compose.resources.stringResource
 
 class ScanEditScreen(
     private val proof: Proof,
-    private val context: ScreenContext
-) : ScaffoldScreen() {
+    context: ScreenContext
+) : ScaffoldScreen(context) {
 
     @Composable
     override fun Render() {

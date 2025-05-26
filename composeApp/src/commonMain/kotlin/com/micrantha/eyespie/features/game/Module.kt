@@ -1,5 +1,6 @@
 package com.micrantha.eyespie.features.game
 
+import com.micrantha.bluebell.get
 import com.micrantha.eyespie.features.game.data.GameDataRepository
 import com.micrantha.eyespie.features.game.data.mapping.GameDomainMapper
 import com.micrantha.eyespie.features.game.data.source.GameRemoteSource
@@ -28,7 +29,7 @@ internal fun module() = DI.Module("Game") {
 
     bindProviderOf(::GameDetailsEnvironment)
     bindProviderOf(::GameDetailsScreenModel)
-    bindFactory { arg: GameDetailScreenArg -> GameDetailsScreen(arg) }
+    bindFactory { arg: GameDetailScreenArg -> GameDetailsScreen(get(), arg) }
 
     bindProviderOf(::GameCreateScreenModel)
     bindProviderOf(::GameCreateScreen)

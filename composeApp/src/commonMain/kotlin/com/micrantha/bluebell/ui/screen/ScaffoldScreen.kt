@@ -19,23 +19,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.app.ScaffoldingState
 import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.bluebell.ui.components.rememberConnectivityStatus
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.core.ui.navi.NavigationAction
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.instance
 
 internal fun defaultBackAction() = NavAction(
     icon = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
     action = { context -> context.router.navigateBack() }
 )
 
-class ScaffoldViewModel(context: ScreenContext) : StatefulScreenModel<ScaffoldingState>(
+class ScaffoldScreenModel(context: ScreenContext) : StatefulScreenModel<ScaffoldingState>(
     context,
     ScaffoldingState()
 )
 
-abstract class ScaffoldScreen : Screen {
+abstract class ScaffoldScreen(
+    private val context: ScreenContext
+): Screen, DIAware by context {
+
+    val screenModel: ScaffoldScreenModel by instance()
 
     @Composable
     abstract fun Render()
@@ -48,7 +56,7 @@ abstract class ScaffoldScreen : Screen {
 
         val connectivityStatus by rememberConnectivityStatus()
 
-        val screenModel = remember { ScaffoldViewModel(context) }
+        val screenModel: ScaffoldScreenModel = rememberScreenModel()
 
         val scaffold by screenModel.state.collectAsState()
 

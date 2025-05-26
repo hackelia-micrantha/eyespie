@@ -209,10 +209,14 @@ bluebell {
         className = "DefaultConfig"
         envFile = ".env.local"
 
-        // Guaranteed to exist, set to null on missing file
         defaultKeys = listOf(
             "LOGIN_EMAIL",
             "LOGIN_PASSWORD"
+        )
+
+        requiredKeys = listOf(
+            "SUPABASE_URL",
+            "SUPABASE_KEY"
         )
     }
     models {

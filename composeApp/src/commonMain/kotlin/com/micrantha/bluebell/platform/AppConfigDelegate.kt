@@ -15,6 +15,12 @@ object DefaultAppConfigDelegate {
             ?: AppConfigDelegate.requireConfigValue(property.name)
 }
 
+object OptionalAppConfigDelegate {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
+        DefaultConfig.get(property.name)
+            ?: AppConfigDelegate.getConfigValue(property.name)
+}
+
 class UserAppConfigDelegate(private val userValue: String?) {
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
         userValue ?: AppConfigDelegate.getConfigValue(property.name)
