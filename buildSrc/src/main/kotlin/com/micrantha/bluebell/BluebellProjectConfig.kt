@@ -6,29 +6,27 @@ import org.gradle.api.Project
 import java.io.FileInputStream
 import java.util.Properties
 
-fun Project.configureBuilds(config: BluebellConfig) {
-
-    fun loadConfigFromEnvironment(config: BluebellConfig): Properties {
+fun BluebellConfig.loadConfigFromEnvironment(): Result<Map<String, String>> {
+    try {
         val properties = Properties()
-        try {
-            FileInputStream(config.envFile).use { fileInputStream ->
-                properties.load(fileInputStream)
-            }
-            logger.info("Loaded ${properties.keys.size} variables from ${config.envFile}")
-        } catch (e: Exception) {
-            logger.warn("No ${config.envFile} file found.")
+        FileInputStream(envFile).use { fileInputStream ->
+            properties.load(fileInputStream)
         }
-        return properties
-    }
-
-    val envConfig by lazy {
-        loadConfigFromEnvironment(config).entries.associate { (key, value) -> key.toString() to "\"$value\"" }
+        val config = properties.entries.associate { (key, value) -> key.toString() to "\"$value\"" }
             .toMutableMap().apply {
-                config.defaultKeys.filterNot { containsKey(it) }.forEach {
+                defaultKeys.filterNot { containsKey(it) }.forEach {
                     this[it] = "null"
                 }
             }
+        return Result.success(config.toMap())
+    } catch (e: Exception) {
+        return Result.failure(e)
     }
+}
+
+fun Project.configureBuilds(config: BluebellConfig) {
+
+    config.properties = config.loadConfigFromEnvironment().getOrDefault(emptyMap())
 
     val requiredConfigError = { ->
         logger.error("${config.envFile} must contain the following variables:")
@@ -38,7 +36,7 @@ fun Project.configureBuilds(config: BluebellConfig) {
 
     fun generateSource(task: BuildConfigTask) {
         val entries =
-            envConfig.entries.map { "\"${it.key}\" to ${config.className}.${it.key}" }
+            config.properties.entries.map { "\"${it.key}\" to ${config.className}.${it.key}" }
 
         val outputDir =
             task.outputDir.dir(config.packageName.replace(".", "/")).get().also {
@@ -58,11 +56,11 @@ fun Project.configureBuilds(config: BluebellConfig) {
         useKotlinOutput { topLevelConstants = false }
 
         fun configureBuild() {
-            if (envConfig.count { config.requiredKeys.contains(it.key) } != config.requiredKeys.size) {
+            if (config.properties.count { config.requiredKeys.contains(it.key) } != config.requiredKeys.size) {
                 requiredConfigError()
             }
 
-            envConfig.forEach { (key, value) ->
+            config.properties.forEach { (key, value) ->
                 buildConfigField("String?", key, value)
             }
 

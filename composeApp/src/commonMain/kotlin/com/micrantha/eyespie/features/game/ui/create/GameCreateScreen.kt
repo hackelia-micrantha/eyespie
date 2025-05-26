@@ -21,7 +21,7 @@ import com.micrantha.bluebell.arch.Dispatch
 import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.Strings
-import com.micrantha.eyespie.ui.EyesPie
+import com.micrantha.eyespie.app.EyesPie
 
 class GameCreateScreen : Screen {
 

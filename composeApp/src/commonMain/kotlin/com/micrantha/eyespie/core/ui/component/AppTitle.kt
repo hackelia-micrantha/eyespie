@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.S
-import com.micrantha.eyespie.ui.EyesPie
+import com.micrantha.eyespie.app.EyesPie
 
 @Composable
 fun AppTitle() {

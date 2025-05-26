@@ -10,8 +10,8 @@ import com.micrantha.eyespie.features.scan.data.SegmentDataRepository
 import com.micrantha.eyespie.features.game.data.GameDataRepository
 import com.micrantha.eyespie.features.players.data.PlayerDataRepository
 import com.micrantha.eyespie.core.data.storage.StorageDataRepository
-import com.micrantha.eyespie.data.system.LocationDataRepository
-import com.micrantha.eyespie.data.system.RealtimeDataRepository
+import com.micrantha.eyespie.core.data.system.LocationDataRepository
+import com.micrantha.eyespie.core.data.system.RealtimeDataRepository
 import com.micrantha.eyespie.features.things.data.ThingDataRepository
 import com.micrantha.eyespie.domain.repository.AccountRepository
 import com.micrantha.eyespie.domain.repository.ColorRepository

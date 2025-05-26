@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.ui.theme.Dimensions.List
-import com.micrantha.eyespie.ui.EyesPie
+import com.micrantha.eyespie.app.EyesPie
 import com.micrantha.eyespie.app.ui.MainAction.Load
 
 class SplashScreen : Screen {

@@ -11,11 +11,17 @@ open class BluebellExtension @Inject constructor(
 
     val models: BluebellModels = objects.newInstance(BluebellModels::class.java)
 
+    val graphql: GraphqlConfig = objects.newInstance(GraphqlConfig::class.java)
+
     fun config(action: Action<BluebellConfig>) {
         action.execute(config)
     }
 
     fun models(action: Action<BluebellModels>) {
         action.execute(models)
+    }
+
+    fun graphql(action: Action<GraphqlConfig>) {
+        action.execute(graphql)
     }
 }

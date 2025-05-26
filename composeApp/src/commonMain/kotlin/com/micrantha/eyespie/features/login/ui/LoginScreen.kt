@@ -39,7 +39,7 @@ import com.micrantha.bluebell.ui.model.isFailure
 import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.Strings
-import com.micrantha.eyespie.ui.EyesPie
+import com.micrantha.eyespie.app.EyesPie
 import com.micrantha.eyespie.ui.login.LoginAction.ResetStatus
 import kotlinx.coroutines.delay
 

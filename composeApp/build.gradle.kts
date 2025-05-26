@@ -203,12 +203,6 @@ android {
     }
 }
 
-apollo {
-    service("eyespie") {
-        packageNamesFromFilePaths("com.micrantha.eyespie.graphql")
-    }
-}
-
 bluebell {
     config {
         packageName = "com.micrantha.eyespie.config"
@@ -229,4 +223,21 @@ bluebell {
             "segmentation/deeplab_v3.tflite" to "segmentation/image.tflite"
         )
     }
+    graphql {
+        serviceName = "eyespie"
+        packagePath = "com.micrantha.eyespie.graphql"
+    }
+
+    afterEvaluate {
+        apollo {
+            service(graphql.serviceName) {
+                packageNamesFromFilePaths(graphql.packagePath)
+                introspection {
+                    endpointUrl = graphql.endpoint
+                    headers.putAll(graphql.headers)
+                }
+            }
+        }
+    }
 }
+
