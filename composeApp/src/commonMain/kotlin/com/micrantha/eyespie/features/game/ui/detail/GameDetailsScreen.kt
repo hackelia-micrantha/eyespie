@@ -11,27 +11,32 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.kodein.rememberScreenModel
+import com.micrantha.bluebell.app.Scaffolding
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ui.components.longDateTime
-import com.micrantha.bluebell.ui.components.stringResource
-import com.micrantha.bluebell.ui.model.UiResult
 import com.micrantha.bluebell.ui.components.LabeledText
 import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.components.TabPager
+import com.micrantha.bluebell.ui.components.longDateTime
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
+import com.micrantha.bluebell.ui.model.UiResult
 import com.micrantha.bluebell.ui.screen.ScaffoldScreen
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.eyespie.app.Strings
+import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.domain.entities.Game
-import com.micrantha.eyespie.features.things.ui.component.ThingListContent
 import com.micrantha.eyespie.features.game.ui.detail.GameDetailsAction.Load
 import com.micrantha.eyespie.features.players.ui.component.PlayerListContent
+import com.micrantha.eyespie.features.things.ui.component.ThingListContent
+import eyespie.composeapp.generated.resources.created_at
+import eyespie.composeapp.generated.resources.expires_at
+import eyespie.composeapp.generated.resources.location
+import eyespie.composeapp.generated.resources.next_turn
+import eyespie.composeapp.generated.resources.players
+import eyespie.composeapp.generated.resources.things
+import org.jetbrains.compose.resources.stringResource
 
 data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScreen(),
     StateRenderer<GameDetailsUiState> {
-
-    override fun title() = arg.title
 
     @Composable
     override fun Render() {
@@ -39,6 +44,7 @@ data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScr
 
         LaunchedEffect(Unit) {
             screenModel.dispatch(Load(arg.id))
+            screenModel.dispatch(Scaffolding.Title(arg.title))
         }
 
         val state by screenModel.state.collectAsState()
@@ -65,26 +71,26 @@ data class GameDetailsScreen(private val arg: GameDetailScreenArg) : ScaffoldScr
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.padding(Dimensions.content)) {
                     LabeledText(
-                        label = stringResource(Strings.CreatedAt),
+                        label = stringResource(S.created_at),
                         text = longDateTime(game.createdAt),
                     )
 
                     LabeledText(
-                        label = stringResource(Strings.ExpiresAt),
+                        label = stringResource(S.expires_at),
                         text = longDateTime(game.expires),
                     )
 
                     LabeledText(
-                        label = stringResource(Strings.NextTurn),
+                        label = stringResource(S.next_turn),
                         text = game.turnDuration.toString(),
                     )
                 }
             }
 
             TabPager(
-                stringResource(Strings.Things),
-                stringResource(Strings.Players),
-                stringResource(Strings.Location)
+                stringResource(S.things),
+                stringResource(S.players),
+                stringResource(S.location)
             ) { index, _ ->
                 when (index) {
                     0 -> ThingListContent(game.things, dispatch)

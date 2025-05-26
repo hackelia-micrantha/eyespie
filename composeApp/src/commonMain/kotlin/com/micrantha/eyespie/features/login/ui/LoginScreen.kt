@@ -33,15 +33,21 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.arch.Dispatch
 import com.micrantha.bluebell.ext.enabled
-import com.micrantha.bluebell.ui.components.stringResource
+import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.model.error
 import com.micrantha.bluebell.ui.model.isFailure
-import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.eyespie.app.Strings
 import com.micrantha.eyespie.app.EyesPie
+import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.ui.login.LoginAction.ResetStatus
+import eyespie.composeapp.generated.resources.app_title
+import eyespie.composeapp.generated.resources.email
+import eyespie.composeapp.generated.resources.login
+import eyespie.composeapp.generated.resources.login_email_placeholder
+import eyespie.composeapp.generated.resources.login_password_placeholder
+import eyespie.composeapp.generated.resources.password
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 
 class LoginScreen : Screen, StateRenderer<LoginUiState> {
 
@@ -73,7 +79,7 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
                     tint = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = stringResource(Strings.AppTitle),
+                    text = stringResource(S.app_title),
                     fontSize = Dimensions.Text.Large
                 )
 
@@ -83,9 +89,9 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
                     value = state.email,
                     enabled = state.status.enabled(),
                     maxLines = 1,
-                    label = { Text(stringResource(Strings.Email)) },
+                    label = { Text(stringResource(S.email)) },
                     onValueChange = { dispatch(LoginAction.ChangedEmail(it)) },
-                    placeholder = { Text(stringResource(Strings.LoginEmailPlaceholder)) }
+                    placeholder = { Text(stringResource(S.login_email_placeholder)) }
                 )
 
                 Spacer(modifier = Modifier.heightIn(Dimensions.content))
@@ -95,10 +101,10 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.padding(Dimensions.content),
                     maxLines = 1,
-                    label = { Text(stringResource(Strings.Password)) },
+                    label = { Text(stringResource(S.password)) },
                     value = state.password,
                     onValueChange = { dispatch(LoginAction.ChangedPassword(it)) },
-                    placeholder = { Text(stringResource(Strings.LoginPasswordPlaceholder)) }
+                    placeholder = { Text(stringResource(S.login_password_placeholder)) }
                 )
 
                 Spacer(modifier = Modifier.heightIn(Dimensions.screen))
@@ -109,7 +115,7 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
                     contentPadding = PaddingValues(Dimensions.content),
                     onClick = { dispatch(LoginAction.OnLogin) }) {
                     if (state.status.enabled()) {
-                        Text(stringResource(Strings.Login))
+                        Text(stringResource(S.login))
                     } else {
                         CircularProgressIndicator(
                             modifier = Modifier.size(Dimensions.Image.button)
@@ -137,7 +143,7 @@ class LoginScreen : Screen, StateRenderer<LoginUiState> {
     private fun Messages(state: LoginUiState, dispatch: Dispatch) {
         state.status.error?.let {
             Text(
-                text = it,
+                text = stringResource(it),
                 fontStyle = FontStyle.Italic,
                 color = MaterialTheme.colorScheme.error
             )

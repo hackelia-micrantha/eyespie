@@ -1,9 +1,6 @@
 package com.micrantha.eyespie.features.things.data.mapping
 
 import com.micrantha.eyespie.core.data.system.mapping.LocationDomainMapper
-import com.micrantha.eyespie.features.scan.data.mapping.ClueDomainMapper
-import com.micrantha.eyespie.features.scan.data.model.LabelClueData
-import com.micrantha.eyespie.features.scan.data.model.ProofData
 import com.micrantha.eyespie.domain.entities.Clues
 import com.micrantha.eyespie.domain.entities.ColorClue
 import com.micrantha.eyespie.domain.entities.Embedding
@@ -12,6 +9,9 @@ import com.micrantha.eyespie.domain.entities.Location.Point
 import com.micrantha.eyespie.domain.entities.Player
 import com.micrantha.eyespie.domain.entities.Proof
 import com.micrantha.eyespie.domain.entities.Thing
+import com.micrantha.eyespie.features.scan.data.mapping.ClueDomainMapper
+import com.micrantha.eyespie.features.scan.data.model.LabelClueData
+import com.micrantha.eyespie.features.scan.data.model.ProofData
 import com.micrantha.eyespie.features.things.data.model.MatchRequest
 import com.micrantha.eyespie.features.things.data.model.MatchResponse
 import com.micrantha.eyespie.features.things.data.model.NearbyRequest

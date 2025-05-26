@@ -1,8 +1,8 @@
 package com.micrantha.eyespie.features.scan.data
 
-import com.micrantha.eyespie.features.scan.data.source.SegmentCaptureLocalSource
 import com.micrantha.eyespie.domain.entities.SegmentProof
 import com.micrantha.eyespie.domain.repository.SegmentRepository
+import com.micrantha.eyespie.features.scan.data.source.SegmentCaptureLocalSource
 import com.micrantha.eyespie.platform.scan.CameraImage
 import org.kodein.di.DI
 import org.kodein.di.DIAware

@@ -1,8 +1,8 @@
 package com.micrantha.bluebell.ui
 
+import com.micrantha.bluebell.app.navi.BluebellRouter
 import com.micrantha.bluebell.get
 import com.micrantha.bluebell.ui.components.Router
-import com.micrantha.bluebell.app.navi.BluebellRouter
 import com.micrantha.bluebell.ui.screen.BluebellScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import org.kodein.di.DI

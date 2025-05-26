@@ -17,15 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ui.components.longDateTime
-import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.components.LabeledText
+import com.micrantha.bluebell.ui.components.longDateTime
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.eyespie.app.Strings.CreatedAt
-import com.micrantha.eyespie.app.Strings.ExpiresAt
-import com.micrantha.eyespie.app.Strings.Players
-import com.micrantha.eyespie.app.Strings.Things
+import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.domain.entities.Game
+import eyespie.composeapp.generated.resources.created_at
+import eyespie.composeapp.generated.resources.expires_at
+import eyespie.composeapp.generated.resources.players
+import eyespie.composeapp.generated.resources.things
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
@@ -44,12 +45,12 @@ fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
         LabeledText(
             modifier = Modifier.padding(top = Dimensions.content),
             text = longDateTime(game.createdAt),
-            label = stringResource(CreatedAt),
+            label = stringResource(S.created_at),
         )
 
         LabeledText(
             text = longDateTime(game.expiresAt),
-            label = stringResource(ExpiresAt),
+            label = stringResource(S.expires_at),
         )
 
         Spacer(Modifier.heightIn(Dimensions.screen))
@@ -69,7 +70,7 @@ fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
                 LabeledText(
                     modifier = Modifier.padding(Dimensions.content),
                     text = game.totalThings.toString(),
-                    label = stringResource(Things),
+                    label = stringResource(S.things),
                 )
             }
 
@@ -83,7 +84,7 @@ fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
                 LabeledText(
                     modifier = Modifier.padding(Dimensions.content),
                     text = game.totalPlayers.toString(),
-                    label = stringResource(Players),
+                    label = stringResource(S.players),
                 )
             }
         }

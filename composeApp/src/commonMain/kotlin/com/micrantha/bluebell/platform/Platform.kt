@@ -9,7 +9,11 @@ expect class Platform : LocalizedRepository, FileSystem {
 
     val networkMonitor: NetworkMonitor
 
-    override fun resource(str: LocalizedString, vararg args: Any?): String
+    override fun string(str: LocalizedString): String
+    override fun string(
+        str: LocalizedString,
+        vararg args: Any
+    ): String
 
     override fun format(
         epochSeconds: Long,

@@ -2,6 +2,7 @@ package com.micrantha.bluebell
 
 import com.micrantha.bluebell.domain.bluebellDomain
 import com.micrantha.bluebell.domain.repository.LocalizedRepository
+import com.micrantha.bluebell.flux.bluebellFlux
 import com.micrantha.bluebell.platform.ConnectivityStatus
 import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.platform.Platform
@@ -18,6 +19,7 @@ fun bluebellModules(trigger: DITrigger? = null) = DI.Module(name = "Bluebell") {
 
     importOnce(bluebellDomain())
     importOnce(bluebellUi())
+    importOnce(bluebellFlux())
 
     bindProviderOf(::ConnectivityStatus)
 

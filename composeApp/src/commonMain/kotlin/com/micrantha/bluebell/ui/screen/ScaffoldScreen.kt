@@ -12,15 +12,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.core.screen.Screen
-import com.micrantha.bluebell.app.Scaffolding
+import com.micrantha.bluebell.app.ScaffoldingState
+import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.bluebell.ui.components.rememberConnectivityStatus
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.eyespie.core.ui.navi.NavigationAction
 
 internal fun defaultBackAction() = NavAction(
@@ -28,7 +30,12 @@ internal fun defaultBackAction() = NavAction(
     action = { context -> context.router.navigateBack() }
 )
 
-abstract class ScaffoldScreen : Screen, Scaffolding {
+class ScaffoldViewModel(context: ScreenContext) : StatefulScreenModel<ScaffoldingState>(
+    context,
+    ScaffoldingState()
+)
+
+abstract class ScaffoldScreen : Screen {
 
     @Composable
     abstract fun Render()
@@ -41,12 +48,16 @@ abstract class ScaffoldScreen : Screen, Scaffolding {
 
         val connectivityStatus by rememberConnectivityStatus()
 
+        val screenModel = remember { ScaffoldViewModel(context) }
+
+        val scaffold by screenModel.state.collectAsState()
+
         Scaffold(
             topBar = {
                 TopAppBar(
                     modifier = Modifier.shadow(Dimensions.content),
                     title = {
-                        title()?.let {
+                        scaffold.title?.let {
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.headlineMedium
@@ -54,13 +65,13 @@ abstract class ScaffoldScreen : Screen, Scaffolding {
                         }
                     },
                     navigationIcon = {
-                        if (showBack) {
-                            backAction()?.let {
+                        if (scaffold.showBack) {
+                            scaffold.backAction?.let {
                                 NavigationAction(
                                     navAction = it
                                 )
                             } ?: run {
-                                if ((canGoBack == null && context.router.canGoBack) || canGoBack == true) {
+                                if ((scaffold.canGoBack == null && context.router.canGoBack) || scaffold.canGoBack == true) {
                                     NavigationAction(
                                         navAction = defaultBackAction()
                                     )
@@ -69,7 +80,7 @@ abstract class ScaffoldScreen : Screen, Scaffolding {
                         }
                     },
                     actions = {
-                        actions()?.forEach { nav ->
+                        scaffold.actions?.forEach { nav ->
                             NavigationAction(
                                 modifier = Modifier.padding(start = Dimensions.content),
                                 navAction = nav

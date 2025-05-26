@@ -18,9 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.S
+import eyespie.composeapp.generated.resources.new_thing
+import eyespie.composeapp.generated.resources.new_thing_description
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ScanNewThingCard(onClick: () -> Unit) {
@@ -47,11 +49,11 @@ fun ScanNewThingCard(onClick: () -> Unit) {
             ) {
                 Text(
                     modifier = Modifier.padding(bottom = Dimensions.content),
-                    text = stringResource(S.NewThing),
+                    text = stringResource(S.new_thing),
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
-                    text = stringResource(S.NewThingDescription),
+                    text = stringResource(S.new_thing_description),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium
                 )

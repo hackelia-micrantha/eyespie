@@ -23,14 +23,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.kodein.rememberScreenModel
+import com.micrantha.bluebell.app.Scaffolding
+import com.micrantha.bluebell.app.Scaffolding.CanGoBack
+import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.bluebell.arch.Dispatch
 import com.micrantha.bluebell.ui.screen.ScaffoldScreen
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.theme.Dimensions
+import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.core.ui.component.ChoiceField
 import com.micrantha.eyespie.core.ui.component.LocationEnabledEffect
-import com.micrantha.eyespie.app.S
-import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.eyespie.domain.entities.Proof
 import com.micrantha.eyespie.features.scan.ui.edit.ScanEditAction.ClearLabel
 import com.micrantha.eyespie.features.scan.ui.edit.ScanEditAction.ColorChanged
@@ -39,31 +41,33 @@ import com.micrantha.eyespie.features.scan.ui.edit.ScanEditAction.Init
 import com.micrantha.eyespie.features.scan.ui.edit.ScanEditAction.LabelChanged
 import com.micrantha.eyespie.features.scan.ui.edit.ScanEditAction.NameChanged
 import com.micrantha.eyespie.features.scan.ui.edit.ScanEditAction.SaveScanEdit
+import eyespie.composeapp.generated.resources.new_thing
+import org.jetbrains.compose.resources.stringResource
 
 class ScanEditScreen(
     private val proof: Proof,
     private val context: ScreenContext
 ) : ScaffoldScreen() {
 
-    override fun title() = context.i18n.string(S.NewThing)
-
-    override val canGoBack = true
-
-    override fun actions() = listOf(
-        NavAction(
-            icon = Icons.Default.Save,
-            action = {
-                it.dispatcher.dispatch(SaveScanEdit)
-            }
-        )
-    )
-
     @Composable
     override fun Render() {
         val screenModel: ScanEditScreenModel = rememberScreenModel()
 
+        val title = stringResource(S.new_thing)
         LaunchedEffect(Unit) {
             screenModel.dispatch(Init(proof))
+            screenModel.dispatch(Scaffolding.Title(title))
+            screenModel.dispatch(CanGoBack(true))
+            screenModel.dispatch(
+                Scaffolding.Actions(
+                    listOf(
+                        NavAction(
+                    icon = Icons.Default.Save,
+                    action = {
+                        it.dispatcher.dispatch(SaveScanEdit)
+                    }
+                )
+            )))
         }
 
         LocationEnabledEffect()

@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.features.things.data.model
 
-import com.micrantha.eyespie.features.scan.data.model.ProofData
 import com.micrantha.eyespie.domain.entities.Embedding
+import com.micrantha.eyespie.features.scan.data.model.ProofData
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement

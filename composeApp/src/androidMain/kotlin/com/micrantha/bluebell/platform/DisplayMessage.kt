@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import com.micrantha.bluebell.ui.model.UiMessage
 import com.micrantha.bluebell.ui.model.UiMessage.Type.Popup
 import com.micrantha.bluebell.ui.components.message.icon
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 actual fun DisplayMessage(message: UiMessage) = when (val msg = message.type) {
@@ -22,11 +23,11 @@ private fun Popup.Display(message: UiMessage) {
         confirmButton = {
             positive?.let {
                 Button(onClick = it.onClick) {
-                    Text(it.label)
+                    Text(stringResource(it.label))
                 }
             }
         },
-        text = { Text(message.message) },
+        text = { Text(stringResource(message.message)) },
         icon = {
             message.category.icon?.let {
                 Icon(

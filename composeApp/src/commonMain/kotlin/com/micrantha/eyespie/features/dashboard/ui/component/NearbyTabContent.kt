@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Photo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.components.status.EmptyContent
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.S
@@ -20,8 +19,13 @@ import com.micrantha.eyespie.features.dashboard.ui.DashboardAction.GuessThing
 import com.micrantha.eyespie.features.dashboard.ui.DashboardAction.HasMorePlayers
 import com.micrantha.eyespie.features.dashboard.ui.DashboardAction.HasMoreThings
 import com.micrantha.eyespie.features.dashboard.ui.DashboardUiState.Data.Nearby
-import com.micrantha.eyespie.features.things.ui.component.ThingListingCard
 import com.micrantha.eyespie.features.players.ui.component.PlayerListCard
+import com.micrantha.eyespie.features.things.ui.component.ThingListingCard
+import eyespie.composeapp.generated.resources.no_players_found
+import eyespie.composeapp.generated.resources.no_things_found
+import eyespie.composeapp.generated.resources.players
+import eyespie.composeapp.generated.resources.things
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -32,7 +36,7 @@ fun NearbyTabContent(
     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
         stickyHeader(key = tab.things.data) {
-            ListHeader(label = stringResource(S.Things))
+            ListHeader(label = stringResource(S.things))
         }
         itemsIndexed(
             items = tab.things.data,
@@ -53,7 +57,7 @@ fun NearbyTabContent(
         when {
             tab.things.data.isEmpty() -> item {
                 EmptyContent(
-                    message = stringResource(S.NoThingsFound),
+                    message = S.no_things_found,
                     size = Dimensions.List.thumbnail,
                     icon = Icons.Default.Photo
                 )
@@ -66,7 +70,7 @@ fun NearbyTabContent(
             }
         }
         stickyHeader(key = tab.players.data) {
-            ListHeader(label = stringResource(S.Players))
+            ListHeader(label = stringResource(S.players))
         }
         itemsIndexed(tab.players.data, key = { _, item -> item.id }) { index, player ->
             PlayerListCard(
@@ -83,7 +87,7 @@ fun NearbyTabContent(
         when {
             tab.players.data.isEmpty() -> item {
                 EmptyContent(
-                    message = stringResource(S.NoPlayersFound),
+                    message = S.no_players_found,
                     size = Dimensions.List.thumbnail,
                     icon = Icons.Default.People
                 ) {

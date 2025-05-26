@@ -13,10 +13,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.app.EyesPie
+import com.micrantha.eyespie.app.S
+import eyespie.composeapp.generated.resources.app_title
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun AppTitle() {
@@ -36,7 +37,7 @@ fun AppTitle() {
             contentDescription = null,
         )
         Text(
-            text = stringResource(S.AppTitle),
+            text = stringResource(S.app_title),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineLarge
         )

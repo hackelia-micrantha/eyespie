@@ -7,7 +7,7 @@ sealed class GameAction {
 
     data object Load : GameAction()
 
-    data class Failure(val error: Throwable) : GameAction()
+    data class Error(val error: Throwable) : GameAction()
 
     data class LoadedImage(val id: String, val data: String) :
         GameAction()

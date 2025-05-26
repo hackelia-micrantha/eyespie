@@ -1,10 +1,10 @@
 package com.micrantha.eyespie.app
 
-import com.micrantha.bluebell.domain.entities.LocalizedString
+import eyespie.composeapp.generated.resources.Res
 
-typealias S = Strings
+internal val S = Res.string
 
-enum class Strings(
+/*enum class Strings(
     override val key: String,
     override val iosKey: String? = null,
     override val androidKey: String? = null
@@ -47,4 +47,4 @@ enum class Strings(
     Friends("friends"),
     OK("ok"),
     NoDataFound("no_data_found")
-}
+}*/

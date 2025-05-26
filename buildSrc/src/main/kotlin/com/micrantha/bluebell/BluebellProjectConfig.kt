@@ -96,7 +96,9 @@ fun Project.configureBuilds(config: BluebellConfig) {
 private fun generatedExtensionSourceCode(config: BluebellConfig, entries: List<String>) = """
 package ${config.packageName}
 
-private val map = mapOf(
+${if(config.properties.isEmpty()) "object DefaultConfig" else ""}
+
+private val map = mapOf<String, String>(
     ${entries.joinToString(",\n    ")}
 )
 

@@ -9,9 +9,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.S
+import eyespie.composeapp.generated.resources.has_more
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HasMoreFooter(
@@ -29,7 +30,7 @@ fun HasMoreFooter(
         ) {
             Text(
                 modifier = Modifier.padding(start = Dimensions.content),
-                text = stringResource(S.HasMore)
+                text = stringResource(S.has_more)
             )
         }
     }

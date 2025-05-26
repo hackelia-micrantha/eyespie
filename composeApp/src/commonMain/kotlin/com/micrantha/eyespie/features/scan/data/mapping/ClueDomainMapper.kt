@@ -1,15 +1,15 @@
 package com.micrantha.eyespie.features.scan.data.mapping
 
 import com.micrantha.bluebell.app.fail
-import com.micrantha.eyespie.features.scan.data.model.ImageResponse
-import com.micrantha.eyespie.features.scan.data.model.LabelClueData
-import com.micrantha.eyespie.features.scan.data.model.LocationClueData
-import com.micrantha.eyespie.features.scan.data.model.RemoteImageLabel
 import com.micrantha.eyespie.domain.entities.Clue
 import com.micrantha.eyespie.domain.entities.LabelClue
 import com.micrantha.eyespie.domain.entities.LabelProof
 import com.micrantha.eyespie.domain.entities.Location
 import com.micrantha.eyespie.domain.entities.LocationClue
+import com.micrantha.eyespie.features.scan.data.model.ImageResponse
+import com.micrantha.eyespie.features.scan.data.model.LabelClueData
+import com.micrantha.eyespie.features.scan.data.model.LocationClueData
+import com.micrantha.eyespie.features.scan.data.model.RemoteImageLabel
 import kotlinx.collections.immutable.toPersistentSet
 
 class ClueDomainMapper {

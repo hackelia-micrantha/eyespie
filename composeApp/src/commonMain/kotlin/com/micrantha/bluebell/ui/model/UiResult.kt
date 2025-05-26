@@ -1,10 +1,12 @@
 package com.micrantha.bluebell.ui.model
 
+import com.micrantha.bluebell.domain.entities.LocalizedString
 import com.micrantha.bluebell.ui.model.UiResult.Busy
 import com.micrantha.bluebell.ui.model.UiResult.Default
 import com.micrantha.bluebell.ui.model.UiResult.Empty
 import com.micrantha.bluebell.ui.model.UiResult.Failure
 import com.micrantha.bluebell.ui.model.UiResult.Ready
+import org.jetbrains.compose.resources.StringResource
 
 sealed class UiResult<out T> {
 
@@ -12,11 +14,11 @@ sealed class UiResult<out T> {
 
     object Default : UiResult<Nothing>()
 
-    data class Busy(val message: String? = null) : UiResult<Nothing>()
+    data class Busy(val message: LocalizedString? = null) : UiResult<Nothing>()
 
-    data class Failure(val message: String? = null) : UiResult<Nothing>()
+    data class Failure(val message: LocalizedString? = null) : UiResult<Nothing>()
 
-    data class Empty(val message: String? = null) : UiResult<Nothing>()
+    data class Empty(val message: LocalizedString? = null) : UiResult<Nothing>()
 
 }
 
@@ -34,13 +36,13 @@ val <T> UiResult<T>.isReady: Boolean
 val <T> UiResult<T>.isFailure: Boolean
     get() = this is Failure
 
-val <T> UiResult<T>.error: String?
+val <T> UiResult<T>.error: StringResource?
     get() = when (this) {
         is Failure -> message
         else -> null
     }
 
-val <T> UiResult<T>.message: String?
+val <T> UiResult<T>.message: StringResource?
     get() = when (this) {
         is Busy -> message
         is Failure -> message

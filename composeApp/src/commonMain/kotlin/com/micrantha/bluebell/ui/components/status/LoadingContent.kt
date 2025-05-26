@@ -10,9 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun LoadingContent(message: String? = null) {
+fun LoadingContent(message: StringResource? = null) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -20,7 +22,7 @@ fun LoadingContent(message: String? = null) {
         ) {
             CircularProgressIndicator()
             message?.let {
-                Text(it, style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(it), style = MaterialTheme.typography.titleLarge)
             }
         }
     }

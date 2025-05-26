@@ -13,21 +13,24 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ui.components.stringResource
-import com.micrantha.bluebell.ui.model.UiResult.Failure
-import com.micrantha.bluebell.ui.model.UiResult.Ready
 import com.micrantha.bluebell.ui.components.TabPager
 import com.micrantha.bluebell.ui.components.status.FailureContent
 import com.micrantha.bluebell.ui.components.status.LoadingContent
+import com.micrantha.bluebell.ui.model.UiResult.Failure
+import com.micrantha.bluebell.ui.model.UiResult.Ready
+import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.core.ui.component.AppTitle
 import com.micrantha.eyespie.core.ui.component.LocationEnabledEffect
 import com.micrantha.eyespie.core.ui.component.RealtimeDataEnabledEffect
-import com.micrantha.eyespie.app.S
 import com.micrantha.eyespie.features.dashboard.ui.DashboardAction.Load
 import com.micrantha.eyespie.features.dashboard.ui.DashboardAction.ScanNewThing
 import com.micrantha.eyespie.features.dashboard.ui.component.FriendsTabContent
 import com.micrantha.eyespie.features.dashboard.ui.component.NearbyTabContent
 import com.micrantha.eyespie.features.dashboard.ui.component.ScanNewThingCard
+import eyespie.composeapp.generated.resources.friends
+import eyespie.composeapp.generated.resources.loading_dashboard
+import eyespie.composeapp.generated.resources.nearby
+import org.jetbrains.compose.resources.stringResource
 
 class DashboardScreen : Screen {
 
@@ -66,7 +69,7 @@ class DashboardScreen : Screen {
             when (state.status) {
                 is Ready -> ContentPager(state.status.data, dispatch)
                 is Failure -> FailureContent(state.status.message)
-                else -> LoadingContent(stringResource(S.LoadingDashboard))
+                else -> LoadingContent(S.loading_dashboard)
             }
         }
     }
@@ -74,8 +77,8 @@ class DashboardScreen : Screen {
     @Composable
     fun ContentPager(data: DashboardUiState.Data, dispatch: Dispatch) {
         TabPager(
-            stringResource(S.Nearby),
-            stringResource(S.Friends)
+            stringResource(S.nearby),
+            stringResource(S.friends)
         ) { page, _ ->
             when (page) {
                 0 -> NearbyTabContent(data.nearby, dispatch)

@@ -4,10 +4,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.benasher44.uuid.uuid4
 import com.micrantha.bluebell.ui.model.UiMessage.Category.Default
 import com.micrantha.bluebell.ui.model.UiMessage.Type.Timed
+import org.jetbrains.compose.resources.StringResource
 
 data class UiMessage(
     val id: String = uuid4().toString(),
-    val message: String,
+    val message: StringResource,
     val category: Category = Default,
     val type: Type = Timed()
 ) {
@@ -41,7 +42,7 @@ data class UiMessage(
     }
 
     data class Action(
-        val label: String,
+        val label: StringResource,
         val onClick: () -> Unit
     )
 }

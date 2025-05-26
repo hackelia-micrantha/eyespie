@@ -18,6 +18,7 @@ import com.micrantha.bluebell.ui.model.UiMessage.Category.Warning
 import com.micrantha.bluebell.ui.model.UiMessage.Type.Popup
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.eyespie.app.S
+import eyespie.composeapp.generated.resources.ok
 
 
 val Category.icon: ImageVector?
@@ -35,11 +36,11 @@ fun ScreenContext.popup(
     accept: () -> Unit
 ) =
     UiMessage(
-        message = i18n.string(message),
+        message = message,
         category = category,
         type = Popup(
             positive = Action(
-                i18n.string(S.OK),
+                S.ok,
                 accept
             )
         )

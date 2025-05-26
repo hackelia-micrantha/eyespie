@@ -2,8 +2,8 @@ package com.micrantha.eyespie.features.scan.ui.capture
 
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.micrantha.bluebell.app.Log
-import com.micrantha.bluebell.domain.stats.weightedRandomSample
 import com.micrantha.bluebell.arch.StateMapper
+import com.micrantha.bluebell.domain.stats.weightedRandomSample
 import com.micrantha.eyespie.domain.entities.Clue
 import com.micrantha.eyespie.domain.entities.Clues
 import com.micrantha.eyespie.domain.entities.Embedding

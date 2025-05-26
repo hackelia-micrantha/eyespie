@@ -18,10 +18,14 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ui.components.stringResource
 import com.micrantha.bluebell.ui.theme.Dimensions
-import com.micrantha.eyespie.app.Strings
 import com.micrantha.eyespie.app.EyesPie
+import com.micrantha.eyespie.app.S
+import eyespie.composeapp.generated.resources.name
+import eyespie.composeapp.generated.resources.new_game_content
+import eyespie.composeapp.generated.resources.new_game_header
+import eyespie.composeapp.generated.resources.next
+import org.jetbrains.compose.resources.stringResource
 
 class GameCreateScreen : Screen {
 
@@ -54,11 +58,11 @@ class GameCreateScreen : Screen {
                 )
 
                 Text(
-                    text = stringResource(Strings.NewGameHeader),
+                    text = stringResource(S.new_game_header),
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    text = stringResource(Strings.NewGameContent),
+                    text = stringResource(S.new_game_content),
                     style = MaterialTheme.typography.bodyLarge
                 )
 
@@ -66,7 +70,7 @@ class GameCreateScreen : Screen {
                     value = state.name,
                     label = {
                         Text(
-                            text = stringResource(Strings.Name),
+                            text = stringResource(S.name),
                             style = MaterialTheme.typography.labelSmall
                         )
                     },
@@ -78,7 +82,7 @@ class GameCreateScreen : Screen {
                 Button(
                     onClick = { dispatch(GameCreateAction.NameDone) }
                 ) {
-                    Text(text = stringResource(Strings.Next))
+                    Text(text = stringResource(S.next))
                 }
             }
         }

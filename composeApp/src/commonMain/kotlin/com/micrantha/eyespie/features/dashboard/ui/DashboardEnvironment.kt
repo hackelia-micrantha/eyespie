@@ -5,9 +5,9 @@ import com.micrantha.bluebell.arch.Dispatcher
 import com.micrantha.bluebell.arch.Effect
 import com.micrantha.bluebell.arch.Reducer
 import com.micrantha.bluebell.arch.StateMapper
-import com.micrantha.bluebell.ext.busy
-import com.micrantha.bluebell.ext.failure
 import com.micrantha.bluebell.ui.model.Ready
+import com.micrantha.bluebell.ui.model.UiResult.Busy
+import com.micrantha.bluebell.ui.model.UiResult.Failure
 import com.micrantha.bluebell.ui.model.isReady
 import com.micrantha.bluebell.ui.model.map
 import com.micrantha.bluebell.ui.screen.ScreenContext
@@ -22,11 +22,13 @@ import com.micrantha.eyespie.features.dashboard.ui.DashboardUiState.Data
 import com.micrantha.eyespie.features.dashboard.ui.DashboardUiState.Data.Nearby
 import com.micrantha.eyespie.features.dashboard.ui.DashboardUiState.Data.TabContent
 import com.micrantha.eyespie.features.dashboard.ui.usecase.DashboardLoadUseCase
-import com.micrantha.eyespie.features.guess.ui.ScanGuessScreen
 import com.micrantha.eyespie.features.game.ui.component.GameAction
 import com.micrantha.eyespie.features.game.ui.detail.GameDetailScreenArg
 import com.micrantha.eyespie.features.game.ui.detail.GameDetailsScreen
+import com.micrantha.eyespie.features.guess.ui.ScanGuessScreen
 import com.micrantha.eyespie.features.scan.ui.capture.ScanCaptureScreen
+import eyespie.composeapp.generated.resources.loading_dashboard
+import eyespie.composeapp.generated.resources.network_failure
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -68,11 +70,11 @@ class DashboardEnvironment(
             )
 
             is LoadError -> state.copy(
-                status = context.i18n.failure(S.NetworkFailure)
+                status = Failure(S.network_failure)
             )
 
             is Load -> if (state.status.isReady) state else state.copy(
-                status = context.i18n.busy(S.LoadingDashboard)
+                status = Busy(S.loading_dashboard)
             )
 
             else -> state
