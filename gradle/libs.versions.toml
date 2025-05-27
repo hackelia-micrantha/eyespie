@@ -2,9 +2,9 @@
 
 cache4k = "0.14.0"
 cameraExtensions = "1.4.2"
-compose = "1.8.0"
+compose = "1.8.2"
 compose-plugin = "1.7.3"
-agp = "8.9.2"
+agp = "8.9.3"
 android-minSdk = "29"
 android-compileSdk = "35"
 android-targetSdk = "35"
@@ -19,8 +19,8 @@ fragmentKtx = "1.8.7"
 geoCompose = "0.8.0"
 supabaseKt = "latest.release"
 kamelImage = "1.0.3"
-kodeinDi = "7.21.1"
-kodeinDiConf = "7.21.1"
+kodeinDi = "7.26.1"
+kodeinDiConf = "7.26.1"
 kotlin = "2.1.20"
 junit = "4.13.2"
 graphql = "4.2.0"
@@ -36,7 +36,8 @@ permissionsCompose = "0.19.1"
 voyagerNavigator = "1.0.1"
 tensorflowLiteSupport = "latest.release"
 tensorflowLite = "latest.release"
-mediapipe = "0.10.21"
+mediapipe = "0.20230731"
+mediapipeGenAI = "0.10.24"
 buildConfig = "3.1.0"
 mokoMedia = "0.11.0"
 
@@ -117,6 +118,6 @@ mediapipe-tasks-vision = { module = "com.google.mediapipe:tasks-vision", version
 mediapipe-tasks-text = { module = "com.google.mediapipe:tasks-text", version.ref = "mediapipe" }
 mediapipe-tasks-audio = { module = "com.google.mediapipe:tasks-audio", version.ref = "mediapipe" }
 mediapipe-tasks-image-generator = { module = "com.google.mediapipe:tasks-vision-image-generator", version.ref = "mediapipe" }
-mediapipe-tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "mediapipe" }
+mediapipe-tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "mediapipeGenAI" }
 moko-media = { module = "dev.icerock.moko:media", version.ref = "mokoMedia" }
 build-config = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildConfig" }
