@@ -213,11 +213,6 @@ bluebell {
             "LOGIN_EMAIL",
             "LOGIN_PASSWORD"
         )
-
-        requiredKeys = listOf(
-            "SUPABASE_URL",
-            "SUPABASE_KEY"
-        )
     }
     models {
         files = mapOf(
