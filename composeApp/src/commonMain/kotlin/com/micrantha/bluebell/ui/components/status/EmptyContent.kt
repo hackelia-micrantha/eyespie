@@ -17,10 +17,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import com.micrantha.bluebell.ui.theme.Dimensions
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EmptyContent(
-    message: String? = null,
+    message: StringResource? = null,
     icon: ImageVector? = null,
     size: Dp = Dimensions.List.placeholder,
     onClick: () -> Unit = {}
@@ -43,7 +45,7 @@ fun EmptyContent(
             }
             message?.let {
                 Text(
-                    message,
+                    stringResource(it),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center
                 )

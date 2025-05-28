@@ -1,11 +1,10 @@
 package com.micrantha.bluebell.platform
 
 import com.micrantha.mobuildenvuscator.MobuildEnvuscator
-import kotlin.jvm.Throws
 
 class ConfigError(message: String) : Throwable(message)
 
-actual object AppConfigDelegate : AppConfigPropertyDelegate {
+actual object AppConfigDelegate : PlatformConfigDelegate, AppConfigRequireDelegate {
     private val envuscator: MobuildEnvuscator = MobuildEnvuscator()
 
     @Throws(ConfigError::class)

@@ -2,7 +2,7 @@ package com.micrantha.eyespie.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.micrantha.eyespie.ui.component.Choice
+import com.micrantha.eyespie.core.ui.component.Choice
 
 @Composable
 actual fun ChoiceSelector(

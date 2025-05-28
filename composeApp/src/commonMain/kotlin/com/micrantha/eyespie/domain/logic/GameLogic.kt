@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.domain.logic
 
-import com.micrantha.eyespie.domain.model.LabelClue
-import com.micrantha.eyespie.domain.model.Location
+import com.micrantha.eyespie.domain.entities.LabelClue
+import com.micrantha.eyespie.domain.entities.Location
 import kotlin.math.max
 
 class GameLogic {

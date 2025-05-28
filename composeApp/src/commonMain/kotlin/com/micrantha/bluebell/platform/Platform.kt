@@ -1,7 +1,7 @@
 package com.micrantha.bluebell.platform
 
-import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.i18n.LocalizedString
+import com.micrantha.bluebell.domain.entities.LocalizedString
+import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import okio.Path
 
 expect class Platform : LocalizedRepository, FileSystem {
@@ -9,7 +9,11 @@ expect class Platform : LocalizedRepository, FileSystem {
 
     val networkMonitor: NetworkMonitor
 
-    override fun resource(str: LocalizedString, vararg args: Any?): String
+    override fun string(str: LocalizedString): String
+    override fun string(
+        str: LocalizedString,
+        vararg args: Any
+    ): String
 
     override fun format(
         epochSeconds: Long,

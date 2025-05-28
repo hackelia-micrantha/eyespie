@@ -15,33 +15,28 @@ jobs:
     environment: production
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: ruby/setup-ruby@v1
+      - uses: ./.github/actions/supabase
         with:
-          ruby-version: "3.2"
-          bundler-cache: true
-
-      - uses: supabase/setup-cli@v1
-
-      - uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: "supabase"
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+          access_token: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          project_id: ${{ secrets.SUPABASE_PROJECT_ID }}
+          db_password: ${{ secrets.SUPABASE_DB_URL }}
 
   mobile:
     runs-on: macos-latest
     environment: production
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: ruby/setup-ruby@v1
+      - name: Create build config
+        uses: ./.github/actions/configure-build
+        id: build-config
         with:
-          ruby-version: "3.2"
-          bundler-cache: true
+          android_keystore: ${{ secrets.ANDROID_STORE_FILE }}
+          login_email: ${{ inputs.login_email }}
+          login_password: ${{ inputs.login_password }}
 
       - name: Build environment configuration
         uses: ./.github/actions/mobuild-envuscator
@@ -51,10 +46,12 @@ jobs:
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
-          lane: "build_release"
-
-      - uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: "deploy_release"
+          lane: "distribute_production"
         env:
-          APPLE_ID: {{ secrets.APPLE_ID }}
+          APPLE_CONNECT_ID: "${{ secrets.APPLE_CONNECT_ID }}"
+          APPLE_TEAM_ID: "${{ secrets.APPLE_TEAM_ID }}"
+          APPLE_USERNAME: "${{ secrets.APPLE_USERNAME }}"
+          ANDROID_STORE_FILE: "${{ steps.build-config.outputs.android_keystore }}"
+          ANDROID_STORE_PASSWORD: "${{ secrets.ANDROID_STORE_PASSWORD }}"
+          ANDROID_KEY_ALIAS: "${{ secrets.ANDROID_KEY_ALIAS }}"
+          ANDROID_KEY_PASSWORD: "${{ secrets.ANDROID_KEY_PASSWORD }}"

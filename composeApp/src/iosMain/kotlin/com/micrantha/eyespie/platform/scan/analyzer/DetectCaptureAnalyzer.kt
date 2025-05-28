@@ -1,9 +1,9 @@
 package com.micrantha.eyespie.platform.scan.analyzer
 
 import androidx.compose.ui.geometry.Rect
-import com.micrantha.eyespie.domain.model.DetectClue
-import com.micrantha.eyespie.domain.model.DetectProof
-import com.micrantha.eyespie.domain.model.LabelClue
+import com.micrantha.eyespie.domain.entities.DetectClue
+import com.micrantha.eyespie.domain.entities.DetectProof
+import com.micrantha.eyespie.domain.entities.LabelClue
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.CameraImage

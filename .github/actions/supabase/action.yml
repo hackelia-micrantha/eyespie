@@ -1,0 +1,32 @@
+name: Supabase
+description: Deploy supabase changes
+inputs:
+  project_id:
+    description: "The project id"
+    required: true
+    type: string
+  access_token:
+    description: "Access token for the project"
+    required: true
+    type: string
+  database_url:
+    description: "Database url for the project"
+    required: true
+    type: string
+runs:
+  using: "composite"
+  steps:
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: "3.2"
+        bundler-cache: true
+
+    - uses: supabase/setup-cli@v1
+
+    - uses: maierj/fastlane-action@v3.1.0
+      with:
+        lane: "supabase"
+      env:
+        DATABASE_URL: ${{ inputs.database_url }}
+        SUPABASE_ACCESS_TOKEN: ${{ inputs.access_token }}
+        SUPABASE_PROJECT_ID: ${{ inputs.project_id }}

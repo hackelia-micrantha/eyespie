@@ -1,6 +1,6 @@
 package com.micrantha.eyespie.domain.repository
 
-import com.micrantha.eyespie.domain.model.PlayerList
+import com.micrantha.eyespie.domain.entities.PlayerList
 
 interface PlayerRepository {
 

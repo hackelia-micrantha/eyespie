@@ -1,6 +1,6 @@
 package com.micrantha.bluebell.ui.components
 
-import com.micrantha.bluebell.data.Log
+import com.micrantha.bluebell.app.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow

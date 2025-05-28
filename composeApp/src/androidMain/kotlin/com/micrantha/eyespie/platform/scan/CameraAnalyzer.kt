@@ -5,7 +5,7 @@ import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mediapipe.tasks.core.BaseOptions
-import com.micrantha.bluebell.data.Log
+import com.micrantha.bluebell.app.Log
 import com.micrantha.eyespie.platform.scan.components.CameraScannerDispatch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

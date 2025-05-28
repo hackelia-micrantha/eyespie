@@ -1,7 +1,6 @@
 package com.micrantha.bluebell.platform
 
-import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.i18n.LocalizedString
+import com.micrantha.bluebell.domain.repository.LocalizedRepositoryimport com.micrantha.bluebell.domain.entities.LocalizedString
 import com.micrantha.eyespie.AppDelegate
 import okio.FileSystem
 import okio.Path

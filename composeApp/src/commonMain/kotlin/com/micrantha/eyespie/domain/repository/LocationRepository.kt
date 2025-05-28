@@ -1,6 +1,6 @@
 package com.micrantha.eyespie.domain.repository
 
-import com.micrantha.eyespie.domain.model.Location
+import com.micrantha.eyespie.domain.entities.Location
 import kotlinx.coroutines.flow.Flow
 
 interface LocationRepository {

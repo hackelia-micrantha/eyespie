@@ -1,4 +1,3 @@
-
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -129,6 +128,7 @@ kotlin {
 //            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
 
             implementation(libs.mediapipe.tasks.vision)
+            implementation(libs.compose.ui.tooling)
         }
 
         iosMain.dependencies {
@@ -144,6 +144,9 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
+
+        versionCode = 10
+        versionName = "1.0.0"
     }
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -163,43 +166,50 @@ android {
             enableSplit = true
         }
     }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = true
-        }
-    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+    signingConfigs {
+        create("release") {
+            System.getenv("ANDROID_STORE_FILE")?.let { storeFile = file(it) }
+            storePassword = System.getenv("ANDROID_STORE_PASSWORD")
+            keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+            keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+        }
+    }
     buildTypes {
         debug {
-            dependencies {
-                implementation(libs.compose.ui.tooling)
-                implementation(files("libs/debug/mobuild-envuscator.aar"))
-            }
+            applicationIdSuffix = ".debug"
         }
         release {
-            dependencies {
-                //implementation(files("libs/release/mobuild-envuscator.aar"))
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            ndk {
+                debugSymbolLevel = "SYMBOL_TABLE"
             }
         }
     }
-}
-
-apollo {
-    service("eyespie") {
-        packageNamesFromFilePaths("com.micrantha.eyespie.graphql")
+    dependencies {
+        //releaseImplementation(files("libs/release/mobuild-envuscator.aar"))
+        //debugImplementation(files("libs/debug/mobuild-envuscator.aar"))
+        implementation(files("libs/debug/mobuild-envuscator.aar"))
     }
 }
 
 bluebell {
     config {
         packageName = "com.micrantha.eyespie.config"
+        className = "DefaultConfig"
         envFile = ".env.local"
-        debugOnly = true
 
-        keys = listOf(
+        defaultKeys = listOf(
             "LOGIN_EMAIL",
             "LOGIN_PASSWORD"
         )
@@ -212,4 +222,21 @@ bluebell {
             "segmentation/deeplab_v3.tflite" to "segmentation/image.tflite"
         )
     }
+    graphql {
+        serviceName = "eyespie"
+        packagePath = "com.micrantha.eyespie.graphql"
+    }
+
+    afterEvaluate {
+        apollo {
+            service(graphql.serviceName) {
+                packageNamesFromFilePaths(graphql.packagePath)
+                introspection {
+                    endpointUrl = graphql.endpoint
+                    headers.putAll(graphql.headers)
+                }
+            }
+        }
+    }
 }
+

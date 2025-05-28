@@ -8,9 +8,9 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedder
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedder.ImageEmbedderOptions
 import com.google.mediapipe.tasks.vision.imageembedder.ImageEmbedderResult
-import com.micrantha.bluebell.data.Log
-import com.micrantha.eyespie.domain.model.MatchClue
-import com.micrantha.eyespie.domain.model.MatchProof
+import com.micrantha.bluebell.app.Log
+import com.micrantha.eyespie.domain.entities.MatchClue
+import com.micrantha.eyespie.domain.entities.MatchProof
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraImage
 import com.micrantha.eyespie.platform.scan.baseOptions

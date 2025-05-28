@@ -2,14 +2,14 @@ package com.micrantha.bluebell.ui.screen
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.domain.arch.Dispatch
-import com.micrantha.bluebell.domain.arch.Dispatcher
-import com.micrantha.bluebell.domain.arch.StateMapper
-import com.micrantha.bluebell.domain.arch.Stateful
-import com.micrantha.bluebell.domain.arch.Store
-import com.micrantha.bluebell.domain.flux.Flux
-import com.micrantha.bluebell.domain.i18n.LocalizedRepository
+import com.micrantha.bluebell.arch.Action
+import com.micrantha.bluebell.arch.Dispatch
+import com.micrantha.bluebell.arch.Dispatcher
+import com.micrantha.bluebell.arch.StateMapper
+import com.micrantha.bluebell.arch.Stateful
+import com.micrantha.bluebell.arch.Store
+import com.micrantha.bluebell.domain.repository.LocalizedRepository
+import com.micrantha.bluebell.flux.Flux
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.mapIn
 import kotlinx.coroutines.CoroutineScope

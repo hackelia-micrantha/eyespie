@@ -1,5 +1,14 @@
+fastlane_require 'semantic'
+fastlane_require 'semantic/core_ext'
 
 platform :android do
+
+  before_all do
+    # Ensure git status is clean
+    #ensure_git_status_clean
+    # Update all dependencies
+    gradle(task: "clean")
+  end
 
   desc "Build Android Debug APK"
   lane :build_debug do
@@ -31,14 +40,102 @@ platform :android do
     )
   end
 
-  desc "Distribute Android APK "
-  lane :distribute do
-    build_android_release
-
-    # Upload APK to Firebase App Distribution or Play Store
-    firebase_app_distribution(
-      app: "1:1234567890:android:abcdef123456",
-      groups: "testers"
+  desc "Distribute Android APK to production"
+  lane :distribute_production do
+    version_code = options[:version_code] || android_get_version_code(
+      gradle_file: "./composeApp/build.gradle.kts"
     )
+
+    version_name = options[:version_name] || android_get_version_name(
+      gradle_file: "./composeApp/build.gradle.kts"
+    ).
+
+    upload_to_play_store(
+      track: 'beta',
+      track_promote_to: 'production',
+      version_code: version_code,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false
+    )
+
+    # Add a git tag
+    add_git_tag(
+      tag: "android-production-#{version_name}"
+    )
+
+    # Push the tag
+    push_git_tags
+  end
+
+
+  desc "Distribute Android APK to staging"
+  lane :distribute_staging do |options|
+    version_code = options[:version_code] || android_get_version_code(
+      gradle_file: "./composeApp/build.gradle.kts"
+    )
+
+    upload_to_play_store(
+      track: 'internal',
+      track_promote_to: 'beta',
+      version_code: version_code,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false
+    )
+  end
+
+  desc "Distribute Android APK to development"
+  lane :distribute_development do |options|
+
+    # Increment version code
+    version_code = options[:version_code] || android_get_version_code(
+      gradle_file: "./composeApp/build.gradle.kts"
+    )
+
+    version_name = android_get_version_name(
+      gradle_file: "./composeApp/build.gradle.kts"
+    )
+
+    android_set_version_code(
+      gradle_file: "./composeApp/build.gradle.kts",
+      version_code: version_code.to_i + 1
+    )
+
+    # Build the release APK
+    build_release
+
+    # Upload to Play Store internal testing track
+    upload_to_play_store(
+      track: 'internal',
+      release_status: 'draft',
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: false,
+      version_name: version_name,
+      mapping: "./composeApp/build/outputs/mapping/release/mapping.txt"
+    )
+  end
+
+  after_all do |lane|
+    # Clean up any files generated during the lane
+    clean_build_artifacts
+
+    # Notify on success
+    #slack(
+    #  message: "Successfully deployed new Android version!"
+    #) if ENV['SLACK_URL']
+  end
+
+  # Runs if there was an error
+  error do |lane, exception|
+    # Notify on failure
+    #slack(
+    #  message: "Error deploying Android version: #{exception.message}",
+    #  success: false
+    #) if ENV['SLACK_URL']
   end
 end

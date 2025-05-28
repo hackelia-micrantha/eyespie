@@ -28,7 +28,6 @@ class iOSConfigDelegate : PlatformConfigDelegate {
 private let app = AppDelegate(
     networkMonitor: iOSNetworkMonitor(),
     appConfig: iOSConfigDelegate()
-
 )
 
 struct ComposeView: UIViewControllerRepresentable {

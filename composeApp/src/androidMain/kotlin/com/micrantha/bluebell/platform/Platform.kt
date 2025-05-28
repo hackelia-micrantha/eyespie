@@ -1,11 +1,13 @@
 package com.micrantha.bluebell.platform
 
 import android.content.Context
-import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.i18n.LocalizedString
+import com.micrantha.bluebell.domain.entities.LocalizedString
+import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import okio.FileSystem
 import okio.Path
 import okio.buffer
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -20,10 +22,15 @@ actual class Platform(
 ) : LocalizedRepository, BluebellFileSystem {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
-    actual override fun resource(str: LocalizedString, vararg args: Any?): String {
-        val key = str.androidKey ?: str.key
-        val id = context.resources.getIdentifier(key, "string", context.packageName)
-        return context.getString(id, *args)
+    actual override fun string(str: LocalizedString): String {
+        return context.getString(context.resources.getIdentifier(str.key, "string", context.packageName))
+    }
+
+    actual override fun string(
+        str: LocalizedString,
+        vararg args: Any
+    ): String {
+        TODO("Not yet implemented")
     }
 
     actual override fun format(

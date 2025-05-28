@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.platform.scan.analyzer
 
-import com.micrantha.eyespie.domain.model.SegmentClue
-import com.micrantha.eyespie.domain.model.SegmentProof
+import com.micrantha.eyespie.domain.entities.SegmentClue
+import com.micrantha.eyespie.domain.entities.SegmentProof
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.CameraImage
