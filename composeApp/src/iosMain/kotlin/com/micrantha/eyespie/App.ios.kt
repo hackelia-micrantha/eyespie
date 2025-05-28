@@ -1,6 +1,7 @@
 package com.micrantha.eyespie
 
 import androidx.compose.runtime.Composable
+import com.micrantha.eyespie.app.EyesPieApp
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
 

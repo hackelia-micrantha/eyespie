@@ -1,7 +1,7 @@
 package com.micrantha.eyespie.domain.repository
 
-import com.micrantha.eyespie.domain.model.Game
-import com.micrantha.eyespie.domain.model.GameList
+import com.micrantha.eyespie.domain.entities.Game
+import com.micrantha.eyespie.domain.entities.GameList
 
 interface GameRepository {
     suspend fun games(): Result<GameList>

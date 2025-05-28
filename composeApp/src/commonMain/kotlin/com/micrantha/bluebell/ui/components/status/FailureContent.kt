@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.micrantha.bluebell.ui.theme.Dimensions
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun FailureContent(message: String? = null) {
+fun FailureContent(message: StringResource? = null) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize().padding(Dimensions.screen)
@@ -35,7 +37,7 @@ fun FailureContent(message: String? = null) {
             )
             message?.let {
                 Text(
-                    message,
+                    stringResource(message),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center
                 )

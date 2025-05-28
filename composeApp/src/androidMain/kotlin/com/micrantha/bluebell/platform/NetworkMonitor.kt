@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
-import com.micrantha.bluebell.data.Log
-import com.micrantha.bluebell.data.d
+import com.micrantha.bluebell.app.Log
+import com.micrantha.bluebell.app.d
 
 class AndroidNetworkMonitor(context: Context) : NetworkMonitor {
     private var connectivityManager: ConnectivityManager =

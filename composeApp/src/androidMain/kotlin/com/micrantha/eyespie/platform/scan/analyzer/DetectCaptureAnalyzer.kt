@@ -10,10 +10,10 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector.ObjectDetectorOptions
 import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetectorResult
-import com.micrantha.bluebell.data.Log
-import com.micrantha.eyespie.domain.model.DetectClue
-import com.micrantha.eyespie.domain.model.DetectProof
-import com.micrantha.eyespie.domain.model.LabelClue
+import com.micrantha.bluebell.app.Log
+import com.micrantha.eyespie.domain.entities.DetectClue
+import com.micrantha.eyespie.domain.entities.DetectProof
+import com.micrantha.eyespie.domain.entities.LabelClue
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraImage
 import com.micrantha.eyespie.platform.scan.baseOptions

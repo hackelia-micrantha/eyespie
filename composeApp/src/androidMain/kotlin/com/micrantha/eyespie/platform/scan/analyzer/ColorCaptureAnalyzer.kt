@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.palette.graphics.Palette
-import com.micrantha.bluebell.data.Log
-import com.micrantha.eyespie.domain.model.ColorClue
-import com.micrantha.eyespie.domain.model.ColorProof
+import com.micrantha.bluebell.app.Log
+import com.micrantha.eyespie.domain.entities.ColorClue
+import com.micrantha.eyespie.domain.entities.ColorProof
 import com.micrantha.eyespie.platform.scan.CameraImage
 import com.micrantha.eyespie.platform.scan.components.CaptureAnalyzer
 import kotlin.math.sqrt

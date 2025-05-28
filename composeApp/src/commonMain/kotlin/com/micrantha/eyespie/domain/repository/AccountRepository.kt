@@ -1,6 +1,6 @@
 package com.micrantha.eyespie.domain.repository
 
-import com.micrantha.eyespie.domain.model.Session
+import com.micrantha.eyespie.domain.entities.Session
 
 interface AccountRepository {
     suspend fun session(): Result<Session>

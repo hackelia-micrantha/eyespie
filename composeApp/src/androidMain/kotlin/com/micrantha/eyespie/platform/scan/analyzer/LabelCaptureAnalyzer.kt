@@ -9,9 +9,9 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifier.ImageClassifierOptions
 import com.google.mediapipe.tasks.vision.imageclassifier.ImageClassifierResult
-import com.micrantha.bluebell.data.Log
-import com.micrantha.eyespie.domain.model.LabelClue
-import com.micrantha.eyespie.domain.model.LabelProof
+import com.micrantha.bluebell.app.Log
+import com.micrantha.eyespie.domain.entities.LabelClue
+import com.micrantha.eyespie.domain.entities.LabelProof
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraImage
 import com.micrantha.eyespie.platform.scan.components.AnalyzerCallback

@@ -13,6 +13,10 @@ inputs:
     description: The default password to populate login with
     required: false
     type: string
+  config:
+    description: "Optional base64 encoded environment config"
+    required: false
+    type: string
 outputs:
   android_keystore:
     description: "The decoded keystore as a file"
@@ -28,9 +32,16 @@ runs:
         ruby-version: "3.2"
         bundler-cache: true
 
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
+      with:
+        distribution: "temurin"
+        java-version: "21"
+
     - uses: burrunan/gradle-cache-action@v1
 
     - name: Create android keystore
+      if: inputs.android_keystore != ''
       id: decode
       run: |
         echo -n "${{ inputs.android_keystore }}" | base64 -d > "${{ github.workspace }}/android.keystore"
@@ -41,5 +52,12 @@ runs:
       run: |
         echo "LOGIN_EMAIL=${{ inputs.login_email }}" > "${{ github.workspace }}/.env.local"
         echo "LOGIN_PASSWORD=${{ inputs.login_password }}" >> "${{ github.workspace }}/.env.local"
-        echo "env_file=${{ github.workspace }}/.env.local" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - if: inputs.config != ''
+      run: |
+        echo -n "${{ inputs.config }}" | base64 -d >> "${{ github.workspace }}/.env.local"
+      shell: bash
+
+    - run: echo "env_file=${{ github.workspace }}/.env.local" >> $GITHUB_OUTPUT
       shell: bash

@@ -11,9 +11,9 @@ import com.google.mediapipe.tasks.vision.core.RunningMode.LIVE_STREAM
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenter.ImageSegmenterOptions
 import com.google.mediapipe.tasks.vision.imagesegmenter.ImageSegmenterResult
-import com.micrantha.bluebell.data.Log
-import com.micrantha.eyespie.domain.model.SegmentClue
-import com.micrantha.eyespie.domain.model.SegmentProof
+import com.micrantha.bluebell.app.Log
+import com.micrantha.eyespie.domain.entities.SegmentClue
+import com.micrantha.eyespie.domain.entities.SegmentProof
 import com.micrantha.eyespie.platform.scan.CameraAnalyzerConfig
 import com.micrantha.eyespie.platform.scan.CameraImage
 import com.micrantha.eyespie.platform.scan.baseOptions

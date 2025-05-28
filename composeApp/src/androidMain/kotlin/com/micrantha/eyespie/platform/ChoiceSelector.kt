@@ -5,7 +5,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.micrantha.eyespie.ui.component.Choice
+import com.micrantha.eyespie.core.ui.component.Choice
 
 @Composable
 actual fun ChoiceSelector(
