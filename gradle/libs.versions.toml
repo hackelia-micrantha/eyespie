@@ -37,7 +37,7 @@ voyagerNavigator = "1.0.1"
 tensorflowLiteSupport = "latest.release"
 tensorflowLite = "latest.release"
 mediapipe = "0.20230731"
-mediapipeGenAI = "0.10.24"
+mediapipeGenAI = "0.10.25"
 buildConfig = "v5.6.7"
 mokoMedia = "0.11.0"
 
