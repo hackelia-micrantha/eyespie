@@ -20,7 +20,9 @@ import com.micrantha.eyespie.domain.entities.ImagePath
 import com.micrantha.eyespie.domain.entities.Thing
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun ThingListingCard(
     modifier: Modifier = Modifier,
@@ -60,7 +62,7 @@ private fun GameThingImage(imageUrl: ImagePath) {
 
         KamelImage(
             modifier = Modifier.fillMaxSize(),
-            resource = painter,
+            resource = { painter },
             contentDescription = null
         )
     }

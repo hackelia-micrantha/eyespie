@@ -8,9 +8,11 @@ import com.micrantha.eyespie.graphql.GameListQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node2
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 class GameDomainMapper {
 
     fun list(data: GameListQuery.Node) = Game.Listing(

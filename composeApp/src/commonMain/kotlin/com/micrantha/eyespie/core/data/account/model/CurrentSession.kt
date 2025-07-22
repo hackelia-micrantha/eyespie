@@ -6,6 +6,7 @@ import com.micrantha.eyespie.domain.entities.Session
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlin.time.ExperimentalTime
 
 object CurrentSession {
     private val data = MutableStateFlow<Session?>(null)
@@ -14,6 +15,7 @@ object CurrentSession {
         data.update { value }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun update(value: Location) {
         data.update {
             it?.copy(player = it.player.copy(location = value))

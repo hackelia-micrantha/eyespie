@@ -20,11 +20,13 @@ import com.micrantha.eyespie.features.things.data.model.ThingRequest
 import com.micrantha.eyespie.features.things.data.model.ThingResponse
 import com.micrantha.eyespie.features.things.data.model.toImageEmbedding
 import com.micrantha.eyespie.features.things.data.model.toJsonElement
-import kotlinx.datetime.Clock.System
-import kotlinx.datetime.Instant
+import kotlin.time.Clock.System
+import kotlin.time.Instant
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 class ThingsDomainMapper(
     private val locationMapper: LocationDomainMapper,
     private val clueMapper: ClueDomainMapper

@@ -27,7 +27,9 @@ import eyespie.composeapp.generated.resources.expires_at
 import eyespie.composeapp.generated.resources.players
 import eyespie.composeapp.generated.resources.things
 import org.jetbrains.compose.resources.stringResource
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun GameListCard(game: Game.Listing, dispatch: Dispatch) = Card(
     modifier = Modifier.padding(Dimensions.screen).fillMaxWidth()

@@ -197,9 +197,6 @@ android {
         }
     }
     dependencies {
-        //releaseImplementation(files("libs/release/mobuild-envuscator.aar"))
-        //debugImplementation(files("libs/debug/mobuild-envuscator.aar"))
-        implementation(files("libs/debug/mobuild-envuscator.aar"))
     }
 }
 

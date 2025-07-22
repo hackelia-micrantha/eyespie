@@ -11,10 +11,6 @@ class IOSApplication(
     private val component: AppDelegate
 ) : UIApplicationController {
 
-    init {
-        AppConfigDelegate.load(component.appConfig)
-    }
-
     private val rootViewController: UIViewController by lazy {
         UIApplication.sharedApplication.keyWindow!!.let {
             it.rootViewController!!

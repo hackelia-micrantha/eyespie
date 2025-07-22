@@ -34,9 +34,10 @@ fun EyesPieTheme(
     if (!view.isInEditMode) {
         SideEffect {
             with(view.context as Activity) {
-                this.window.statusBarColor = colorScheme.primary.toArgb()
-                WindowCompat.getInsetsController(this.window, view).isAppearanceLightStatusBars =
-                    darkTheme
+                WindowCompat.getInsetsController(this.window, view).apply {
+                    isAppearanceLightStatusBars = darkTheme
+                    isAppearanceLightNavigationBars = darkTheme.not()
+                }
             }
         }
     }

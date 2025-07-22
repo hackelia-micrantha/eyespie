@@ -5,8 +5,10 @@ import com.micrantha.eyespie.domain.entities.Player
 import com.micrantha.eyespie.domain.entities.Player.Name
 import com.micrantha.eyespie.domain.entities.Player.Score
 import com.micrantha.eyespie.features.players.data.model.PlayerResponse
-import kotlinx.datetime.Instant
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
+@OptIn(ExperimentalTime::class)
 class PlayerDomainMapper(
     private val locationMapper: LocationDomainMapper
 ) {

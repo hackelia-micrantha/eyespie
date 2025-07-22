@@ -2,10 +2,12 @@ package com.micrantha.bluebell.domain.usecase
 
 import androidx.compose.ui.text.intl.Locale
 import com.micrantha.bluebell.platform.Platform
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
+import kotlin.time.ExperimentalTime
 
 class FormatDateTimeUseCase(private val platform: Platform) {
+    @OptIn(ExperimentalTime::class)
     operator fun invoke(instant: Instant): String {
         // TODO: get locale from user prefs
         val locale = Locale.current

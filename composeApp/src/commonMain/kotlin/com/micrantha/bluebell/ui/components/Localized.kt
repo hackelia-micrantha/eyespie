@@ -6,10 +6,12 @@ import androidx.compose.runtime.produceState
 import com.micrantha.bluebell.domain.entities.LocalizedString
 import com.micrantha.bluebell.domain.usecase.FormatDateTimeUseCase
 import com.micrantha.bluebell.ui.screen.LocalScreenContext
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import org.jetbrains.compose.resources.getString
 import org.kodein.di.instance
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun longDateTime(instant: Instant): String {
     val viewContext = LocalScreenContext.current

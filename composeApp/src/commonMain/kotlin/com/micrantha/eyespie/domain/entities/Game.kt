@@ -1,8 +1,10 @@
 package com.micrantha.eyespie.domain.entities
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 data class Game(
     override val id: String,
     override val createdAt: Instant,
