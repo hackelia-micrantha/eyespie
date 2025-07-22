@@ -42,7 +42,7 @@ actual class Platform(
         val instant = Instant.ofEpochSecond(epochSeconds)
         val zoneId = ZoneId.of(timeZone)
         val date = LocalDateTime.ofInstant(instant, zoneId)
-        val formatter = DateTimeFormatter.ofPattern(format, Locale(locale))
+            val formatter = DateTimeFormatter.ofPattern(format, Locale.forLanguageTag(locale))
         return date.format(formatter)
     }
 

@@ -1,5 +1,6 @@
 package com.micrantha.bluebell.ui.components
 
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -15,7 +16,7 @@ fun TabPager(
     content: @Composable (Int, String) -> Unit
 ) {
     var currentIndex by remember { mutableStateOf(0) }
-    TabRow(selectedTabIndex = currentIndex) {
+    SecondaryTabRow(selectedTabIndex = currentIndex) {
         tabs.forEachIndexed { index, title ->
             Tab(
                 currentIndex == index,
