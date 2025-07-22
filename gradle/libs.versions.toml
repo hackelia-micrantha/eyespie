@@ -24,7 +24,7 @@ kodeinDiConf = "7.26.1"
 kotlin = "2.1.20"
 junit = "4.13.2"
 graphql = "4.2.0"
-kotlinxCollectionsImmutable = "0.3.7"
+kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxDatetime = "0.6.2"
 kotlinxSerializationJson = "1.8.1"
@@ -120,4 +120,4 @@ mediapipe-tasks-audio = { module = "com.google.mediapipe:tasks-audio", version.r
 mediapipe-tasks-image-generator = { module = "com.google.mediapipe:tasks-vision-image-generator", version.ref = "mediapipe" }
 mediapipe-tasks-genai = { module = "com.google.mediapipe:tasks-genai", version.ref = "mediapipeGenAI" }
 moko-media = { module = "dev.icerock.moko:media", version.ref = "mokoMedia" }
-build-config = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildConfig" }
+build-config = { module = "com.github.gmazzo.gradle-buildconfig-plugin:com.github.gmazzo.buildconfig.gradle.plugin", version.ref = "buildConfig" }

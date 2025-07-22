@@ -134,7 +134,7 @@ kotlin {
         iosMain.dependencies {
         }
     }
-    task("testClasses")
+    tasks.register("testClasses")
 }
 
 android {

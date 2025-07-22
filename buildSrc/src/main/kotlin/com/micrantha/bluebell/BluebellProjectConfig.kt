@@ -1,7 +1,7 @@
 package com.micrantha.bluebell
 
-import com.github.gmazzo.gradle.plugins.BuildConfigExtension
-import com.github.gmazzo.gradle.plugins.BuildConfigTask
+import com.github.gmazzo.buildconfig.BuildConfigExtension
+import com.github.gmazzo.buildconfig.BuildConfigTask
 import org.gradle.api.Project
 import java.io.FileInputStream
 import java.util.Properties
@@ -82,9 +82,6 @@ fun Project.configureBuilds(config: BluebellConfig) {
         }
 
         generateTask.configure {
-            doFirst {
-                configureBuild()
-            }
             doLast {
                 generateSource(this as BuildConfigTask)
             }
@@ -102,7 +99,7 @@ private val map = mapOf<String, String?>(
     ${entries.joinToString(",\n    ")}
 )
 
-fun ${config.className}.get(key: String): String? {
+internal fun ${config.className}.get(key: String): String? {
     return map[key]
 }    
 """.trimIndent()
