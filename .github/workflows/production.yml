@@ -35,14 +35,9 @@ jobs:
         id: build-config
         with:
           android_keystore: ${{ secrets.ANDROID_STORE_FILE }}
+          config: ${{ secrets.APP_CONFIG }}
           login_email: ${{ inputs.login_email }}
           login_password: ${{ inputs.login_password }}
-
-      - name: Build environment configuration
-        uses: ./.github/actions/mobuild-envuscator
-        with:
-          config: ${{ secrets.APP_CONFIG }}
-          token: ${{ secrets.ENVUSCATOR_PAT }}
 
       - uses: maierj/fastlane-action@v3.1.0
         with:
