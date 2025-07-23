@@ -10,4 +10,10 @@ interface AccountRepository {
     suspend fun loginAnonymous(): Result<Unit>
 
     suspend fun login(email: String, passwd: String): Result<Session>
+
+    suspend fun loginWithGoogle(): Result<Session>
+
+    suspend fun register(email: String, passwd: String): Result<Unit>
+
+    suspend fun registerWithGoogle(): Result<Unit>
 }

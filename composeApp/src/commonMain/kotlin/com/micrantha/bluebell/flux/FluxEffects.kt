@@ -4,15 +4,17 @@ import com.micrantha.bluebell.arch.Action
 import com.micrantha.bluebell.arch.Effect
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlin.concurrent.Volatile
 
 class FluxEffects<State> internal constructor(
-    // typically the screen model scope
     private val scope: CoroutineScope
 ) {
-    private val effects = mutableListOf<Effect<State>>()
+    @Volatile
+    private var effects = emptyList<Effect<State>>()
 
     suspend fun send(action: Action, value: State) {
-        effects.forEach { effect -> effect(action, value) }
+        val currentEffects = effects
+        currentEffects.forEach { effect -> effect(action, value) }
     }
 
     fun dispatch(action: Action, value: State) {
@@ -22,7 +24,8 @@ class FluxEffects<State> internal constructor(
     }
 
 
-    fun apply(effect: Effect<State>) {
-        effects.add(effect)
+    fun apply(effect: Effect<State>): FluxEffects<State> {
+        effects = effects.plus(effect)
+        return this
     }
 }

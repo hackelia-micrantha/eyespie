@@ -6,7 +6,7 @@ import com.micrantha.eyespie.domain.entities.ColorClue
 import com.micrantha.eyespie.domain.entities.Embedding
 import com.micrantha.eyespie.domain.entities.LabelClue
 import com.micrantha.eyespie.domain.entities.Location.Point
-import com.micrantha.eyespie.domain.entities.Player
+import com.micrantha.eyespie.features.players.domain.entities.Player
 import com.micrantha.eyespie.domain.entities.Proof
 import com.micrantha.eyespie.domain.entities.Thing
 import com.micrantha.eyespie.features.scan.data.mapping.ClueDomainMapper

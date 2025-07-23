@@ -12,7 +12,8 @@ class AccountDataRepository(
     private val mapper: AccountDomainMapper,
 ) : AccountRepository {
 
-    override suspend fun session() = remoteSource.account().map { mapper.map(it) }.onSuccess {
+    override suspend fun session() = remoteSource.account()
+        .map(mapper::map).onSuccess {
         currentSession.update(it)
     }
 
@@ -25,4 +26,12 @@ class AccountDataRepository(
     }
 
     override suspend fun loginAnonymous() = remoteSource.loginAnonymous()
+
+    override suspend fun loginWithGoogle() = remoteSource.loginWithGoogle().mapCatching {
+        session().getOrThrow()
+    }
+
+    override suspend fun register(email: String, passwd: String) = remoteSource.register(email, passwd)
+
+    override suspend fun registerWithGoogle() = remoteSource.registerWithGoogle()
 }

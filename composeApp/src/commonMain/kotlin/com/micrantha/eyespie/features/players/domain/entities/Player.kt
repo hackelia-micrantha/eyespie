@@ -1,5 +1,8 @@
-package com.micrantha.eyespie.domain.entities
+package com.micrantha.eyespie.features.players.domain.entities
 
+import com.micrantha.eyespie.domain.entities.Creatable
+import com.micrantha.eyespie.domain.entities.Entity
+import com.micrantha.eyespie.domain.entities.Location
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 

@@ -76,7 +76,7 @@ kotlin {
             implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.cio)
 
-            implementation(libs.supabase.gotrue)
+            implementation(libs.supabase.auth)
             implementation(libs.supabase.postgrest)
             implementation(libs.supabase.apollo.graphql)
             implementation(libs.supabase.storage)
@@ -88,6 +88,8 @@ kotlin {
             implementation(libs.geo.compose)
             implementation(libs.kamel.image)
             implementation(libs.moko.media)
+
+            implementation("org.jetbrains.kotlin:kotlin-reflect")
 
             //implementation("ca.rmen:rhymer:1.2.0")
 
@@ -208,7 +210,7 @@ bluebell {
 
         defaultKeys = listOf(
             "LOGIN_EMAIL",
-            "LOGIN_PASSWORD"
+            "LOGIN_PASSWORD",
         )
     }
     models {
@@ -236,4 +238,3 @@ bluebell {
         }
     }
 }
-

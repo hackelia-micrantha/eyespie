@@ -5,12 +5,11 @@ import com.micrantha.eyespie.domain.entities.Session
 import com.micrantha.eyespie.features.players.data.mapping.PlayerDomainMapper
 
 class AccountDomainMapper(
-    private val mapper: PlayerDomainMapper
 ) {
 
     fun map(data: AccountResponse) = Session(
         accessToken = data.accessToken,
         refreshToken = data.refreshToken,
-        player = mapper.map(data.player)
+        userId = data.userId
     )
 }

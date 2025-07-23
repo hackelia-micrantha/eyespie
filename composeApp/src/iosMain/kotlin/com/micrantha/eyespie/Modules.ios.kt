@@ -20,7 +20,7 @@ import com.micrantha.eyespie.domain.repository.GameRepository
 import com.micrantha.eyespie.domain.repository.LabelRepository
 import com.micrantha.eyespie.domain.repository.LocationRepository
 import com.micrantha.eyespie.domain.repository.MatchRepository
-import com.micrantha.eyespie.domain.repository.PlayerRepository
+import com.micrantha.eyespie.features.players.domain.repository.PlayerRepository
 import com.micrantha.eyespie.domain.repository.RealtimeRepository
 import com.micrantha.eyespie.domain.repository.SegmentRepository
 import com.micrantha.eyespie.domain.repository.StorageRepository

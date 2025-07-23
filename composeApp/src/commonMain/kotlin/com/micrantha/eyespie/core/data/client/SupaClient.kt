@@ -7,8 +7,9 @@ import com.micrantha.eyespie.features.things.data.model.NearbyRequest
 import com.micrantha.eyespie.graphql.GameListQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery
 import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.gotrue.Auth
-import io.github.jan.supabase.gotrue.auth
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.FlowType
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.graphql.GraphQL
 import io.github.jan.supabase.graphql.graphql
 import io.github.jan.supabase.postgrest.Postgrest
@@ -38,7 +39,9 @@ class SupaClient {
 
             install(DatabaseClient)
 
-            install(AuthClient)
+            install(AuthClient) {
+                flowType = FlowType.PKCE
+            }
 
             install(StorageClient)
         }

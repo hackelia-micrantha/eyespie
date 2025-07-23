@@ -6,6 +6,7 @@ import com.micrantha.bluebell.arch.Dispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -29,6 +30,10 @@ class FluxDispatcher internal constructor(
         dispatchScope.launch {
             actions.emit(action)
         }
+    }
+
+    fun cancel() {
+        dispatchScope.cancel()
     }
 
     override suspend fun send(action: Action) {

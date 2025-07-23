@@ -9,17 +9,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.updateAndGet
+import kotlin.concurrent.Volatile
 
 class FluxStore<State> internal constructor(
     initialState: State,
     override val dispatchScope: CoroutineScope
 ) : Store<State> {
-    private val reducers = mutableListOf<Reducer<State>>()
+    @Volatile
+    private var reducers = emptyList<Reducer<State>>()
     private val current = MutableStateFlow(initialState)
     private val effects = FluxEffects<State>(dispatchScope)
 
     private fun update(action: Action) = current.updateAndGet { state ->
-        reducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
+        val currentReducers = reducers
+        currentReducers.fold(state) { next, reducer -> reducer.reduce(next, action) }
     }
 
     override fun dispatch(action: Action) {
@@ -33,7 +36,7 @@ class FluxStore<State> internal constructor(
     }
 
     override fun addReducer(reducer: Reducer<State>): FluxStore<State> {
-        reducers.add(reducer)
+        reducers = reducers + reducer
         return this
     }
 

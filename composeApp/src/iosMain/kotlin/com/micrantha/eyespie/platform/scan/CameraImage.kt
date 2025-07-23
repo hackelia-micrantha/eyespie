@@ -35,7 +35,7 @@ import platform.CoreVideo.kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange
 import platform.ImageIO.CGImagePropertyOrientation
 
 @OptIn(ExperimentalForeignApi::class)
-actual data class CameraImage constructor(
+actual data class CameraImage(
     internal val data: CVImageBufferRef,
     val orientation: CGImagePropertyOrientation
 ) {

@@ -1,5 +1,6 @@
 package com.micrantha.eyespie.domain.entities
 
+import com.micrantha.eyespie.features.players.domain.entities.Player
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 

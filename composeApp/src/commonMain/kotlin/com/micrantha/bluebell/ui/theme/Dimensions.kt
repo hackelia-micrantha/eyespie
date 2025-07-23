@@ -11,6 +11,18 @@ object Dimensions {
 
     val content = 12.dp
 
+    object Padding {
+        val large = 48.dp
+
+        val mediumLarge = 36.dp
+
+        val medium = 24.dp
+
+        val smallMedium = 18.dp
+
+        val small = 12.dp
+    }
+
     object Text {
         val Large = 26.sp
     }

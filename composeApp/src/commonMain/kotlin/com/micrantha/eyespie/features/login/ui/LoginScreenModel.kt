@@ -2,6 +2,9 @@ package com.micrantha.eyespie.ui.login
 
 import com.micrantha.bluebell.ui.screen.MappedScreenModel
 import com.micrantha.bluebell.ui.screen.ScreenContext
+import com.micrantha.eyespie.features.login.ui.LoginEnvironment
+import com.micrantha.eyespie.features.login.ui.LoginState
+import com.micrantha.eyespie.features.login.ui.LoginUiState
 
 class LoginScreenModel(
     screenContext: ScreenContext,
@@ -10,7 +13,7 @@ class LoginScreenModel(
 ) : MappedScreenModel<LoginState, LoginUiState>(
     screenContext,
     initialState,
-    LoginEnvironment::map
+    environment::map
 ) {
 
     init {

@@ -18,4 +18,7 @@
 -dontwarn org.tensorflow.lite.gpu.GpuDelegateFactory$Options$GpuBackend
 -dontwarn org.tensorflow.lite.gpu.GpuDelegateFactory$Options
 
--keep class com.micrantha.mobuildenvuscator.MobuildEnvuscator { native <methods>; }
+-keep class io.supabase.** { *; }
+-keepclassmembers class * {
+    @io.supabase.* <methods>;
+}
