@@ -5,9 +5,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import com.micrantha.bluebell.ui.components.message.icon
 import com.micrantha.bluebell.ui.model.UiMessage
 import com.micrantha.bluebell.ui.model.UiMessage.Type.Popup
-import com.micrantha.bluebell.ui.components.message.icon
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

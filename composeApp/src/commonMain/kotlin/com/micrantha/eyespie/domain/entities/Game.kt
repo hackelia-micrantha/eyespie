@@ -1,9 +1,9 @@
 package com.micrantha.eyespie.domain.entities
 
 import com.micrantha.eyespie.features.players.domain.entities.Player
-import kotlin.time.Instant
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
 data class Game(

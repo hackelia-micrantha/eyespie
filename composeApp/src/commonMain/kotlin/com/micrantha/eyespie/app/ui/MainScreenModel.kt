@@ -9,10 +9,8 @@ import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.screen.navigate
 import com.micrantha.eyespie.app.ui.MainAction.Load
 import com.micrantha.eyespie.domain.repository.AccountRepository
-import com.micrantha.eyespie.features.dashboard.ui.DashboardScreen
 import com.micrantha.eyespie.features.login.ui.LoginScreen
 import com.micrantha.eyespie.features.players.domain.usecase.LoadSessionPlayerUseCase
-import com.micrantha.eyespie.features.players.ui.create.NewPlayerScreen
 import kotlinx.coroutines.launch
 
 class MainScreenModel(

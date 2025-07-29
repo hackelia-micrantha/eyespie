@@ -1,6 +1,5 @@
 package com.micrantha.eyespie.core.data.account.source
 
-import com.micrantha.eyespie.app.AppConfig
 import com.micrantha.eyespie.core.data.account.model.AccountResponse
 import com.micrantha.eyespie.core.data.client.SupaClient
 import io.github.jan.supabase.auth.providers.Google

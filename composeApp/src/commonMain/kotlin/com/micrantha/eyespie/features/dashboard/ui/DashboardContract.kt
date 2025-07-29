@@ -2,9 +2,9 @@ package com.micrantha.eyespie.features.dashboard.ui
 
 import com.micrantha.bluebell.ui.model.UiResult
 import com.micrantha.eyespie.domain.entities.Location
-import com.micrantha.eyespie.features.players.domain.entities.PlayerList
 import com.micrantha.eyespie.domain.entities.Thing
 import com.micrantha.eyespie.domain.entities.ThingList
+import com.micrantha.eyespie.features.players.domain.entities.PlayerList
 
 data class DashboardState(
     val playerID: String? = null,

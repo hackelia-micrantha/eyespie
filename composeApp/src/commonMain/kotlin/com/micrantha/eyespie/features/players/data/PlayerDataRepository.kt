@@ -1,8 +1,8 @@
 package com.micrantha.eyespie.features.players.data
 
-import com.micrantha.eyespie.features.players.domain.repository.PlayerRepository
 import com.micrantha.eyespie.features.players.data.mapping.PlayerDomainMapper
 import com.micrantha.eyespie.features.players.data.source.PlayerRemoteSource
+import com.micrantha.eyespie.features.players.domain.repository.PlayerRepository
 
 class PlayerDataRepository(
     private val remoteSource: PlayerRemoteSource,

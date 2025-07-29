@@ -1,10 +1,10 @@
 package com.micrantha.eyespie.features.players.data.mapping
 
 import com.micrantha.eyespie.core.data.system.mapping.LocationDomainMapper
+import com.micrantha.eyespie.features.players.data.model.PlayerResponse
 import com.micrantha.eyespie.features.players.domain.entities.Player
 import com.micrantha.eyespie.features.players.domain.entities.Player.Name
 import com.micrantha.eyespie.features.players.domain.entities.Player.Score
-import com.micrantha.eyespie.features.players.data.model.PlayerResponse
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 

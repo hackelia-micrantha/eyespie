@@ -35,8 +35,6 @@ import eyespie.composeapp.generated.resources.next_turn
 import eyespie.composeapp.generated.resources.players
 import eyespie.composeapp.generated.resources.things
 import org.jetbrains.compose.resources.stringResource
-import org.kodein.di.DI
-import org.kodein.di.DIAware
 import kotlin.time.ExperimentalTime
 
 data class GameDetailsScreen(private val context: ScreenContext, private val arg: GameDetailScreenArg) : ScaffoldScreen(context),

@@ -1,8 +1,8 @@
 package com.micrantha.eyespie.core.data.account.model
 
 import com.micrantha.eyespie.domain.entities.Location
-import com.micrantha.eyespie.features.players.domain.entities.Player
 import com.micrantha.eyespie.domain.entities.Session
+import com.micrantha.eyespie.features.players.domain.entities.Player
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

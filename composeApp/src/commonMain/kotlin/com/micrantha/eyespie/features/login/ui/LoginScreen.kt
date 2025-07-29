@@ -52,9 +52,9 @@ import com.micrantha.eyespie.ui.login.LoginScreenModel
 import eyespie.composeapp.generated.resources.app_title
 import eyespie.composeapp.generated.resources.email
 import eyespie.composeapp.generated.resources.login
-import eyespie.composeapp.generated.resources.login_with_google
 import eyespie.composeapp.generated.resources.login_email_placeholder
 import eyespie.composeapp.generated.resources.login_password_placeholder
+import eyespie.composeapp.generated.resources.login_with_google
 import eyespie.composeapp.generated.resources.password
 import eyespie.composeapp.generated.resources.register
 import kotlinx.coroutines.delay

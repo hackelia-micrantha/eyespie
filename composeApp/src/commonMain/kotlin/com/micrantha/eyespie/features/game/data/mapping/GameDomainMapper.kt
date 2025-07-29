@@ -2,15 +2,15 @@ package com.micrantha.eyespie.features.game.data.mapping
 
 import com.micrantha.eyespie.domain.entities.Game
 import com.micrantha.eyespie.domain.entities.Game.Limits
-import com.micrantha.eyespie.features.players.domain.entities.Player
 import com.micrantha.eyespie.domain.entities.Thing
+import com.micrantha.eyespie.features.players.domain.entities.Player
 import com.micrantha.eyespie.graphql.GameListQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node
 import com.micrantha.eyespie.graphql.GameNodeQuery.Node2
-import kotlin.time.Instant
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
 class GameDomainMapper {

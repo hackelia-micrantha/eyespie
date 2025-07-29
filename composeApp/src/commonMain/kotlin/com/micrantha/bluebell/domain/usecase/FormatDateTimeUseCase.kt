@@ -2,9 +2,9 @@ package com.micrantha.bluebell.domain.usecase
 
 import androidx.compose.ui.text.intl.Locale
 import com.micrantha.bluebell.platform.Platform
-import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
 
 class FormatDateTimeUseCase(private val platform: Platform) {
     @OptIn(ExperimentalTime::class)
