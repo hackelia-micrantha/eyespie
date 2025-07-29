@@ -1,4 +1,4 @@
-package com.micrantha.eyespie.ui.scan.view
+package com.micrantha.eyespie.features.scan.ui.capture
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Rect
@@ -11,7 +11,7 @@ import com.micrantha.eyespie.ui.PreviewContext
 
 @Preview(showBackground = true, backgroundColor = 0xFF, widthDp = 200, heightDp = 400)
 @Composable
-fun ScanPreview() = PreviewContext(
+fun ScanCapturePreview() = PreviewContext(
     ScanUiState(
         clues = listOf(
             "clue 1",
@@ -31,8 +31,9 @@ fun ScanPreview() = PreviewContext(
             override fun DrawScope.onDraw() {
                 drawRect(Color.Gray)
             }
-        }
+        },
+        busy = false
     )
 ) {
-    ScanScreen()
+    ScanCaptureScreen()
 }

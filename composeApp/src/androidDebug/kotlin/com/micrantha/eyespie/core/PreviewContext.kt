@@ -5,11 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import cafe.adriel.voyager.core.screen.Screen
-import com.micrantha.bluebell.domain.arch.Action
-import com.micrantha.bluebell.domain.arch.Dispatch
-import com.micrantha.bluebell.domain.arch.Dispatcher
-import com.micrantha.bluebell.domain.i18n.LocalizedRepository
-import com.micrantha.bluebell.domain.i18n.LocalizedString
+import com.micrantha.bluebell.arch.Action
+import com.micrantha.bluebell.arch.Dispatch
+import com.micrantha.bluebell.arch.Dispatcher
+import com.micrantha.bluebell.domain.entities.LocalizedString
+import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.ui.components.Router
 import com.micrantha.bluebell.ui.components.Router.Options
@@ -18,14 +18,17 @@ import com.micrantha.bluebell.ui.screen.LocalDispatcher
 import com.micrantha.bluebell.ui.screen.LocalScreenContext
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.eyespie.androidDependencies
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import okio.Path
 import org.kodein.di.DI
 
 class PreviewContext(
-    context: Context
+    context: Context, override val dispatchScope: CoroutineScope = MainScope()
 ) : ScreenContext, Dispatch {
     override val i18n: LocalizedRepository = object : LocalizedRepository {
-        override fun resource(str: LocalizedString, vararg args: Any?): String = str.key
+        override fun string(str: LocalizedString, vararg args: Any): String = str.key
+        override fun string(str: LocalizedString) = str.key
 
         override fun format(
             epochSeconds: Long,
@@ -50,6 +53,8 @@ class PreviewContext(
     override val dispatcher: Dispatcher = object : Dispatcher {
         override fun dispatch(action: Action) = Unit
         override suspend fun send(action: Action) = Unit
+        override val dispatchScope: CoroutineScope
+            get() = this.dispatchScope
     }
 
     override suspend fun send(action: Action) = dispatcher.send(action)
@@ -64,7 +69,7 @@ class PreviewContext(
 }
 
 @Composable
-fun <State> PreviewContext(state: State, renderer: (ScreenContext) -> StateRenderer<State>) {
+fun <State> PreviewContext(state: State, renderer: @Composable (ScreenContext) -> StateRenderer<State>) {
 
     val screenContext = PreviewContext(LocalContext.current)
 

@@ -1,8 +1,8 @@
-package com.micrantha.eyespie.ui.login
+package com.micrantha.eyespie.features.login.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.micrantha.bluebell.domain.model.Ready
+import com.micrantha.bluebell.ui.model.Ready
 import com.micrantha.eyespie.ui.PreviewContext
 
 @Preview
@@ -11,7 +11,9 @@ fun LoginPreview() = PreviewContext(
     LoginUiState(
         email = "account@example.com",
         password = "P@ssw0rd123",
-        status = Ready()
+        status = Ready(),
+        isEmailMasked = false,
+        isPasswordMasked = true
     )
 ) {
     LoginScreen()

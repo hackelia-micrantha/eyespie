@@ -27,6 +27,7 @@ import com.micrantha.bluebell.app.Scaffolding
 import com.micrantha.bluebell.app.Scaffolding.CanGoBack
 import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.bluebell.arch.Dispatch
+import com.micrantha.bluebell.ui.components.StateRenderer
 import com.micrantha.bluebell.ui.screen.ScaffoldScreen
 import com.micrantha.bluebell.ui.screen.ScreenContext
 import com.micrantha.bluebell.ui.theme.Dimensions
@@ -45,9 +46,9 @@ import eyespie.composeapp.generated.resources.new_thing
 import org.jetbrains.compose.resources.stringResource
 
 class ScanEditScreen(
-    private val proof: Proof,
-    context: ScreenContext
-) : ScaffoldScreen(context) {
+    context: ScreenContext,
+    private val proof: Proof
+) : ScaffoldScreen(context), StateRenderer<ScanEditUiState> {
 
     @Composable
     override fun Render() {
@@ -79,7 +80,7 @@ class ScanEditScreen(
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    private fun Render(state: ScanEditUiState, dispatch: Dispatch) {
+    override fun Render(state: ScanEditUiState, dispatch: Dispatch) {
 
         Box(
             modifier = Modifier.fillMaxSize().padding(Dimensions.screen),
