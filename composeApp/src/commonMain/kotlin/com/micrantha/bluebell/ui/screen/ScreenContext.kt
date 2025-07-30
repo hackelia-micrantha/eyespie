@@ -11,6 +11,7 @@ import com.micrantha.bluebell.ui.components.Router.Options
 import com.micrantha.bluebell.ui.components.Router.Options.None
 import org.kodein.di.DI
 import org.kodein.di.DIAware
+import org.kodein.di.factory
 import org.kodein.di.provider
 
 interface ScreenContext : DIAware {
@@ -51,6 +52,6 @@ inline fun <reified T : Screen, reified A : Any> ScreenContext.navigate(
     options: Options = None,
     arg: A
 ) {
-    val screen: () -> T by di.provider(arg = arg)
-    router.navigate(screen(), options)
+    val screen: (arg: A) -> T by di.factory<A, T>()
+    router.navigate(screen(arg), options)
 }

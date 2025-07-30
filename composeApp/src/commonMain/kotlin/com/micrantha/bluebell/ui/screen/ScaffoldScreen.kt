@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,7 @@ import com.micrantha.bluebell.app.navi.NavAction
 import com.micrantha.bluebell.ui.components.rememberConnectivityStatus
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.core.ui.navi.NavigationAction
+import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.instance
 
@@ -41,8 +43,6 @@ abstract class ScaffoldScreen(
     private val context: ScreenContext
 ): Screen, DIAware by context {
 
-    val screenModel: ScaffoldScreenModel by instance()
-
     @Composable
     abstract fun Render()
 
@@ -59,6 +59,13 @@ abstract class ScaffoldScreen(
         val scaffold by screenModel.state.collectAsState()
 
         Scaffold(
+            floatingActionButton = {
+                scaffold.floatingActionButton?.let {
+                    NavigationAction(
+                        navAction = it
+                    )
+                }
+            },
             topBar = {
                 TopAppBar(
                     modifier = Modifier.shadow(Dimensions.content),

@@ -46,7 +46,7 @@ sealed interface DashboardAction {
 
     data object LoadError : DashboardAction
 
-    data class Loaded(val things: ThingList, val friends: PlayerList, val players: PlayerList) :
+    data class Loaded(val nearbyThings: ThingList, val nearbyPlayers: PlayerList, val friends: PlayerList) :
         DashboardAction
 
     data object AddFriendClicked : DashboardAction

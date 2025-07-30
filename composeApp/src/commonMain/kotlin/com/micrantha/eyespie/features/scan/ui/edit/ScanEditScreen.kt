@@ -3,10 +3,11 @@ package com.micrantha.eyespie.features.scan.ui.edit
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
@@ -83,23 +84,22 @@ class ScanEditScreen(
     override fun Render(state: ScanEditUiState, dispatch: Dispatch) {
 
         Box(
-            modifier = Modifier.fillMaxSize().padding(Dimensions.screen),
-            contentAlignment = Alignment.TopCenter
+            modifier = Modifier.fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier.align(Alignment.TopCenter)
-            ) {
-                state.image?.let {
-                    Image(
-                        modifier = Modifier.size(Dimensions.Image.placeholder)
-                            .align(Alignment.CenterHorizontally),
-                        painter = it,
-                        contentDescription = null,
-                    )
-                }
+            state.image?.let {
+                Image(
+                    modifier = Modifier.fillMaxSize(),
+                    painter = it,
+                    contentDescription = null,
+                )
+            }
+
+            Column(modifier = Modifier.align(Alignment.BottomCenter)
+                .padding(Dimensions.content)
+                .fillMaxWidth()) {
+
                 OutlinedTextField(
                     modifier = Modifier
-                        .padding(bottom = Dimensions.content)
                         .fillMaxWidth(),
                     value = state.name,
                     onValueChange = { dispatch(NameChanged(it)) },
@@ -110,6 +110,7 @@ class ScanEditScreen(
                 )
 
                 if (state.labels.isNotEmpty()) {
+                    Spacer(Modifier.sizeIn(Dimensions.content))
                     ChoiceField(
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "What") },
@@ -134,6 +135,7 @@ class ScanEditScreen(
                 }
 
                 if (state.colors.isNotEmpty()) {
+                    Spacer(Modifier.sizeIn(Dimensions.content))
                     ChoiceField(
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Color") },
@@ -153,14 +155,16 @@ class ScanEditScreen(
                         dispatch(ColorChanged(choice))
                     }
                 }
-            }
-            Button(
-                enabled = state.enabled,
-                modifier = Modifier.align(Alignment.BottomCenter).fillMaxWidth()
-                    .padding(Dimensions.content),
-                onClick = { dispatch(SaveScanEdit) }
-            ) {
-                Text("Save")
+
+                Spacer(Modifier.sizeIn(Dimensions.content))
+
+                Button(
+                    enabled = state.enabled,
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { dispatch(SaveScanEdit) }
+                ) {
+                    Text("Save")
+                }
             }
         }
     }

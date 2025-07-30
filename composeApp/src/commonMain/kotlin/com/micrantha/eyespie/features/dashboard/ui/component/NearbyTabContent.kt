@@ -35,7 +35,7 @@ fun NearbyTabContent(
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-        stickyHeader(key = tab.things.data) {
+        stickyHeader {
             ListHeader(label = stringResource(S.things))
         }
         itemsIndexed(

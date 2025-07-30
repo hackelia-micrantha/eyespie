@@ -13,6 +13,7 @@ import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.framework.image.MediaImageBuilder
 import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions
 import com.micrantha.bluebell.platform.toByteArray
+import androidx.core.graphics.createBitmap
 
 actual class CameraImage(
     private var data: Image? = null,
@@ -67,7 +68,7 @@ actual class CameraImage(
     fun toBitmap(): Bitmap {
         if (bitmapBuffer != null) return bitmapBuffer!!
 
-        val result = Bitmap.createBitmap(_width, _height, Bitmap.Config.ARGB_8888).apply {
+        val result = createBitmap(_width, _height).apply {
             copyPixelsFromBuffer(data!!.planes[0].buffer)
         }
 

@@ -7,14 +7,13 @@ import org.kodein.di.on
 
 class ScanCaptureScreenModel(
     context: ScreenContext,
+    environment: ScanCaptureEnvironment,
     mapper: ScanCaptureStateMapper,
 ) : MappedScreenModel<ScanState, ScanUiState>(
     context,
     ScanState(),
     mapper::map
 ) {
-    private val environment by di.on(this).instance<ScanCaptureEnvironment>()
-
     init {
         store.addReducer(environment::reduce).applyEffect(environment::invoke)
     }

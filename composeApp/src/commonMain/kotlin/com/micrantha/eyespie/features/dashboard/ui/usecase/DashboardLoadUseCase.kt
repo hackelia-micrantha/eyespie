@@ -6,6 +6,7 @@ import com.micrantha.eyespie.domain.entities.Location.Point
 import com.micrantha.eyespie.domain.repository.ThingRepository
 import com.micrantha.eyespie.features.dashboard.ui.DashboardAction.Loaded
 import com.micrantha.eyespie.features.players.domain.repository.PlayerRepository
+import com.micrantha.eyespie.features.players.domain.entities.Player
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 
@@ -19,31 +20,33 @@ class DashboardLoadUseCase(
         val location = player.location?.point
 
         combine(
-            flow = things(location, player.id),
-            flow2 = friends,
-            flow3 = players
-        ) { things, friends, players ->
-            Loaded(things, friends, players)
+            flow = if (location != null) things(location) else flow { emit(emptyList()) },
+            flow2 = if (location != null) players(location) else flow { emit(emptyList()) },
+            flow3 = friends,
+        ) { nearbyThings, nearbyPlayers, friends ->
+            Loaded(nearbyThings, nearbyPlayers, friends)
         }
     }
 
-    private fun things(location: Point?, playerID: String) = flow {
-        val res = if (location != null) {
-            thingsRepository.nearby(location = location)
-        } else {
-            thingsRepository.things(playerID)
-        }
-        res.onSuccess { emit(it) }
+    private fun things(location: Point) = flow {
+        thingsRepository.nearby(location = location)
+            .onSuccess { emit(it) }
+            .onFailure { emit(emptyList()) }
+    }
+
+    private fun things(playerID: String) = flow {
+        thingsRepository.things(playerID)
+            .onSuccess { emit(it) }
+            .onFailure { emit(emptyList()) }
+    }
+
+    private fun players(location: Point) = flow {
+        playerRepository.nearby(location = location)
+            .onSuccess { emit(it) }
+            .onFailure { emit(emptyList()) }
     }
 
     private val friends = flow {
-        playerRepository.players()
-            .onSuccess { emit(it) }
-    }
-
-
-    private val players = flow {
-        playerRepository.players()
-            .onSuccess { emit(it) }
+        emit(emptyList<Player.Listing>())
     }
 }

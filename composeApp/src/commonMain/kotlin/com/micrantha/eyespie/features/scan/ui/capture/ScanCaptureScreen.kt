@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Save
@@ -69,8 +70,8 @@ class ScanCaptureScreen : Screen, StateRenderer<ScanUiState> {
         ) {
             when {
                 state.busy -> LoadingContent()
-                state.capture != null -> renderCapture(state, dispatch)
-                else -> renderCamera(state, dispatch)
+                state.capture != null -> RenderCapture(state, dispatch)
+                else -> RenderCamera(state, dispatch)
             }
 
         }
@@ -78,7 +79,7 @@ class ScanCaptureScreen : Screen, StateRenderer<ScanUiState> {
 }
 
 @Composable
-private fun BoxWithConstraintsScope.renderCamera(
+private fun BoxWithConstraintsScope.RenderCamera(
     state: ScanUiState,
     dispatch: Dispatch
 ) {
@@ -100,21 +101,31 @@ private fun BoxWithConstraintsScope.renderCamera(
         dispatch.send(it)
     }
 
-    renderClues(state, dispatch)
+    IconButton(
+        modifier = Modifier.align(Alignment.BottomCenter).padding(Dimensions.content),
+        enabled = state.enabled,
+        onClick = { dispatch(SaveScan) }
+    ) {
+        Icon(
+            imageVector = Icons.Default.Camera,
+            tint = MaterialTheme.colorScheme.onSurface,
+            contentDescription = null
+        )
+    }
 }
 
 @Composable
-private fun BoxWithConstraintsScope.renderCapture(state: ScanUiState, dispatch: Dispatch) {
+private fun BoxWithConstraintsScope.RenderCapture(state: ScanUiState, dispatch: Dispatch) {
     Image(
         modifier = Modifier.align(Alignment.TopCenter).fillMaxSize(),
         painter = state.capture!!,
         contentDescription = null
     )
-    renderClues(state, dispatch)
+    RenderClues(state, dispatch)
 }
 
 @Composable
-private fun BoxWithConstraintsScope.renderClues(state: ScanUiState, dispatch: Dispatch) {
+private fun BoxWithConstraintsScope.RenderClues(state: ScanUiState, dispatch: Dispatch) {
 
     if (state.overlays.isNotEmpty()) {
         ScannedOverlays(

@@ -1,6 +1,7 @@
 package com.micrantha.eyespie.features.players.data.source
 
 import com.micrantha.eyespie.core.data.client.SupaClient
+import com.micrantha.eyespie.domain.entities.Location
 import com.micrantha.eyespie.features.players.data.model.PlayerResponse
 
 class PlayerRemoteSource(
@@ -34,6 +35,17 @@ class PlayerRemoteSource(
             "nick_name" to nickName
         ))
         Result.success(Unit)
+    } catch (err: Throwable) {
+        Result.failure(err)
+    }
+
+    suspend fun nearby(location: Location.Point) = try {
+        val result = supaClient.players().select {
+            filter {
+                eq("location", location)
+            }
+        }.decodeAs<List<PlayerResponse>>()
+        Result.success(result)
     } catch (err: Throwable) {
         Result.failure(err)
     }

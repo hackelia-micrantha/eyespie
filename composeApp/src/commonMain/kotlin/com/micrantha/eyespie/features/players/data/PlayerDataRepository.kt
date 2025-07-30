@@ -1,5 +1,6 @@
 package com.micrantha.eyespie.features.players.data
 
+import com.micrantha.eyespie.domain.entities.Location
 import com.micrantha.eyespie.features.players.data.mapping.PlayerDomainMapper
 import com.micrantha.eyespie.features.players.data.source.PlayerRemoteSource
 import com.micrantha.eyespie.features.players.domain.repository.PlayerRepository
@@ -10,6 +11,10 @@ class PlayerDataRepository(
 ) : PlayerRepository {
 
     override suspend fun players() = remoteSource.players().map {
+        it.map(mapper::list)
+    }
+
+    override suspend fun nearby(location: Location.Point) = remoteSource.nearby(location).map {
         it.map(mapper::list)
     }
 

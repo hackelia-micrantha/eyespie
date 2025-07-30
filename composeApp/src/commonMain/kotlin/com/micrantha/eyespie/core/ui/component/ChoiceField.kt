@@ -51,7 +51,7 @@ fun ChoiceField(
             trailingIcon = {
                 Row {
                     Icon(
-                        modifier = Modifier.padding(end = Dimensions.content)
+                        modifier = Modifier.padding(end = Dimensions.Padding.small)
                             .clickable {
                                 active = active.not()
                                 if (active.not()) {

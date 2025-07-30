@@ -64,8 +64,8 @@ class DashboardEnvironment(
         return when (action) {
             is Loaded -> state.copy(
                 status = Ready(),
-                things = action.things,
-                players = action.players,
+                things = action.nearbyThings,
+                players = action.nearbyPlayers,
                 friends = action.friends
             )
 

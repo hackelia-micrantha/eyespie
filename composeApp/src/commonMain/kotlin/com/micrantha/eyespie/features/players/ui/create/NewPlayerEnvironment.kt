@@ -68,6 +68,7 @@ class NewPlayerEnvironment(
                 state.lastName,
                 state.nickName
             ).onSuccess {
+                currentSession.update(it)
                 context.navigate<DashboardScreen>(Router.Options.Replace)
             }.onFailure {
                 dispatch(Action.OnError(it))
