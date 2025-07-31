@@ -1,3 +1,5 @@
+import com.micrantha.bluebell.BluebellDownload
+
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -213,13 +215,13 @@ bluebell {
             "LOGIN_PASSWORD",
         )
     }
-    models {
-        files = mapOf(
-            "classification/image/efficientnet_lite0.tflite" to "classification/image.tflite",
-            "detection/image/efficientdet_lite0.tflite" to "detection/image.tflite",
-            "embedding/image/mobilenet_v3_small.tflite" to "embedding/image.tflite",
-            "segmentation/deeplab_v3.tflite" to "segmentation/image.tflite"
-        )
+    assets {
+        downloads {
+            create("mobilenet_v3_lite") {
+                url = "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/1/mobilenet_v3_small.tflite"
+                destination = "models/embedding/image_lite.tflite"
+            }
+        }
     }
     graphql {
         serviceName = "eyespie"

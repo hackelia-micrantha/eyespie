@@ -13,7 +13,7 @@ open class BluebellPlugin : Plugin<Project> {
 
         afterEvaluate {
             configureBuilds(bluebell.config)
-            configureModels(bluebell.models)
+            configureAssets(bluebell.assets)
             configureGraphql(bluebell.graphql, bluebell.config)
         }
     }

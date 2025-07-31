@@ -1,5 +1,12 @@
 package com.micrantha.bluebell
 
+import org.gradle.api.NamedDomainObjectContainer
+import org.gradle.api.model.ObjectFactory
+import org.gradle.api.provider.Property
+import org.gradle.kotlin.dsl.domainObjectContainer
+import org.gradle.kotlin.dsl.property
+import javax.inject.Inject
+
 
 open class BluebellConfig {
     var packageName: String = "com.micrantha.bluebell.config"
@@ -20,15 +27,26 @@ open class GraphqlConfig {
     var headers: Map<String, String> = emptyMap()
 }
 
-open class BluebellModels {
-    var outputPaths: Array<String> = arrayOf(
-        "composeApp/src/androidMain/assets/models",
-        "iosApp/iosApp/Models"
-    )
-    var downloadPath: String = "models"
-
-    //var ids: List<String> = emptyList()
-    var files: Map<String, String> = emptyMap()
+abstract class BluebellAssets @Inject constructor(objects: ObjectFactory) {
+    var downloads = objects.domainObjectContainer(BluebellDownload::class)
+    val copies: List<BluebellCopy> = emptyList()
 }
+
+abstract class BluebellDownload @Inject constructor(val name: String) {
+    abstract var url: String
+    abstract var destination: String
+}
+
+//data class BluebellDownload(
+//    val url: String,
+//    val destination: String,
+//    val id: String
+//)
+
+data class BluebellCopy(
+    val source: String,
+    val destination: String,
+    val id: String
+)
 
 
