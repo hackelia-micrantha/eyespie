@@ -1,3 +1,4 @@
+
 import androidx.compose.ui.window.ComposeUIViewController
 import com.micrantha.eyespie.AppDelegate
 import com.micrantha.eyespie.UIApplicationController
@@ -34,5 +35,4 @@ class IOSApplication(
     override fun finish(
         viewController: UIViewController
     ) = Unit
-
 }

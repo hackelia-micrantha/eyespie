@@ -8,12 +8,12 @@ import androidx.annotation.OptIn
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.core.graphics.createBitmap
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.MPImage
 import com.google.mediapipe.framework.image.MediaImageBuilder
 import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions
 import com.micrantha.bluebell.platform.toByteArray
-import androidx.core.graphics.createBitmap
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 
@@ -22,7 +22,7 @@ actual class CameraImage @kotlin.OptIn(ExperimentalTime::class) constructor(
     private var _bitmap: Bitmap? = null,
     private var _width: Int,
     private var _height: Int,
-    private var _rotation: Int,
+    private var _rotation: Int = 0,
     private var _timestamp: Long = Clock.System.now().epochSeconds,
     private var regionOfInterest: RectF? = null,
 ) {
@@ -45,6 +45,24 @@ actual class CameraImage @kotlin.OptIn(ExperimentalTime::class) constructor(
         regionOfInterest = region ?: regionOfInterest
         _image = image.image
         _bitmap = null
+        imageBitmapBuffer = null
+        mediaImage = null
+    }
+
+    @kotlin.OptIn(ExperimentalTime::class)
+    fun copy(
+        bitmap: Bitmap,
+        rotation: Int = 0,
+        timestamp: Long = Clock.System.now().epochSeconds,
+        region: RectF? = null
+    ) {
+        _width = bitmap.width
+        _height = bitmap.height
+        _rotation = rotation
+        _timestamp = timestamp
+        regionOfInterest = region ?: regionOfInterest
+        _image = null
+        _bitmap = bitmap
         imageBitmapBuffer = null
         mediaImage = null
     }

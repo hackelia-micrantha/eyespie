@@ -1,8 +1,10 @@
 package com.micrantha.eyespie
 
 import android.content.Context
+import com.micrantha.bluebell.data.download.BackgroundDownloadManager
 import com.micrantha.bluebell.get
 import com.micrantha.bluebell.platform.AndroidNetworkMonitor
+import com.micrantha.bluebell.platform.Notifications
 import com.micrantha.bluebell.platform.Platform
 import com.micrantha.eyespie.platform.scan.analyzer.ColorCaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.analyzer.DetectCaptureAnalyzer
@@ -24,6 +26,10 @@ fun androidDependencies(
     bindSingletonOf(::Platform)
 
     bindProviderOf(::AndroidNetworkMonitor)
+
+    bindProviderOf(::BackgroundDownloadManager)
+
+    bindProviderOf(::Notifications)
 
     bindProvider {
         LabelCaptureAnalyzer(get())

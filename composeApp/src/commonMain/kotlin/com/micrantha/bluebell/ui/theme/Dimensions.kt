@@ -37,4 +37,11 @@ object Dimensions {
         val placeholder = 200.dp
         val thumbnail = 80.dp
     }
+
+    object Border {
+        val small = 2.dp
+        val medium = 6.dp
+        val mediumLarge = 8.dp
+        val large = 12.dp
+    }
 }

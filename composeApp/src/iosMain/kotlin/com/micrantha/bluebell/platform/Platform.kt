@@ -1,13 +1,11 @@
 package com.micrantha.bluebell.platform
 
-import com.micrantha.bluebell.domain.entities.LocalizedString
 import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import com.micrantha.eyespie.AppDelegate
 import okio.FileSystem
 import okio.Path
 import okio.buffer
 import okio.use
-import platform.Foundation.NSBundle
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSLocale
@@ -17,37 +15,15 @@ import platform.Foundation.timeZoneWithName
 import platform.UIKit.UIDevice
 import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
-com.micrantha.bluebell.domain.entities.LocalizedString
-import com.micrantha.eyespie.AppDelegate
-import okio.FileSystem
-import okio.Path
-import okio.buffer
-import okio.use
-import platform.Foundation.NSBundle
-import platform.Foundation.NSDate
-import platform.Foundation.NSDateFormatter
-import platform.Foundation.NSLocale
-import platform.Foundation.NSTimeZone
-import platform.Foundation.dateWithTimeIntervalSince1970
-import platform.Foundation.timeZoneWithName
-import platform.UIKit.UIDevice
-import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
-actual class Platform(app: AppDelegate) : LocalizedRepository, BluebellFileSystem {
+actual class Platform(private val app: AppDelegate) : LocalizedRepository, BluebellFileSystem {
+
+    private var backgroundSession: BackgroundSession? = null
 
     actual val networkMonitor = app.networkMonitor
 
     actual val name: String =
         UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
-
-    actual override fun resource(str: LocalizedString, vararg args: Any?): String {
-        val format =
-            NSBundle.mainBundle.localizedStringForKey(str.iosKey ?: str.key, str.toString(), null)
-        /*if (args.isNotEmpty()) {
-            return NSString.stringWithFormat(format, *arrayOf(*arg))
-        }*/
-        return format
-    }
 
     actual override fun format(
         epochSeconds: Long,
@@ -79,4 +55,3 @@ actual class Platform(app: AppDelegate) : LocalizedRepository, BluebellFileSyste
         }
     }
 }
-

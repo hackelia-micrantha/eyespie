@@ -5,31 +5,6 @@ enum ConfigError : Error {
     case general(reason: String)
 }
 
-class iOSConfigDelegate : PlatformConfigDelegate {
-    private let envuscator: MobuildEnvuscator = MobuildEnvuscator()
-
-    func requireConfigValue(key: String) -> String throws  {
-        do {
-            return try envuscator.get(forKey: key)
-        } catch {
-            throw ConfigError.general(error)
-        }
-    }
-
-    func getConfigValue(key: String, defaultValue: String) -> String {
-       do {
-            return try envuscator.get(forKey: key)
-       } catch {
-            return defaultValue
-       }
-    }
-}
-
-private let app = AppDelegate(
-    networkMonitor: iOSNetworkMonitor(),
-    appConfig: iOSConfigDelegate()
-)
-
 struct ComposeView: UIViewControllerRepresentable {
     var application = IOSApplication(component: app)
 

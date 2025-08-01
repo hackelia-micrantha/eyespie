@@ -19,7 +19,8 @@ class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
             overlays = overlays(state),
             enabled = state.enabled,
             busy = state.busy,
-            capture = if (state.enabled.not()) state.image?.toImageBitmap()?.let {
+            capture = if (state.enabled.not()) (state.obfuscated ?: state.image)?.toImageBitmap()
+                ?.let {
                 BitmapPainter(it)
             } else null
         )
@@ -34,7 +35,7 @@ class ScanCaptureStateMapper : StateMapper<ScanState, ScanUiState> {
             location = state.location?.data?.let { LocationClue(it) },
             colors = state.colors
         ),
-        name = "",
+        name = state.labels?.minByOrNull { it.confidence }?.data,
         image = state.path!!,
         match = state.match?.data ?: Embedding.EMPTY,
         location = state.location?.point,

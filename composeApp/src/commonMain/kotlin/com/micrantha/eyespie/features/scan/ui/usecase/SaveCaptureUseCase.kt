@@ -18,7 +18,7 @@ class SaveCaptureUseCase(
 ) {
 
     suspend operator fun invoke(
-        proof: Proof
+        proof: Proof,
     ) = dispatchUseCase(coroutineContext) {
         val image = withContext(Dispatchers.IO) {
             fileSystem.read(proof.image)

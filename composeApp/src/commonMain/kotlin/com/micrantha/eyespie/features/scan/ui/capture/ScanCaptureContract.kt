@@ -21,6 +21,7 @@ data class ScanState(
     val location: Location? = null,
     val colors: ColorProof? = null,
     val image: CameraImage? = null,
+    val obfuscated: CameraImage? = null,
     val enabled: Boolean = true,
     val busy: Boolean = false,
     val detection: DetectClue? = null,
@@ -49,6 +50,8 @@ sealed interface ScanAction {
     data object EditScan : ScanAction
 
     data object SaveError : ScanAction
+
+    data class GeneratedImage(val image: CameraImage) : ScanAction
 
     data object LoadError : ScanAction
 

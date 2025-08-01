@@ -27,6 +27,7 @@ class FluxDispatcher internal constructor(
 
     override fun dispatch(action: Action) {
         log.d { "action: $action" }
+
         dispatchScope.launch {
             actions.emit(action)
         }

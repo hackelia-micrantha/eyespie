@@ -1,7 +1,6 @@
 package com.micrantha.bluebell.platform
 
 import android.content.Context
-import com.micrantha.bluebell.domain.entities.LocalizedString
 import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import okio.FileSystem
 import okio.Path
@@ -20,17 +19,6 @@ actual class Platform(
 ) : LocalizedRepository, BluebellFileSystem {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
-    actual override fun string(str: LocalizedString): String {
-        return context.getString(context.resources.getIdentifier(str.key, "string", context.packageName))
-    }
-
-    actual override fun string(
-        str: LocalizedString,
-        vararg args: Any
-    ): String {
-        TODO("Not yet implemented")
-    }
-
     actual override fun format(
         epochSeconds: Long,
         format: String,
@@ -40,7 +28,7 @@ actual class Platform(
         val instant = Instant.ofEpochSecond(epochSeconds)
         val zoneId = ZoneId.of(timeZone)
         val date = LocalDateTime.ofInstant(instant, zoneId)
-            val formatter = DateTimeFormatter.ofPattern(format, Locale.forLanguageTag(locale))
+        val formatter = DateTimeFormatter.ofPattern(format, Locale.forLanguageTag(locale))
         return date.format(formatter)
     }
 

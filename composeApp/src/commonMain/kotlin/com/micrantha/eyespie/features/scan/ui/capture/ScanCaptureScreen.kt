@@ -6,16 +6,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -102,16 +104,20 @@ private fun BoxWithConstraintsScope.RenderCamera(
     }
 
     IconButton(
-        modifier = Modifier.align(Alignment.BottomCenter).padding(Dimensions.content),
+        modifier = Modifier.background(
+            MaterialTheme.colorScheme.surface.copy(alpha = 0.5f),
+            RoundedCornerShape(Dimensions.Border.mediumLarge)
+        ).align(Alignment.BottomCenter),
         enabled = state.enabled,
         onClick = { dispatch(SaveScan) }
     ) {
         Icon(
-            imageVector = Icons.Default.Camera,
+            imageVector = Icons.Default.PhotoCamera,
             tint = MaterialTheme.colorScheme.onSurface,
             contentDescription = null
         )
     }
+    Spacer(Modifier.sizeIn(Dimensions.screen))
 }
 
 @Composable
@@ -169,7 +175,7 @@ private fun BoxWithConstraintsScope.RenderClues(state: ScanUiState, dispatch: Di
             onClick = { dispatch(SaveScan) }
         ) {
             Icon(
-                imageVector = Icons.Default.Save,
+                imageVector = Icons.Default.Camera,
                 tint = MaterialTheme.colorScheme.onSurface,
                 contentDescription = null
             )

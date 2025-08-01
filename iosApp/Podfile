@@ -3,5 +3,9 @@ platform :ios, '11.0'
 target 'iosApp' do
   use_frameworks!
 
+  pod 'MediaPipeTasksVision'
+  pod 'MediaPipeTasksGenAI'
+  pod 'MediaPipeTasksGenAIC'
+
   pod 'composeApp', :path => '../composeApp'
 end

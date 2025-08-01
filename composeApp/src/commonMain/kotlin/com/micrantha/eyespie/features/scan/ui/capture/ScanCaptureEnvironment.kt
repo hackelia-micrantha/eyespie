@@ -20,6 +20,7 @@ import com.micrantha.eyespie.domain.entities.SegmentClue
 import com.micrantha.eyespie.domain.repository.LocationRepository
 import com.micrantha.eyespie.features.scan.ui.capture.ScanAction.EditSaved
 import com.micrantha.eyespie.features.scan.ui.capture.ScanAction.EditScan
+import com.micrantha.eyespie.features.scan.ui.capture.ScanAction.GeneratedImage
 import com.micrantha.eyespie.features.scan.ui.capture.ScanAction.ImageSaved
 import com.micrantha.eyespie.features.scan.ui.capture.ScanAction.SaveError
 import com.micrantha.eyespie.features.scan.ui.capture.ScanAction.SaveScan
@@ -69,6 +70,7 @@ class ScanCaptureEnvironment(
                 ), options = Replace
             )
 
+            /*
             is ImageSaved -> saveCaptureUseCase(mapper.prove(state))
                 .onFailure {
                     Log.e("unable to save scan", it)
@@ -76,7 +78,7 @@ class ScanCaptureEnvironment(
                 }
                 .onSuccess {
                     navigateBack()
-                }
+                }*/
 
             is SaveScan -> takeCaptureUseCase(
                 state.image!!
@@ -103,6 +105,11 @@ class ScanCaptureEnvironment(
             colors = state.colors.combine(action)
         )
 
+        is GeneratedImage -> state.copy(
+            obfuscated = action.image,
+            busy = false
+        )
+
         is DetectClue -> state.copy(
             detection = action,
             labels = state.labels.combine(action.labels)
@@ -118,6 +125,11 @@ class ScanCaptureEnvironment(
 
         is ScanSavable -> state.copy(
             path = action.path,
+        )
+
+        is ImageSaved -> state.copy(
+            enabled = true,
+            busy = false
         )
 
         is SaveScan, is EditScan -> state.copy(

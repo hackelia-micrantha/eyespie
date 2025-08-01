@@ -8,7 +8,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.micrantha.bluebell.arch.Action
 import com.micrantha.bluebell.arch.Dispatch
 import com.micrantha.bluebell.arch.Dispatcher
-import com.micrantha.bluebell.domain.entities.LocalizedString
 import com.micrantha.bluebell.domain.repository.LocalizedRepository
 import com.micrantha.bluebell.platform.FileSystem
 import com.micrantha.bluebell.ui.components.Router
@@ -27,9 +26,6 @@ class PreviewContext(
     context: Context, override val dispatchScope: CoroutineScope = MainScope()
 ) : ScreenContext, Dispatch {
     override val i18n: LocalizedRepository = object : LocalizedRepository {
-        override fun string(str: LocalizedString, vararg args: Any): String = str.key
-        override fun string(str: LocalizedString) = str.key
-
         override fun format(
             epochSeconds: Long,
             format: String,

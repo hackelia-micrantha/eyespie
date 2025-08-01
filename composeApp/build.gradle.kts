@@ -1,5 +1,3 @@
-import com.micrantha.bluebell.BluebellDownload
-
 plugins {
     alias(libs.plugins.nativeCocoapods)
     alias(libs.plugins.kotlinMultiplatform)
@@ -86,6 +84,9 @@ kotlin {
 
             implementation(libs.permissions.compose)
             implementation(libs.permissions.camera)
+            implementation(libs.permissions.location)
+            implementation(libs.permissions.notifications)
+            implementation(libs.permissions.storage)
 
             implementation(libs.geo.compose)
             implementation(libs.kamel.image)
@@ -113,7 +114,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.android)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.fragment.ktx)
-
+            implementation(libs.androidx.work.runtime.ktx)
             implementation(libs.androidx.palette.ktx)
 
             implementation(libs.androidx.camera.core)
@@ -131,6 +132,7 @@ kotlin {
 //            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
 
             implementation(libs.mediapipe.tasks.vision)
+            implementation(libs.mediapipe.tasks.genai)
             implementation(libs.compose.ui.tooling)
         }
 
@@ -156,6 +158,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     bundle {
@@ -204,6 +207,7 @@ android {
             }
         }
     }
+
     dependencies {
     }
 }
@@ -246,9 +250,6 @@ bluebell {
             }
             create("detection_efficientnet.tflite") {
                 url = "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/float32/latest/efficientdet_lite2.tflite"
-            }
-            create("classification_yamnet_audio.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/latest/yamnet.tflite"
             }
             create("stylepredict_magenta_android.tflite") {
                 androidUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
