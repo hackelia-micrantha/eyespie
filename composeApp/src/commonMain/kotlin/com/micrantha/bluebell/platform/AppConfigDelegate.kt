@@ -1,15 +1,14 @@
 package com.micrantha.bluebell.platform
 
-import com.micrantha.eyespie.config.DefaultConfig
+import com.micrantha.eyespie.config.EnvConfig
 import com.micrantha.eyespie.config.get
 import kotlin.reflect.KProperty
 
-object DefaultAppConfigDelegate {
+internal class DefaultAppConfigDelegate(
+    private val defaultValue: String = ""
+) {
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
-        DefaultConfig.get(property.name) ?: ""
+        EnvConfig.get(property.name) ?: defaultValue
 }
 
-object OptionalAppConfigDelegate {
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): String =
-        DefaultConfig.get(property.name) ?: ""
-}
+internal typealias AppConfigDelegate = EnvConfig

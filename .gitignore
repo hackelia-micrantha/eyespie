@@ -4,7 +4,9 @@
 iosEntryPoint/iosEntryPoint.podspec
 shared/shared.podspec
 templates
-models
+
+## AI Models ##
+*.tflite
 
 ## Environment ##
 .env*

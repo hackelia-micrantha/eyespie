@@ -1,7 +1,6 @@
 package com.micrantha.bluebell
 
 import org.gradle.api.Action
-import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.model.ObjectFactory
 import javax.inject.Inject
 

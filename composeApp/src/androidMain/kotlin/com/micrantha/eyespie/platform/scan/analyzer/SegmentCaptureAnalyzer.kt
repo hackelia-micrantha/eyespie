@@ -22,7 +22,7 @@ import com.micrantha.eyespie.platform.scan.components.CaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.components.StreamAnalyzer
 import java.nio.ByteBuffer
 
-private const val MODEL_ASSET = "models/segmentation/image.tflite"
+private const val MODEL_ASSET = "segmentation_deeplab_v3.tflite"
 typealias SegmentAnalyzerConfig = CameraAnalyzerConfig<SegmentProof, ImageSegmenterOptions.Builder, ImageSegmenter, ImageSegmenterResult>
 
 actual class SegmentCaptureAnalyzer(

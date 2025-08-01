@@ -34,10 +34,10 @@ class CameraAnalyzer(
         try {
             if (!::current.isInitialized) {
                 current = CameraImage(
-                    data = image.image,
+                    _image = image.image,
                     _width = image.width,
                     _height = image.height,
-                    rotation = image.imageInfo.rotationDegrees,
+                    _rotation = image.imageInfo.rotationDegrees,
                     _timestamp = image.imageInfo.timestamp,
                     regionOfInterest = regionOfInterest
                 )

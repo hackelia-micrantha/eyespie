@@ -18,7 +18,9 @@ import com.micrantha.eyespie.platform.scan.components.AnalyzerCallback
 import com.micrantha.eyespie.platform.scan.components.CaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.components.StreamAnalyzer
 
-private const val MODEL_ASSET = "models/classification/image.tflite"
+private const val MODEL_ASSET = "classification_efficientnet.tflite"
+private const val MODEL_ASSET_LITE = "classification_efficientnet_lite.tflite"
+private const val MODEL_ASSET_AUDIO = "classification_yamnet_audio.tflite"
 
 typealias LabelAnalyzerConfig = CameraAnalyzerConfig<LabelProof, ImageClassifierOptions.Builder, ImageClassifier, ImageClassifierResult>
 

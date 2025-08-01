@@ -19,7 +19,8 @@ import com.micrantha.eyespie.platform.scan.components.CaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.components.StreamAnalyzer
 import okio.ByteString.Companion.toByteString
 
-private const val MODEL_ASSET = "models/embedding/image.tflite"
+private const val MODEL_ASSET = "embedding_mobilenet_v3.tflite"
+private const val MODEL_ASSET_LITE = "embedding_mobilenet_v3_lite.tflite"
 
 typealias EmbeddingAnalyzerConfig =
         CameraAnalyzerConfig<MatchProof, ImageEmbedderOptions.Builder, ImageEmbedder, ImageEmbedderResult>

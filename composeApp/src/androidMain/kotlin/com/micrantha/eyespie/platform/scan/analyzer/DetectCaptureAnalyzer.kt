@@ -21,7 +21,12 @@ import com.micrantha.eyespie.platform.scan.components.AnalyzerCallback
 import com.micrantha.eyespie.platform.scan.components.CaptureAnalyzer
 import com.micrantha.eyespie.platform.scan.components.StreamAnalyzer
 
-private const val MODEL_ASSET = "models/detection/image.tflite"
+private const val MODEL_ASSET = "detection_efficientnet.tflite"
+// TODO: use cases for smaller model?
+//   1) low memory / cpu
+//   2) offline
+//   3) device age / type
+private const val MODEL_ASSET_LITE = "detection_efficientnet_lite.tflite"
 
 typealias DetectionAnalyzerConfig = CameraAnalyzerConfig<DetectProof, ObjectDetectorOptions.Builder, ObjectDetector, ObjectDetectorResult>
 

@@ -123,11 +123,10 @@ kotlin {
             implementation(libs.androidx.camera.view)
             implementation(libs.androidx.camera.extensions)
 
-//            Might need for embeddings or customization
-//            implementation(libs.tensorflow.lite)
-//            implementation(libs.tensorflow.lite.gpu)
-//            implementation(libs.tensorflow.lite.support)
-//            implementation(libs.tensorflow.lite.metadata)
+            implementation(libs.tensorflow.lite)
+            implementation(libs.tensorflow.lite.gpu)
+            implementation(libs.tensorflow.lite.support)
+            implementation(libs.tensorflow.lite.metadata)
 //            implementation(libs.tensorflow.lite.task.vision)
 //            implementation(libs.tensorflow.lite.gpu.delegate.plugin)
 
@@ -174,6 +173,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false // Ensures uncompressed .so files
+        }
+    }
     signingConfigs {
         create("release") {
             System.getenv("ANDROID_STORE_FILE")?.let { storeFile = file(it) }
@@ -207,19 +211,56 @@ android {
 bluebell {
     config {
         packageName = "com.micrantha.eyespie.config"
-        className = "DefaultConfig"
+        className = "EnvConfig"
         envFile = ".env.local"
 
-        defaultKeys = listOf(
+        defaultedKeys = listOf(
             "LOGIN_EMAIL",
             "LOGIN_PASSWORD",
+        )
+        expectedKeys = listOf(
+            "SUPABASE_URL",
+            "SUPABASE_KEY",
+            "HUGGING_FACE_TOKEN",
         )
     }
     assets {
         downloads {
-            create("mobilenet_v3_lite") {
-                url = "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/1/mobilenet_v3_small.tflite"
-                destination = "models/embedding/image_lite.tflite"
+            create("embedding_mobilenet_v3_lite.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/latest/mobilenet_v3_small.tflite"
+            }
+            create("embedding_mobilenet_v3.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_large/float32/latest/mobilenet_v3_large.tflite"
+            }
+            create("classification_efficientnet_lite.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite"
+            }
+            create("classification_efficientnet.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite2/float32/latest/efficientnet_lite2.tflite"
+            }
+            create("segmentation_deeplab_v3.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/latest/deeplab_v3.tflite"
+            }
+            create("detection_efficientnet_lite.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float32/latest/efficientdet_lite0.tflite"
+            }
+            create("detection_efficientnet.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/float32/latest/efficientdet_lite2.tflite"
+            }
+            create("classification_yamnet_audio.tflite") {
+                url = "https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/latest/yamnet.tflite"
+            }
+            create("stylepredict_magenta_android.tflite") {
+                androidUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
+            }
+            create("styletransfer_magenta_android.tflite") {
+                androidUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite"
+            }
+            create("stylepredict_magenta_ios.tflite") {
+                iosUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/ios/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
+            }
+            create("styletransfer_magenta_ios.tflite") {
+                iosUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/ios/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite"
             }
         }
     }
