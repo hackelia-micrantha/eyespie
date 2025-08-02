@@ -6,15 +6,16 @@ Pod::Spec.new do |spec|
     spec.authors                  = ''
     spec.license                  = 'GPLv3'
     spec.summary                  = 'Native dependencies for composeApp'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/bluebell.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/composeApp.framework'
     spec.libraries                = 'c++'
+    spec.ios.deployment_target    = '15.0'
+    spec.dependency 'MediaPipeTasksGenAI'
+    spec.dependency 'MediaPipeTasksVision'
                 
-                
-                
-    if !Dir.exist?('build/cocoapods/framework/bluebell.framework') || Dir.empty?('build/cocoapods/framework/bluebell.framework')
+    if !Dir.exist?('build/cocoapods/framework/composeApp.framework') || Dir.empty?('build/cocoapods/framework/composeApp.framework')
         raise "
 
-        Kotlin framework 'bluebell' doesn't exist yet, so a proper Xcode project can't be generated.
+        Kotlin framework 'composeApp' doesn't exist yet, so a proper Xcode project can't be generated.
         'pod install' should be executed after running ':generateDummyFramework' Gradle task:
 
             ./gradlew :composeApp:generateDummyFramework
@@ -28,7 +29,7 @@ Pod::Spec.new do |spec|
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':composeApp',
-        'PRODUCT_MODULE_NAME' => 'bluebell',
+        'PRODUCT_MODULE_NAME' => 'composeApp',
     }
                 
     spec.script_phases = [

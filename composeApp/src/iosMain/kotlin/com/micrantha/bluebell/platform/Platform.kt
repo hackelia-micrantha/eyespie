@@ -18,8 +18,6 @@ import com.micrantha.bluebell.platform.FileSystem as BluebellFileSystem
 
 actual class Platform(private val app: AppDelegate) : LocalizedRepository, BluebellFileSystem {
 
-    private var backgroundSession: BackgroundSession? = null
-
     actual val networkMonitor = app.networkMonitor
 
     actual val name: String =

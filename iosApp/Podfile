@@ -1,11 +1,12 @@
-platform :ios, '11.0'
+platform :ios, '15.0'
+
+source 'https://cdn.cocoapods.org'
 
 target 'iosApp' do
   use_frameworks!
 
   pod 'MediaPipeTasksVision'
   pod 'MediaPipeTasksGenAI'
-  pod 'MediaPipeTasksGenAIC'
 
   pod 'composeApp', :path => '../composeApp'
 end

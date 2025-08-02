@@ -10,6 +10,5 @@
 #define iosApp_Bridging_Header_h
 
 //#import "iosApp-Swift.h"
-#import <MobuildEnvuscator/MobuildEnvuscator.h>
 
 #endif /* iosApp_Bridging_Header_h */

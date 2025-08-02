@@ -17,12 +17,11 @@ kotlin {
         summary = "Native dependencies for ${project.name}"
         homepage = "https://github.com/hackelia-micrantha/eyespie"
         license = "GPLv3"
-
-        framework {
-            baseName = "bluebell"
-        }
-
+        ios.deploymentTarget = "15.0"
         podfile = project.file("../iosApp/Podfile")
+
+        pod("MediaPipeTasksVision")
+        pod("MediaPipeTasksGenAI")
     }
 
     applyDefaultHierarchyTemplate()
@@ -138,10 +137,17 @@ kotlin {
 
         iosMain.dependencies {
         }
-    }
-    tasks.register("testClasses")
-}
 
+        appleTest {
+        }
+
+    }
+}
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
 android {
     namespace = "com.micrantha.eyespie"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -231,37 +237,48 @@ bluebell {
     assets {
         downloads {
             create("embedding_mobilenet_v3_lite.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/latest/mobilenet_v3_small.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/latest/mobilenet_v3_small.tflite"
             }
             create("embedding_mobilenet_v3.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_large/float32/latest/mobilenet_v3_large.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_large/float32/latest/mobilenet_v3_large.tflite"
             }
             create("classification_efficientnet_lite.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite0/float32/latest/efficientnet_lite0.tflite"
             }
             create("classification_efficientnet.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite2/float32/latest/efficientnet_lite2.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/image_classifier/efficientnet_lite2/float32/latest/efficientnet_lite2.tflite"
             }
             create("segmentation_deeplab_v3.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/latest/deeplab_v3.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/image_segmenter/deeplab_v3/float32/latest/deeplab_v3.tflite"
             }
             create("detection_efficientnet_lite.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float32/latest/efficientdet_lite0.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float32/latest/efficientdet_lite0.tflite"
             }
             create("detection_efficientnet.tflite") {
-                url = "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/float32/latest/efficientdet_lite2.tflite"
+                url =
+                    "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite2/float32/latest/efficientdet_lite2.tflite"
             }
             create("stylepredict_magenta_android.tflite") {
-                androidUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
+                androidUrl =
+                    "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
             }
             create("styletransfer_magenta_android.tflite") {
-                androidUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite"
+                androidUrl =
+                    "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite"
             }
             create("stylepredict_magenta_ios.tflite") {
-                iosUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/ios/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
+                iosUrl =
+                    "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/ios/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite"
             }
             create("styletransfer_magenta_ios.tflite") {
-                iosUrl = "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/ios/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite"
+                iosUrl =
+                    "https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/ios/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite"
             }
         }
     }

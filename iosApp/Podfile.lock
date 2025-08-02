@@ -1,21 +1,37 @@
 PODS:
-  - composeApp (1.0)
-  - MobuildEnvuscator (1.0.0)
+  - composeApp (1.0):
+    - MediaPipeTasksGenAI
+    - MediaPipeTasksVision
+  - MediaPipeTasksCommon (0.10.21)
+  - MediaPipeTasksGenAI (0.10.24):
+    - MediaPipeTasksGenAIC (= 0.10.24)
+  - MediaPipeTasksGenAIC (0.10.24)
+  - MediaPipeTasksVision (0.10.21):
+    - MediaPipeTasksCommon (= 0.10.21)
 
 DEPENDENCIES:
   - composeApp (from `../composeApp`)
-  - MobuildEnvuscator (from `MobuildEnvuscator/MobuildEnvuscator.podspec`)
+  - MediaPipeTasksGenAI
+  - MediaPipeTasksVision
+
+SPEC REPOS:
+  trunk:
+    - MediaPipeTasksCommon
+    - MediaPipeTasksGenAI
+    - MediaPipeTasksGenAIC
+    - MediaPipeTasksVision
 
 EXTERNAL SOURCES:
   composeApp:
     :path: "../composeApp"
-  MobuildEnvuscator:
-    :path: MobuildEnvuscator/MobuildEnvuscator.podspec
 
 SPEC CHECKSUMS:
-  composeApp: ca0ab7c4b1ca990e13d971805a70c7aba5b63bd4
-  MobuildEnvuscator: b3143367f25b646ff7295156f4bc1af5e2e4db69
+  composeApp: fa3624f9d25c09f416174b06dc9000186f4fe383
+  MediaPipeTasksCommon: 6cfa29170d4900f04d250ad95ec058f14a741f38
+  MediaPipeTasksGenAI: 076ba7032a6e9da16db9c7cf0c3b67c751c18bc1
+  MediaPipeTasksGenAIC: ec35d9f431f6a6b651a0bc9f67a4ed149ffa575c
+  MediaPipeTasksVision: 7b1c0f5a5820e87e9d96926f5e65d8cd3744fac2
 
-PODFILE CHECKSUM: f21d091f14ff15e866690be7a97bb82a07d7ef39
+PODFILE CHECKSUM: 0cb9ff2d9365ee7134f3bc6ea81460318a20ea21
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

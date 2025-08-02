@@ -1,4 +1,6 @@
-package com.micrantha.bluebell.data.download
+package com.micrantha.bluebell.platform
+
+import com.micrantha.bluebell.data.download.DownloadListener
 
 expect class BackgroundDownloadManager {
     fun startDownload(url: String, fileName: String? = null): String

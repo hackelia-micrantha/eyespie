@@ -1,12 +1,16 @@
 import SwiftUI
 import composeApp
 
-enum ConfigError : Error {
+enum ConfigError: Error {
     case general(reason: String)
 }
 
 struct ComposeView: UIViewControllerRepresentable {
-    var application = IOSApplication(component: app)
+    var application = IOSApplication(component: AppDelegate(
+        networkMonitor: iOSNetworkMonitor(),
+        packageId: "com.micrantha.eyespie"
+    )
+    )
 
     func makeUIViewController(context: Context) -> UIViewController {
         application.createViewController()
@@ -26,13 +30,15 @@ struct ContentView: View {
 
     var body: some View {
         ComposeView().ignoresSafeArea(.all, edges: .bottom)
-            .onAppear {  }
-            .onDisappear {  }
+        .onAppear {
+        }
+        .onDisappear {
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-		ContentView()
-	}
+    static var previews: some View {
+        ContentView()
+    }
 }

@@ -1,26 +1,23 @@
-package com.micrantha.bluebell.data.download
+package com.micrantha.bluebell.platform
 
 import android.content.Context
 import androidx.work.Constraints
-import androidx.work.CoroutineWorker
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
-import androidx.work.WorkerParameters
 import androidx.work.workDataOf
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
+import com.micrantha.bluebell.data.download.DownloadListener
+import com.micrantha.bluebell.data.download.DownloadService
+import com.micrantha.bluebell.data.download.DownloadStatus
+import com.micrantha.bluebell.data.download.DownloadTask
+import com.micrantha.bluebell.data.download.DownloadWorker
+import com.micrantha.bluebell.data.download.KEY_FILE_NAME
+import com.micrantha.bluebell.data.download.KEY_TASK_ID
+import com.micrantha.bluebell.data.download.KEY_URL
 import java.util.UUID
 
 actual class BackgroundDownloadManager(context: Context) {
-    companion object {
-        const val KEY_URL = "download_url"
-        const val KEY_FILE_NAME = "file_name"
-        const val KEY_TASK_ID = "task_id"
-    }
 
     private var downloadListener: DownloadListener? = null
     private val downloadTasks = mutableMapOf<String, DownloadTask>()
@@ -131,8 +128,14 @@ actual class BackgroundDownloadManager(context: Context) {
                             totalBytes = totalBytes
                         ) ?: return@let
 
-                        downloadListener?.onDownloadProgress(taskId, progress, bytesDownloaded, totalBytes)
+                        downloadListener?.onDownloadProgress(
+                            taskId,
+                            progress,
+                            bytesDownloaded,
+                            totalBytes
+                        )
                     }
+
                     WorkInfo.State.SUCCEEDED -> {
                         val filePath = workInfo.outputData.getString("filePath") ?: ""
                         downloadTasks[taskId] = downloadTasks[taskId]?.copy(
@@ -142,6 +145,7 @@ actual class BackgroundDownloadManager(context: Context) {
 
                         downloadListener?.onDownloadCompleted(taskId, filePath)
                     }
+
                     WorkInfo.State.FAILED -> {
                         val error = workInfo.outputData.getString("error") ?: "Unknown error"
                         downloadTasks[taskId] = downloadTasks[taskId]?.copy(
@@ -150,98 +154,16 @@ actual class BackgroundDownloadManager(context: Context) {
 
                         downloadListener?.onDownloadFailed(taskId, error)
                     }
+
                     WorkInfo.State.CANCELLED -> {
                         downloadTasks[taskId] = downloadTasks[taskId]?.copy(
                             status = DownloadStatus.CANCELLED
                         ) ?: return@let
                     }
+
                     else -> {}
                 }
             }
-        }
-    }
-}
-
-class DownloadWorker(
-    context: Context,
-    params: WorkerParameters
-) : CoroutineWorker(context, params) {
-
-    private val downloadService by lazy { DownloadService() }
-
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        val url = inputData.getString(BackgroundDownloadManager.KEY_URL)
-            ?: return@withContext Result.failure()
-        val fileName = inputData.getString(BackgroundDownloadManager.KEY_FILE_NAME)
-            ?: return@withContext Result.failure()
-        val taskId = inputData.getString(BackgroundDownloadManager.KEY_TASK_ID)
-            ?: return@withContext Result.failure()
-
-        try {
-            downloadFile(url, fileName, taskId)
-        } catch (e: Exception) {
-            Result.failure(
-                workDataOf("error" to (e.message ?: "Download failed"))
-            )
-        } finally {
-            downloadService.close()
-        }
-    }
-
-    private suspend fun downloadFile(
-        urlString: String,
-        fileName: String,
-        taskId: String
-    ): Result {
-        return try {
-            val downloadDir = File(applicationContext.filesDir, "downloads")
-            if (!downloadDir.exists()) {
-                downloadDir.mkdirs()
-            }
-
-            val file = File(downloadDir, fileName)
-            val resumePosition = if (file.exists()) file.length() else 0L
-
-            if (resumePosition == 0L) {
-                try {
-                    downloadService.getFileInfo(urlString)
-                    // Could update fileName here if needed
-                } catch (e: Exception) {
-                    // Continue with download even if HEAD request fails
-                }
-            }
-
-            val fileData = downloadService.downloadFile(
-                url = urlString,
-                resumePosition = resumePosition
-            ) { bytesDownloaded, totalBytes, progress ->
-                if (isStopped) return@downloadFile
-
-                setProgress(
-                    workDataOf(
-                        "progress" to progress,
-                        "bytesDownloaded" to bytesDownloaded,
-                        "totalBytes" to totalBytes
-                    )
-                )
-            }
-
-            if (resumePosition > 0) {
-                FileOutputStream(file, true).use { output ->
-                    output.write(fileData)
-                }
-            } else {
-                file.writeBytes(fileData)
-            }
-
-            Result.success(
-                workDataOf("filePath" to file.absolutePath)
-            )
-
-        } catch (e: Exception) {
-            Result.failure(
-                workDataOf("error" to (e.message ?: "Download failed"))
-            )
         }
     }
 }

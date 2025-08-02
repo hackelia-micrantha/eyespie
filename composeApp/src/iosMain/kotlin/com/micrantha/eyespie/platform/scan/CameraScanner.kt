@@ -10,6 +10,7 @@ import androidx.compose.ui.interop.UIKitView
 import co.touchlab.stately.freeze
 import com.micrantha.eyespie.platform.asException
 import com.micrantha.eyespie.platform.scan.components.CameraScannerDispatch
+import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.ObjCObjectVar
@@ -144,6 +145,7 @@ class CameraStream(
         }
     }
 
+    @OptIn(BetaInteropApi::class)
     fun setup() {
         val err = memScoped {
             alloc<ObjCObjectVar<NSError?>>()
