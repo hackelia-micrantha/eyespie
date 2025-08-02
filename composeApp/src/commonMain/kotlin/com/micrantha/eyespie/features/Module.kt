@@ -1,5 +1,6 @@
 package com.micrantha.eyespie.features
 
+import com.micrantha.eyespie.features.onboarding.onboardingModule
 import org.kodein.di.DI
 import com.micrantha.eyespie.features.dashboard.module as dashboardModule
 import com.micrantha.eyespie.features.game.module as gameModule
@@ -20,4 +21,5 @@ internal fun module() = DI.Module("Features") {
     importOnce(playersModule())
     importOnce(thingsModule())
     importOnce(registerModule())
+    importOnce(onboardingModule())
 }

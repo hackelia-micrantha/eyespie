@@ -8,6 +8,7 @@ import okio.buffer
 import okio.use
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
+import platform.Foundation.NSHomeDirectory
 import platform.Foundation.NSLocale
 import platform.Foundation.NSTimeZone
 import platform.Foundation.dateWithTimeIntervalSince1970
@@ -51,5 +52,9 @@ actual class Platform(private val app: AppDelegate) : LocalizedRepository, Blueb
                 buf.readByteArray()
             }
         }
+    }
+
+    actual fun dataStorePath(fileName: String): String {
+        return NSHomeDirectory() + "/" + fileName
     }
 }

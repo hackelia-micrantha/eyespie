@@ -2,6 +2,7 @@ package com.micrantha.eyespie.app
 
 import com.micrantha.eyespie.app.ui.MainScreen
 import com.micrantha.eyespie.app.ui.MainScreenModel
+import com.micrantha.eyespie.app.ui.usecase.LoadMainUseCase
 import org.kodein.di.DI
 import org.kodein.di.bindProviderOf
 import com.micrantha.eyespie.core.module as coreModule
@@ -15,4 +16,5 @@ internal fun module() = DI.Module("App") {
 
     bindProviderOf(::MainScreenModel)
     bindProviderOf(::MainScreen)
+    bindProviderOf(::LoadMainUseCase)
 }

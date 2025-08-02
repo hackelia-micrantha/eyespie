@@ -91,7 +91,8 @@ kotlin {
             implementation(libs.kamel.image)
             implementation(libs.moko.media)
 
-            implementation("org.jetbrains.kotlin:kotlin-reflect")
+            implementation(libs.datastore)
+            implementation(libs.datastore.preferences)
 
             //implementation("ca.rmen:rhymer:1.2.0")
 
@@ -110,7 +111,6 @@ kotlin {
 
             implementation(libs.androidx.lifecycle.runtime.ktx)
 
-            implementation(libs.kotlinx.coroutines.android)
             implementation(libs.androidx.activity.compose)
             implementation(libs.androidx.fragment.ktx)
             implementation(libs.androidx.work.runtime.ktx)
@@ -123,6 +123,8 @@ kotlin {
             implementation(libs.androidx.camera.view)
             implementation(libs.androidx.camera.extensions)
 
+            implementation(libs.kotlinx.coroutines.android)
+
             implementation(libs.tensorflow.lite)
             implementation(libs.tensorflow.lite.gpu)
             implementation(libs.tensorflow.lite.support)
@@ -132,6 +134,7 @@ kotlin {
 
             implementation(libs.mediapipe.tasks.vision)
             implementation(libs.mediapipe.tasks.genai)
+
             implementation(libs.compose.ui.tooling)
         }
 

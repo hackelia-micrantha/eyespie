@@ -10,4 +10,5 @@ data class OnboardingUiState(
 
 sealed interface OnboardingAction {
     data object Next : OnboardingAction
+    data object Download : OnboardingAction
 }

@@ -48,4 +48,8 @@ actual class Platform(
             }
         }
     }
+
+    actual fun dataStorePath(fileName: String): String {
+        return context.filesDir.resolve(fileName).absolutePath
+    }
 }

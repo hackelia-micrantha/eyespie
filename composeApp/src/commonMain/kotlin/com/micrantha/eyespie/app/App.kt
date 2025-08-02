@@ -37,9 +37,7 @@ fun EyesPieApp(module: DI = localDI()) = subDI(
 
             BluebellApp {
                 LaunchedEffect(Unit) {
-                    if (navigator.lastItem is SplashScreen) {
-                        navigator.replaceAll(MainScreen())
-                    }
+                    navigator.replaceAll(MainScreen())
                 }
 
                 CurrentScreen()

@@ -3,11 +3,9 @@ package com.micrantha.bluebell
 import com.github.gmazzo.buildconfig.BuildConfigExtension
 import com.github.gmazzo.buildconfig.BuildConfigTask
 import org.gradle.api.Project
-import org.gradle.api.provider.Provider
 import java.io.File
 import java.io.FileInputStream
 import java.util.Properties
-import kotlin.io.path.Path
 
 fun BluebellConfig.loadConfigFromEnvironment(): Result<Map<String, String>> {
     try {
@@ -97,12 +95,6 @@ fun Project.configureBuilds(config: BluebellConfig) {
 
             generateSource(generateTask.get())
         }
-//
-//        generateTask.configure {
-//            doLast {
-//                generateSource(this as BuildConfigTask)
-//            }
-//        }
     }
 
 }
