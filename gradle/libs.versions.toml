@@ -39,7 +39,7 @@ tensorflowLite = "latest.release"
 mediapipe = "0.20230731"
 mediapipeGenAI = "0.10.25"
 buildConfig = "v5.6.7"
-mokoMedia = "0.11.0"
+mokoMedia = "0.11.1"
 
 [plugins]
 
