@@ -38,9 +38,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ext.enabled
 import com.micrantha.bluebell.ui.components.EmailVisualTransformation
 import com.micrantha.bluebell.ui.components.StateRenderer
+import com.micrantha.bluebell.ui.model.enabled
 import com.micrantha.bluebell.ui.model.error
 import com.micrantha.bluebell.ui.model.isFailure
 import com.micrantha.bluebell.ui.theme.Dimensions

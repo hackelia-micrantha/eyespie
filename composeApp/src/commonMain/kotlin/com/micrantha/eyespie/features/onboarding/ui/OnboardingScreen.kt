@@ -1,9 +1,12 @@
 package com.micrantha.eyespie.features.onboarding.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,10 +17,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.arch.Dispatch
 import com.micrantha.bluebell.ui.components.StateRenderer
+import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.core.ui.Screen
 import com.micrantha.eyespie.features.onboarding.ui.components.ClickableAnimatedPagerIndicator
 
@@ -66,16 +69,15 @@ class OnboardingScreen : Screen, StateRenderer<OnboardingUiState> {
         HorizontalPager(
             state=pagerState,
         ) {
-            Box(contentAlignment = Alignment.Center) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                 Column {
                     when (it) {
                         OnboardingPage.GenAI.ordinal -> RenderGenAI(state, dispatch)
                     }
                 }
-
                 ClickableAnimatedPagerIndicator(
                     pagerState = pagerState,
-                    modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+                    modifier = Modifier.align(Alignment.BottomCenter).padding(Dimensions.screen),
                 )
             }
         }
@@ -85,7 +87,10 @@ class OnboardingScreen : Screen, StateRenderer<OnboardingUiState> {
     private fun ColumnScope.RenderGenAI(state: OnboardingUiState, dispatch: Dispatch){
         Text("Download artificial intelligence models?  Models help improve gameplay and experience.")
 
-        Row {
+        Row(
+            modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
             OutlinedButton({
                 dispatch(OnboardingAction.Next)
             }) {

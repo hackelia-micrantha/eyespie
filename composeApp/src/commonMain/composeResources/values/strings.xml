@@ -46,4 +46,8 @@
     <string name="no_clues">Clues not available, try capturing another image.</string>
     <string name="ok">OK</string>
     <string name="no_data_found">No data found</string>
+    <string name="download_started">Download started</string>
+    <string name="downloading">Downloading %1$s</string>
+    <string name="download_failed">Download failed</string>
+    <string name="download_completed">Download completed</string>
 </resources>

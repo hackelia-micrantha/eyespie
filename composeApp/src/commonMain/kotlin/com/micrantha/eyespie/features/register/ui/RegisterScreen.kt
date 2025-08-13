@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.kodein.rememberScreenModel
 import com.micrantha.bluebell.arch.Dispatch
-import com.micrantha.bluebell.ext.enabled
 import com.micrantha.bluebell.ui.components.StateRenderer
+import com.micrantha.bluebell.ui.model.enabled
 import com.micrantha.bluebell.ui.model.isFailure
 import com.micrantha.bluebell.ui.theme.Dimensions
 import com.micrantha.eyespie.app.EyesPie

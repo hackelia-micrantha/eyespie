@@ -29,7 +29,7 @@ actual class Notifications(
 
     private fun createChannel(context: Context) {
         val channel = NotificationChannel(
-            "default",
+            NOTIFICATION_CHANNEL_DEFAULT,
             "Default Notifications",
             NotificationManager.IMPORTANCE_DEFAULT
         )
@@ -64,5 +64,9 @@ actual class Notifications(
     actual override fun cancel(id: String) {
         WorkManager.getInstance(context).cancelUniqueWork(id)
         NotificationManagerCompat.from(context).cancel(id.hashCode())
+    }
+
+    companion object {
+        const val NOTIFICATION_CHANNEL_DEFAULT = "default"
     }
 }
