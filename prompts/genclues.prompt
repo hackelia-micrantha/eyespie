@@ -1,0 +1,8 @@
+<start_of_turn>user
+Answer the following question with a json response.
+
+Generate clues for this image for a game of "I spy with my little eye".
+Its location is {location}.
+Provide an overall clue, plus a list of ranked, alternatives such as color, shape, function, or synonyms
+<end_of_turn>
+<start_of_turn>model
