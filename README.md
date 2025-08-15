@@ -21,7 +21,15 @@ Alice gets participation points.
 
 ## Notes
 
-Apologies for the lack of testing and continuous integration - resource constrained and am a perfect programmer.
+The project is also SDK development for future applications (Project 'Bluebell') which has to be split out still.
+
+Offline support for remote areas is a critical requirement.
+
+Generative AI has signifantly changed the scope of the project since its inception.
+
+The goal is that features will be modular and in-app purchases.
+
+Apologies for the lack of testing and continuous integration - resource constrained and am a perfect programmer - but has been designed to support.
 
 ## Author
 
